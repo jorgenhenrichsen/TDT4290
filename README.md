@@ -2,10 +2,6 @@
 
 Here we are to present our project and code. Make it understandable, give relevant information etc.
 
-Let's see if i can make it do as in the tutorial...
-
-Maybe with a different commit name it will be as foretold
-
 ## How To Get Started 🙌
 
 ![](http://i.imgur.com/ZvnsY1d.gif)
@@ -41,3 +37,13 @@ Now the Project interpreter in Pycharm needs to be set to this too.
 To do this we need the path of the venv create by pipenv. This can be printed with:
 ```pipenv --venv```.
 Now go into Pycharm's settings and paste in the path as the interpreter-path.
+
+## CircleCI
+
+CircleCI will pull, build and test for us whenever a pull request is opened or a commit to an open pull request is pushed.
+The project's builds can be seen [here](https://circleci.com/gh/jorgenhenrichsen/TDT4290).
+
+## TODO:
+  * Linting?
+  * Deploy on version release or tag?
+  
