@@ -44,7 +44,8 @@ jobs:
           name: run tests
           command: |
             source ~/repo/.venv/bin/activate
-            python manage.py test
+            # Perform tests here
+            deactivate
 
       - store_artifacts:
           path: test-reports
