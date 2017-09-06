@@ -23,22 +23,27 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
+          - v1-dependencies-{{ checksum "Pipfile.lock" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
 
       - run:
           name: install dependencies
           command: |
             pip install pipenv
+            export WORKON_HOME=~/.venvs
             pipenv install
 
       - save_cache:
           paths:
-        
+            - ./venvs
+          key: v1-dependencies-{{ checksum "Pipfile.lock" }}
+
       # run tests!
       - run:
           name: run tests
           command: |
-            pipenv shell
-            python manage.py test
+            pipenv run manage.py test
 
       - store_artifacts:
           path: test-reports
