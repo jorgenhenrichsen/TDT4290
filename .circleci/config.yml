@@ -31,20 +31,19 @@ jobs:
           name: install dependencies
           command: |
             sudo pip install pipenv
-            export WORKON_HOME=~/repo/venvs
             export PIPENV_VENV_IN_PROJECT=1
             pipenv install
 
       - save_cache:
           paths:
-            - ./venvs
+            - ./.venv/
           key: v1-dependencies-{{ checksum "Pipfile.lock" }}
 
       # run tests!
       - run:
           name: run tests
           command: |
-            pipenv shell
+            source ~/repo/bin/activate
             python manage.py test
 
       - store_artifacts:
