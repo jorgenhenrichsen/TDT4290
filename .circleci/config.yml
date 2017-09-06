@@ -31,7 +31,7 @@ jobs:
           name: install dependencies
           command: |
             pip install pipenv
-            export WORKON_HOME=~/.venvs
+            export WORKON_HOME=~/repo/venvs
             pipenv install
 
       - save_cache:
