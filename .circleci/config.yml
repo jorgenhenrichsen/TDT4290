@@ -45,6 +45,7 @@ jobs:
           command: |
             source ~/repo/.venv/bin/activate
             # Perform tests here
+            python athlitikos/manage.py test
             deactivate
 
       - store_artifacts:
