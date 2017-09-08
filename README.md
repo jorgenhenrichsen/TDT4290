@@ -30,7 +30,7 @@ pipenv shell
 Now python commands from the terminal will be run with the venv's Python executable.
 Alternatively, if you want to run a single python-file within the venv use: 
 ```
-pipenv run somefile.py
+pipenv run python somefile.py
 ```
 
 Now the Project interpreter in Pycharm needs to be set to this too.
