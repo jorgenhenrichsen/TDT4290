@@ -8,27 +8,20 @@
           <form method="post">
               {% csrf_token %}
 {#              standard for sending form elements in django#}
-              <div class="controlGroup">
-                  <label for="control-label" for="username">Brukernavn</label>
-                  <div class="controls">
-                      <input class="form-control" type="text" id="username" name="username" placeholder="brukernavn">
+              <div >
+                  <label for="username">Brukernavn</label>
+                  <div>
+                      <input type="text" name="username" placeholder="brukernavn">
                   </div>
               </div>
-              <div class="control-group">
-                  <label class="control-label" for="password">Password</label>
-                  <div class="controls">
-                      <input class="form-control" type="password" name="password" id="password" placeholder="passord">
+              <div >
+                  <label for="password">Passord</label>
+                  <div>
+                      <input type="password" name="password" placeholder="passord">
                   </div>
               </div>
 {#              adds a submit button#}
-              <input class="btn btn-default" type="submit" value="Logg inn">
+              <input type="submit" value="Logg inn">
           </form>
     </div>
-
-{#  <h2>Innlogging</h2>#}
-{#  <form method="post">#}
-{#    {% csrf_token %}#}
-{#    {{ form.as_p }}#}
-{#    <button type="submit">Login</button>#}
-{#  </form>#}
 {% endblock %}
