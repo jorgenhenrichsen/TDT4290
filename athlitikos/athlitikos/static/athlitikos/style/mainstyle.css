@@ -1,0 +1,29 @@
+/*overwrites browser standard for padding and margin*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+.navbar {
+    display: flex;
+    background-color: #cb1e1f;
+    padding: 0;
+}
+
+/*gives all the elements in the navbar some styling*/
+.navbar a {
+    margin: 20px;
+    display: block;
+    text-decoration: none;
+    color: white;
+}
+
+/*standard styling for forms. Aligning + making things more easy to make responsive */
+.form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 30px;
+}
