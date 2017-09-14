@@ -75,9 +75,12 @@ WSGI_APPLICATION = 'athlitikos.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        'PASSWORD': '',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'django',
+        'USER': 'postgres',
+        'PASSWORD': 'postgre314',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
