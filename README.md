@@ -17,7 +17,7 @@ Dependencies are managed with a Pipfile so we need Pipenv. It can be grabbed wit
 pip install --user pipenv
 ```
 
-Now all you need to do is run: 
+Now all you need to do is navigate to the project folder and run: 
 ```
 pipenv install
 ``` 
@@ -37,6 +37,15 @@ Now the Project interpreter in Pycharm needs to be set to this too.
 To do this we need the path of the venv create by pipenv. This can be printed with:
 ```pipenv --venv```.
 Now go into Pycharm's settings and paste in the path as the interpreter-path.
+
+### Installing new dependencies for the project
+
+To install new dependencies, navigate to the project root and run:
+```
+pipenv install somepackage
+```
+
+This will install the package in the virtualenv and add it to the Pipfile and Pipfile.lock.
 
 ## CircleCI
 
