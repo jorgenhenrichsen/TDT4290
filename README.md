@@ -6,6 +6,7 @@ Here we are to present our project and code. Make it understandable, give releva
 
 ![](http://i.imgur.com/ZvnsY1d.gif)
 
+
 First go ahead and clone the repo with: 
 ```
 git clone git@github.com:jorgenhenrichsen/TDT4290.git
@@ -17,7 +18,28 @@ Dependencies are managed with a Pipfile so we need Pipenv. It can be grabbed wit
 pip install --user pipenv
 ```
 
-Now all you need to do is navigate to the project folder and run: 
+Make sure pipenv is runnable in the terminal.
+
+**If it is, you may skip this next part. 
+
+If it is not, you probably need to add it to the path(**if using windows**).
+To do this you need to know where it lies, and the easiest way to find it is by running:
+```
+pip show pipenv
+```
+You will probably get something that looks like this:
+```
+...
+Location: c:\users\[yourUserName]\appdata\roaming\python\python36\site-packages
+...
+```
+Now go to edit your environmental variables, and edit the PATH in system variables.
+Add the location you found in the step above as a new entry, but switch out **site-packages** with **scripts**.
+Click **OK** and relaunch your terminal. 
+
+## Pipenv should now be runnable. 
+
+If it is, all you need to do is navigate to the project folder and run:
 ```
 pipenv install
 ``` 
