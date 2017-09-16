@@ -76,7 +76,7 @@ WSGI_APPLICATION = 'athlitikos.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'django',
+        'NAME': 'athlitikos',
         'USER': 'postgres',
         'PASSWORD': 'postgre314',
         'HOST': 'localhost',
