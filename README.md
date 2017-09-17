@@ -43,6 +43,13 @@ Now go into Pycharm's settings and paste in the path as the interpreter-path.
 CircleCI will pull, build and test for us whenever a pull request is opened or a commit to an open pull request is pushed.
 The project's builds can be seen [here](https://circleci.com/gh/jorgenhenrichsen/TDT4290).
 
+# PostgreSQL
+
+Here is a tutorial on how to install the database PostgreSQL
+https://www.youtube.com/watch?v=e1MwsT5FJRQ
+
+The database should now be connected to Django
+
 ## TODO:
   * Linting?
   * Deploy on version release or tag?
