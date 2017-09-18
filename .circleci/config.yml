@@ -13,7 +13,11 @@ jobs:
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
+      - image: circleci/postgres:9.6
+        environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_DB=test_db
+
 
     working_directory: ~/repo
 
@@ -29,6 +33,8 @@ jobs:
 
       - run:
           name: install dependencies
+          command: sudo -u postgres psql -p 5433 -c "create user postgres with password ‘postgre314’;”
+          command: sudo -u postgres psql -p 5433 -c "alter user postgres with superuser;"
           command: |
             sudo pip install pipenv
             export PIPENV_VENV_IN_PROJECT=1
