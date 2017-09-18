@@ -34,6 +34,8 @@ jobs:
       - run:
           name: install dependencies
           command: |
+            sudo -u postgres psql -p 5433 -c "create user postgres with password ‘postgre314’;”
+            sudo -u postgres psql -p 5433 -c "alter user postgres with superuser;"
             sudo pip install pipenv
             export PIPENV_VENV_IN_PROJECT=1
             pipenv install
