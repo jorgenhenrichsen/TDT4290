@@ -7,3 +7,10 @@ class Result(models.Model):
     total = models.IntegerField()
     points = models.IntegerField()
     points_veteran = models.IntegerField()
+    sinclair_coefficient = models.FloatField()
+    best_snatch = models.IntegerField()
+    best_clean_and_jerk = models.IntegerField()
+    #lifter = models.ForeignKey(Person)
+
+
+
