@@ -7,6 +7,9 @@ class Person(models.Model):
     last_name = models.CharField(max_length=100)
     birth_date = models.DateTimeField()
 
+    def __str__(self):
+        return "{} {}".format(self.first_name, self.last_name)
+
 
 class Lifter(Person):
     pass
