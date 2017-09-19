@@ -5,8 +5,8 @@ class Person(models.Model):
 
     first_name = models.CharField(max_length=40)
     last_name = models.CharField(max_length=100)
+    birth_date = models.DateTimeField()
 
 
 class Lifter(Person):
-
-    birth_date = models.DateTimeField()
+    pass

@@ -8,6 +8,7 @@ def home(request):
     return render(request, 'registration/home.html')
 
 
+# TODO: Should be login-only
 def add_new_lifter(request):
 
     if request.method == "POST":
