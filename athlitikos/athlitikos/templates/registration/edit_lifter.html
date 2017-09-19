@@ -1,13 +1,22 @@
 
 {% extends 'base.html' %}
 
+{% block head %}
+        <link rel="stylesheet" type="text/css" href="/static/athlitikos/style/personforms.css">
+{%  endblock %}
+
+
 {% block content %}
 
-    <h1>Ny sterk kar</h1>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Save</button>
-    </form>
+    <div class="container">
+        <h1>Legg til ny utøver</h1>
+        <form method="POST" class="lifter-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+        </form>
+        <input class="save-button" type="submit" value="Lagre">
+
+    </div>
+
 
 {% endblock %}

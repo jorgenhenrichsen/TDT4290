@@ -22,9 +22,9 @@ class JudgeLevel(ChoiceEnum):
 
 class Person(models.Model):
 
-    first_name = models.CharField(max_length=40)
-    last_name = models.CharField(max_length=100)
-    birth_date = models.DateTimeField()
+    first_name = models.CharField(max_length=40, verbose_name='Fornavn')
+    last_name = models.CharField(max_length=100, verbose_name='Etternavn')
+    birth_date = models.DateTimeField(verbose_name='Fødselsdato')
 
     def __str__(self):
         return self.fullname()
