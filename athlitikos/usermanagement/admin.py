@@ -5,3 +5,5 @@ from . import models
 
 admin.site.register(models.Person)
 admin.site.register(models.Lifter)
+admin.site.register(models.Judge)
+admin.site.register(models.Staff)
