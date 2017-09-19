@@ -27,6 +27,9 @@ class Person(models.Model):
     birth_date = models.DateTimeField()
 
     def __str__(self):
+        return self.fullname()
+
+    def fullname(self):
         return "{} {}".format(self.first_name, self.last_name)
 
 
