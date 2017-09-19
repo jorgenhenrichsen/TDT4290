@@ -14,7 +14,7 @@ def home(request):
 
 def lifter_detail(request, pk):
     lifter = get_object_or_404(Lifter, pk=pk)
-    return render(request, 'registration/lifter_detail.html',
+    return render(request, 'lifter_detail.html',
                   {'fullname': lifter.__str__(),
                    'birth_date': lifter.birth_date.strftime('%Y-%m-%d')
                    })
@@ -29,5 +29,5 @@ def add_new_lifter(request):
             lifter = form.save()
             return redirect(reverse('resultregistration:lifter_detail', args=[lifter.pk]))
     form = LifterForm()
-    return render(request, 'registration/edit_lifter.html', {'form': form})
+    return render(request, 'edit_lifter.html', {'form': form})
 
