@@ -20,7 +20,7 @@ def lifter_detail(request, pk):
                    })
 
 
-# TODO: Should be login-only
+@login_required(login_url='/login')
 def add_new_lifter(request):
 
     if request.method == "POST":
