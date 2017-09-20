@@ -13,8 +13,10 @@
         <form method="POST" class="lifter-form">
             {% csrf_token %}
             {{ form.as_p }}
+
+            <input class="save-button" type="submit" value="Lagre">
+
         </form>
-        <input class="save-button" type="submit" value="Lagre">
 
     </div>
 
