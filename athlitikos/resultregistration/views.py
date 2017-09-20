@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.contrib.auth.decorators import login_required
-from .forms import LifterForm
+from .forms import LifterForm, JudgeForm
 from .models import Lifter
 
 # Create your views here.
@@ -31,3 +31,13 @@ def add_new_lifter(request):
     form = LifterForm()
     return render(request, 'edit_lifter.html', {'form': form})
 
+
+def add_new_judge(request):
+
+    if request.method == "POST":
+        form = JudgeForm(request.POST)
+        if form.is_valid():
+            judge = form.save()
+            return redirect('home')
+    form = JudgeForm()
+    return render(request, 'edit_judge.html', {'form': form})
