@@ -20,6 +20,11 @@ class JudgeLevel(ChoiceEnum):
     Level3 = 3
 
 
+class Gender(ChoiceEnum):
+    male = 'M'
+    female = 'K'
+
+
 class Person(models.Model):
 
     first_name = models.CharField(max_length=40, verbose_name='Fornavn')
@@ -34,7 +39,8 @@ class Person(models.Model):
 
 
 class Lifter(Person):
-    pass
+
+    gender = models.CharField(max_length=10, verbose_name='Kjønn', choices=Gender.choices(), null=True)
 
 
 class Judge(Person):
