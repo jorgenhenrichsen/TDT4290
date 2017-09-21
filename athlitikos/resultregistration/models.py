@@ -1,4 +1,5 @@
 from django.db import models
+from .enums import Gender, JudgeLevel
 
 
 class Person(models.Model):
