@@ -1,10 +1,17 @@
 
 {% extends 'base.html' %}
 
+{% block head %}
+        <link rel="stylesheet" type="text/css" href="/static/css/persondetail.css">
+{%  endblock %}
+
 {% block content %}
 
-    <h1>Navn: {{ fullname }}</h1>
-    <h2>Fødselsdato: {{ birth_date }}</h2>
+    <div class="detail-container">
 
+        <h1>Navn: {{ fullname }}</h1>
+        <label>Fødselsdato: {{ birth_date }}<br></label>
+
+    </div>
 
 {% endblock %}
