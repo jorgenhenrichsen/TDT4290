@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.contrib.auth.decorators import login_required
-from .forms import LifterForm, JudgeForm
-from .models import Lifter, Judge
+from .forms import LifterForm, JudgeForm, StaffForm
+from .models import Lifter, Judge, Staff
 
 # Create your views here.
 
@@ -16,7 +16,8 @@ def lifter_detail(request, pk):
     lifter = get_object_or_404(Lifter, pk=pk)
     return render(request, 'lifter_detail.html',
                   {'fullname': lifter.__str__(),
-                   'birth_date': lifter.birth_date.strftime('%Y-%m-%d')
+                   'birth_date': lifter.birth_date.strftime('%Y-%m-%d'),
+                   'gender': lifter.gender
                    })
 
 
@@ -54,9 +55,20 @@ def judge_detail(request, pk):
 
 
 @login_required(login_url='/login')
-def add_new_staff(request, pk):
-    pass
+def add_new_staff(request):
+
+    if request.method == "POST":
+        form = StaffForm(request.POST)
+        if form.is_valid():
+            staff = form.save()
+            return redirect(reverse('resultregistration:staff_detail', args=[staff.pk]))
+    form = StaffForm()
+    return render(request, 'edit_person.html', {'title': 'Legg til ny funksjonær', 'form': form})
 
 
 def staff_detail(request, pk):
-    pass
+    staff = get_object_or_404(Staff, pk=pk)
+    return render(request, 'staff_detail.html', {
+        'fullname': staff.__str__(),
+        'birth_date': staff.birth_date.strftime('%Y-%m-%d'),
+    })
