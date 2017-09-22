@@ -17,14 +17,14 @@ class Group(models.Model):
     competition = models.ForeignKey(Competition)
     date = models.DateField()
 
-    # competitionLeader = models.ForeignKey(Person)
-    # jury many to one?
-    # judge many to one?
-    # secretary = models.ForeignKey(Person)
-    # speaker = models.ForeignKey(Person)
-    # technicalController = models.ForeignKey(Person)
-    # cheifMarshall = models.ForeignKey(Person)
-    # timeKeeper = models.ForeignKey(Person)
+    competitionLeader = models.ForeignKey('Staff', related_name='competitionLeader')
+    jury = models.ManyToManyField('Staff', related_name='jury')
+    judges = models.ManyToManyField('Judge', related_name='judges')
+    secretary = models.ForeignKey('Staff', related_name='secretary')
+    speaker = models.ForeignKey('Staff', related_name='speaker')
+    technicalController = models.ForeignKey('Staff', related_name='technicalController')
+    cheifMarshall = models.ForeignKey('Staff', related_name='chiefMarshall')
+    timeKeeper = models.ForeignKey('Staff', related_name='timeKeeper')
     notes = models.CharField(max_length=300)
     recordsDescription = models.CharField(max_length=300)
 
@@ -41,7 +41,7 @@ class Result(models.Model):
     best_snatch = models.ForeignKey('MoveAttempt', related_name='best_snatch', null=True)
     best_clean_and_jerk = models.ForeignKey('MoveAttempt', related_name='best_clean_and_jerk', null=True)
     group = models.ForeignKey(Group)
-    # person = models.ForeignKey(Lifter)
+    lifter = models.ForeignKey('Lifter')
 
 
 class MoveAttempt(models.Model):
