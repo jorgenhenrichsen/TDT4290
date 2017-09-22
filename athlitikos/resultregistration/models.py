@@ -10,12 +10,18 @@ class Competition(models.Model):
     location = models.CharField(max_length=100)
     startDate = models.DateField()
 
+    def __str__(self):
+        return '{0}, {1}, {2}'.format(self.competitionCategory, self.location, self.startDate)
+
 
 
 class Group(models.Model):
+    #   Identifying
     groupNumber = models.IntegerField()
     competition = models.ForeignKey(Competition)
     date = models.DateField()
+
+    competitors = models.ForeignKey('Lifter', null=True)
 
     competitionLeader = models.ForeignKey('Staff', related_name='competitionLeader')
     jury = models.ManyToManyField('Staff', related_name='jury')
@@ -28,31 +34,48 @@ class Group(models.Model):
     notes = models.CharField(max_length=300)
     recordsDescription = models.CharField(max_length=300)
 
+    def __str__(self):
+        return '{0}, group {1}, {2}'.format(self.competition, self.groupNumber, self.date)
+
     class Meta:
         unique_together = ('groupNumber', 'competition')
 
 # Result for weightlifting(snatch/cleanAndJerk)
 class Result(models.Model):
     resultID = models.IntegerField(primary_key=True)
-    total = models.IntegerField()
-    points = models.IntegerField()
-    points_veteran = models.IntegerField()  # or some sort of logic?
-    sinclair_coefficient = models.FloatField()  # or decimalField?
+
+    #   These should be made into derived properties based on the MoveAttempts that this result consists of
+    total = models.IntegerField(null=True)
+    points = models.IntegerField(null=True)
+
+    #   These should be made into derived properties based on the age/weight of the lifter, as well as the points
+    points_veteran = models.IntegerField(null=True)
+    sinclair_coefficient = models.FloatField(null=True)  # or decimalField?
+
+    #   Should be derived from the best snatch and clean_and_jerk MoveAttempts respectively
     best_snatch = models.ForeignKey('MoveAttempt', related_name='best_snatch', null=True)
     best_clean_and_jerk = models.ForeignKey('MoveAttempt', related_name='best_clean_and_jerk', null=True)
-    group = models.ForeignKey(Group)
-    lifter = models.ForeignKey('Lifter')
+
+    group = models.ForeignKey(Group, null=True)     # The Group that this result belongs to.
+    lifter = models.ForeignKey('Lifter')    # The Lifter that this result belongs to
 
 
 class MoveAttempt(models.Model):
+    # Currently only made for the lifting attempts, not the pentathlon
+
     MOVE_TYPE_CHOICES = ((0, 'Snatch'), (1, 'Clean and jerk'))
-    parentResult = models.ForeignKey('Result', on_delete=models.CASCADE)
-    attemptNum = models.IntegerField()
+    parentResult = models.ForeignKey('Result', on_delete=models.CASCADE)    # The Result this is part of
     moveType = models.IntegerField(choices=MOVE_TYPE_CHOICES)
-    weight = models.IntegerField()
+    attemptNum = models.IntegerField()
+    weight = models.IntegerField()  # Weight that was attempted lifted
     success = models.BooleanField()
 
+    def __str__(self):
+        return '{0}, attempt {1}, weight {2}, {3}'.format(self.moveType, self.attemptNum, self.weight, self.success)
+
     class Meta:
+        # The MoveAttempt should be uniquely identified
+        # by a combination of the result it belongs to, the attempt number and the moveType
         unique_together = ('parentResult', 'attemptNum')
 
 
@@ -60,7 +83,7 @@ class Person(models.Model):
 
     first_name = models.CharField(max_length=40, verbose_name='Fornavn')
     last_name = models.CharField(max_length=100, verbose_name='Etternavn')
-    birth_date = models.DateTimeField(verbose_name='Fødselsdato')
+    birth_date = models.DateField(verbose_name='Fødselsdato')   # Changed from dateTime, as we don't need time of birth
 
     def __str__(self):
         return self.fullname()
