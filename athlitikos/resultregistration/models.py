@@ -1,41 +1,8 @@
 from django.db import models
 
 # Create your models here.
-MOVE_TYPES = ((0,_('Snatch')),(1,_('Clean and jerk')))
+MOVE_TYPE_CHOICES = ((0,'Snatch'), (1,'Clean and jerk'))
 
-#Result for weightlifting(snatch/cleanAndJerk)
-class Result(models.Model):
-    resultID = models.IntegerField(primary_key=True)
-    total = models.IntegerField()
-    points = models.IntegerField()
-    points_veteran = models.IntegerField() #or some sort of logic?
-    sinclair_coefficient = models.FloatField() #or decimalfield?
-    best_snatch = models.ForeignKey(MoveAttempt)
-    best_clean_and_jerk = models.ForeignKey(MoveAttempt)
-    group = models.ForeignKey(Group)
-    # person = models.ForeignKey(Lifter)
-
-
-class MoveAttempt(models.Model):
-    moveType = models.IntegerField(choices=MOVE_TYPES)
-    weight = models.IntegerField()
-    success = models.BooleanField()
-    result = models.ForeignKey(Result)
-
-    class Meta:
-        unique_together = ('result', 'success', 'weight', 'moveType')
-
-
-# moveType = models.IntegerField(choices=MOVE_TYPES)
-# class MoveType(models.Model):
-#     moveTypeName = models.CharField(max_length=75, primary_key=True)
-#     moveTypeDescription = models.CharField(max_length=100)
-
-# class MoveAttempt(models.Model):
-#     moveType = models.ForeignKey(MoveType)
-#     moveName = models.IntegerField(choices=MOVE_TYPES)
-
-# stevne, person, resultat
 
 class Competition(models.Model):
     # comeptitionArranger = models.ForeignKey(Organisation)
@@ -63,3 +30,42 @@ class Group(models.Model):
 
     class Meta:
         unique_together = ('groupNumber', 'competition')
+
+# Result for weightlifting(snatch/cleanAndJerk)
+class Result(models.Model):
+    resultID = models.IntegerField(primary_key=True)
+    total = models.IntegerField()
+    points = models.IntegerField()
+    points_veteran = models.IntegerField()  # or some sort of logic?
+    sinclair_coefficient = models.FloatField()  # or decimalField?
+
+    #   Why will this not work?
+    best_snatch = models.ForeignKey('MoveAttempt', related_name='best_snatch', null=True)
+    best_clean_and_jerk = models.ForeignKey('MoveAttempt', related_name='best_clean_and_jerk', null=True)
+
+    group = models.ForeignKey(Group)
+    # person = models.ForeignKey(Lifter)
+
+
+class MoveAttempt(models.Model):
+    parentResult = models.ForeignKey('Result', on_delete=models.CASCADE)
+    attemptNum = models.IntegerField()
+    moveType = models.IntegerField(choices=MOVE_TYPE_CHOICES)
+    weight = models.IntegerField()
+    success = models.BooleanField()
+
+    class Meta:
+        unique_together = ('parentResult', 'attemptNum')
+
+
+# moveType = models.IntegerField(choices=MOVE_TYPES)
+# class MoveType(models.Model):
+#     moveTypeName = models.CharField(max_length=75, primary_key=True)
+#     moveTypeDescription = models.CharField(max_length=100)
+
+# class MoveAttempt(models.Model):
+#     moveType = models.ForeignKey(MoveType)
+#     moveName = models.IntegerField(choices=MOVE_TYPES)
+
+# stevne, person, resultat
+
