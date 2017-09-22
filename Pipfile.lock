@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "b89349d4933fc10de35e7613468dfc1ccb3ba3f3cee9934c9df0d82c820c9067"
+            "sha256": "f04a6b09cc3f9b63bc919d2017982d241be875cbb15f66ead547a199717dd8a0"
         },
         "pipfile-spec": 1,
         "requires": {},
@@ -15,6 +15,12 @@
     "default": {
         "django": {
             "version": "==1.11.5"
+        },
+        "enum34": {
+            "version": "==1.1.6"
+        },
+        "psycopg2": {
+            "version": "==2.7.3.1"
         },
         "pytz": {
             "version": "==2017.2"

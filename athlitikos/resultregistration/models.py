@@ -1,8 +1,8 @@
 from django.db import models
+from .enums import Gender, JudgeLevel
+
 
 # Create your models here.
-MOVE_TYPE_CHOICES = ((0,'Snatch'), (1,'Clean and jerk'))
-
 
 class Competition(models.Model):
     # comeptitionArranger = models.ForeignKey(Organisation)
@@ -38,16 +38,14 @@ class Result(models.Model):
     points = models.IntegerField()
     points_veteran = models.IntegerField()  # or some sort of logic?
     sinclair_coefficient = models.FloatField()  # or decimalField?
-
-    #   Why will this not work?
     best_snatch = models.ForeignKey('MoveAttempt', related_name='best_snatch', null=True)
     best_clean_and_jerk = models.ForeignKey('MoveAttempt', related_name='best_clean_and_jerk', null=True)
-
     group = models.ForeignKey(Group)
     # person = models.ForeignKey(Lifter)
 
 
 class MoveAttempt(models.Model):
+    MOVE_TYPE_CHOICES = ((0, 'Snatch'), (1, 'Clean and jerk'))
     parentResult = models.ForeignKey('Result', on_delete=models.CASCADE)
     attemptNum = models.IntegerField()
     moveType = models.IntegerField(choices=MOVE_TYPE_CHOICES)
@@ -58,14 +56,28 @@ class MoveAttempt(models.Model):
         unique_together = ('parentResult', 'attemptNum')
 
 
-# moveType = models.IntegerField(choices=MOVE_TYPES)
-# class MoveType(models.Model):
-#     moveTypeName = models.CharField(max_length=75, primary_key=True)
-#     moveTypeDescription = models.CharField(max_length=100)
+class Person(models.Model):
 
-# class MoveAttempt(models.Model):
-#     moveType = models.ForeignKey(MoveType)
-#     moveName = models.IntegerField(choices=MOVE_TYPES)
+    first_name = models.CharField(max_length=40, verbose_name='Fornavn')
+    last_name = models.CharField(max_length=100, verbose_name='Etternavn')
+    birth_date = models.DateTimeField(verbose_name='Fødselsdato')
 
-# stevne, person, resultat
+    def __str__(self):
+        return self.fullname()
 
+    def fullname(self):
+        return "{} {}".format(self.first_name, self.last_name)
+
+
+class Lifter(Person):
+
+    gender = models.CharField(max_length=10, verbose_name='Kjønn', choices=Gender.choices(), null=True)
+
+
+class Judge(Person):
+
+    judge_level = models.CharField(max_length=10, choices=JudgeLevel.choices(), default=JudgeLevel.Level0)
+
+
+class Staff(Person):
+    pass
