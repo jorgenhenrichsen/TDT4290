@@ -29,7 +29,7 @@ def add_new_lifter(request):
             lifter = form.save()
             return redirect(reverse('resultregistration:lifter_detail', args=[lifter.pk]))
     form = LifterForm()
-    return render(request, 'edit_lifter.html', {'form': form})
+    return render(request, 'edit_person.html', {'title': 'Legg til ny utøver', 'form': form})
 
 
 @login_required(login_url='/login')
@@ -41,7 +41,7 @@ def add_new_judge(request):
             judge = form.save()
             return redirect(reverse('resultregistration:judge_detail', args=[judge.pk]))
     form = JudgeForm()
-    return render(request, 'edit_judge.html', {'form': form})
+    return render(request, 'edit_person.html', {'title': 'Legg til ny dommer', 'form': form})
 
 
 def judge_detail(request, pk):
@@ -51,3 +51,12 @@ def judge_detail(request, pk):
         'birth_date': judge.birth_date.strftime('%Y-%m-%d'),
         'level': judge.judge_level,
     })
+
+
+@login_required(login_url='/login')
+def add_new_staff(request, pk):
+    pass
+
+
+def staff_detail(request, pk):
+    pass
