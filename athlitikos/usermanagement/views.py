@@ -1,3 +1,7 @@
-from django.shortcuts import render
+from django.http import HttpResponse
+from .models import ClubOfficial
 
-# Create your views here.
+def club_official_options(request):
+
+    html = ''
+    return HttpResponse()
