@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'athlitikos',
     'resultregistration',
-    'usermanagement'
+    'usermanagement',
+    'userRoles',
 ]
 
 MIDDLEWARE = [
