@@ -1,0 +1,30 @@
+{
+    "_meta": {
+        "hash": {
+            "sha256": "f04a6b09cc3f9b63bc919d2017982d241be875cbb15f66ead547a199717dd8a0"
+        },
+        "pipfile-spec": 1,
+        "requires": {},
+        "sources": [
+            {
+                "url": "https://pypi.python.org/simple",
+                "verify_ssl": true
+            }
+        ]
+    },
+    "default": {
+        "django": {
+            "version": "==1.11.5"
+        },
+        "enum34": {
+            "version": "==1.1.6"
+        },
+        "psycopg2": {
+            "version": "==2.7.3.1"
+        },
+        "pytz": {
+            "version": "==2017.2"
+        }
+    },
+    "develop": {}
+}

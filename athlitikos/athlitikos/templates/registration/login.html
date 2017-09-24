@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+{#    uses standard styling for forms #}
+    <div class="form" id="loginform">
+          <form method="post">
+              {% csrf_token %}
+{#              standard for sending form elements in django#}
+              <div >
+                  <label for="username">Brukernavn</label>
+                  <div>
+                      <input type="text" name="username" placeholder="brukernavn">
+                  </div>
+              </div>
+              <div >
+                  <label for="password">Passord</label>
+                  <div>
+                      <input type="password" name="password" placeholder="passord">
+                  </div>
+              </div>
+{#              adds a submit button#}
+              <input type="submit" value="Logg inn">
+          </form>
+    </div>
+{% endblock %}
