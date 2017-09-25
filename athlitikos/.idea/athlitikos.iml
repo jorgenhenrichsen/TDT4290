@@ -7,13 +7,12 @@
         <option name="settingsModule" value="athlitikos/settings.py" />
         <option name="manageScript" value="manage.py" />
         <option name="environment" value="&lt;map/&gt;" />
-        <option name="commandsToSkip" value="" />
       </configuration>
     </facet>
   </component>
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$" />
-    <orderEntry type="jdk" jdkName="Python 3.6.2 virtualenv at ~/.virtualenvs/TDT4290-ZbdOySDY" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.6.2 virtualenv at C:\Users\TorMagne\.virtualenvs\TDT4290-SwvwBT5z" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="TemplatesService">
