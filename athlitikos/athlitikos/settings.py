@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'athlitikos',
     'usermanagement',
     'resultregistration',
+    'usermanagement',
+    'userRoles',
 ]
 
 MIDDLEWARE = [

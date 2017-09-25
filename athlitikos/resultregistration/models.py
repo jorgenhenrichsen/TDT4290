@@ -85,6 +85,7 @@ class Person(models.Model):
     last_name = models.CharField(max_length=100, verbose_name='Etternavn')
     birth_date = models.DateField(verbose_name='Fødselsdato')   # Changed from dateTime, as we don't need time of birth
 
+
     def __str__(self):
         return self.fullname()
 
