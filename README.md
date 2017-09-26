@@ -81,6 +81,14 @@ https://www.youtube.com/watch?v=e1MwsT5FJRQ
 
 The database should now be connected to Django
 
+# Pull Request
+
+When a pull request is made, use the words close, closes, closed, fix, fixes, fixed, resolve, resolves or resolved
+in front of the issue number it fixes, either in the title or the description. Example: Closes #42, description of the pull request. 
+The pull request will then be linked with the issue and the task on Waffle.io. Also check that all of your tasks/issues and pull reguest
+is closed on waffle.io when the merge is complete. 
+
+
 ## TODO:
   * Linting?
   * Deploy on version release or tag?
