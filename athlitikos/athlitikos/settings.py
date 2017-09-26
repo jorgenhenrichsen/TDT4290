@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'resultregistration',
     'usermanagement',
     'userRoles',
+    'autocomplete'
 ]
 
 MIDDLEWARE = [
