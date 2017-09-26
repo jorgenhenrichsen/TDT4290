@@ -1,0 +1,22 @@
+
+{% extends 'base.html' %}
+
+{% block head %}
+        <link rel="stylesheet" type="text/css" href="/static/css/search.css">
+{%  endblock %}
+
+
+{% block content %}
+
+    <div class="search-container">
+
+        <input type="text">
+        <select id="club-dropdown" class="search-selector">
+            {% for club in clubs %}
+                <option value={{ club }}>{{ club }}</option>
+            {% endfor %}
+        </select>
+
+    </div>
+
+{% endblock %}
