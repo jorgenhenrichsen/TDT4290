@@ -6,7 +6,7 @@ from .models import Lifter, Judge, Staff
 # Create your views here.
 
 
-@login_required(login_url='/login')
+#@login_required(login_url='/login')
 def home(request):
     return render(request, 'home.html')
 
@@ -20,7 +20,7 @@ def lifter_detail(request, pk):
                    })
 
 
-@login_required(login_url='/login')
+#@login_required(login_url='/login')
 def add_new_lifter(request):
 
     if request.method == "POST":
@@ -32,7 +32,7 @@ def add_new_lifter(request):
     return render(request, 'edit_person.html', {'title': 'Legg til ny utøver', 'form': form})
 
 
-@login_required(login_url='/login')
+#@login_required(login_url='/login')
 def add_new_judge(request):
 
     if request.method == "POST":
@@ -53,7 +53,7 @@ def judge_detail(request, pk):
     })
 
 
-@login_required(login_url='/login')
+#@login_required(login_url='/login')
 def add_new_staff(request):
 
     if request.method == "POST":

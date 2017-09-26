@@ -1,14 +1,17 @@
 from django.db import models
 from .enums import Gender, JudgeLevel
+from .validators import validate_name
+#from datetime import datetime
+#from django.db.models.signals import pre_save is usefull ;)
 
 
 # Create your models here.
 
 class Competition(models.Model):
     # comeptitionArranger = models.ForeignKey(Organisation)
-    competitionCategory = models.CharField(max_length=100)
+    competitionCategory = models.CharField(max_length=100,validators=[validate_name])
     location = models.CharField(max_length=100)
-    startDate = models.DateField()
+    startDate = models.DateField(help_text="år-måned-dag")
 
     def __str__(self):
         return '{0}, {1}, {2}'.format(self.competitionCategory, self.location, self.startDate)
@@ -81,8 +84,8 @@ class MoveAttempt(models.Model):
 
 class Person(models.Model):
 
-    first_name = models.CharField(max_length=40, verbose_name='Fornavn')
-    last_name = models.CharField(max_length=100, verbose_name='Etternavn')
+    first_name = models.CharField(max_length=40, verbose_name='Fornavn', validators=[validate_name])
+    last_name = models.CharField(max_length=100, verbose_name='Etternavn', validators=[validate_name])
     birth_date = models.DateField(verbose_name='Fødselsdato')   # Changed from dateTime, as we don't need time of birth
 
 
