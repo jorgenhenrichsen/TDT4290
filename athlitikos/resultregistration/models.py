@@ -17,10 +17,13 @@ class Competition(models.Model):
         return '{0}, {1}, {2}'.format(self.competitionCategory, self.location, self.startDate)
 
 class Club(models.Model):
-    clubName = models.CharField(max_length=100, validators=[validate_name])
-    region = models.CharField(max_length=100, validators=[validate_name])
+    clubName = models.CharField(max_length=100)
+    region = models.CharField(max_length=100)
     address = models.CharField(max_length=100)
-    models.ManyToManyField(Competition) #One Club can join many competitions
+    models.ManyToManyField(Competition, null=True) #One Club can join many competitions
+
+    def __str__(self):
+        return self.clubName
 
 
 class Group(models.Model):
@@ -104,7 +107,7 @@ class Person(models.Model):
 class Lifter(Person):
 
     gender = models.CharField(max_length=10, verbose_name='Kjønn', choices=Gender.choices(), null=True)
-    club = models.ForeignKey('Club')  # The club that this lifter< belongs to
+    club = models.ForeignKey('Club', null=True)  # The club that this lifter< belongs to
 
 
 class Judge(Person):
