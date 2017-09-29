@@ -1,9 +1,13 @@
-from django.shortcuts import render
-from .models import Person
-#from django.middleware.csrf import Cs
-from django.shortcuts import render_to_response
+import sys
 
+from django.views.decorators.csrf import csrf_exempt
+from .models import Person
+from django.shortcuts import render
+
+@csrf_exempt
 def autocomplete(request):
+    print("JEG ER HER", file=sys.stderr)
+
     language = 'en-us'
     session_language = 'en-us'
     if 'lang' in request.COOKIES:
@@ -17,16 +21,17 @@ def autocomplete(request):
     args['language'] = language
     args['session_language'] = session_language
 
-    return render_to_response('autocomplete/base.html', args)
+    return render(request, 'autocomplete/base.html', args)
 
+@csrf_exempt
 def search_person_names(request):
-
-    if request.method == 'POST':
+    print("JEG ER HER TO", file=sys.stderr)
+    if request.method == "POST":
         search_text = request.POST['search_text']
     else:
-        search_text = ''
+        search_text = ""
 
-    persons = Person.objects.filter(name__contains = search_text)
+    persons = Person.objects.filter(first_name__contains=search_text)
 
-    return render_to_response('ajax_search.html', {'persons' : persons})
+    return render(request, 'autocomplete/ajax_search.html', {'persons' : persons})
 
