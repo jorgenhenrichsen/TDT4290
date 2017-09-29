@@ -11,4 +11,5 @@ admin.site.register(models.Competition)
 admin.site.register(models.Group)
 admin.site.register(models.Result)
 admin.site.register(models.MoveAttempt)
+admin.site.register(models.Club)
 
