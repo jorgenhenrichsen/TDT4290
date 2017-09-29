@@ -12,6 +12,14 @@
     <title> NVF </title>
 </head>
 
+<h3>Search</h3>
+{% csrf_token %}
+<input type="text" id="search" name="search" />
+
+<ul id="search-results">
+
+</ul>
+
 <body>
     {#    navbar#}
     <div class="navbar">

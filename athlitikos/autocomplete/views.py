@@ -1,15 +1,32 @@
 from django.shortcuts import render
-from athlitikos.resultregistration.models import Lifter
+from .models import Person
+#from django.middleware.csrf import Cs
+from django.shortcuts import render_to_response
 
 def autocomplete(request):
-    return render(request, 'base.html')
+    language = 'en-us'
+    session_language = 'en-us'
+    if 'lang' in request.COOKIES:
+        language = request.COOKIES['lang']
+    if 'lang' in request.session:
+        session_language = request.session['lang']
 
-def search_club_names(request):
+    args = {}
+  #  args.update(csrf(request)) (check into csrf-protection)
+    args['articles'] = Person.objects.all()
+    args['language'] = language
+    args['session_language'] = session_language
+
+    return render_to_response('test.html', args)
+
+def search_person_names(request):
 
     if request.method == 'POST':
         search_text = request.POST['search_text']
     else:
         search_text = ''
 
-    #clubs = Club.objects.filter()
+    persons = Person.objects.filter(name__contains = search_text)
+
+    return render_to_response('ajax_search.html', {'persons' : persons})
 
