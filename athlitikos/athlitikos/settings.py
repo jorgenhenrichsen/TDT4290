@@ -129,8 +129,9 @@ LOGIN_REDIRECT_URL = '/home'
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-    '/var/www/static/',
+    os.path.join(BASE_DIR, "autocomplete", "static"),
+    # '/var/www/static/',
 ]
 
-STATIC_ROOT = (os.getcwd() + "static")
+STATIC_ROOT = (os.getcwd() + "autocomplete/static/autocomplete/js")
+

@@ -17,7 +17,7 @@ def autocomplete(request):
     args['language'] = language
     args['session_language'] = session_language
 
-    return render_to_response('test.html', args)
+    return render_to_response('autocomplete/base.html', args)
 
 def search_person_names(request):
 
