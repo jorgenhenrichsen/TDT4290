@@ -12,20 +12,42 @@
 
         <h1>Søk etter resultater</h1>
 
-        <input type="text" placeholder="Navn...">
-        <select id="club-dropdown" class="search-selector">
-            <option disabled selected value="">Velg klubb</option>
-            {% for club in clubs %}
-                <option value={{ club }}>{{ club }}</option>
-            {% endfor %}
-        </select>
+        <form class="query-form" role="search" action="/search/">
+            <div class="form-group">
+                <input type="text" class="query-text-input" placeholder="Navn..." name="query_text">
 
-        <select class="search-selector">
-            <option disabled selected value="">Velg vektklasse</option>
-        </select>
-        <select class="search-selector">
-            <option disabled selected>Velg kategori</option>
-        </select>
+                <select class="search-selector" name="club_id">
+                    <option disabled selected value="">Velg klubb</option>
+                    {% for club in clubs %}
+                        <option value={{ club.pk }}>{{ club.clubName }}</option>
+                    {% endfor %}
+                </select>
+
+                <select class="search-selector">
+                    <option disabled selected value="">Velg vektklasse</option>
+                </select>
+
+                <select class="search-selector">
+                    <option disabled selected>Velg kategori</option>
+                </select>
+
+            </div>
+            <button type="submit">Søk</button>
+         </form>
+
+
+
+
+
+        <div class="search-results-container">
+
+            {% for result in results %}
+
+                <label>{{ result.lifter.first_name }} {{ result.lifter.last_name }}</label><br>
+
+            {% endfor %}
+
+        </div>
 
     </div>
 

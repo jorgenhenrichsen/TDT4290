@@ -63,12 +63,16 @@ class Result(models.Model):
     points_veteran = models.IntegerField(null=True)
     sinclair_coefficient = models.FloatField(null=True)  # or decimalField?
 
-    #   Should be derived from the best snatch and clean_and_jerk MoveAttempts respectively
-    best_snatch = models.ForeignKey('MoveAttempt', related_name='best_snatch', null=True)
-    best_clean_and_jerk = models.ForeignKey('MoveAttempt', related_name='best_clean_and_jerk', null=True)
-
     group = models.ForeignKey(Group, null=True)     # The Group that this result belongs to.
     lifter = models.ForeignKey('Lifter')    # The Lifter that this result belongs to
+
+    def get_best_snatch(self):
+        #TODO: Implement
+        pass
+
+    def get_bets_clean_and_jerk(self):
+        #TODO: Implement
+        pass
 
 
 class MoveAttempt(models.Model):
