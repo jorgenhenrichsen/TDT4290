@@ -2,11 +2,19 @@
 .search-container {
 
     width: 90%;
+    margin-top: 30px;
+
+    /* Horizontal centering */
     position: absolute;
     left: 50%;
-    margin-top: 30px;
     transform: translate(-50%, -0%);
     -ms-transform: translate(-50%, -0%); /* IE 9 */
     -webkit-transform: translate(-50%, -0%); /* Chrome, Safari, Opera */
+
+}
+
+.search-selector {
+
+    width: 150px;
 
 }

@@ -10,12 +10,17 @@
 
     <div class="search-container">
 
-        <input type="text">
+        <h1>Søk etter resultater</h1>
+
+        <input type="text" value="Navn...">
         <select id="club-dropdown" class="search-selector">
             {% for club in clubs %}
                 <option value={{ club }}>{{ club }}</option>
             {% endfor %}
         </select>
+
+        <select class="search-selector"></select>
+        <select class="search-selector"></select>
 
     </div>
 
