@@ -8,7 +8,7 @@ from .models import Lifter, Judge, Staff, Competition, Group, Result
 
 @login_required(login_url='/login')
 def home(request):
-    return render(request, 'home.html')
+    return render(request, 'resultregistration/home.html')
 
 
 def lifter_detail(request, pk):
@@ -29,7 +29,7 @@ def add_new_lifter(request):
             lifter = form.save()
             return redirect(reverse('resultregistration:lifter_detail', args=[lifter.pk]))
     form = LifterForm()
-    return render(request, 'edit_person.html', {'title': 'Legg til ny utøver', 'form': form})
+    return render(request, 'resultregistration/edit_person.html', {'title': 'Legg til ny utøver', 'form': form})
 
 
 @login_required(login_url='/login')
@@ -41,12 +41,12 @@ def add_new_judge(request):
             judge = form.save()
             return redirect(reverse('resultregistration:judge_detail', args=[judge.pk]))
     form = JudgeForm()
-    return render(request, 'edit_person.html', {'title': 'Legg til ny dommer', 'form': form})
+    return render(request, 'resultregistration/edit_person.html', {'title': 'Legg til ny dommer', 'form': form})
 
 
 def judge_detail(request, pk):
     judge = get_object_or_404(Judge, pk=pk)
-    return render(request, 'judge_detail.html', {
+    return render(request, 'resultregistration/judge_detail.html', {
         'fullname': judge.__str__(),
         'birth_date': judge.birth_date.strftime('%Y-%m-%d'),
         'level': judge.judge_level,
@@ -62,7 +62,7 @@ def add_new_staff(request):
             staff = form.save()
             return redirect(reverse('resultregistration:staff_detail', args=[staff.pk]))
     form = StaffForm()
-    return render(request, 'edit_person.html', {'title': 'Legg til ny funksjonær', 'form': form})
+    return render(request, 'resultregistration/edit_person.html', {'title': 'Legg til ny funksjonær', 'form': form})
 
 
 def staff_detail(request, pk):
@@ -76,11 +76,6 @@ def staff_detail(request, pk):
 def result_registration(request):
     form = ResultRegistrationForm()
     return render(request, 'resultregistration/resultregistration.html', {'form': form})
-
-    # if request.method == "POST":
-    #     form = ResultRegistrationForm(request.POST)
-    #     if form.is_valid():
-    #         group = form.save()
 
 
     # returns all the tings you need to make the result registration form
