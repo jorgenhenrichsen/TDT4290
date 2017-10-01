@@ -1,5 +1,5 @@
 from django import forms
-from .models import Lifter, Judge, Staff
+from .models import Lifter, Judge, Staff, Group
 from django.utils import timezone
 
 YEAR_CHOICES = [y for y in range(1900, timezone.now().year)]
@@ -40,5 +40,5 @@ class StaffForm(forms.ModelForm):
 
 class ResultRegistrationForm(forms.ModelForm):
     class Meta:
-        model = Lifter
-        fields = ('first_name', 'birth_date')
+        model = Group
+        fields = '__all__'

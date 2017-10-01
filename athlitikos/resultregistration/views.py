@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.contrib.auth.decorators import login_required
-from .forms import LifterForm, JudgeForm, StaffForm
-from .models import Lifter, Judge, Staff, Competition, Group
+from .forms import LifterForm, JudgeForm, StaffForm, ResultRegistrationForm
+from .models import Lifter, Judge, Staff, Competition, Group, Result
 
 # Create your views here.
 
@@ -74,17 +74,56 @@ def staff_detail(request, pk):
 
 
 def result_registration(request):
-    return render(request, 'resultregistration.html')
+    form = ResultRegistrationForm()
+    return render(request, 'resultregistration/resultregistration.html', {'form': form})
+
+    # if request.method == "POST":
+    #     form = ResultRegistrationForm(request.POST)
+    #     if form.is_valid():
+    #         group = form.save()
+
+
     # returns all the tings you need to make the result registration form
-    # def build_registration_form(registration_form):
+    # def build_competition_info(competition_info):
     #     return {
     #         'cateogry': group.competition.competitionCategory,
     #         'organizer': club.clubName,
-    #         # 'location'
-    #         'date': competition.startDate,
-    #         'pool':
-    #         'fullname': lifter.__str__(),
-    #         'birth_date': lifter.birth_date.strftime('%Y-%m-%d'),
-    #         'club': lifter.club.clubName,
+    #         'location': group.competition.location,
+    #         'date': group.date,
+    #         'pool': group.groupNumber,
+    #         'staff_leader': group.competitionLeader,
+    #         'staff_jury': group.jury,
+    #         'staff_secretary': group.secretary,
+    #         'staff_speaker': group.speaker,
+    #         'judge_1': group.judges,
+    #         'judge_2': group.judges,
+    #         'judge_3': group.judges,
+    #         'staff_controller': group.technicalController,
+    #         'staff_chief_marshall': group.cheifMarshall,
+    #         'staff_time_keeper': group.timeKeeper,
+    #         'notes': group.recordsDescription,
     #     }
-    #
+    # def build_competator(competator):
+    #     return {
+    #         # 'weightclass'
+    #         # 'bodyWeight'
+    #         # 'category'
+    #         'birth_date': group.competitors.lifter.birth_date,
+    #         'fullname': group.competitors.lifter.__str__(),
+    #         'club': group.competitors.lifter.club,
+    #         # 'snatch_attempt_1'
+    #         # 'snatch_attempt_2'
+    #         # 'snatch_attempt_3'
+    #         # 'jerk_attempt_1'
+    #         # 'jerk_attempt_2'
+    #         # 'jerk_attempt_3'
+    #         'best_snatch': result.best_snatch,
+    #         'best_jerk': result.best_clean_and_jerk,
+    #         'total_weight': result.total,
+    #         'points': result.points,
+    #         'vetaran_points': result.points_veteran,
+    #         # 'placement':
+    #         # 'record'
+    #         # 'sinclair'
+    #     }
+
