@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.contrib.auth.decorators import login_required
 from .forms import LifterForm, JudgeForm, StaffForm
-from .models import Lifter, Judge, Staff
+from .models import Lifter, Judge, Staff, Competition, Group
 
 # Create your views here.
 
@@ -71,3 +71,20 @@ def staff_detail(request, pk):
         'fullname': staff.__str__(),
         'birth_date': staff.birth_date.strftime('%Y-%m-%d'),
     })
+
+
+def result_registration(request):
+    return render(request, 'resultregistration.html')
+    # returns all the tings you need to make the result registration form
+    # def build_registration_form(registration_form):
+    #     return {
+    #         'cateogry': group.competition.competitionCategory,
+    #         'organizer': club.clubName,
+    #         # 'location'
+    #         'date': competition.startDate,
+    #         'pool':
+    #         'fullname': lifter.__str__(),
+    #         'birth_date': lifter.birth_date.strftime('%Y-%m-%d'),
+    #         'club': lifter.club.clubName,
+    #     }
+    #

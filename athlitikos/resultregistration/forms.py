@@ -36,3 +36,9 @@ class StaffForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(StaffForm, self).__init__(*args, **kwargs)
         self.fields['birth_date'].widget = forms.widgets.SelectDateWidget(years=YEAR_CHOICES)
+
+
+class ResultRegistrationForm(forms.ModelForm):
+    class Meta:
+        model = Lifter
+        fields = ('first_name', 'birth_date')
