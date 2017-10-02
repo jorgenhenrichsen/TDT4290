@@ -24,7 +24,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'', include('resultregistration.urls')),
     url(r'', include('public.urls')),
-    url(r'', include('autocomplete.urls')),
 ]
 
 if settings.DEBUG:
