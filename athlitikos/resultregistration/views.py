@@ -13,7 +13,7 @@ def home(request):
 
 def lifter_detail(request, pk):
     lifter = get_object_or_404(Lifter, pk=pk)
-    return render(request, 'lifter_detail.html',
+    return render(request, 'resultregistration/lifter_detail.html',
                   {'fullname': lifter.__str__(),
                    'birth_date': lifter.birth_date.strftime('%Y-%m-%d'),
                    'gender': lifter.gender
