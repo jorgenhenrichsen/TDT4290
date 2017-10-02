@@ -1,7 +1,0 @@
-{% if persons.count > 0 %}
-{% for person in persons %}
-<li><a href="/person/get/{{ person.id }}/">{{ person.first_name }}</a></li>
-{% endfor %}
-{% else %}
-<p>None to show!</p>
-{% endif %}

@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'usermanagement',
     'userRoles',
     'public',
-    'autocomplete'
 ]
 
 MIDDLEWARE = [
