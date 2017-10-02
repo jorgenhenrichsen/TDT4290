@@ -1,0 +1,18 @@
+
+{% extends 'base.html' %}
+
+<!--  loads your static-files -->
+
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static  'autocomplete/style.css'%}">
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <div class="button-box" >
+
+        <button>Register Results</button>
+        <button>Edit Results</button>
+
+    </div>
+{% endblock %}

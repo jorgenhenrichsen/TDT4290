@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'usermanagement',
     'userRoles',
     'public',
+    'autocomplete'
 ]
 
 MIDDLEWARE = [
@@ -127,4 +128,15 @@ LOGIN_REDIRECT_URL = '/home'
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+<<<<<<< HEAD
 STATICFILES_DIRS = ( os.path.join('static'), )
+=======
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "autocomplete", "static"),
+    # '/var/www/static/',
+]
+
+STATIC_ROOT = (os.getcwd() + "autocomplete/static/autocomplete/js")
+
+>>>>>>> autoCompletion
