@@ -1,7 +1,6 @@
 from django.shortcuts import render, HttpResponse
 from resultregistration.models import Club, Result, Lifter
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
-from django.views.decorators.csrf import csrf_exempt
 import json
 import functools
 import operator
@@ -9,9 +8,12 @@ import operator
 
 # Create your views here.
 
-
 def search(request):
-
+    """
+    The search page
+    :param request:
+    :return:
+    """
     clubs = Club.objects.all()
     if request.method == 'GET':
         query_text = request.GET.get('query_text')
@@ -25,16 +27,16 @@ def search(request):
     return render(request, 'public/search.html', {'clubs': clubs})
 
 
-@csrf_exempt
 def search_for_lifter(request):
-
-    if True:#request.is_ajax():
+    """
+    Used for autompletion on lifter names
+    :param request:
+    :return:
+    """
+    if request.is_ajax():
         terms = request.GET.get('term', '')
-        print(terms)
-        # `search` is the user's provided search string.
+
         queries = [SearchQuery(query) for query in terms.split(' ')]
-        print(queries)
-        # `name` is where the name of the school is stored in the model.
         vector = SearchVector('first_name', 'last_name')
         query = functools.reduce(operator.or_, queries)
 
