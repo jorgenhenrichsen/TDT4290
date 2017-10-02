@@ -19,5 +19,5 @@ $(function(){
 
 function searchSuccess(data, textStatus, jqXHR)
 {
-    $('#search-results').html(data);
+    $('#autocomplete-results').html(data);
 }

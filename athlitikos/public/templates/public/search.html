@@ -3,6 +3,21 @@
 
 {% block head %}
         <link rel="stylesheet" type="text/css" href="/static/css/search.css">
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" media="all" />
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript">
+        </script> <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
+
+
+        <script type="text/javascript">
+
+        $(function() {
+          $("#lifters").autocomplete({
+            source: "/search/lifter/",
+            minLength: 2,
+          });
+        });
+
+        </script>
 {%  endblock %}
 
 
@@ -13,8 +28,8 @@
         <h1>Søk etter resultater</h1>
 
         <form class="query-form" role="search" action="/search/">
-            <div class="form-group">
-                <input type="text" class="query-text-input" placeholder="Navn..." name="query_text">
+            <div class="ui-widget">
+                <input type="text" id="lifters" class="query-text-input" placeholder="Navn...">
 
                 <select class="search-selector" name="club_id">
                     <option disabled selected value="">Velg klubb</option>
@@ -35,9 +50,6 @@
 
             </div>
          </form>
-
-
-
 
 
         <div class="search-results-container">
