@@ -1,6 +1,8 @@
 from django.db import models
 from .enums import Gender, JudgeLevel
 from .validators import validate_name
+from django.core.validators import MaxValueValidator
+from django.core.validators import MinValueValidator
 #from datetime import datetime
 #from django.db.models.signals import pre_save is usefull ;)
 
@@ -77,7 +79,7 @@ class MoveAttempt(models.Model):
     MOVE_TYPE_CHOICES = ((0, 'Snatch'), (1, 'Clean and jerk'))
     parentResult = models.ForeignKey('Result', on_delete=models.CASCADE)    # The Result this is part of
     moveType = models.IntegerField(choices=MOVE_TYPE_CHOICES)
-    attemptNum = models.IntegerField()
+    attemptNum = models.IntegerField(validators=[MaxValueValidator(3),MinValueValidator(1)])
     weight = models.IntegerField()  # Weight that was attempted lifted
     success = models.BooleanField()
 

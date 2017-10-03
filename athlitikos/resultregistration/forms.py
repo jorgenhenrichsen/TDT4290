@@ -2,7 +2,7 @@ from django import forms
 from .models import Lifter, Judge, Staff
 from django.utils import timezone
 
-YEAR_CHOICES = [y for y in range(1900, timezone.now().year)]
+YEAR_CHOICES = [y for y in range(1900, timezone.now().year+1)]
 
 
 class LifterForm(forms.ModelForm):
