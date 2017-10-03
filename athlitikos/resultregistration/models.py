@@ -33,6 +33,7 @@ class Group(models.Model):
     technicalController = models.ForeignKey('Staff', related_name='technicalController')
     cheifMarshall = models.ForeignKey('Staff', related_name='chiefMarshall')
     timeKeeper = models.ForeignKey('Staff', related_name='timeKeeper')
+
     notes = models.CharField(max_length=300, null=True)
     recordsDescription = models.CharField(max_length=300,  null=True)
 
