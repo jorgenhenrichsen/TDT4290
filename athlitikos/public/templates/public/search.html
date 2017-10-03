@@ -2,8 +2,8 @@
 {% extends 'base.html' %}
 
 {% block head %}
-        <link rel="stylesheet" type="text/css" href="/static/css/search.css">
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" media="all" />
+        <link rel="stylesheet" type="text/css" href="/static/css/search.css">
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript">
         </script> <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
 
@@ -61,22 +61,44 @@
                 </select>
 
                 <input type="hidden" value="" id="lifter-id" name="lifter_id">
-                <input class="search-button" type="submit" value="Søk">
-
 
             </div>
          </form>
 
-        <button onclick="submitForm()">Sub</button>
+        <button class="search-button" onclick="submitForm()">Søk</button>
 
 
-        <div class="search-results-container">
+        <div class="search-results-section">
+            <table class="result-table">
 
-            {% for result in results %}
+                <tr>
+                    <th>Utøver</th>
+                    <th>Klubb</th>
+                    <th>Kategori</th>
+                    <th>Arrangør</th>
+                    <th>Rykk</th>
+                    <th>Støt</th>
+                    <th>Total</th>
+                    <th>Poeng</th>
+                    <th>Veteranpoeng</th>
+                </tr>
 
-                <label>{{ result.lifter.first_name }} {{ result.lifter.last_name }}</label><br>
+                {% for result in results %}
 
-            {% endfor %}
+                    <th>{{ result.lifter.first_name }} {{ result.lifter.last_name }}</th>
+                    <th>{{ result.lifter.club.clubName }}</th>
+                    <th>Kategori</th>
+                    <th>Arrangør</th>
+                    <th>{{ result.get_best_snatch }}</th>
+                    <th>{{ result.get_bets_clean_and_jerk }}</th>
+                    <th>{{ result.total }}</th>
+                    <th>{{ result.points }}</th>
+                    <th>{{ result.points_veteran }}</th>
+
+                {% endfor %}
+
+            </table>
+
 
         </div>
 
