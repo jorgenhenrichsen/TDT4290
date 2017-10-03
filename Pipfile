@@ -5,6 +5,5 @@ verify_ssl = true
 [packages]
 django = "*"
 psycopg2 = "*"
-Django = "*"
 enum34 = "*"
-
+django-betterforms = "*"
