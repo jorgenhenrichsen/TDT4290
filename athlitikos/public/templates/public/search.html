@@ -10,12 +10,26 @@
 
         <script type="text/javascript">
 
+        var selectedLifter;
+
         $(function() {
-          $("#lifters").autocomplete({
-            source: "/search/lifter/",
-            minLength: 2,
+          $("#query-text").autocomplete({
+              source: "/search/lifter/",
+              minLength: 2,
+              select: function (event, ui) {
+                  var id = ui.item.id
+                  console.log("Selected " + ui.item.label, "ID: " + id);
+                  selectedLifter = id;
+              }
           });
         });
+
+        function submitForm() {
+            var form = document.getElementById("search-form");
+            var lifterId = document.getElementById("lifter-id");
+            lifterId.value = selectedLifter;
+            form.submit();
+        }
 
         </script>
 {%  endblock %}
@@ -27,9 +41,9 @@
 
         <h1>Søk etter resultater</h1>
 
-        <form class="query-form" role="search" action="/search/">
+        <form class="query-form" id="search-form" role="search" action="/search/">
             <div class="ui-widget">
-                <input type="text" id="lifters" class="query-text-input" placeholder="Navn...">
+                <input type="text" id="query-text" class="query-text-input" placeholder="Navn..." name="query_text">
 
                 <select class="search-selector" name="club_id">
                     <option disabled selected value="">Velg klubb</option>
@@ -46,10 +60,14 @@
                     <option disabled selected>Velg kategori</option>
                 </select>
 
+                <input type="hidden" value="" id="lifter-id" name="lifter_id">
                 <input class="search-button" type="submit" value="Søk">
+
 
             </div>
          </form>
+
+        <button onclick="submitForm()">Sub</button>
 
 
         <div class="search-results-container">
