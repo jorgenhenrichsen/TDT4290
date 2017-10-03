@@ -2,6 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.contrib.auth.decorators import login_required
 from .forms import LifterForm, JudgeForm, StaffForm, CompiledResultRegistrationForm
 from .models import Lifter, Judge, Staff, Competition, Group, Result
+# from django.views.generic import UpdateView
+# from .forms import UserEditMultiForm
+
+
 
 # Create your views here.
 
@@ -74,7 +78,8 @@ def staff_detail(request, pk):
 
 
 def result_registration(request):
-
     form = CompiledResultRegistrationForm()
     return render(request, 'resultregistration/resultregistration.html', {'form': form})
-
+#
+# class ResultReigstrationView(UpdateView):
+#     Model =

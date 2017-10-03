@@ -10,6 +10,13 @@
     <h1>Herro</h1>
     <form method="POST" class="post-form">{% csrf_token %}
         {{ form.as_p }}
+{#        <div class="competition_information">#}
+{#            <label>Stevnekategori: {{ competitionCategory }}</label>#}
+{#        </div>#}
+
+{#        <label for="id_competition-details-competitionCategory">Stevnekategori: {{ competitionCategory }}</label>#}
+
+
         <input class="save-button" type="submit" value="Lagre">
     </form>
 

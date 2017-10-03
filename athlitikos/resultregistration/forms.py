@@ -50,12 +50,12 @@ class CompetitonForm(forms.ModelForm):
 class ClubForm(forms.ModelForm):
     class Meta:
         model = Club
-        fields = '__all__'
+        fields = ('clubName',)
 
 class GroupForm(forms.ModelForm):
     class Meta:
         model = Group
-        fields = '__all__'
+        exclude = ['competition', 'recordsDescription', 'competitors']
         # May have to remove the foreign key models
 
 class ResultForm(forms.ModelForm):
