@@ -1,9 +1,21 @@
 {% extends 'base.html' %}
 
+
+{% block head %}
+        <link rel="stylesheet" type="text/css" href="/static//css/resultregistration.css">
+{%  endblock %}
+
 {% block content %}
+
     <h1>Herro</h1>
     <form method="POST" class="post-form">{% csrf_token %}
         {{ form.as_p }}
         <input class="save-button" type="submit" value="Lagre">
     </form>
+
 {% endblock %}
+
+
+
+
+
