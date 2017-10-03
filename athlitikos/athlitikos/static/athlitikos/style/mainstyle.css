@@ -1,4 +1,5 @@
 /*overwrites browser standard for padding and margin*/
+
 * {
   margin: 0;
   padding: 0;
@@ -11,6 +12,9 @@
     background-color: #cb1e1f;
     padding: 0;
 }
+
+
+
 
 /*gives all the elements in the navbar some styling*/
 .navbar a {
@@ -49,6 +53,8 @@ input[type=submit] {
     border-radius: 4px;
     cursor: pointer;
 }
+
+
 
 input[type=submit]:hover {
     background-color: #45a049;

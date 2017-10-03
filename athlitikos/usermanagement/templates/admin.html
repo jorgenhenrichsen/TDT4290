@@ -1,17 +1,9 @@
 {% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'usermanagement/adminpanel.css' %}">
+{% block head %}
+        <link rel="stylesheet" type="text/css" href="/static/usermanagement/adminpanel.css">
+{%  endblock %}
 
-    {% block head %}
-    {% endblock head %}
-
-    <title> NVF </title>
-</head>
-
-{% block title %}Home{% endblock %}
 
 {% block content %}
     <div style="" class="button-box" >
@@ -23,3 +15,4 @@
 
     </div>
 {% endblock %}
+
