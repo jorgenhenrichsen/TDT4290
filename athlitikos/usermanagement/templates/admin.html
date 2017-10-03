@@ -1,9 +1,20 @@
 {% extends 'base.html' %}
 
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'usermanagement/adminpanel.css' %}">
+
+    {% block head %}
+    {% endblock head %}
+
+    <title> NVF </title>
+</head>
+
 {% block title %}Home{% endblock %}
 
 {% block content %}
-    <div class="button-box" >
+    <div style="" class="button-box" >
 
         <button>Brukeradministrasjon</button>
         <button>Stevner til godkjenning</button>
