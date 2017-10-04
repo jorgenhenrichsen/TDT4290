@@ -47,6 +47,7 @@ input {
 th, td {
     font-weight: lighter;
     padding: 10px;
+    padding-left: 0;
 }
 
 thead {
@@ -55,5 +56,14 @@ thead {
 
 th.header {
     font-weight: bold;
+    background-repeat: no-repeat;
+    background-position: center right;
 }
 
+th.headerSortUp {
+    background-image: url(../icons/UpArrowBlack.png);
+}
+
+th.headerSortDown {
+    background-image: url(../icons/DownArrowBlack.png);
+}
