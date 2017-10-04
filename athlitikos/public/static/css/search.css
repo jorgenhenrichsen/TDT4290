@@ -10,8 +10,14 @@
 
 }
 
-.result-table {
+.result-table, th, td {
     width: 100%;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 5px;
 }
 
 .search-button {
@@ -38,4 +44,9 @@
     transform: translate(-50%, -0%);
     -ms-transform: translate(-50%, -0%); /* IE 9 */
     -webkit-transform: translate(-50%, -0%); /* Chrome, Safari, Opera */
+}
+
+input {
+    margin-top: 20px;
+    margin-bottom: 20px;
 }

@@ -68,22 +68,24 @@
         <button class="search-button" onclick="submitForm()">Søk</button>
 
 
-        <div class="search-results-section">
+        <section class="search-results-section">
             <table class="result-table">
 
-                <tr>
-                    <th>Utøver</th>
-                    <th>Klubb</th>
-                    <th>Kategori</th>
-                    <th>Arrangør</th>
-                    <th>Rykk</th>
-                    <th>Støt</th>
-                    <th>Total</th>
-                    <th>Poeng</th>
-                    <th>Veteranpoeng</th>
+                <tr class="result-header">
+                    <th class="result-header-item">Utøver</th>
+                    <th class="result-header-item">Klubb</th>
+                    <th class="result-header-item">Kategori</th>
+                    <th class="result-header-item">Arrangør</th>
+                    <th class="result-header-item">Rykk</th>
+                    <th class="result-header-item">Støt</th>
+                    <th class="result-header-item">Total</th>
+                    <th class="result-header-item">Poeng</th>
+                    <th class="result-header-item">Veteranpoeng</th>
                 </tr>
 
                 {% for result in results %}
+
+                <tr>
 
                     <th>{{ result.lifter.first_name }} {{ result.lifter.last_name }}</th>
                     <th>{{ result.lifter.club.clubName }}</th>
@@ -95,12 +97,14 @@
                     <th>{{ result.points }}</th>
                     <th>{{ result.points_veteran }}</th>
 
+                </tr>
+
                 {% endfor %}
 
             </table>
 
 
-        </div>
+        </section>
 
     </div>
 

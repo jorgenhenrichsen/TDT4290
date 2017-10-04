@@ -4,9 +4,8 @@ from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 import json
 import functools
 import operator
+import athlitikos.settings as settings
 
-
-# Create your views here.
 
 def search(request):
     """
@@ -14,17 +13,14 @@ def search(request):
     :param request:
     :return:
     """
+
     clubs = Club.objects.all()
     if request.method == 'GET':
-        query_text = request.GET.get('query_text')
         lifter_id = request.GET.get('lifter_id')
-
         results = search_for_results(lifter_id)
-
         return render(request, 'public/search.html', {'clubs': clubs, 'results': results})
 
     return render(request, 'public/search.html', {'clubs': clubs})
-
 
 def search_for_lifter(request):
     """
@@ -51,7 +47,8 @@ def search_for_lifter(request):
     else:
         data = 'error'
 
-    print(data)
+    if settings.DEBUG:
+        print(data)
 
     mime_type = 'application/json'
     return HttpResponse(data, mime_type)
@@ -60,7 +57,12 @@ def search_for_lifter(request):
 
 
 def search_for_results(lifter_id):
-    results = Result.objects.filter(lifter_id__exact=lifter_id)
+
+    if lifter_id is not None and not lifter_id == 'undefined':
+        results = Result.objects.filter(lifter_id__exact=lifter_id)
+    else:
+        results = Result.objects.all()
+
     return results
 
 
@@ -76,7 +78,6 @@ def search_for_lifters_psql(query):
 
 
 def search_for_lifter_containing(query):
-
     lifters_first_name = Lifter.objects.filter(first_name__icontains=query)
     lifters_last_name = Lifter.objects.filter(last_name__icontains=query)
     lifters = lifters_first_name.union(lifters_last_name)
