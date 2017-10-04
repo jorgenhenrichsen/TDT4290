@@ -12,7 +12,9 @@
 
 
         $(document).ready(function () {
-           $("#result-table").tablesorter();
+           $("#result-table").tablesorter({
+               cancelSelection:true,
+           });
         });
 
         var selectedLifter;
@@ -99,7 +101,7 @@
                 <tr class="result-element">
 
                     <th>{{ result.lifter.first_name }} {{ result.lifter.last_name }}</th>
-                    <th>{{ result.lifter.club.clubName }}</th>
+                    <th>{{ result.lifter.club }}</th>
                     <th>Kategori</th>
                     <th>Arrangør</th>
                     <th>{{ result.get_best_snatch }}</th>
@@ -110,6 +112,8 @@
 
                 </tr>
 
+                {%  empty %}
+                    <tr>Ingen resultater for ditt søk.</tr>
                 {% endfor %}
 
             </table>

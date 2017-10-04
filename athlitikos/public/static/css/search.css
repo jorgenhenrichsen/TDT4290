@@ -58,12 +58,13 @@ th.header {
     font-weight: bold;
     background-repeat: no-repeat;
     background-position: center right;
+    background-image: url(../icons/UpAndDownArrowBlack.svg);
 }
 
 th.headerSortUp {
-    background-image: url(../icons/UpArrowBlack.png);
+    background-image: url(../icons/UpArrowBlack.svg);
 }
 
 th.headerSortDown {
-    background-image: url(../icons/DownArrowBlack.png);
+    background-image: url(../icons/DownArrowBlack.svg);
 }
