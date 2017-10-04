@@ -10,6 +10,7 @@ button{
 }
 
 #buttonLink {
-  visibility: hidden;
+  text-decoration: none;
 }
+
 
