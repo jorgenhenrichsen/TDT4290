@@ -42,7 +42,7 @@
 
 {% block content %}
 
-    <div class="search-container centered-horizontal">
+    <section class="search-section">
 
         <h1>Søk etter resultater</h1>
 
@@ -72,8 +72,10 @@
 
         <button class="search-button" onclick="submitForm()">Søk</button>
 
+    </section>
 
-        <section class="search-results-section">
+
+    <section class="search-results-section">
             <table class="tablesorter" id="result-table">
                 <thead>
 
@@ -94,7 +96,7 @@
 
                 {% for result in results %}
 
-                <tr>
+                <tr class="result-element">
 
                     <th>{{ result.lifter.first_name }} {{ result.lifter.last_name }}</th>
                     <th>{{ result.lifter.club.clubName }}</th>
@@ -114,7 +116,5 @@
 
 
         </section>
-
-    </div>
 
 {% endblock %}

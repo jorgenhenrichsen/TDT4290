@@ -1,7 +1,6 @@
 
-.search-container {
-    width: 90%;
-    margin-top: 30px;
+.search-section {
+    padding: 30px;
 }
 
 .search-selector {
@@ -36,7 +35,25 @@
     -webkit-transform: translate(-50%, -0%); /* Chrome, Safari, Opera */
 }
 
+#result-table {
+    width: 100%;
+}
+
 input {
     margin-top: 20px;
     margin-bottom: 20px;
 }
+
+th, td {
+    font-weight: lighter;
+    padding: 10px;
+}
+
+thead {
+    box-shadow: 0px 2px 2px grey;
+}
+
+th.header {
+    font-weight: bold;
+}
+
