@@ -10,16 +10,6 @@
 
 }
 
-.result-table, th, td {
-    width: 100%;
-    border: 1px solid black;
-    border-collapse: collapse;
-}
-
-th, td {
-    padding: 5px;
-}
-
 .search-button {
     background-color: #cb1e1f;
     border: none;
