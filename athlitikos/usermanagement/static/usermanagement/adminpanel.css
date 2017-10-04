@@ -9,3 +9,7 @@ button{
     font-size: large;
 }
 
+#buttonLink {
+  visibility: hidden;
+}
+
