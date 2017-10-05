@@ -18,23 +18,50 @@
         });
 
         var selectedLifter;
+        var selectedClub;
 
+        /*
+         * Autocomplete function for the name text-input-field.
+         */
         $(function() {
-          $("#query-text").autocomplete({
+          $("#query-lifter").autocomplete({
               source: "/search/lifter/",
               minLength: 2,
               select: function (event, ui) {
-                  var id = ui.item.id
+                  var id = ui.item.id;
                   console.log("Selected " + ui.item.label, "ID: " + id);
                   selectedLifter = id;
               }
           });
         });
 
+        /*
+         * Autocomplete function for the club text-input-field.
+         */
+        $(function () {
+            $("#query-club").autocomplete({
+                source: "/search/club/",
+                minLength: 1,
+                select: function (event, ui) {
+                    var id = ui.item.id;
+                    console.log("Selected " + ui.item.label, "ID: " + id);
+                    selectedClub = id;
+                }
+            });
+        });
+
+        /*
+         * Custom form-submit function to supply ids for selected items.
+         */
         function submitForm() {
             var form = document.getElementById("search-form");
+
             var lifterId = document.getElementById("lifter-id");
             lifterId.value = selectedLifter;
+
+            var clubId = document.getElementById("club-id");
+            clubId.value = selectedClub;
+
             form.submit();
         }
 
@@ -50,24 +77,11 @@
 
         <form class="query-form" id="search-form" role="search" action="/search/">
             <div class="ui-widget">
-                <input type="text" id="query-text" class="query-text-input" placeholder="Navn..." name="query_text">
-
-                <select class="search-selector" name="club_id">
-                    <option disabled selected value="">Velg klubb</option>
-                    {% for club in clubs %}
-                        <option value={{ club.pk }}>{{ club.clubName }}</option>
-                    {% endfor %}
-                </select>
-
-                <select class="search-selector">
-                    <option disabled selected value="">Velg vektklasse</option>
-                </select>
-
-                <select class="search-selector">
-                    <option disabled selected>Velg kategori</option>
-                </select>
+                <input type="text" id="query-lifter" class="query-text-input" placeholder="Navn..." name="query_lifter">
+                <input type="text" id="query-club" class="query-text-input" placeholder="Klubb..." name="query_club">
 
                 <input type="hidden" value="" id="lifter-id" name="lifter_id">
+                <input type="hidden" value="" id="club-id" name="club_id">
 
             </div>
          </form>
