@@ -30,7 +30,10 @@ class CompetitionTestCase(TestCase):
 
         trondheimIL.competition.add(norgesmesterskap, midtnorsk)
 
-        #self.assertEqual(trondheimIL.objects.filter(competition__competitionCategory = "Norgesmesterskap"), "Norgesmesterskap")
+        club_name = Club.objects.filter(competition__competitionCategory = "Norgesmesterskap")\
+            .values_list('clubName', flat=True).first()
+
+        self.assertEqual(club_name, "TrondheimIL")
 
 
 
