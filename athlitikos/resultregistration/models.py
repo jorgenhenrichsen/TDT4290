@@ -2,19 +2,31 @@ from django.db import models
 from .enums import Gender, JudgeLevel, MoveTypes, AgeGroup
 from math import log10
 from datetime import date
+from .enums import Gender, JudgeLevel
+from .validators import validate_name
+#from datetime import datetime
+#from django.db.models.signals import pre_save is usefull ;)
 
 
 # Create your models here.
 
 class Competition(models.Model):
     # comeptitionArranger = models.ForeignKey(Organisation)
-    competitionCategory = models.CharField(max_length=100)
+    competitionCategory = models.CharField(max_length=100,validators=[validate_name])
     location = models.CharField(max_length=100)
-    startDate = models.DateField()
+    startDate = models.DateField(help_text="år-måned-dag")
 
     def __str__(self):
         return '{0}, {1}, {2}'.format(self.competitionCategory, self.location, self.startDate)
 
+class Club(models.Model):
+    clubName = models.CharField(max_length=100)
+    region = models.CharField(max_length=100)
+    address = models.CharField(max_length=100)
+    models.ManyToManyField(Competition, null=True) #One Club can join many competitions
+
+    def __str__(self):
+        return self.clubName
 
 
 class Group(models.Model):
@@ -198,10 +210,8 @@ class MoveAttempt(models.Model):
 
 
 class Person(models.Model):
-
-    first_name = models.CharField(max_length=40, verbose_name='Fornavn')
-    last_name = models.CharField(max_length=100, verbose_name='Etternavn')
-
+    first_name = models.CharField(max_length=40, verbose_name='Fornavn', validators=[validate_name])
+    last_name = models.CharField(max_length=100, verbose_name='Etternavn', validators=[validate_name])
 
     def __str__(self):
         return self.fullname()
@@ -214,11 +224,14 @@ class Lifter(Person):
 
     birth_date = models.DateField(verbose_name='Fødselsdato', null=True)   # Changed from dateTime, as we don't need time of birth
     gender = models.CharField(max_length=10, verbose_name='Kjønn', choices=Gender.choices(), null=True)
+    club = models.ForeignKey('Club', null=True)  # The club that this lifter< belongs to
 
 
 class Judge(Person):
 
     judge_level = models.CharField(max_length=10, choices=JudgeLevel.choices(), default=JudgeLevel.Level0)
+
+
 
 
 class Staff(Person):
