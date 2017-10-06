@@ -46,9 +46,7 @@ class CompetitionForm(forms.ModelForm):
 class GroupForm(forms.ModelForm):
     class Meta:
         model = Group
-        fields = ('groupNumber', 'competition', 'date', 'competitors', 'competitionLeader',
-                  'jury', 'judges', 'secretary', 'speaker', 'technicalController',
-                  'chiefMarshall', 'timeKeeper', 'notes', 'recordsDescription')
+        fields = '__all__'
 
     def __init__(self, *args, **kwargs):
         super(GroupForm, self).__init__(*args, **kwargs)

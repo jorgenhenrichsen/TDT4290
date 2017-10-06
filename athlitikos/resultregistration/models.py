@@ -88,6 +88,10 @@ class Result(models.Model):
     body_weight = models.FloatField(verbose_name='Kroppsvekt', null=True)
     age_group = models.CharField(max_length=20, verbose_name='Kategori', choices=AgeGroup.choices(), null=True)
 
+    _sinclair_coefficient = models.FloatField(db_column='sinclair_coefficient')
+    _best_clean_and_jerk = models.ForeignKey('MoveAttempt', related_name='best_clean_and_jerk', db_column='best_clean_and_jerk')
+    _best_snatch = models.ForeignKey('MoveAttempt', related_name='best_snatch', db_column='best_snatch')
+
     def get_age(self):
         if self.lifter:
             lifter = Lifter.objects.get(pk=self.lifter)
@@ -120,6 +124,11 @@ class Result(models.Model):
     # def weight_class(self):
     weight_class = models.IntegerField(verbose_name='Vektklasse', null=True)
 
+    # @property
+    # def sinclair_coefficient(self):
+    #     return self._sinclair_coefficient
+
+    # @sinclair_coefficient.setter
     @property
     def sinclair_coefficient(self):
         if self.lifter.gender == 'M': # or decimalField?
@@ -129,10 +138,11 @@ class Result(models.Model):
             a = self.sinclair_A_women
             b = self.sinclair_b_women
         if self.body_weight > b:
-            return 1
+            self._sinclair_coefficient = 1
         else:
             x = log10(self.body_weight/b)
-            return 10**(a*(x**2))
+            self._sinclair_coefficient = 10**(a*(x**2))
+        return self._sinclair_coefficient
 
 
 
@@ -160,6 +170,7 @@ class Result(models.Model):
         self.sinclair_A_men, self.sinclair_b_men, self.sinclair_A_women, self.sinclair_b_women\
             = self.populate_sinclair_coeff('D:/Projects/TDT4290/athlitikos/athlitikos/static/athlitikos/coefficients/sinclairValues.txt')
         self.age = self.get_age()
+
 
 
 
