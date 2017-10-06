@@ -1,7 +1,7 @@
 from django import forms
-from .models import *
+from .models import Competition, Club, Group, Result, MoveAttempt, Lifter, Judge, Staff
 from django.utils import timezone
-from betterforms.multiform import MultiModelForm
+
 
 
 YEAR_CHOICES = [y for y in range(1900, timezone.now().year)]
@@ -40,7 +40,7 @@ class StaffForm(forms.ModelForm):
         self.fields['birth_date'].widget = forms.widgets.SelectDateWidget(years=YEAR_CHOICES)
 
 
-# For the resultregistration page
+#For the resultregistration page
 class CompetitonForm(forms.ModelForm):
     class Meta:
         model = Competition
@@ -69,12 +69,3 @@ class MoveAttemptForm(forms.ModelForm):
     class Meta:
         model = MoveAttempt
         fields = '__all__'
-
-class CompiledResultRegistrationForm(MultiModelForm):
-    form_classes = {
-        'competition-details': CompetitonForm,
-        'administrative-details': GroupForm,
-        'lifter': LifterForm,
-        'move-attempt': MoveAttemptForm,
-        'results': ResultForm,
-    }

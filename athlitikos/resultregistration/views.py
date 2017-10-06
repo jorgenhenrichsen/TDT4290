@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.contrib.auth.decorators import login_required
-from .forms import LifterForm, JudgeForm, StaffForm, CompiledResultRegistrationForm
-from .models import Lifter, Judge, Staff, Competition, Group, Result
+from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm, CompetitonForm
+from .models import Lifter, Judge, Staff
 # from django.views.generic import UpdateView
-# from .forms import UserEditMultiForm
+
 
 
 
@@ -78,8 +78,9 @@ def staff_detail(request, pk):
 
 
 def result_registration(request):
-    form = CompiledResultRegistrationForm()
-    return render(request, 'resultregistration/resultregistration.html', {'form': form})
-#
-# class ResultReigstrationView(UpdateView):
-#     Model =
+    form = MoveAttemptForm()
+    form = ResultForm()
+    form = GroupForm()
+    form = ClubForm()
+    form = CompetitonForm()
+    return render(request, 'resultregistration/resultregistration.html', context={'MoveAttemptForm': MoveAttemptForm, 'ResultForm': ResultForm, 'GroupForm': GroupForm, 'ClubForm': ClubForm, 'CompetitonForm': CompetitonForm})

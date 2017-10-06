@@ -9,17 +9,17 @@ from .validators import validate_name
 
 class Competition(models.Model):
     # comeptitionArranger = models.ForeignKey(Organisation)
-    competitionCategory = models.CharField(max_length=100,validators=[validate_name])
-    location = models.CharField(max_length=100)
+    competitionCategory = models.CharField(max_length=100,validators=[validate_name], verbose_name='Kategori')
+    location = models.CharField(max_length=100, verbose_name='Sted')
     startDate = models.DateField(help_text="år-måned-dag")
 
     def __str__(self):
         return '{0}, {1}, {2}'.format(self.competitionCategory, self.location, self.startDate)
 
 class Club(models.Model):
-    clubName = models.CharField(max_length=100)
-    region = models.CharField(max_length=100)
-    address = models.CharField(max_length=100)
+    clubName = models.CharField(max_length=100, verbose_name='Klubbnavn')
+    region = models.CharField(max_length=100,  verbose_name='Krets')
+    address = models.CharField(max_length=100, verbose_name='Adresse')
     models.ManyToManyField(Competition, null=True) #One Club can join many competitions
 
     def __str__(self):
@@ -28,21 +28,21 @@ class Club(models.Model):
 
 class Group(models.Model):
     #   Identifying
-    groupNumber = models.IntegerField()
+    groupNumber = models.IntegerField(verbose_name='Gruppenummer')
     competition = models.ForeignKey(Competition)
     date = models.DateField()
 
     competitors = models.ForeignKey('Lifter', null=True)
 
-    competitionLeader = models.ForeignKey('Staff', related_name='competitionLeader')
-    jury = models.ManyToManyField('Staff', related_name='jury')
-    judges = models.ManyToManyField('Judge', related_name='judges')
-    secretary = models.ForeignKey('Staff', related_name='secretary')
-    speaker = models.ForeignKey('Staff', related_name='speaker')
-    technicalController = models.ForeignKey('Staff', related_name='technicalController')
-    cheifMarshall = models.ForeignKey('Staff', related_name='chiefMarshall')
-    timeKeeper = models.ForeignKey('Staff', related_name='timeKeeper')
-    notes = models.CharField(max_length=300)
+    competitionLeader = models.ForeignKey('Staff', related_name='competitionLeader', verbose_name='Stevnets leder')
+    jury = models.ManyToManyField('Staff', related_name='jury', verbose_name='Jury')
+    judges = models.ManyToManyField('Judge', related_name='judges', verbose_name='Dommer')
+    secretary = models.ForeignKey('Staff', related_name='secretary', verbose_name='Sekretær')
+    speaker = models.ForeignKey('Staff', related_name='speaker', verbose_name='Speaker')
+    technicalController = models.ForeignKey('Staff', related_name='technicalController', verbose_name='Teknisk kontrollør')
+    cheifMarshall = models.ForeignKey('Staff', related_name='chiefMarshall', verbose_name='Chief marshall')
+    timeKeeper = models.ForeignKey('Staff', related_name='timeKeeper', verbose_name='Tidtaker')
+    notes = models.CharField(max_length=300, verbose_name='Notater')
     recordsDescription = models.CharField(max_length=300)
 
     def __str__(self):
@@ -64,8 +64,8 @@ class Result(models.Model):
     sinclair_coefficient = models.FloatField(null=True)  # or decimalField?
 
     #   Should be derived from the best snatch and clean_and_jerk MoveAttempts respectively
-    best_snatch = models.ForeignKey('MoveAttempt', related_name='best_snatch', null=True)
-    best_clean_and_jerk = models.ForeignKey('MoveAttempt', related_name='best_clean_and_jerk', null=True)
+    best_snatch = models.ForeignKey('MoveAttempt', related_name='best_snatch', null=True, verbose_name='Beste rykk')
+    best_clean_and_jerk = models.ForeignKey('MoveAttempt', related_name='best_clean_and_jerk', null=True, verbose_name='Beste støt')
 
     group = models.ForeignKey(Group, null=True)     # The Group that this result belongs to.
     lifter = models.ForeignKey('Lifter')    # The Lifter that this result belongs to
@@ -113,8 +113,6 @@ class Lifter(Person):
 class Judge(Person):
 
     judge_level = models.CharField(max_length=10, choices=JudgeLevel.choices(), default=JudgeLevel.Level0)
-
-
 
 
 class Staff(Person):
