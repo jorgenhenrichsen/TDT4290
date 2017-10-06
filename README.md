@@ -88,6 +88,19 @@ in front of the issue number it fixes, either in the title or the description. E
 The pull request will then be linked with the issue and the task on Waffle.io. Also check that all of your tasks/issues and pull reguest
 is closed on waffle.io when the merge is complete. 
 
+#Testing
+
+When you are writing your own tests, do the following:
+
+* First, look at resultregistration.tests.py. Check what tests are relevant for you and copy them.
+It is ok if nothing is relevant, but try to think of some edge cases you can test :) 
+
+* Then run: python manage.py test. This will execute all the tests!
+
+* Testing can seem unnecessary, but often there are bugs that we did not see :), and testing helps our customer 
+who will work on the code later. They give a better picture of how the code works, so I hope everyone can adapt
+a positive attitude when it comes to testing!
+
 
 ## TODO:
   * Linting?
