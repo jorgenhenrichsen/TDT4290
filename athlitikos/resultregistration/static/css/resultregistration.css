@@ -1,6 +1,43 @@
 form {
     background-color: gray;
+}
+
+.form-container {
+    margin: auto;
+    max-width: 95%;
+}
+
+.before-table {
+    /*white-space: nowrap;*/
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.after-table {
+    display: flex;
+}
+
+.first-column {
+    display: flex;
+    /*white-space: nowrap;*/
+    flex-direction: column;
+    max-width: 50%;
+}
+
+.second-column {
+    /*white-space: nowrap;*/
+    display: flex;
+    flex-direction: column;
+    max-width: 50%;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.table-buttons {
+    display: flex;
 }
 
