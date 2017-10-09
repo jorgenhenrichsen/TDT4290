@@ -118,11 +118,11 @@ Then add an external tool:
 And input the fields like this (Values can be found below the image):
 ![](https://i.imgur.com/pbMjcyp.png)
 
-Program: $PyInterpreterDirectory$/python
+Program: `$PyInterpreterDirectory$/python`
 
-Parameters: -m flake8 --max-complexity 10
+Parameters: `-m flake8 --max-complexity 10`
 
-Working directory: $ProjectFileDir$
+Working directory: `$ProjectFileDir$`
 
 Then linting for files should be available like this:
 ![](https://i.imgur.com/WsDEplj.png)
