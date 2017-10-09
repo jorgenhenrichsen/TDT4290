@@ -30,10 +30,14 @@ class CompetitionTestCase(TestCase):
 
         trondheimIL.competition.add(norgesmesterskap, midtnorsk)
 
+        #Checking for club names, which contain the competition Norgesmesterskap
+
         club_name = Club.objects.filter(competition__competitionCategory = "Norgesmesterskap")\
             .values_list('clubName', flat=True).first()
 
         self.assertEqual(club_name, "TrondheimIL")
+
+
 
 
 
