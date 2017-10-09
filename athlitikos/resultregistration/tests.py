@@ -36,15 +36,3 @@ class CompetitionTestCase(TestCase):
             .values_list('clubName', flat=True).first()
 
         self.assertEqual(club_name, "TrondheimIL")
-
-
-
-
-
-
-
-
-
-
-
-
