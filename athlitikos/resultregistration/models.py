@@ -46,8 +46,8 @@ class Group(models.Model):
     cheifMarshall = models.ForeignKey('Staff', related_name='chiefMarshall')
     timeKeeper = models.ForeignKey('Staff', related_name='timeKeeper')
 
-    notes = models.CharField(max_length=300, null=True)
-    recordsDescription = models.CharField(max_length=300,  null=True)
+    notes = models.CharField(max_length=300, null=True, blank=True)
+    recordsDescription = models.CharField(max_length=300,  null=True, blank=True)
 
     def __str__(self):
         return '{0}, group {1}, {2}'.format(self.competition, self.groupNumber, self.date)
@@ -100,9 +100,9 @@ class Result(models.Model):
     body_weight = models.FloatField(verbose_name='Kroppsvekt', null=True)
     age_group = models.CharField(max_length=20, verbose_name='Kategori', choices=AgeGroup.choices(), null=True)
 
-    _sinclair_coefficient = models.FloatField(db_column='sinclair_coefficient')
-    _best_clean_and_jerk = models.ForeignKey('MoveAttempt', related_name='best_clean_and_jerk', db_column='best_clean_and_jerk')
-    _best_snatch = models.ForeignKey('MoveAttempt', related_name='best_snatch', db_column='best_snatch')
+    _sinclair_coefficient = models.FloatField(db_column='sinclair_coefficient', null=True, blank=True)
+    # _best_clean_and_jerk = models.ForeignKey('MoveAttempt', related_name='best_clean_and_jerk', db_column='best_clean_and_jerk', null=True, blank=True)
+    # _best_snatch = models.ForeignKey('MoveAttempt', related_name='best_snatch', db_column='best_snatch', null=True, blank=True)
 
     def get_age(self):
         if self.lifter:
@@ -111,26 +111,6 @@ class Result(models.Model):
         return 0
     age = 0
     # age = date.today().year - lifter.birth_date.year
-
-    @property
-    def get_best_snatch(self):
-        attempts = MoveAttempt.objects.filter(parentResult=self.id, success=True, moveType='Snatch')
-        best_attempt = 0
-        for l in attempts:
-            if l.weight > best_attempt:
-                best_attempt = l.weight
-        return best_attempt
-
-
-
-    @property
-    def get_best_clean_and_jerk(self):
-        attempts = MoveAttempt.objects.filter(parentResult=self.id, success=True, moveType='Clean and jerk')
-        best_attempt = 0
-        for l in attempts:
-            if l.weight > best_attempt:
-                best_attempt = l.weight
-        return best_attempt
 
     # @property
     # def weight_class(self):
@@ -183,7 +163,8 @@ class Result(models.Model):
             = self.populate_sinclair_coeff('D:/Projects/TDT4290/athlitikos/athlitikos/static/athlitikos/coefficients/sinclairValues.txt')
         self.age = self.get_age()
 
-
+    def __str__(self):
+        return self.lifter.fullname() + str(self.group.competition)
 
 
 

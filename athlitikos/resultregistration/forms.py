@@ -55,7 +55,7 @@ class GroupForm(forms.ModelForm):
 class ResultForm(forms.ModelForm):
     class Meta:
         model = Result
-        fields = ('group', 'lifter', 'body_weight', 'age_group')
+        fields = '__all__'
 
     def __init__(self, *args, **kwargs):
         super(ResultForm, self).__init__(*args, **kwargs)
