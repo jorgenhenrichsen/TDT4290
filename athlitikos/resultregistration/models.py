@@ -9,7 +9,7 @@ from .validators import validate_name
 
 class Competition(models.Model):
     # comeptitionArranger = models.ForeignKey(Organisation)
-    competitionCategory = models.CharField(max_length=100,validators=[validate_name], verbose_name='Kategori')
+    competitionCategory = models.CharField(max_length=100,validators=[validate_name], verbose_name='Stevnekategori')
     location = models.CharField(max_length=100, verbose_name='Sted')
     startDate = models.DateField(help_text="år-måned-dag")
 
