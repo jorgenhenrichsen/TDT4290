@@ -12,4 +12,3 @@ admin.site.register(models.Group)
 admin.site.register(models.Result)
 admin.site.register(models.MoveAttempt)
 admin.site.register(models.Club)
-

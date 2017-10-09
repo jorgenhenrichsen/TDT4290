@@ -1,7 +1,8 @@
 from django.http import HttpResponse
-from .models import ClubOfficial
+# from .models import ClubOfficial
+
 
 def club_official_options(request):
 
-    html = ''
+    # html = ''
     return HttpResponse()

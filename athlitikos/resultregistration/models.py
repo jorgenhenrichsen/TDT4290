@@ -1,26 +1,27 @@
 from django.db import models
 from .enums import Gender, JudgeLevel
 from .validators import validate_name
-#from datetime import datetime
-#from django.db.models.signals import pre_save is usefull ;)
+# from datetime import datetime
+# from django.db.models.signals import pre_save is usefull ;)
 
 
 # Create your models here.
 
 class Competition(models.Model):
     # comeptitionArranger = models.ForeignKey(Organisation)
-    competitionCategory = models.CharField(max_length=100,validators=[validate_name])
+    competitionCategory = models.CharField(max_length=100, validators=[validate_name])
     location = models.CharField(max_length=100)
     startDate = models.DateField(help_text="år-måned-dag")
 
     def __str__(self):
         return '{0}, {1}, {2}'.format(self.competitionCategory, self.location, self.startDate)
 
+
 class Club(models.Model):
     clubName = models.CharField(max_length=100)
     region = models.CharField(max_length=100)
     address = models.CharField(max_length=100)
-    models.ManyToManyField(Competition, null=True) #One Club can join many competitions
+    models.ManyToManyField(Competition, null=True)  # One Club can join many competitions
 
     def __str__(self):
         return self.clubName
@@ -51,6 +52,7 @@ class Group(models.Model):
     class Meta:
         unique_together = ('groupNumber', 'competition')
 
+
 # Result for weightlifting(snatch/cleanAndJerk)
 class Result(models.Model):
     resultID = models.IntegerField(primary_key=True)
@@ -67,11 +69,11 @@ class Result(models.Model):
     lifter = models.ForeignKey('Lifter')    # The Lifter that this result belongs to
 
     def get_best_snatch(self):
-        #TODO: Implement
+        # TODO: Implement
         pass
 
     def get_bets_clean_and_jerk(self):
-        #TODO: Implement
+        # TODO: Implement
         pass
 
 
@@ -100,7 +102,6 @@ class Person(models.Model):
     last_name = models.CharField(max_length=100, verbose_name='Etternavn', validators=[validate_name])
     birth_date = models.DateField(verbose_name='Fødselsdato')   # Changed from dateTime, as we don't need time of birth
 
-
     def __str__(self):
         return self.fullname()
 
@@ -117,8 +118,6 @@ class Lifter(Person):
 class Judge(Person):
 
     judge_level = models.CharField(max_length=10, choices=JudgeLevel.choices(), default=JudgeLevel.Level0)
-
-
 
 
 class Staff(Person):
