@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "3232a8fbe38a3f058eb513a6a8d09cb1dde1330dbccb6a9e999df2a2e33c32c4"
+            "sha256": "d42d4f565fb45c6de6fa644dc95cac3d4e1a0da511c5fb0a52fc776d64d7c863"
         },
         "pipfile-spec": 1,
         "requires": {},
@@ -24,6 +24,12 @@
         },
         "mccabe": {
             "version": "==0.6.1"
+        },
+        "pep8": {
+            "version": "==1.7.0"
+        },
+        "pep8-naming": {
+            "version": "==0.4.1"
         },
         "psycopg2": {
             "version": "==2.7.3.1"
