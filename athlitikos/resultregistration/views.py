@@ -1,11 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.contrib.auth.decorators import login_required
 from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm, CompetitonForm
-from .models import Lifter, Judge, Staff
 # from django.views.generic import UpdateView
-
-
-
+from django.http import JsonResponse
+from .models import Lifter, Judge, Staff, Result, MoveAttempt, Competition, Club
 
 # Create your views here.
 
@@ -73,8 +71,9 @@ def staff_detail(request, pk):
     staff = get_object_or_404(Staff, pk=pk)
     return render(request, 'staff_detail.html', {
         'fullname': staff.__str__(),
-        'birth_date': staff.birth_date.strftime('%Y-%m-%d'),
+        # 'birth_date': staff.birth_date.strftime('%Y-%m-%d'),
     })
+
 
 
 def result_registration(request):
@@ -84,3 +83,23 @@ def result_registration(request):
     form = ClubForm()
     form = CompetitonForm()
     return render(request, 'resultregistration/resultregistration.html', context={'MoveAttemptForm': MoveAttemptForm, 'ResultForm': ResultForm, 'GroupForm': GroupForm, 'ClubForm': ClubForm, 'CompetitonForm': CompetitonForm})
+
+
+
+def get_best_snatch_for_result(request, pk):
+    all_attempts = MoveAttempt.objects.filter(parentResult=pk, moveType='Snatch')
+    best_attempt = 0
+    for attempt in all_attempts:
+        if attempt.success and attempt.weight>best_attempt:
+            best_attempt = attempt.weight
+    return JsonResponse({'best_snatch': str(best_attempt)})
+
+def get_best_clean_and_jerk_for_result(request, pk):
+    all_attempts = MoveAttempt.objects.filter(parentResult=pk, moveType='Clean and jerk')
+    best_attempt = 0
+    for attempt in all_attempts:
+        if attempt.weight > best_attempt:
+            best_attempt = attempt.weight
+    return JsonResponse({'best_clean_and_jerk': str(best_attempt)})
+
+
