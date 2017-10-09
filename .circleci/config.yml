@@ -52,7 +52,7 @@ jobs:
             source ~/repo/.venv/bin/activate
             # Perform tests here
             python athlitikos/manage.py test athlitikos/
-            flake8 /.
+            flake8 athlitikos/
             deactivate
 
       - store_artifacts:
