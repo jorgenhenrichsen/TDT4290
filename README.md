@@ -127,7 +127,34 @@ Working directory: `$ProjectFileDir$`
 Then linting for files should be available like this:
 ![](https://i.imgur.com/WsDEplj.png)
 
+## Code Style
+Not everything will be captured by the linter, so the creator and reviewer of a Pull Reqeust must enforce some rules themselves. Here are some general rules (Some of them is covered by the linter):
+### Naming
 
-## TODO:
+#### Variables and functions
+- Avoid camelcase!
+- Make descriptive names.
+
+DO:
+```
+SOME_CONSTANT = ""
+some_property = ""
+def some_function_yeah(param_one, param_two)
+```
+
+DON'T:
+```
+SomeConstant = ""
+someProperty = ""
+def someFunctionYeah(paramOne, paramTwo)
+```
+
+#### Classes
+- Use capitalized camelcase.
+```
+class SomeClass(ParentClass):
+```
+
+# TODO:
   * Deploy on version release or tag?
   
