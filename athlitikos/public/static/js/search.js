@@ -1,6 +1,3 @@
-/**
- * Created by jorgenhenrichsen on 04/10/2017.
- */
 
 $(document).ready(function () {
    $("#result-table").tablesorter({
