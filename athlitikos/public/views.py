@@ -2,7 +2,6 @@ from django.shortcuts import render, HttpResponse
 import json
 from .search.search import SearchFiltering
 import athlitikos.settings as settings
-from resultregistration.models import Club, Result, Lifter
 
 
 def search(request):
@@ -11,7 +10,6 @@ def search(request):
     :param request:
     :return:
     """
-    clubs = Club.objects.all()
     if request.method == 'GET':
         lifter_id = request.GET.get('lifter_id')
         club_id = request.GET.get('club_id')
@@ -19,9 +17,9 @@ def search(request):
         to_date = request.GET.get('to_date')
         results = SearchFiltering.search_for_results(lifter_id, club_id, from_date, to_date)
 
-        return render(request, 'public/search.html', {'clubs': clubs, 'results': results})
+        return render(request, 'public/search.html', {'results': results})
 
-    return render(request, 'public/search.html', {'clubs': clubs})
+    return render(request, 'public/search.html')
 
 
 def search_for_lifter(request):
@@ -37,9 +35,14 @@ def search_for_lifter(request):
 
         results = []
         for lifter in lifters:
+
+            lifter_string = lifter.lifter.first_name +\
+                            " " + lifter.lifter.last_name +\
+                            ", " + lifter.club.clubName
+
             lifter_json = {
-                'label': lifter.lifter.first_name + " " + lifter.lifter.last_name + ", " + lifter.club.clubName,
-                'value': lifter.lifter.first_name + " " + lifter.lifter.last_name + ", " + lifter.club.clubName,
+                'label': lifter_string,
+                'value': lifter_string,
                 'id': lifter.lifter.id,
             }
             results.append(lifter_json)
