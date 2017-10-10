@@ -12,104 +12,77 @@ from .validators import validate_name
 class Melzer_Faber(models.Model):
     age = models.IntegerField(verbose_name='Alder')
     coefficient = models.FloatField(verbose_name='Koeffisient')
+    year = models.IntegerField(verbose_name='Årstall')
 
     class Meta:
-        unique_together = ('age', 'coefficient')
+        unique_together = ('age', 'coefficient', 'year')
+
+    def __str__(self):
+        return 'M-F for år {}: {}:{}'.format(self.year, self.age, self.coefficient)
+
 
 class Sinclair(models.Model):
     gender = models.CharField(max_length=10, verbose_name='Kjønn', choices=Gender.choices())
-    sinclair_b = models.FloatField()
-    sinclair_A = models.FloatField()
-    year = models.IntegerField()
+    sinclair_b = models.FloatField(verbose_name='b')
+    sinclair_A = models.FloatField(verbose_name='A')
+    year = models.IntegerField(verbose_name='Årstall')
+
+    class Meta:
+        unique_together = ('gender', 'sinclair_b', 'sinclair_A', 'year')
 
     def __str__(self):
-        return self.gender
+        return
+
 
 class Competition(models.Model):
-    # comeptitionArranger = models.ForeignKey(Organisation)
-    competitionCategory = models.CharField(max_length=100,validators=[validate_name])
+    competition_category = models.CharField(max_length=100,validators=[validate_name])
     location = models.CharField(max_length=100)
-    startDate = models.DateField(help_text="år-måned-dag")
+    start_date = models.DateField(help_text="år-måned-dag")
 
     def __str__(self):
-        return '{0}, {1}, {2}'.format(self.competitionCategory, self.location, self.startDate)
+        return '{0}, {1}, {2}'.format(self.competition_category, self.location, self.start_date)
+
 
 class Club(models.Model):
-    clubName = models.CharField(max_length=100)
+    club_name = models.CharField(max_length=100)
+    competition = models.ManyToManyField(Competition, null=True) #One Club can join many competitions
     region = models.CharField(max_length=100)
-    address = models.CharField(max_length=100)
-    models.ManyToManyField(Competition, null=True) #One Club can join many competitions
 
     def __str__(self):
-        return self.clubName
+        return self.club_name
 
 
 class Group(models.Model):
-    #   Identifying
-    groupNumber = models.IntegerField()
+    #   Identifying attributes
+    group_number = models.IntegerField()
     competition = models.ForeignKey(Competition)
     date = models.DateField()
 
     competitors = models.ManyToManyField('Lifter')
 
-    competitionLeader = models.ForeignKey('Staff', related_name='competitionLeader')
+    competition_leader = models.ForeignKey('Staff', related_name='competition_leader')
     jury = models.ManyToManyField('Staff', related_name='jury')
     judges = models.ManyToManyField('Judge', related_name='judges')
     secretary = models.ForeignKey('Staff', related_name='secretary')
     speaker = models.ForeignKey('Staff', related_name='speaker')
-    technicalController = models.ForeignKey('Staff', related_name='technicalController')
-    cheifMarshall = models.ForeignKey('Staff', related_name='chiefMarshall')
-    timeKeeper = models.ForeignKey('Staff', related_name='timeKeeper')
+    technical_controller = models.ForeignKey('Staff', related_name='technical_controller')
+    cheif_marshall = models.ForeignKey('Staff', related_name='chief_marshall')
+    time_keeper = models.ForeignKey('Staff', related_name='time_keeper')
 
     notes = models.CharField(max_length=300, null=True, blank=True)
-    recordsDescription = models.CharField(max_length=300,  null=True, blank=True)
+    records_description = models.CharField(max_length=300,  null=True, blank=True)
 
     def __str__(self):
-        return '{0}, group {1}, {2}'.format(self.competition, self.groupNumber, self.date)
+        return '{0}, group {1}, {2}'.format(self.competition, self.group_number, self.date)
 
     class Meta:
         unique_together = ('groupNumber', 'competition')
 
+
 # Result for weightlifting(snatch/cleanAndJerk)
 class Result(models.Model):
-    #
-    # def populate_age_coefficients(self, file_path):
-    #     valueFile = open(file_path)
-    #     values = valueFile.read()
-    #     valuelist = []
-    #     coeffs = {}
-    #     for l in values.split('\n'):
-    #         valuelist += l.split()
-    #     for i in range(0,len(valuelist),2):
-    #         coeffs[valuelist[i]] = valuelist[i+1]
-    #     return coeffs
-    #
-    # def populate_sinclair_coeff(self, file_path):
-    #     sinclairFile = open(file_path)
-    #     values = sinclairFile.read()
-    #     valuelist = []
-    #     for l in values.split('\n'):
-    #         valuelist += l.split()
-    #     sinclairAMan = float(valuelist[-4])
-    #     sinclairAWoman = float(valuelist[-3])
-    #     sinclairbMan = float(valuelist[-2])
-    #     sinclairbWoman = float(valuelist[-1])
-    #     return sinclairAMan, sinclairAWoman, sinclairbMan, sinclairbWoman
 
-
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     self.melzer_faber = self.populate_age_coefficients(file_path='/athlitikos/static/athlitikos/coefficients/meltzerFaberCoefficients.txt')
-    #     self.sinclair_A_men, self.sinclair_b_men, self.sinclair_A_women, self.sinclair_b_women = self.populate_sinclair_coeff(file_path='../athlitikos/static/athlitikos/coefficients/sinclairValues.txt')
-
-
-    # melzer_faber = {}
-    # sinclair_A_men = 0
-    # sinclair_b_men = 0
-    # sinclair_A_women = 0
-    # sinclair_b_women = 0
-
-    resultID = models.IntegerField(primary_key=True)
+    # resultID = models.IntegerField(primary_key=True)    # Removed, as built in pk is better
 
     group = models.ForeignKey(Group, null=True)     # The Group that this result belongs to.
 
@@ -120,6 +93,7 @@ class Result(models.Model):
 
     sinclair_coefficient = models.FloatField(db_column='sinclair_coefficient', null=True, blank=True)
     veteran_coefficient = models.FloatField(db_column='melzer_faber_coefficient', null=True, blank=True)
+    age = models.IntegerField()
 
     best_clean_and_jerk = models.ForeignKey('MoveAttempt', related_name='best_clean_and_jerk', db_column='best_clean_and_jerk', null=True, blank=True)
     best_snatch = models.ForeignKey('MoveAttempt', related_name='best_snatch', db_column='best_snatch', null=True, blank=True)
@@ -128,86 +102,16 @@ class Result(models.Model):
     points_with_sinclair = models.FloatField(verbose_name='Poeng med sinclair', blank=True, null=True)  # total_lift*sinclair_coefficient
     points_with_veteran = models.FloatField(verbose_name='Veteranpoeng', blank=True, null=True)   # points_with_sinclair*melzerfaber_coefficient
 
-    def get_age(self):
-        if self.lifter:
-            lifter = Lifter.objects.get(pk=self.lifter)
-            return date.today().year - lifter.birth_date.year
-        return 0
-    age = 0
-    # age = date.today().year - lifter.birth_date.year
-
-    # @property
-    # def weight_class(self):
-
-    # @property
-    # def sinclair_coefficient(self):
-    #     return self._sinclair_coefficient
-
-    # @sinclair_coefficient.setter
-    # @property
-    # def sinclair_coefficient(self):
-    #     if self.lifter.gender == 'M': # or decimalField?
-    #         a = Sinclair.objects.get(gender='M')#self.sinclair_A_men
-    #         b = self.sinclair_b_men
-    #     else: #self.lifter.gender == 'K':
-    #         a = self.sinclair_A_women
-    #         b = self.sinclair_b_women
-    #     if self.body_weight > b:
-    #         self._sinclair_coefficient = 1
-    #     else:
-    #         x = log10(self.body_weight/b)
-    #         self._sinclair_coefficient = 10**(a*(x**2))
-    #     return self._sinclair_coefficient
-
-
-
-    # @property
-    # def points(self):
-    #     return self.get_best_snatch.weight + self.get_best_clean_and_jerk.weight
-
-    #   points multiplied with sinclair coefficient
-    # @property
-    # def total(self):
-    #     sinclair = Sinclair.objects.get(gender=self.lifter.gender)
-    #     sinclair_A = sinclair.sinclair_A
-    #     sinclair_b = sinclair.sinclair_b
-    #     coefficient = 1
-    #     if self.body_weight < sinclair_b:
-    #         x = log10(self.body_weight/sinclair_b)
-    #         coefficient = 10**(sinclair_A*(x**2))
-    #     return self.points*coefficient
-    #
-    # @property
-    # def veteranTotal(self):
-    #
-    #     if self.age not in self.melzer_faber:
-    #         return self.total
-    #     else:
-    #         return self.total*self.melzer_faber[self.age]
-
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     self.melzer_faber \
-    #         = self.populate_age_coefficients('D:/Projects/TDT4290/athlitikos/athlitikos/static/athlitikos/coefficients/meltzerFaberCoefficients.txt')  #(BASE_DIR + '/static/athlitikos/coefficients/meltzerFaberCoefficients.txt')
-    #     self.sinclair_A_men, self.sinclair_b_men, self.sinclair_A_women, self.sinclair_b_women\
-    #         = self.populate_sinclair_coeff('D:/Projects/TDT4290/athlitikos/athlitikos/static/athlitikos/coefficients/sinclairValues.txt')
-    #     self.age = self.get_age()
-
     def __str__(self):
         return self.lifter.fullname() + str(self.group.competition)
-
-
-
-
-
 
 
 class MoveAttempt(models.Model):
     # Currently only made for the lifting attempts, not the pentathlon
 
-    parentResult = models.ForeignKey('Result', on_delete=models.CASCADE)    # The Result this is part of
-    moveType = models.CharField(max_length=20, choices=MoveTypes.choices())
-    attemptNum = models.IntegerField()
+    parent_result = models.ForeignKey('Result', on_delete=models.CASCADE)    # The Result this is part of
+    move_type = models.CharField(max_length=20, choices=MoveTypes.choices())
+    attempt_num = models.IntegerField()
     weight = models.IntegerField()  # Weight that was attempted lifted
     success = models.BooleanField()
 
@@ -232,8 +136,8 @@ class Person(models.Model):
 
 
 class Lifter(Person):
-
-    birth_date = models.DateField(verbose_name='Fødselsdato', null=True)   # Changed from dateTime, as we don't need time of birth
+    # Changed from dateTime, as we don't need time of birth
+    birth_date = models.DateField(verbose_name='Fødselsdato', null=True)
     gender = models.CharField(max_length=10, verbose_name='Kjønn', choices=Gender.choices(), null=True)
     club = models.ForeignKey('Club', null=True)  # The club that this lifter< belongs to
 
@@ -243,15 +147,6 @@ class Judge(Person):
     judge_level = models.CharField(max_length=10, choices=JudgeLevel.choices(), default=JudgeLevel.Level0)
 
 
-
-
 class Staff(Person):
     pass
 
-# class Sinclair_coefficients(models.Model):
-#     gender = models.CharField(max_length=10, verbose_name='Kjønn', choices=Gender.choices())
-#     body_weight = models.DecimalField(verbose_name='Kroppsvekt',max_digits=4,decimal_places=1)
-#     coefficient = models.FloatField(verbose_name='Sinclairkoeffisient')
-#
-#     class Meta:
-#         unique_together = ('gender', 'body_weight', 'coefficient')
