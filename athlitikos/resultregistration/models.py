@@ -159,11 +159,11 @@ class Result(models.Model):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.melzer_faber \
-            = self.populate_age_coefficients('D:/Projects/TDT4290/athlitikos/athlitikos/static/athlitikos/coefficients/meltzerFaberCoefficients.txt')  #(BASE_DIR + '/static/athlitikos/coefficients/meltzerFaberCoefficients.txt')
-        self.sinclair_A_men, self.sinclair_b_men, self.sinclair_A_women, self.sinclair_b_women\
-            = self.populate_sinclair_coeff('D:/Projects/TDT4290/athlitikos/athlitikos/static/athlitikos/coefficients/sinclairValues.txt')
-        self.age = self.get_age()
+        # self.melzer_faber \
+        #     = self.populate_age_coefficients('D:/Projects/TDT4290/athlitikos/athlitikos/static/athlitikos/coefficients/meltzerFaberCoefficients.txt')  #(BASE_DIR + '/static/athlitikos/coefficients/meltzerFaberCoefficients.txt')
+        # self.sinclair_A_men, self.sinclair_b_men, self.sinclair_A_women, self.sinclair_b_women\
+        #     = self.populate_sinclair_coeff('D:/Projects/TDT4290/athlitikos/athlitikos/static/athlitikos/coefficients/sinclairValues.txt')
+        # self.age = self.get_age()
 
     def __str__(self):
         return self.lifter.fullname() + str(self.group.competition)
