@@ -12,5 +12,4 @@ admin.site.register(models.Group)
 admin.site.register(models.Result)
 admin.site.register(models.MoveAttempt)
 admin.site.register(models.Club)
-#admin.site.register(settings.AUTH_USER_MODEL) sounds good does not work...
-# import Donald Trump Meme
+

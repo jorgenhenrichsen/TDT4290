@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f04a6b09cc3f9b63bc919d2017982d241be875cbb15f66ead547a199717dd8a0"
+            "sha256": "d42d4f565fb45c6de6fa644dc95cac3d4e1a0da511c5fb0a52fc776d64d7c863"
         },
         "pipfile-spec": 1,
         "requires": {},
@@ -14,13 +14,31 @@
     },
     "default": {
         "django": {
-            "version": "==1.11.5"
+            "version": "==1.11.6"
         },
         "enum34": {
             "version": "==1.1.6"
         },
+        "flake8": {
+            "version": "==3.4.1"
+        },
+        "mccabe": {
+            "version": "==0.6.1"
+        },
+        "pep8": {
+            "version": "==1.7.0"
+        },
+        "pep8-naming": {
+            "version": "==0.4.1"
+        },
         "psycopg2": {
             "version": "==2.7.3.1"
+        },
+        "pycodestyle": {
+            "version": "==2.3.1"
+        },
+        "pyflakes": {
+            "version": "==1.5.0"
         },
         "pytz": {
             "version": "==2017.2"
