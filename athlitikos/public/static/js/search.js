@@ -62,5 +62,12 @@ function submitForm() {
     var clubId = document.getElementById("club-id");
     clubId.value = selectedClub;
 
-    form.submit();
+    $.ajax({
+        type: "GET",
+        url: "/search/results/",
+        dataType: "json",
+        success: function (response) {
+            console.log(response)
+        }
+    })
 }
