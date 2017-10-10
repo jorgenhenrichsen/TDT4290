@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponse
 import json
-from .search import SearchFiltering
+from .search import search
 import athlitikos.settings as settings
 from resultregistration.models import Club, Result, Lifter
 
@@ -11,14 +11,13 @@ def search(request):
     :param request:
     :return:
     """
-
     clubs = Club.objects.all()
     if request.method == 'GET':
         lifter_id = request.GET.get('lifter_id')
         club_id = request.GET.get('club_id')
         from_date = request.GET.get('from_date')
         to_date = request.GET.get('to_date')
-        results = SearchFiltering.search_for_results(lifter_id, club_id, from_date, to_date)
+        results = search.search_for_results(lifter_id, club_id, from_date, to_date)
 
         return render(request, 'public/search.html', {'clubs': clubs, 'results': results})
 
@@ -34,7 +33,7 @@ def search_for_lifter(request):
     if request.is_ajax():
         query = request.GET.get('term', '')
 
-        lifters = SearchFiltering.search_for_lifter_containing(query)
+        lifters = search.search_for_lifter_containing(query)
 
         results = []
         for lifter in lifters:
@@ -65,7 +64,7 @@ def search_for_clubs(request):
     """
     if request.is_ajax():
         query = request.GET.get('term', '')
-        clubs = SearchFiltering.search_for_club_containing(query)
+        clubs = search.search_for_club_containing(query)
 
         results = []
         for club in clubs:
