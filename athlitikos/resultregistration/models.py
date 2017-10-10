@@ -43,10 +43,12 @@ class Competition(models.Model):
         return '{0}, {1}, {2}'.format(self.competition_category, self.location, self.start_date)
 
 
+
 class Club(models.Model):
     club_name = models.CharField(max_length=100)
-    competition = models.ManyToManyField(Competition, null=True) #One Club can join many competitions
     region = models.CharField(max_length=100)
+    address = models.CharField(max_length=100)
+    competition = models.ManyToManyField(Competition, null=True, blank=True) #One Club can join many competitions
 
     def __str__(self):
         return self.club_name
@@ -104,6 +106,14 @@ class Result(models.Model):
 
     def __str__(self):
         return self.lifter.fullname() + str(self.group.competition)
+
+    def get_best_snatch(self):
+        #TODO: Implement
+        pass
+
+    def get_bets_clean_and_jerk(self):
+        #TODO: Implement
+        pass
 
 
 class MoveAttempt(models.Model):

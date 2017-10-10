@@ -1,0 +1,80 @@
+
+{% extends 'base.html' %}
+
+{% block head %}
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" media="all" />
+        <link rel="stylesheet" type="text/css" href="/static/css/search.css">
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript">
+        </script> <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
+        <script src="/static/js/jquery.tablesorter.js" type="text/javascript"></script>
+        <script type="text/javascript" src="/static/js/search.js"></script>
+{%  endblock %}
+
+
+{% block content %}
+
+    <section class="search-section">
+
+        <h1>Søk etter resultater</h1>
+
+        <form class="query-form" id="search-form" role="search" action="/search/">
+            <div class="ui-widget">
+                <input type="text" id="query-lifter" class="query-text-input" placeholder="Navn...">
+                <input type="text" id="query-club" class="query-text-input" placeholder="Klubb...">
+
+                <input type="hidden" value="" id="lifter-id" name="lifter_id">
+                <input type="hidden" value="" id="club-id" name="club_id">
+
+            </div>
+         </form>
+
+        <button class="search-button" onclick="submitForm()">Søk</button>
+
+    </section>
+
+
+    <section class="search-results-section">
+            <table class="tablesorter" id="result-table">
+                <thead>
+
+                    <tr>
+                        <th>Utøver</th>
+                        <th>Klubb</th>
+                        <th>Kategori</th>
+                        <th>Arrangør</th>
+                        <th>Rykk</th>
+                        <th>Støt</th>
+                        <th>Total</th>
+                        <th>Poeng</th>
+                        <th>Veteranpoeng</th>
+                    </tr>
+
+                </thead>
+
+
+                {% for result in results %}
+
+                <tr class="result-element">
+
+                    <th>{{ result.lifter.first_name }} {{ result.lifter.last_name }}</th>
+                    <th>{{ result.lifter.club }}</th>
+                    <th>Kategori</th>
+                    <th>Arrangør</th>
+                    <th>{{ result.get_best_snatch }}</th>
+                    <th>{{ result.get_bets_clean_and_jerk }}</th>
+                    <th>{{ result.total }}</th>
+                    <th>{{ result.points }}</th>
+                    <th>{{ result.points_veteran }}</th>
+
+                </tr>
+
+                {%  empty %}
+                    <tr>Ingen resultater for ditt søk.</tr>
+                {% endfor %}
+
+            </table>
+
+
+        </section>
+
+{% endblock %}

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'resultregistration',
     'usermanagement',
     'userRoles',
+    'public',
 ]
 
 MIDDLEWARE = [
@@ -128,7 +129,6 @@ LOGIN_REDIRECT_URL = '/home'
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-   os.path.join(BASE_DIR, "athlitikos", "static"),
-   # '/var/www/static/',
+    os.path.join(BASE_DIR, "static"),
+    # '/var/www/static/',
 ]
-STATIC_ROOT = (os.getcwd() + "athlitikos/static/athlitikos/coefficients")
