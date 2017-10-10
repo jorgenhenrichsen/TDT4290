@@ -39,6 +39,18 @@ $(function () {
 });
 
 /*
+ * Set up datepicker fields.
+ */
+
+$.datepicker.setDefaults({
+    dateFormat: "dd/mm/yy",
+});
+$(function () {
+    $("#from-date-picker").datepicker();
+    $("#to-date-picker").datepicker()
+});
+
+/*
  * Custom form-submit function to supply ids for selected items.
  */
 function submitForm() {
