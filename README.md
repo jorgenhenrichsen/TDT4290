@@ -155,6 +155,19 @@ def someFunctionYeah(paramOne, paramTwo)
 class SomeClass(ParentClass):
 ```
 
+# Testing
+
+When you are writing your own tests, do the following:
+
+* First, look at resultregistration.tests.py. Check what tests are relevant for you and copy them.
+It is ok if nothing is relevant, but try to think of some edge cases you can test :) 
+
+* Then run: python manage.py test. This will execute all the tests!
+
+* Testing can seem unnecessary, but often there are bugs that we did not see :), and testing helps our customer 
+who will work on the code later. They give a better picture of how the code works, so I hope everyone can adapt
+a positive attitude when it comes to testing!
+
 # TODO:
   * Deploy on version release or tag?
   
