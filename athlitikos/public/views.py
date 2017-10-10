@@ -1,10 +1,8 @@
 from django.shortcuts import render, HttpResponse
-from resultregistration.models import Club, Result, Lifter
-from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 import json
-import functools
-import operator
+from .search import SearchFiltering
 import athlitikos.settings as settings
+from resultregistration.models import Club, Result, Lifter
 
 
 def search(request):
@@ -18,7 +16,10 @@ def search(request):
     if request.method == 'GET':
         lifter_id = request.GET.get('lifter_id')
         club_id = request.GET.get('club_id')
-        results = search_for_results(lifter_id, club_id)
+        from_date = request.GET.get('from_date')
+        to_date = request.GET.get('to_date')
+        results = SearchFiltering.search_for_results(lifter_id, club_id, from_date, to_date)
+
         return render(request, 'public/search.html', {'clubs': clubs, 'results': results})
 
     return render(request, 'public/search.html', {'clubs': clubs})
@@ -33,7 +34,7 @@ def search_for_lifter(request):
     if request.is_ajax():
         query = request.GET.get('term', '')
 
-        lifters = search_for_lifter_containing(query)
+        lifters = SearchFiltering.search_for_lifter_containing(query)
 
         results = []
         for lifter in lifters:
@@ -64,7 +65,7 @@ def search_for_clubs(request):
     """
     if request.is_ajax():
         query = request.GET.get('term', '')
-        clubs = search_for_club_containing(query)
+        clubs = SearchFiltering.search_for_club_containing(query)
 
         results = []
         for club in clubs:
@@ -87,45 +88,14 @@ def search_for_clubs(request):
     return HttpResponse(data, mime_type)
 
 
-# HELPERS
+def search_for_results(request):
+
+    if request.is_ajax():
+        data = 'some'
+    else:
+        data = 'error'
+
+    mime_type = 'application/json'
+    return HttpResponse(data, mime_type)
 
 
-def search_for_results(lifter_id, club_id):
-
-    if settings.DEBUG:
-        print("Searching with lifter_id={}, club_id={}".format(lifter_id, club_id))
-
-    results = Result.objects.all()
-
-    if lifter_id is not None and not lifter_id == 'undefined':
-        results = results.filter(lifter_id__exact=lifter_id)
-
-    if club_id is not None and not club_id == 'undefined':
-        results = results.filter(lifter__club_id__exact=club_id)
-
-    if settings.DEBUG:
-        print(results)
-
-    return results
-
-
-def search_for_lifters_psql(query):
-    queries = [SearchQuery(x) for x in query.split(' ')]
-    vector = SearchVector('first_name', 'last_name')
-    combined_queries = functools.reduce(operator.or_, queries)
-
-    lifters = Lifter.objects.annotate(
-        rank=SearchRank(vector, combined_queries)).order_by('-rank')
-    lifters = lifters.filter(rank__gte=0.04)
-    return lifters
-
-
-def search_for_lifter_containing(query):
-    lifters_first_name = Lifter.objects.filter(first_name__icontains=query)
-    lifters_last_name = Lifter.objects.filter(last_name__icontains=query)
-    lifters = lifters_first_name.union(lifters_last_name)
-    return lifters
-
-
-def search_for_club_containing(query):
-    return Club.objects.filter(clubName__icontains=query)
