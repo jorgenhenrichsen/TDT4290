@@ -21,7 +21,6 @@ class Club(models.Model):
     clubName = models.CharField(max_length=100)
     region = models.CharField(max_length=100)
     address = models.CharField(max_length=100)
-    competition = models.ManyToManyField(Competition, null=True, blank=True)  # One Club can join many competitions
 
     def __str__(self):
         return self.clubName
@@ -119,6 +118,6 @@ class Judge(Person):
 
     judge_level = models.CharField(max_length=10, choices=JudgeLevel.choices(), default=JudgeLevel.Level0)
 
-    
+
 class Staff(Person):
     pass
