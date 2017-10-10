@@ -17,7 +17,7 @@ def search(request):
         to_date = request.GET.get('to_date')
         results = SearchFiltering.search_for_results(lifter_id, club_id, from_date, to_date)
 
-        return render(request, 'public/search.html', {'results': results})
+        return render(request, 'public/search.html')
 
     return render(request, 'public/search.html')
 
@@ -45,6 +45,7 @@ def search_for_lifter(request):
                 'value': lifter_string,
                 'id': lifter.lifter.id,
             }
+
             results.append(lifter_json)
 
         data = json.dumps(results)
@@ -91,9 +92,19 @@ def search_for_clubs(request):
 
 
 def search_for_results(request):
-    print("HERE")
+
     if request.is_ajax():
-        data = 'some'
+
+        results = SearchFiltering.search_for_results(None, None, None, None)
+        json_array = []
+        for result in results:
+            result_json = {
+                "points": result.points
+            }
+            json_array.append(result_json)
+
+        data = json.dumps(json_array)
+
     else:
         data = 'error'
 

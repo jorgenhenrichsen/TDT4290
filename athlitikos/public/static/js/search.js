@@ -66,8 +66,15 @@ function submitForm() {
         type: "GET",
         url: "/search/results/",
         dataType: "json",
-        success: function (response) {
-            console.log(response)
+        success: function (data) {
+            console.log(data);
+            /* TODO: Update the table with the received json data */
+        },
+        error: function () {
+          console.log("ERROR");  
+        },
+        complete: function () {
+            console.log("COMPLETE");
         }
-    })
+    });
 }
