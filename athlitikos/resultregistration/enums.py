@@ -28,7 +28,7 @@ class MoveTypes(ChoiceEnum):
     clean_and_jerk = 'Clean and jerk'
 
 class AgeGroup(ChoiceEnum):
-    youth = 'Youth'
-    junior = 'Junior'
-    senior = 'Senior'
-    master = 'Master'
+    youth = 'U'
+    junior = 'J'
+    senior = 'S'
+    master = 'M'

@@ -9,6 +9,21 @@ from .validators import validate_name
 
 
 # Create your models here.
+class Melzer_Faber(models.Model):
+    age = models.IntegerField(verbose_name='Alder')
+    coefficient = models.FloatField(verbose_name='Koeffisient')
+
+    class Meta:
+        unique_together = ('age', 'coefficient')
+
+class Sinclair(models.Model):
+    gender = models.CharField(max_length=10, verbose_name='Kjønn', choices=Gender.choices())
+    sinclair_b = models.FloatField()
+    sinclair_A = models.FloatField()
+    year = models.IntegerField()
+
+    def __str__(self):
+        return self.gender
 
 class Competition(models.Model):
     # comeptitionArranger = models.ForeignKey(Organisation)
@@ -57,29 +72,29 @@ class Group(models.Model):
 
 # Result for weightlifting(snatch/cleanAndJerk)
 class Result(models.Model):
-
-    def populate_age_coefficients(self, file_path):
-        valueFile = open(file_path)
-        values = valueFile.read()
-        valuelist = []
-        coeffs = {}
-        for l in values.split('\n'):
-            valuelist += l.split()
-        for i in range(0,len(valuelist),2):
-            coeffs[valuelist[i]] = valuelist[i+1]
-        return coeffs
-
-    def populate_sinclair_coeff(self, file_path):
-        sinclairFile = open(file_path)
-        values = sinclairFile.read()
-        valuelist = []
-        for l in values.split('\n'):
-            valuelist += l.split()
-        sinclairAMan = float(valuelist[-4])
-        sinclairAWoman = float(valuelist[-3])
-        sinclairbMan = float(valuelist[-2])
-        sinclairbWoman = float(valuelist[-1])
-        return sinclairAMan, sinclairAWoman, sinclairbMan, sinclairbWoman
+    #
+    # def populate_age_coefficients(self, file_path):
+    #     valueFile = open(file_path)
+    #     values = valueFile.read()
+    #     valuelist = []
+    #     coeffs = {}
+    #     for l in values.split('\n'):
+    #         valuelist += l.split()
+    #     for i in range(0,len(valuelist),2):
+    #         coeffs[valuelist[i]] = valuelist[i+1]
+    #     return coeffs
+    #
+    # def populate_sinclair_coeff(self, file_path):
+    #     sinclairFile = open(file_path)
+    #     values = sinclairFile.read()
+    #     valuelist = []
+    #     for l in values.split('\n'):
+    #         valuelist += l.split()
+    #     sinclairAMan = float(valuelist[-4])
+    #     sinclairAWoman = float(valuelist[-3])
+    #     sinclairbMan = float(valuelist[-2])
+    #     sinclairbWoman = float(valuelist[-1])
+    #     return sinclairAMan, sinclairAWoman, sinclairbMan, sinclairbWoman
 
 
     # def __init__(self, *args, **kwargs):
@@ -88,21 +103,30 @@ class Result(models.Model):
     #     self.sinclair_A_men, self.sinclair_b_men, self.sinclair_A_women, self.sinclair_b_women = self.populate_sinclair_coeff(file_path='../athlitikos/static/athlitikos/coefficients/sinclairValues.txt')
 
 
-    melzer_faber = {}
-    sinclair_A_men = 0
-    sinclair_b_men = 0
-    sinclair_A_women = 0
-    sinclair_b_women = 0
+    # melzer_faber = {}
+    # sinclair_A_men = 0
+    # sinclair_b_men = 0
+    # sinclair_A_women = 0
+    # sinclair_b_women = 0
 
     resultID = models.IntegerField(primary_key=True)
+
     group = models.ForeignKey(Group, null=True)     # The Group that this result belongs to.
+
     lifter = models.ForeignKey('Lifter', null=True)    # The Lifter that this result belongs to
     body_weight = models.FloatField(verbose_name='Kroppsvekt', null=True)
     age_group = models.CharField(max_length=20, verbose_name='Kategori', choices=AgeGroup.choices(), null=True)
+    weight_class = models.IntegerField(verbose_name='Vektklasse', null=True)
 
-    _sinclair_coefficient = models.FloatField(db_column='sinclair_coefficient', null=True, blank=True)
-    # _best_clean_and_jerk = models.ForeignKey('MoveAttempt', related_name='best_clean_and_jerk', db_column='best_clean_and_jerk', null=True, blank=True)
-    # _best_snatch = models.ForeignKey('MoveAttempt', related_name='best_snatch', db_column='best_snatch', null=True, blank=True)
+    sinclair_coefficient = models.FloatField(db_column='sinclair_coefficient', null=True, blank=True)
+    veteran_coefficient = models.FloatField(db_column='melzer_faber_coefficient', null=True, blank=True)
+
+    best_clean_and_jerk = models.ForeignKey('MoveAttempt', related_name='best_clean_and_jerk', db_column='best_clean_and_jerk', null=True, blank=True)
+    best_snatch = models.ForeignKey('MoveAttempt', related_name='best_snatch', db_column='best_snatch', null=True, blank=True)
+
+    total_lift = models.IntegerField(verbose_name='Total poeng', blank=True, null=True)  # best_clean_and_jerk + best_snatch
+    points_with_sinclair = models.FloatField(verbose_name='Poeng med sinclair', blank=True, null=True)  # total_lift*sinclair_coefficient
+    points_with_veteran = models.FloatField(verbose_name='Veteranpoeng', blank=True, null=True)   # points_with_sinclair*melzerfaber_coefficient
 
     def get_age(self):
         if self.lifter:
@@ -114,54 +138,60 @@ class Result(models.Model):
 
     # @property
     # def weight_class(self):
-    weight_class = models.IntegerField(verbose_name='Vektklasse', null=True)
 
     # @property
     # def sinclair_coefficient(self):
     #     return self._sinclair_coefficient
 
     # @sinclair_coefficient.setter
-    @property
-    def sinclair_coefficient(self):
-        if self.lifter.gender == 'M': # or decimalField?
-            a = self.sinclair_A_men
-            b = self.sinclair_b_men
-        else: #self.lifter.gender == 'K':
-            a = self.sinclair_A_women
-            b = self.sinclair_b_women
-        if self.body_weight > b:
-            self._sinclair_coefficient = 1
-        else:
-            x = log10(self.body_weight/b)
-            self._sinclair_coefficient = 10**(a*(x**2))
-        return self._sinclair_coefficient
+    # @property
+    # def sinclair_coefficient(self):
+    #     if self.lifter.gender == 'M': # or decimalField?
+    #         a = Sinclair.objects.get(gender='M')#self.sinclair_A_men
+    #         b = self.sinclair_b_men
+    #     else: #self.lifter.gender == 'K':
+    #         a = self.sinclair_A_women
+    #         b = self.sinclair_b_women
+    #     if self.body_weight > b:
+    #         self._sinclair_coefficient = 1
+    #     else:
+    #         x = log10(self.body_weight/b)
+    #         self._sinclair_coefficient = 10**(a*(x**2))
+    #     return self._sinclair_coefficient
 
 
 
-    @property
-    def points(self):
-        return self.get_best_snatch.weight + self.get_best_clean_and_jerk.weight
+    # @property
+    # def points(self):
+    #     return self.get_best_snatch.weight + self.get_best_clean_and_jerk.weight
 
     #   points multiplied with sinclair coefficient
-    @property
-    def total(self):
-        return self.points*self.sinclair_coefficient
+    # @property
+    # def total(self):
+    #     sinclair = Sinclair.objects.get(gender=self.lifter.gender)
+    #     sinclair_A = sinclair.sinclair_A
+    #     sinclair_b = sinclair.sinclair_b
+    #     coefficient = 1
+    #     if self.body_weight < sinclair_b:
+    #         x = log10(self.body_weight/sinclair_b)
+    #         coefficient = 10**(sinclair_A*(x**2))
+    #     return self.points*coefficient
+    #
+    # @property
+    # def veteranTotal(self):
+    #
+    #     if self.age not in self.melzer_faber:
+    #         return self.total
+    #     else:
+    #         return self.total*self.melzer_faber[self.age]
 
-    @property
-    def veteranTotal(self):
-
-        if self.age not in self.melzer_faber:
-            return self.total
-        else:
-            return self.total*self.melzer_faber[self.age]
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.melzer_faber \
-            = self.populate_age_coefficients('D:/Projects/TDT4290/athlitikos/athlitikos/static/athlitikos/coefficients/meltzerFaberCoefficients.txt')  #(BASE_DIR + '/static/athlitikos/coefficients/meltzerFaberCoefficients.txt')
-        self.sinclair_A_men, self.sinclair_b_men, self.sinclair_A_women, self.sinclair_b_women\
-            = self.populate_sinclair_coeff('D:/Projects/TDT4290/athlitikos/athlitikos/static/athlitikos/coefficients/sinclairValues.txt')
-        self.age = self.get_age()
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     self.melzer_faber \
+    #         = self.populate_age_coefficients('D:/Projects/TDT4290/athlitikos/athlitikos/static/athlitikos/coefficients/meltzerFaberCoefficients.txt')  #(BASE_DIR + '/static/athlitikos/coefficients/meltzerFaberCoefficients.txt')
+    #     self.sinclair_A_men, self.sinclair_b_men, self.sinclair_A_women, self.sinclair_b_women\
+    #         = self.populate_sinclair_coeff('D:/Projects/TDT4290/athlitikos/athlitikos/static/athlitikos/coefficients/sinclairValues.txt')
+    #     self.age = self.get_age()
 
     def __str__(self):
         return self.lifter.fullname() + str(self.group.competition)
@@ -218,10 +248,10 @@ class Judge(Person):
 class Staff(Person):
     pass
 
-class Sinclair_coefficients(models.Model):
-    gender = models.CharField(max_length=10, verbose_name='Kjønn', choices=Gender.choices())
-    body_weight = models.DecimalField(verbose_name='Kroppsvekt',max_digits=4,decimal_places=1)
-    coefficient = models.FloatField(verbose_name='Sinclairkoeffisient')
-
-    class Meta:
-        unique_together = ('gender', 'body_weight', 'coefficient')
+# class Sinclair_coefficients(models.Model):
+#     gender = models.CharField(max_length=10, verbose_name='Kjønn', choices=Gender.choices())
+#     body_weight = models.DecimalField(verbose_name='Kroppsvekt',max_digits=4,decimal_places=1)
+#     coefficient = models.FloatField(verbose_name='Sinclairkoeffisient')
+#
+#     class Meta:
+#         unique_together = ('gender', 'body_weight', 'coefficient')
