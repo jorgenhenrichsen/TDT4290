@@ -1,0 +1,40 @@
+
+<table class="tablesorter" id="result-table">
+
+            <thead>
+
+                <tr>
+                    <th>Utøver</th>
+                    <th>Klubb</th>
+                    <th>Kategori</th>
+                    <th>Arrangør</th>
+                    <th>Rykk</th>
+                    <th>Støt</th>
+                    <th>Total</th>
+                    <th>Poeng</th>
+                    <th>Veteranpoeng</th>
+                </tr>
+
+            </thead>
+
+            {% if results %}
+            {% for result in results %}
+
+                <tr class="result-element">
+
+                    <th>{{ result.lifter.first_name }} {{ result.lifter.last_name }}</th>
+                    <th>{{ result.lifter.club }}</th>
+                    <th>Kategori</th>
+                    <th>Arrangør</th>
+                    <th>{{ result.get_best_snatch }}</th>
+                    <th>{{ result.get_bets_clean_and_jerk }}</th>
+                    <th>{{ result.total }}</th>
+                    <th>{{ result.points }}</th>
+                    <th>{{ result.points_veteran }}</th>
+
+                </tr>
+
+            {% endfor %}
+            {% endif %}
+
+</table>

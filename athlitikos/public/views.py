@@ -10,14 +10,14 @@ def search(request):
     :param request:
     :return:
     """
-    if request.method == 'GET':
+    if request.method == 'GET' and request.is_ajax():
         lifter_id = request.GET.get('lifter_id')
         club_id = request.GET.get('club_id')
         from_date = request.GET.get('from_date')
         to_date = request.GET.get('to_date')
         results = SearchFiltering.search_for_results(lifter_id, club_id, from_date, to_date)
 
-        return render(request, 'public/search.html')
+        return render(request, 'public/result-table.html', {'results': results})
 
     return render(request, 'public/search.html')
 

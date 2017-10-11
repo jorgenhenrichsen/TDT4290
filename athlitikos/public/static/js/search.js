@@ -64,11 +64,19 @@ function submitForm() {
 
     $.ajax({
         type: "GET",
-        url: "/search/results/",
-        dataType: "json",
-        success: function (data) {
-            console.log(data);
-            /* TODO: Update the table with the received json data */
+        url: "/search/",
+        dataType: "html",
+        data: {},
+        success: function (html) {
+
+            /* Replace the result table with the new one */
+            $('#result-table').html(html);
+            document.getElementById('result-table').classList.add('tablesorter');
+
+           $("#result-table").tablesorter({
+               cancelSelection:true,
+            });
+
         },
         error: function () {
           console.log("ERROR");  
