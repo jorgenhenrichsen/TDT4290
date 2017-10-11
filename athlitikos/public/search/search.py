@@ -6,7 +6,24 @@ from resultregistration.models import Club, Result, Lifter
 Contains helpers to search for objects in the database.
 """
 
+
 class SearchFiltering:
+
+    NONE_VALUES = [
+        "undefined",
+        "",
+        "none",
+        "None",
+    ]
+
+    @classmethod
+    def is_none_value(cls, value) -> bool:
+        """
+        Checks if a query parameter is a none-value, as defined in NONE_VALUES.
+        :param value:
+        :return: bool, true if the input is a none-value.
+        """
+        return value is None or SearchFiltering.NONE_VALUES.__contains__(str(value))
 
     @classmethod
     def search_for_results(cls, lifter_id, club_id, from_date, to_date):
@@ -25,17 +42,17 @@ class SearchFiltering:
 
         results = Result.objects.all()
 
-        if lifter_id is not None and not lifter_id == 'undefined':
+        if not SearchFiltering.is_none_value(lifter_id):
             results = results.filter(lifter_id__exact=lifter_id)
 
-        if club_id is not None and not club_id == 'undefined':
+        if not SearchFiltering.is_none_value(club_id):
             results = results.filter(lifter__club_id__exact=club_id)
 
-        if from_date is not None and not from_date == 'undefined':
+        if not SearchFiltering.is_none_value(from_date):
             from_date_formatted = datetime.strptime(from_date, "%d/%m/%Y").date()
             results = results.filter(group__competition__startDate__gte=from_date_formatted)
 
-        if to_date is not None and not to_date == 'undefined':
+        if not SearchFiltering.is_none_value(to_date):
             to_date_formatted = datetime.strptime(to_date, "%d/%m/%Y").date()
             results = results.filter(group__competition__startDate__lte=to_date_formatted)
 
@@ -58,4 +75,9 @@ class SearchFiltering:
 
     @classmethod
     def search_for_club_containing(cls, query):
+        """
+        Find clubs
+        :param query: The query
+        :return: The clubs where the club name contains the query string.
+        """
         return Club.objects.filter(clubName__icontains=query)
