@@ -35,9 +35,16 @@ class Sinclair(models.Model):
 
 
 class Competition(models.Model):
+<<<<<<< HEAD
     competition_category = models.CharField(max_length=100,validators=[validate_name])
     location = models.CharField(max_length=100)
     start_date = models.DateField(help_text="år-måned-dag")
+=======
+    # comeptitionArranger = models.ForeignKey(Organisation)
+    competitionCategory = models.CharField(max_length=100,validators=[validate_name], verbose_name='Kategori')
+    location = models.CharField(max_length=100, verbose_name='Sted')
+    startDate = models.DateField(help_text="år-måned-dag")
+>>>>>>> origin/resultRegistrationForm
 
     def __str__(self):
         return '{0}, {1}, {2}'.format(self.competition_category, self.location, self.start_date)
@@ -45,23 +52,36 @@ class Competition(models.Model):
 
 
 class Club(models.Model):
+<<<<<<< HEAD
     club_name = models.CharField(max_length=100)
     region = models.CharField(max_length=100)
     address = models.CharField(max_length=100)
     competition = models.ManyToManyField(Competition, null=True, blank=True) #One Club can join many competitions
+=======
+    clubName = models.CharField(max_length=100, verbose_name='Klubbnavn')
+    region = models.CharField(max_length=100,  verbose_name='Krets')
+    address = models.CharField(max_length=100, verbose_name='Adresse')
+    models.ManyToManyField(Competition, null=True) #One Club can join many competitions
+>>>>>>> origin/resultRegistrationForm
 
     def __str__(self):
         return self.club_name
 
 
 class Group(models.Model):
+<<<<<<< HEAD
     #   Identifying attributes
     group_number = models.IntegerField()
+=======
+    #   Identifying
+    groupNumber = models.IntegerField(verbose_name='Gruppenummer')
+>>>>>>> origin/resultRegistrationForm
     competition = models.ForeignKey(Competition)
     date = models.DateField()
 
     competitors = models.ManyToManyField('Lifter')
 
+<<<<<<< HEAD
     competition_leader = models.ForeignKey('Staff', related_name='competition_leader')
     jury = models.ManyToManyField('Staff', related_name='jury')
     judges = models.ManyToManyField('Judge', related_name='judges')
@@ -73,6 +93,18 @@ class Group(models.Model):
 
     notes = models.CharField(max_length=300, null=True, blank=True)
     records_description = models.CharField(max_length=300,  null=True, blank=True)
+=======
+    competitionLeader = models.ForeignKey('Staff', related_name='competitionLeader', verbose_name='Stevnets leder')
+    jury = models.ManyToManyField('Staff', related_name='jury', verbose_name='Jury')
+    judges = models.ManyToManyField('Judge', related_name='judges', verbose_name='Dommer')
+    secretary = models.ForeignKey('Staff', related_name='secretary', verbose_name='Sekretær')
+    speaker = models.ForeignKey('Staff', related_name='speaker', verbose_name='Speaker')
+    technicalController = models.ForeignKey('Staff', related_name='technicalController', verbose_name='Teknisk kontrollør')
+    cheifMarshall = models.ForeignKey('Staff', related_name='chiefMarshall', verbose_name='Chief marshall')
+    timeKeeper = models.ForeignKey('Staff', related_name='timeKeeper', verbose_name='Tidtaker')
+    notes = models.CharField(max_length=300, verbose_name='Notater')
+    recordsDescription = models.CharField(max_length=300)
+>>>>>>> origin/resultRegistrationForm
 
     def __str__(self):
         return '{0}, group {1}, {2}'.format(self.competition, self.group_number, self.date)
@@ -88,10 +120,16 @@ class Result(models.Model):
 
     group = models.ForeignKey(Group, null=True)     # The Group that this result belongs to.
 
+<<<<<<< HEAD
     lifter = models.ForeignKey('Lifter', null=True)    # The Lifter that this result belongs to
     body_weight = models.FloatField(verbose_name='Kroppsvekt', null=True)
     age_group = models.CharField(max_length=20, verbose_name='Kategori', choices=AgeGroup.choices(), null=True)
     weight_class = models.IntegerField(verbose_name='Vektklasse', null=True)
+=======
+    #   Should be derived from the best snatch and clean_and_jerk MoveAttempts respectively
+    best_snatch = models.ForeignKey('MoveAttempt', related_name='best_snatch', null=True, verbose_name='Beste rykk')
+    best_clean_and_jerk = models.ForeignKey('MoveAttempt', related_name='best_clean_and_jerk', null=True, verbose_name='Beste støt')
+>>>>>>> origin/resultRegistrationForm
 
     sinclair_coefficient = models.FloatField(db_column='sinclair_coefficient', null=True, blank=True)
     veteran_coefficient = models.FloatField(db_column='melzer_faber_coefficient', null=True, blank=True)

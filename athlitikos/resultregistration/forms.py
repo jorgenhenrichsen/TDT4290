@@ -1,5 +1,5 @@
 from django import forms
-from .models import Lifter, Judge, Staff, Result, MoveAttempt, Group, Competition
+from .models import Competition, Club, Group, Result, MoveAttempt, Lifter, Judge, Staff
 from django.utils import timezone
 
 YEAR_CHOICES = [y for y in range(1900, timezone.now().year)]
@@ -32,39 +32,36 @@ class StaffForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(StaffForm, self).__init__(*args, **kwargs)
-        # self.fields['birth_date'].widget = forms.widgets.SelectDateWidget(years=YEAR_CHOICES)
 
-class CompetitionForm(forms.ModelForm):
+
+#For the resultregistration page
+class CompetitonForm(forms.ModelForm):
     class Meta:
         model = Competition
-        fields = ('competitionCategory', 'location', 'startDate')
+        fields = '__all__'
 
-    def __init__(self, *args, **kwargs):
-        super(CompetitionForm, self).__init__(*args, **kwargs)
+
+class ClubForm(forms.ModelForm):
+    class Meta:
+        model = Club
+        fields = ('clubName',)
 
 
 class GroupForm(forms.ModelForm):
     class Meta:
         model = Group
-        fields = '__all__'
-
-    def __init__(self, *args, **kwargs):
-        super(GroupForm, self).__init__(*args, **kwargs)
+        exclude = ['competition', 'recordsDescription', 'competitors']
+        # May have to remove the foreign key models
 
 
 class ResultForm(forms.ModelForm):
     class Meta:
         model = Result
-        fields = '__all__'
-
-    def __init__(self, *args, **kwargs):
-        super(ResultForm, self).__init__(*args, **kwargs)
+        exclude = ['resultID']
+        # https://docs.djangoproject.com/en/1.11/topics/forms/modelforms/#selecting-the-fields-to-use
 
 
 class MoveAttemptForm(forms.ModelForm):
     class Meta:
         model = MoveAttempt
-        fields = ('parentResult', 'moveType', 'attemptNum', 'weight', 'success')
-
-    def __init__(self, *args, **kwargs):
-        super(MoveAttemptForm, self).__init__(*args, **kwargs)
+        fields = '__all__'
