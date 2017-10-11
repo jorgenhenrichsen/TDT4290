@@ -28,6 +28,7 @@ def search_for_lifter(request):
     :param request:
     :return:
     """
+
     if request.is_ajax():
         query = request.GET.get('term', '')
 
@@ -89,26 +90,3 @@ def search_for_clubs(request):
 
     mime_type = 'application/json'
     return HttpResponse(data, mime_type)
-
-
-def search_for_results(request):
-
-    if request.is_ajax():
-
-        results = SearchFiltering.search_for_results(None, None, None, None)
-        json_array = []
-        for result in results:
-            result_json = {
-                "points": result.points
-            }
-            json_array.append(result_json)
-
-        data = json.dumps(json_array)
-
-    else:
-        data = 'error'
-
-    mime_type = 'application/json'
-    return HttpResponse(data, mime_type)
-
-
