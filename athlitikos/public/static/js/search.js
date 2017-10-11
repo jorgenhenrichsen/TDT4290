@@ -45,6 +45,7 @@ $(function () {
 $.datepicker.setDefaults({
     dateFormat: "dd/mm/yy",
 });
+
 $(function () {
     $("#from-date-picker").datepicker();
     $("#to-date-picker").datepicker()
@@ -56,17 +57,19 @@ $(function () {
 function submitForm() {
     var form = document.getElementById("search-form");
 
-    var lifterId = document.getElementById("lifter-id");
-    lifterId.value = selectedLifter;
-
-    var clubId = document.getElementById("club-id");
-    clubId.value = selectedClub;
+    var fromDate = document.getElementById("from-date-picker").value;
+    var toDate = document.getElementById("to-date-picker").value;
 
     $.ajax({
         type: "GET",
         url: "/search/",
         dataType: "html",
-        data: {},
+        data: {
+                "lifter_id": selectedLifter,
+                "club_id": selectedClub,
+                "from_date": fromDate,
+                "to_date": toDate
+        },
         success: function (html) {
 
             /* Replace the result table with the new one */

@@ -1,6 +1,6 @@
-
 <table class="tablesorter" id="result-table">
 
+    {% if results %}
             <thead>
 
                 <tr>
@@ -17,7 +17,7 @@
 
             </thead>
 
-            {% if results %}
+
             {% for result in results %}
 
                 <tr class="result-element">
@@ -35,6 +35,6 @@
                 </tr>
 
             {% endfor %}
-            {% endif %}
+        {% endif %}
 
 </table>
