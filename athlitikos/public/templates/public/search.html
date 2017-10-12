@@ -18,18 +18,24 @@
         <h1>Søk etter resultater</h1>
 
             <div class="ui-widget">
-                <input type="text" id="query-lifter" class="query-text-input" placeholder="Navn...">
 
-                <div id="lifters-container"></div>
+                <div class="query-fields-container">
 
-                <input type="text" id="query-club" class="query-text-input" placeholder="Klubb...">
+                    <input type="text" id="query-lifter" class="query-text-input" placeholder="Navn...">
+                    <div id="lifters-container"></div>
+                    <input type="text" id="query-club" class="query-text-input" placeholder="Klubb...">
+                    <div id="clubs-container"></div>
 
-                <div id="clubs-container"></div>
+                </div>
 
-                <label>Filtrer resultater på tidsrom</label>
+                <div class="date-filter-container">
 
-                <input type="text" id="from-date-picker" placeholder="Fra dato: dd/mm/yyyy">
-                <input type="text" id="to-date-picker" placeholder="Til dato: dd/mm/yyyy">
+                    <label>Filtrer resultater på tidsrom</label><br>
+                    <input type="text" class="datepicker" id="from-date-picker" placeholder="Fra dato: dd/mm/yyyy">
+                    <input type="text" class="datepicker" id="to-date-picker" placeholder="Til dato: dd/mm/yyyy">
+
+                </div>
+
             </div>
 
         <button class="search-button" onclick="submitForm()">Søk</button>

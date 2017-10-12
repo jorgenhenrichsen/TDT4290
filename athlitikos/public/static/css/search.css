@@ -15,6 +15,14 @@
     padding: 30px;
 }
 
+.query-fields-container, .date-filter-container {
+    margin: 10px 0px 10px 0px;
+}
+
+.datepicker {
+    width: 40%;
+}
+
 .search-selector {
     width: 150px;
 }
