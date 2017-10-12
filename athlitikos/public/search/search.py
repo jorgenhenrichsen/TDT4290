@@ -14,6 +14,8 @@ class SearchFiltering:
         "",
         "none",
         "None",
+        [],
+        None
     ]
 
     @classmethod
@@ -23,7 +25,8 @@ class SearchFiltering:
         :param value:
         :return: bool, true if the input is a none-value.
         """
-        return value is None or SearchFiltering.NONE_VALUES.__contains__(str(value))
+        return value is None or SearchFiltering.NONE_VALUES.__contains__(str(value))\
+               or SearchFiltering.NONE_VALUES.__contains__(value)
 
     @classmethod
     def search_for_results(cls, lifters, clubs, from_date, to_date):
@@ -42,11 +45,11 @@ class SearchFiltering:
 
         results = Result.objects.all()
 
-        if not None and lifters != []:
+        if not SearchFiltering.is_none_value(lifters):
             print("Filtering for lifters")
             results = results.filter(lifter_id__in=lifters)
 
-        if not None and clubs != []:
+        if not SearchFiltering.is_none_value(clubs):
             print("Filtering for clubs")
             results = results.filter(lifter__club_id__in=clubs)
 
