@@ -6,7 +6,7 @@ $(document).ready(function () {
 });
 
 var selectedLifters = [];
-var selectedClub;
+var selectedClubs = [];
 
 /*
  * Autocomplete function for the name text-input-field.
@@ -18,6 +18,7 @@ $(function() {
       select: function (event, ui) {
           var id = ui.item.id;
           console.log("Selected " + ui.item.label, "ID: " + id);
+
           if ($.inArray(id, selectedLifters) == -1) {
               selectedLifters.push(id);
 
@@ -25,9 +26,6 @@ $(function() {
               var html = "<button id='" + id +"' onclick='removeLifter(this.id)'> "+ ui.item.label +"</button>";
               var lifters = document.getElementById("lifters-container");
               lifters.innerHTML += html;
-          }
-          else {
-              console.log("Was in the array");
           }
       }
   });
@@ -43,7 +41,15 @@ $(function () {
         select: function (event, ui) {
             var id = ui.item.id;
             console.log("Selected " + ui.item.label, "ID: " + id);
-            selectedClub = id;
+
+            if ($.inArray(id, selectedClubs) == -1) {
+              selectedClubs.push(id);
+
+              /* Create a button with id=lifter_id and text=lifet_label */
+              var html = "<button id='" + id +"' onclick='removeClub(this.id)'> "+ ui.item.label +"</button>";
+              var clubs = document.getElementById("clubs-container");
+              clubs.innerHTML += html;
+          }
         }
     });
 });
@@ -70,17 +76,16 @@ function submitForm() {
     var fromDate = document.getElementById("from-date-picker").value;
     var toDate = document.getElementById("to-date-picker").value;
 
-    console.log(selectedLifters);
     /* Fetching search results and reloading the table with the new values */
     var serializedLifters = JSON.stringify(selectedLifters);
-    console.log(serializedLifters);
+    var serializedClubs = JSON.stringify(selectedClubs);
     $.ajax({
         type: "GET",
         url: "/search/",
         dataType: "html",
         data: {
                 "lifters": serializedLifters,
-                "club_id": selectedClub,
+                "clubs": serializedClubs,
                 "from_date": fromDate,
                 "to_date": toDate
         },
@@ -109,12 +114,21 @@ function submitForm() {
 
 /* Remove a lifter from the filter list */
 function removeLifter(id) {
-    console.log(id);
 
     selectedLifters.splice( selectedLifters.indexOf(id), 1 );
-    console.log(selectedLifters);
 
     var container = document.getElementById("lifters-container");
+    var button = document.getElementById(id);
+
+    container.removeChild(button);
+}
+
+/* Remove a club from the filter list */
+function removeClub(id) {
+
+    selectedClubs.splice( selectedClubs.indexOf(id), 1 );
+
+    var container = document.getElementById("clubs-container");
     var button = document.getElementById(id);
 
     container.removeChild(button);

@@ -12,10 +12,10 @@ def search(request):
     """
     if request.method == 'GET' and request.is_ajax():
         lifters = json.loads(request.GET.get('lifters'))  #  Fetch the lifters array and convert from JSON array to Python list.
-        club_id = request.GET.get('club_id')
+        clubs = json.loads(request.GET.get('clubs'))
         from_date = request.GET.get('from_date')
         to_date = request.GET.get('to_date')
-        results = SearchFiltering.search_for_results(lifters, club_id, from_date, to_date)
+        results = SearchFiltering.search_for_results(lifters, clubs, from_date, to_date)
 
         return render(request, 'public/result-table.html', {'results': results})
 
