@@ -23,7 +23,7 @@ $(function() {
               selectedLifters.push(id);
 
               /* Create a button with id=lifter_id and text=lifet_label */
-              var html = "<button id='" + id +"' onclick='removeLifter(this.id)'> "+ ui.item.label +"</button>";
+              var html = "<button id='" + id +"' onclick='removeLifter(this.id)' class='filter-button'> "+ ui.item.label +"</button>";
               var lifters = document.getElementById("lifters-container");
               lifters.innerHTML += html;
           }
@@ -48,7 +48,7 @@ $(function () {
               selectedClubs.push(id);
 
               /* Create a button with id=lifter_id and text=lifet_label */
-              var html = "<button id='" + id +"' onclick='removeClub(this.id)'> "+ ui.item.label +"</button>";
+              var html = "<button id='" + id +"' onclick='removeClub(this.id)' class='filter-button'> "+ ui.item.label +"</button>";
               var clubs = document.getElementById("clubs-container");
               clubs.innerHTML += html;
           }

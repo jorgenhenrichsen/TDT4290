@@ -1,12 +1,22 @@
 
+.filter-button {
+    background: rgba(0, 0, 0, 0.05) url(../icons/Cross.svg) no-repeat center right;
+    border: none;
+    padding: 5px 20px 5px 5px;
+    border-radius: 4px;
+    margin: 5px 5px 5px 5px;
+}
+
+.filter-button:hover {
+    cursor: pointer;
+}
+
 .search-section {
     padding: 30px;
 }
 
 .search-selector {
-
     width: 150px;
-
 }
 
 .search-button {
@@ -56,9 +66,7 @@ thead {
 
 th.header {
     font-weight: bold;
-    background-repeat: no-repeat;
-    background-position: center right;
-    background-image: url(../icons/UpAndDownArrowBlack.svg);
+    background: no-repeat center right url(../icons/UpAndDownArrowBlack.svg);
 }
 
 th.headerSortUp {
