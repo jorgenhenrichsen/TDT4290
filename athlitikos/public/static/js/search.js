@@ -5,7 +5,6 @@ $(document).ready(function () {
    });
 });
 
-var selectedLifter;
 var selectedLifters = [];
 var selectedClub;
 
@@ -19,9 +18,6 @@ $(function() {
       select: function (event, ui) {
           var id = ui.item.id;
           console.log("Selected " + ui.item.label, "ID: " + id);
-          selectedLifter = id;
-
-          console.log(selectedLifters);
           if ($.inArray(id, selectedLifters) == -1) {
               selectedLifters.push(id);
 
@@ -33,9 +29,6 @@ $(function() {
           else {
               console.log("Was in the array");
           }
-
-
-
       }
   });
 });
@@ -86,7 +79,6 @@ function submitForm() {
         url: "/search/",
         dataType: "html",
         data: {
-                "lifter_id": selectedLifter,
                 "lifters": serializedLifters,
                 "club_id": selectedClub,
                 "from_date": fromDate,
@@ -126,11 +118,4 @@ function removeLifter(id) {
     var button = document.getElementById(id);
 
     container.removeChild(button);
-
-
-
-}
-
-function clearThis(target){
-        target.value= "";
 }

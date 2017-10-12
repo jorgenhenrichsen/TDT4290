@@ -11,13 +11,11 @@ def search(request):
     :return:
     """
     if request.method == 'GET' and request.is_ajax():
-        lifters = request.GET.get('lifters')
-        print(lifters)
-        lifter_id = request.GET.get('lifter_id')
+        lifters = json.loads(request.GET.get('lifters'))  #  Fetch the lifters array and convert from JSON array to Python list.
         club_id = request.GET.get('club_id')
         from_date = request.GET.get('from_date')
         to_date = request.GET.get('to_date')
-        results = SearchFiltering.search_for_results(lifter_id, club_id, from_date, to_date)
+        results = SearchFiltering.search_for_results(lifters, club_id, from_date, to_date)
 
         return render(request, 'public/result-table.html', {'results': results})
 

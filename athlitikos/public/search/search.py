@@ -26,10 +26,10 @@ class SearchFiltering:
         return value is None or SearchFiltering.NONE_VALUES.__contains__(str(value))
 
     @classmethod
-    def search_for_results(cls, lifter_id, club_id, from_date, to_date):
+    def search_for_results(cls, lifters, club_id, from_date, to_date):
         """
         Filter out results.
-        :param lifter_id: Only inlcude results with this lifter
+        :param lifters: Only inlcude results from the lifters ids in this list.
         :param club_id: Only include results with lifters belonging to this club
         :param from_date: Only include results that has a competition start_date that are after or equal to this date.
         :param to_date: Only include results that has a competition start_date that are before or equal to this date.
@@ -37,13 +37,13 @@ class SearchFiltering:
         """
 
         if settings.DEBUG:
-            print("Searching with lifter_id={}, club_id={}, from_date{}, to_date{}".format(lifter_id, club_id, from_date,
+            print("Searching with lifters={}, club_id={}, from_date={}, to_date={}".format(lifters, club_id, from_date,
                                                                                            to_date))
 
         results = Result.objects.all()
 
-        if not SearchFiltering.is_none_value(lifter_id):
-            results = results.filter(lifter_id__exact=lifter_id)
+        if not None or lifters != []:
+            results = results.filter(lifter_id__in=lifters)
 
         if not SearchFiltering.is_none_value(club_id):
             results = results.filter(lifter__club_id__exact=club_id)
@@ -56,8 +56,8 @@ class SearchFiltering:
             to_date_formatted = datetime.strptime(to_date, "%d/%m/%Y").date()
             results = results.filter(group__competition__startDate__lte=to_date_formatted)
 
-        if settings.DEBUG:
-            print(results)
+       # if settings.DEBUG:
+#            print(results)
 
         return results
 
