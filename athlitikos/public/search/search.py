@@ -55,11 +55,11 @@ class SearchFiltering:
 
         if not SearchFiltering.is_none_value(from_date):
             from_date_formatted = datetime.strptime(from_date, "%d/%m/%Y").date()
-            results = results.filter(group__competition__startDate__gte=from_date_formatted)
+            results = results.filter(group__date__gte=from_date_formatted)
 
         if not SearchFiltering.is_none_value(to_date):
             to_date_formatted = datetime.strptime(to_date, "%d/%m/%Y").date()
-            results = results.filter(group__competition__startDate__lte=to_date_formatted)
+            results = results.filter(group__date__lte=to_date_formatted)
 
         if settings.DEBUG:
             print(results)
