@@ -11,7 +11,7 @@ def search(request):
     :return:
     """
     if request.method == 'GET' and request.is_ajax():
-        lifters = json.loads(request.GET.get('lifters'))  #  Fetch the lifters array and convert from JSON array to Python list.
+        lifters = json.loads(request.GET.get('lifters'))
         clubs = json.loads(request.GET.get('clubs'))
         from_date = request.GET.get('from_date')
         to_date = request.GET.get('to_date')

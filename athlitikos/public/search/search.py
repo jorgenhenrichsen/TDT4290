@@ -37,8 +37,8 @@ class SearchFiltering:
         """
 
         if settings.DEBUG:
-            print("Searching with lifters={}, clubs={}, from_date={}, to_date={}".format(lifters, clubs, from_date,
-                                                                                           to_date))
+            print("Searching with lifters={}, clubs={}, from_date={}, to_date={}"
+                  .format(lifters, clubs, from_date, to_date))
 
         results = Result.objects.all()
 
