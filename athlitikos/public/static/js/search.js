@@ -27,6 +27,8 @@ $(function() {
               var lifters = document.getElementById("lifters-container");
               lifters.innerHTML += html;
           }
+
+          ui.item.value = "";
       }
   });
 });
@@ -50,6 +52,8 @@ $(function () {
               var clubs = document.getElementById("clubs-container");
               clubs.innerHTML += html;
           }
+
+          ui.item.value = "";
         }
     });
 });
