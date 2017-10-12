@@ -11,6 +11,8 @@ def search(request):
     :return:
     """
     if request.method == 'GET' and request.is_ajax():
+        lifters = request.GET.get('lifters')
+        print(lifters)
         lifter_id = request.GET.get('lifter_id')
         club_id = request.GET.get('club_id')
         from_date = request.GET.get('from_date')
