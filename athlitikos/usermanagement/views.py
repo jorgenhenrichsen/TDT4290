@@ -4,10 +4,44 @@ from .models import ClubOfficial
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
-from django.views import generic, View
-from .forms import UserForm
+from django.views.generic import View
+from .forms import SignUpForm, UserForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
+
+class UserFormView(View):
+    form_class = UserForm
+    template_name = 'newuser.html'
+
+    def get(self, request):
+        form = self.form_class(None)
+        return render(request, self.template_name, {'form' : form})
+
+    def post(self, request):
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+
+            user = form.save(commit=False)
+
+            #cleaned normalized data
+            email = form.cleaned_data['epost']
+            password = form.cleaned_data['passord']
+            status = form.cleaned_data['status']
+            user.set_password(password)
+            user.save()
+
+            user = authenticate(email=email, password=password)
+
+            if user is not None:
+
+                if user.is_active:
+
+                    login(request, user)
+                    return redirect('/home')
+
+        return render(request, self.template_name, {'form': form})
+
 
 @login_required(login_url='/login')
 def admin(request):
@@ -15,14 +49,15 @@ def admin(request):
 
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = SignUpForm(request.POST)
+        form.username = None
 
         if form.is_valid():
             form.save()
             return redirect('/home')
 
     else:
-        form = UserCreationForm()
+        form = SignUpForm()
 
         args = {'form': form}
         return render(request, 'newuser.html', args)
@@ -42,9 +77,10 @@ def create_new_user(request):
         form = UserCreationForm()
     return render(request, 'newuser.html', {'form': form})
 
+"""
 class UserFormView(View):
 
-    form_class = UserForm
+    #form_class = UserForm
     template_name = 'newuser.html'
 
     #Display blank form
@@ -77,4 +113,4 @@ class UserFormView(View):
 
         return render(request, self.template_name, {'form' : form})
 
-
+"""

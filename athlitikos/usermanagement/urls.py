@@ -5,5 +5,5 @@ urlpatterns = [
     url(r'^admin-startside/', views.admin, name='home'),
     url(r'^admin/', views.admin, name='home'),
    # url(r'^ny-bruker/', views.UserFormView(), name='home'),
-    url(r'^register/', views.register, name='register')
+    url(r'^register/', views.UserFormView.as_view(), name='register')
 ]
