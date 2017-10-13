@@ -4,11 +4,9 @@
 <head>
     <meta charset="UTF-8">
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'athlitikos/style/mainstyle.css' %}">
-
+    <link rel="stylesheet" type="text/css" href="{% static 'css/mainstyle.css' %}">
     {% block head %}
     {% endblock head %}
-
     <title> NVF </title>
 </head>
 
@@ -17,7 +15,6 @@
     <div class="navbar">
         <ul><a href="">Logo</a></ul>
     </div>
-
     {#    adds the content of the subpage#}
     {% block content %}
     {% endblock content %}

@@ -74,8 +74,8 @@ def search_for_clubs(request):
         results = []
         for club in clubs:
             club_json = {
-                'label': club.clubName,
-                'value': club.clubName,
+                'label': club.club_name,
+                'value': club.club_name,
                 'id': club.id,
             }
             results.append(club_json)
@@ -133,4 +133,4 @@ def search_for_lifter_containing(query):
 
 
 def search_for_club_containing(query):
-    return Club.objects.filter(clubName__icontains=query)
+    return Club.objects.filter(club_name__icontains=query)
