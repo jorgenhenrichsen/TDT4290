@@ -17,7 +17,7 @@ class CompetitionTestCase(TestCase):
 
         norgesmesterskap = Competition.objects.get(competition_category="Norgesmesterskap")
 
-        self.assertEqual(validate_name(norgesmesterskap.competitionCategory), "Norgesmesterskap")
+        self.assertEqual(validate_name(norgesmesterskap.competition_category), "Norgesmesterskap")
         self.assertEqual(validate_name(norgesmesterskap.location), "Bodø")
 
     def test_if_one_club_can_join_many_competitions(self):
@@ -33,6 +33,6 @@ class CompetitionTestCase(TestCase):
         #Checking for club names, which contain the competition Norgesmesterskap
 
         club_name = Club.objects.filter(competition__competition_category = "Norgesmesterskap")\
-            .values_list('clubName', flat=True).first()
+            .values_list('club_name', flat=True).first()
 
         self.assertEqual(club_name, "TrondheimIL")

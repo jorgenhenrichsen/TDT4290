@@ -38,8 +38,8 @@ def search_for_lifter(request):
         results = []
         for lifter in lifters:
             lifter_json = {
-                'label': lifter.lifter.first_name + " " + lifter.lifter.last_name + ", " + lifter.club.clubName,
-                'value': lifter.lifter.first_name + " " + lifter.lifter.last_name + ", " + lifter.club.clubName,
+                'label': lifter.lifter.first_name + " " + lifter.lifter.last_name + ", " + lifter.club.club_name,
+                'value': lifter.lifter.first_name + " " + lifter.lifter.last_name + ", " + lifter.club.club_name,
                 'id': lifter.lifter.id,
             }
             results.append(lifter_json)
@@ -69,8 +69,8 @@ def search_for_clubs(request):
         results = []
         for club in clubs:
             club_json = {
-                'label': club.clubName,
-                'value': club.clubName,
+                'label': club.club_name,
+                'value': club.club_name,
                 'id': club.id,
             }
             results.append(club_json)
@@ -128,4 +128,4 @@ def search_for_lifter_containing(query):
 
 
 def search_for_club_containing(query):
-    return Club.objects.filter(clubName__icontains=query)
+    return Club.objects.filter(club_name__icontains=query)
