@@ -36,7 +36,7 @@ class Sinclair(models.Model):
 
 class Competition(models.Model):
 
-    competition_category = models.CharField(max_length=100,validators=[validate_name])
+    competition_category = models.CharField(max_length=100, validators=[validate_name])
     location = models.CharField(max_length=100)
     start_date = models.DateField(help_text="år-måned-dag")
 
@@ -77,7 +77,7 @@ class Group(models.Model):
     time_keeper = models.ForeignKey('Staff', related_name='time_keeper')
 
     notes = models.CharField(max_length=300, null=True, blank=True)
-    records_description = models.CharField(max_length=300,  null=True, blank=True)
+    records_description = models.CharField(max_length=300, null=True, blank=True)
 
 
     def __str__(self):
@@ -124,7 +124,7 @@ class MoveAttempt(models.Model):
     success = models.BooleanField()
 
     def __str__(self):
-        return '{0}, attempt {1}, weight {2}, {3}'.format(self.moveType, self.attemptNum, self.weight, self.success)
+        return '{0}, attempt {1}, weight {2}, {3}'.format(self.move_type, self.attempt_num, self.weight, self.success)
 
     class Meta:
         # The MoveAttempt should be uniquely identified

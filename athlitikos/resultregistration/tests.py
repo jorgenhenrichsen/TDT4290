@@ -7,15 +7,15 @@ class CompetitionTestCase(TestCase):
 
     def setUp(self):
 
-        Competition.objects.create(competitionCategory = "Norgesmesterskap", location = "Bodø", startDate = "2018-10-05")
-        Competition.objects.create(competitionCategory = "Midtnorsk", location = "Trondheim", startDate = "2019-11-06")
-        Club.objects.create(clubName="TrondheimIL", region="Trondheim", address="Arne Bergsgårds Veg 30")
+        Competition.objects.create(competition_category = "Norgesmesterskap", location = "Bodø", start_date = "2018-10-05")
+        Competition.objects.create(competition_dategory = "Midtnorsk", location = "Trondheim", start_date = "2019-11-06")
+        Club.objects.create(club_name="TrondheimIL", region="Trondheim", address="Arne Bergsgårds Veg 30")
 
     def test_competition_naming_is_valid(self):
 
         """Competitions with valid naming are identified by using the validate_name method"""
 
-        norgesmesterskap = Competition.objects.get(competitionCategory="Norgesmesterskap")
+        norgesmesterskap = Competition.objects.get(competition_category="Norgesmesterskap")
 
         self.assertEqual(validate_name(norgesmesterskap.competitionCategory), "Norgesmesterskap")
         self.assertEqual(validate_name(norgesmesterskap.location), "Bodø")
@@ -24,15 +24,15 @@ class CompetitionTestCase(TestCase):
 
         """Two competitions are added to a club, to test that the many-to-many relationship works in the database"""
 
-        norgesmesterskap = Competition.objects.get(competitionCategory = "Norgesmesterskap")
-        midtnorsk = Competition.objects.get(competitionCategory = "Midtnorsk")
-        trondheimIL = Club.objects.get(clubName = "TrondheimIL")
+        norgesmesterskap = Competition.objects.get(competition_category = "Norgesmesterskap")
+        midtnorsk = Competition.objects.get(competition_category = "Midtnorsk")
+        trondheimIL = Club.objects.get(club_name = "TrondheimIL")
 
         trondheimIL.competition.add(norgesmesterskap, midtnorsk)
 
         #Checking for club names, which contain the competition Norgesmesterskap
 
-        club_name = Club.objects.filter(competition__competitionCategory = "Norgesmesterskap")\
+        club_name = Club.objects.filter(competition__competition_category = "Norgesmesterskap")\
             .values_list('clubName', flat=True).first()
 
         self.assertEqual(club_name, "TrondheimIL")
