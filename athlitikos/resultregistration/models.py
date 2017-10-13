@@ -4,8 +4,8 @@ from math import log10
 from datetime import date
 from .enums import Gender, JudgeLevel
 from .validators import validate_name
-#from datetime import datetime
-#from django.db.models.signals import pre_save is usefull ;)
+# from datetime import datetime
+# from django.db.models.signals import pre_save is usefull ;)
 
 
 # Create your models here.
@@ -36,7 +36,9 @@ class Sinclair(models.Model):
 
 class Competition(models.Model):
 
+
     competition_category = models.CharField(max_length=100, validators=[validate_name])
+
     location = models.CharField(max_length=100)
     start_date = models.DateField(help_text="år-måned-dag")
 
@@ -51,7 +53,6 @@ class Club(models.Model):
     region = models.CharField(max_length=100)
     address = models.CharField(max_length=100)
     competition = models.ManyToManyField(Competition, blank=True) #One Club can join many competitions
-
 
     def __str__(self):
         return self.club_name
@@ -87,6 +88,7 @@ class Group(models.Model):
         unique_together = ('group_number', 'competition')
 
 
+
 # Result for weightlifting(snatch/cleanAndJerk)
 class Result(models.Model):
 
@@ -111,7 +113,6 @@ class Result(models.Model):
 
     def __str__(self):
         return self.lifter.fullname() + str(self.group.competition)
-
 
 
 class MoveAttempt(models.Model):

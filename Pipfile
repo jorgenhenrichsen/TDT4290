@@ -9,4 +9,3 @@ Django = "*"
 flake8 = "*"
 pep8 = "*"
 pep8-naming = "*"
-

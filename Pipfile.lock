@@ -27,10 +27,12 @@
     },
     "default": {
         "django": {
+
             "hashes": [
                 "sha256:7ab6a9c798a5f9f359ee6da3677211f883fb02ef32cebe9b29751eb7a871febf",
                 "sha256:c3b42ca1efa1c0a129a9e863134cc3fe705c651dea3a04a7998019e522af0c60"
             ],
+
             "version": "==1.11.6"
         },
         "enum34": {
@@ -43,6 +45,7 @@
             "version": "==1.1.6"
         },
         "flake8": {
+
             "hashes": [
                 "sha256:f1a9d8886a9cbefb52485f4f4c770832c7fb569c084a9a314fb1eaa37c0c2c86",
                 "sha256:c20044779ff848f67f89c56a0e4624c04298cd476e25253ac0c36f910a1a11d8"
@@ -68,7 +71,8 @@
                 "sha256:1b419fa45b68b61cd8c5daf4e0c96d28915ad14d3d5f35fcc1e7e95324a33a2e",
                 "sha256:4eedfd4c4b05e48796f74f5d8628c068ff788b9c2b08471ad408007fc6450e5a"
             ],
-            "version": "==0.4.1"
+            "version": "==3.4.1"
+
         },
         "psycopg2": {
             "hashes": [
@@ -118,7 +122,7 @@
                 "sha256:cc5eadfb38041f8366128786b4ca12700ed05bbf1403d808e89d57d67a3875a7",
                 "sha256:aa0d4dff45c0cc2214ba158d29280f8fa1129f3e87858ef825930845146337f4"
             ],
-            "version": "==1.5.0"
+            "version": "==2.3.1"
         },
         "pytz": {
             "hashes": [

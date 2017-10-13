@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponse
 from resultregistration.models import Club, Result, Lifter
-from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank  # noqa
 import json
 import functools
 import operator
@@ -37,6 +37,11 @@ def search_for_lifter(request):
 
         results = []
         for lifter in lifters:
+
+            lifter_string = lifter.lifter.first_name +\
+                            " " + lifter.lifter.last_name +\
+                            ", " + lifter.club.clubName
+
             lifter_json = {
                 'label': lifter.lifter.first_name + " " + lifter.lifter.last_name + ", " + lifter.club.club_name,
                 'value': lifter.lifter.first_name + " " + lifter.lifter.last_name + ", " + lifter.club.club_name,

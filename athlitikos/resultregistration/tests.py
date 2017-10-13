@@ -1,7 +1,7 @@
 from django.test import TestCase
 from .models import Competition, Club
 from .validators import validate_name
-from django.test import Client
+
 
 class CompetitionTestCase(TestCase):
 
@@ -10,6 +10,7 @@ class CompetitionTestCase(TestCase):
         Competition.objects.create(competition_category = "Norgesmesterskap", location = "Bodø", start_date = "2018-10-05")
         Competition.objects.create(competition_category = "Midtnorsk", location = "Trondheim", start_date = "2019-11-06")
         Club.objects.create(club_name="TrondheimIL", region="Trondheim", address="Arne Bergsgårds Veg 30")
+
 
     def test_competition_naming_is_valid(self):
 
@@ -24,13 +25,15 @@ class CompetitionTestCase(TestCase):
 
         """Two competitions are added to a club, to test that the many-to-many relationship works in the database"""
 
+
         norgesmesterskap = Competition.objects.get(competition_category = "Norgesmesterskap")
         midtnorsk = Competition.objects.get(competition_category = "Midtnorsk")
-        trondheimIL = Club.objects.get(club_name = "TrondheimIL")
+        trondheim_il = Club.objects.get(club_name = "TrondheimIL")
 
-        trondheimIL.competition.add(norgesmesterskap, midtnorsk)
 
-        #Checking for club names, which contain the competition Norgesmesterskap
+        trondheim_il.competition.add(norgesmesterskap, midtnorsk)
+
+        # Checking for club names, which contain the competition Norgesmesterskap
 
         club_name = Club.objects.filter(competition__competition_category = "Norgesmesterskap")\
             .values_list('club_name', flat=True).first()
