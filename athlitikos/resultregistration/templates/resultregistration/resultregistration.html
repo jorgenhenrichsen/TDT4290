@@ -1,0 +1,35 @@
+
+{% extends 'base.html' %}
+
+
+{% block head %}
+        <link rel="stylesheet" type="text/css" href="/static//css/resultregistration.css">
+{%  endblock %}
+
+{% block content %}
+
+    <h1>Register result</h1>
+    <form method="POST" class="post-form">{% csrf_token %}
+
+{#        {% include 'betterforms/form_as_fieldsets.html' %}#}
+        {{ CompetitonForm.as_p }}
+        {{ ResultForm.as_p }}
+        {{ MoveAttemptForm.as_p }}
+        {{ GroupForm.as_p }}
+        {{ ClubForm.as_p }}
+        {#        <div class="competition_information">#}
+{#            <label>Stevnekategori: {{ competition_category }}</label>#}
+{#        </div>#}
+
+{#        <label for="id_competition-details-competition_category">Stevnekategori: {{ competition_category }}</label>#}
+
+
+        <input class="save-button" type="submit" value="Lagre">
+    </form>
+
+{% endblock %}
+
+
+
+
+

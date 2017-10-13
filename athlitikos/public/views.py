@@ -74,8 +74,8 @@ def search_for_clubs(request):
         results = []
         for club in clubs:
             club_json = {
-                'label': club.clubName,
-                'value': club.clubName,
+                'label': club.club_name,
+                'value': club.club_name,
                 'id': club.id,
             }
             results.append(club_json)

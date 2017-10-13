@@ -4,8 +4,8 @@ verify_ssl = true
 
 [packages]
 psycopg2 = "*"
-Django = "*"
 enum34 = "*"
+Django = "*"
 flake8 = "*"
 pep8 = "*"
 pep8-naming = "*"
