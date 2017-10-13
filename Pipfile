@@ -6,7 +6,6 @@ verify_ssl = true
 psycopg2 = "*"
 enum34 = "*"
 Django = "*"
-django-betterforms = "*"
 flake8 = "*"
 pep8 = "*"
 pep8-naming = "*"

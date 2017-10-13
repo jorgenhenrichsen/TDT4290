@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}
 
 
@@ -7,15 +8,15 @@
 
 {% block content %}
 
-    <h1>Herro</h1>
+    <h1>Register result</h1>
     <form method="POST" class="post-form">{% csrf_token %}
 
 {#        {% include 'betterforms/form_as_fieldsets.html' %}#}
-        {{ MoveAttemptForm.as_p }}
+        {{ CompetitonForm.as_p }}
         {{ ResultForm.as_p }}
+        {{ MoveAttemptForm.as_p }}
         {{ GroupForm.as_p }}
         {{ ClubForm.as_p }}
-        {{ CompetitonForm.as_p }}
         {#        <div class="competition_information">#}
 {#            <label>Stevnekategori: {{ competitionCategory }}</label>#}
 {#        </div>#}

@@ -83,7 +83,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'athlitikos',
         'USER': 'postgres',
-        'PASSWORD': 'corbel-yoke-reviewer',
+        'PASSWORD': 'postgre314',
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -129,6 +129,8 @@ LOGIN_REDIRECT_URL = '/home'
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
+
     os.path.join(BASE_DIR, "static"),
     # '/var/www/static/',
 ]
+STATIC_ROOT = (os.getcwd() + "/athlitikos/")

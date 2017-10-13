@@ -135,10 +135,10 @@ def get_age_for_lifter_in_result(request,pk):
 
 
 def result_registration(request):
-    form = MoveAttemptForm()
+    form = CompetitonForm()
     form = ResultForm()
+    form = MoveAttemptForm()
     form = GroupForm()
     form = ClubForm()
-    form = CompetitonForm()
     return render(request, 'resultregistration/resultregistration.html', context={'MoveAttemptForm': MoveAttemptForm, 'ResultForm': ResultForm, 'GroupForm': GroupForm, 'ClubForm': ClubForm, 'CompetitonForm': CompetitonForm})
 
