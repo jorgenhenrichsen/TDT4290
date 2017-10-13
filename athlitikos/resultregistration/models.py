@@ -112,13 +112,6 @@ class Result(models.Model):
     def __str__(self):
         return self.lifter.fullname() + str(self.group.competition)
 
-    def get_best_snatch(self):
-        #TODO: Implement
-        pass
-
-    def get_bets_clean_and_jerk(self):
-        #TODO: Implement
-        pass
 
 
 class MoveAttempt(models.Model):
