@@ -7,10 +7,26 @@ from django.contrib.auth.forms import UserCreationForm
 from django.views import generic, View
 from .forms import UserForm
 from django.shortcuts import render, redirect
+from django.contrib.auth.forms import UserCreationForm
 
 @login_required(login_url='/login')
 def admin(request):
     return render(request, 'admin.html')
+
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return redirect('/home')
+
+    else:
+        form = UserCreationForm()
+
+        args = {'form': form}
+        return render(request, 'newuser.html', args)
+
 
 def create_new_user(request):
     if request.method == 'POST':
@@ -60,6 +76,5 @@ class UserFormView(View):
                 return redirect('http://127.0.0.1:8000/admin-startside/')
 
         return render(request, self.template_name, {'form' : form})
-
 
 
