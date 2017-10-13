@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from datetime import date
-from .models import Lifter, Judge, Staff, Result, MoveAttempt, Competition, Club
+from .models import Lifter, Judge, Staff, Result, MoveAttempt
 from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm, CompetitonForm
 # from django.views.generic import UpdateView
 
@@ -71,7 +71,7 @@ def add_new_staff(request):
 
 def staff_detail(request, pk):
     staff = get_object_or_404(Staff, pk=pk)
-    return render(request, 'staff_detail.html', {
+    return render(request, 'resultregistration/staff_detail.html', {
         'fullname': staff.__str__(),
         # 'birth_date': staff.birth_date.strftime('%Y-%m-%d'),
     })
@@ -81,7 +81,7 @@ def get_best_snatch_for_result(request, pk):
     all_attempts = MoveAttempt.objects.filter(parent_result=pk, move_type='Snatch')
     best_attempt = 0
     for attempt in all_attempts:
-        if attempt.success and attempt.weight>best_attempt:
+        if attempt.success and attempt.weight > best_attempt:
             best_attempt = attempt.weight
     result = Result.objects.get(pk=pk)
     result.best_snatch = best_attempt
@@ -96,7 +96,7 @@ def get_best_clean_and_jerk_for_result(request, pk):
         if attempt.weight > best_attempt:
             best_attempt = attempt.weight
     result = Result.objects.get(pk=pk)
-    result.best_clean_and_jerk=best_attempt
+    result.best_clean_and_jerk = best_attempt
     result.save()
     return JsonResponse({'best_clean_and_jerk': str(best_attempt)})
 
@@ -118,7 +118,7 @@ def get_points_with_sinclair_for_result(request, pk):
     return JsonResponse({'points_with_sinclair': str(total)})
 
 
-def get_points_with_veteran_for_result(request,pk):
+def get_points_with_veteran_for_result(request, pk):
     result = get_object_or_404(Result, pk=pk)
     veteran_points = result.points_with_sinclair*result.veteran_coefficient
     result.points_with_veteran = veteran_points
@@ -126,19 +126,17 @@ def get_points_with_veteran_for_result(request,pk):
     return JsonResponse({'points_with_veteran': str(veteran_points)})
 
 
-def get_age_for_lifter_in_result(request,pk):
+def get_age_for_lifter_in_result(request, pk):
     result = get_object_or_404(Result, pk=pk)
     age = date.today().year - result.lifter.birth_date.year
     result.age = age
     result.save()
-    return JsonResponse({'age':str(age)})
+    return JsonResponse({'age': str(age)})
 
 
 def result_registration(request):
-    form = CompetitonForm()
-    form = ResultForm()
-    form = MoveAttemptForm()
-    form = GroupForm()
-    form = ClubForm()
-    return render(request, 'resultregistration/resultregistration.html', context={'MoveAttemptForm': MoveAttemptForm, 'ResultForm': ResultForm, 'GroupForm': GroupForm, 'ClubForm': ClubForm, 'CompetitonForm': CompetitonForm})
-
+    return render(request, 'resultregistration/resultregistration.html', context={'MoveAttemptForm': MoveAttemptForm,
+                                                                                  'ResultForm': ResultForm,
+                                                                                  'GroupForm': GroupForm,
+                                                                                  'ClubForm': ClubForm,
+                                                                                  'CompetitonForm': CompetitonForm})

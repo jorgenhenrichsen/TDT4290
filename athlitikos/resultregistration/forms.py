@@ -33,7 +33,8 @@ class StaffForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(StaffForm, self).__init__(*args, **kwargs)
 
-#For the resultregistration page
+
+# For the resultregistration page
 class CompetitonForm(forms.ModelForm):
     class Meta:
         model = Competition

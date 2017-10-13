@@ -43,8 +43,8 @@ def search_for_lifter(request):
                             ", " + lifter.club.clubName
 
             lifter_json = {
-                'label': lifter.lifter.first_name + " " + lifter.lifter.last_name + ", " + lifter.club.club_name,
-                'value': lifter.lifter.first_name + " " + lifter.lifter.last_name + ", " + lifter.club.club_name,
+                'label': lifter_string,
+                'value': lifter_string,
                 'id': lifter.lifter.id,
             }
             results.append(lifter_json)

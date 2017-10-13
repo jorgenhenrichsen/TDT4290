@@ -1,7 +1,5 @@
 from django.db import models
-from .enums import Gender, JudgeLevel, MoveTypes, AgeGroup
-from math import log10
-from datetime import date
+from .enums import MoveTypes, AgeGroup
 from .enums import Gender, JudgeLevel
 from .validators import validate_name
 # from datetime import datetime
@@ -9,7 +7,7 @@ from .validators import validate_name
 
 
 # Create your models here.
-class Melzer_Faber(models.Model):
+class MelzerFaber(models.Model):
     age = models.IntegerField(verbose_name='Alder')
     coefficient = models.FloatField(verbose_name='Koeffisient')
     year = models.IntegerField(verbose_name='Årstall')
@@ -35,38 +33,32 @@ class Sinclair(models.Model):
 
 
 class Competition(models.Model):
-
-
     competition_category = models.CharField(max_length=100, validators=[validate_name])
 
     location = models.CharField(max_length=100)
     start_date = models.DateField(help_text="år-måned-dag")
 
-
     def __str__(self):
         return '{0}, {1}, {2}'.format(self.competition_category, self.location, self.start_date)
-
 
 
 class Club(models.Model):
     club_name = models.CharField(max_length=100)
     region = models.CharField(max_length=100)
     address = models.CharField(max_length=100)
-    competition = models.ManyToManyField(Competition, blank=True) #One Club can join many competitions
+    competition = models.ManyToManyField(Competition, blank=True)   # One Club can join many competitions
 
     def __str__(self):
         return self.club_name
 
 
 class Group(models.Model):
-
     #   Identifying attributes
     group_number = models.IntegerField()
     competition = models.ForeignKey(Competition)
     date = models.DateField()
 
     competitors = models.ManyToManyField('Lifter')
-
 
     competition_leader = models.ForeignKey('Staff', related_name='competition_leader')
     jury = models.ManyToManyField('Staff', related_name='jury')
@@ -80,13 +72,11 @@ class Group(models.Model):
     notes = models.CharField(max_length=300, null=True, blank=True)
     records_description = models.CharField(max_length=300, null=True, blank=True)
 
-
     def __str__(self):
         return '{0}, group {1}, {2}'.format(self.competition, self.group_number, self.date)
 
     class Meta:
         unique_together = ('group_number', 'competition')
-
 
 
 # Result for weightlifting(snatch/cleanAndJerk)
@@ -104,12 +94,17 @@ class Result(models.Model):
     veteran_coefficient = models.FloatField(db_column='melzer_faber_coefficient', null=True, blank=True)
     age = models.IntegerField()
 
-    best_clean_and_jerk = models.ForeignKey('MoveAttempt', related_name='best_clean_and_jerk', db_column='best_clean_and_jerk', null=True, blank=True)
-    best_snatch = models.ForeignKey('MoveAttempt', related_name='best_snatch', db_column='best_snatch', null=True, blank=True)
+    best_clean_and_jerk = models.ForeignKey('MoveAttempt', related_name='best_clean_and_jerk',
+                                            db_column='best_clean_and_jerk', null=True, blank=True)
+    best_snatch = models.ForeignKey('MoveAttempt', related_name='best_snatch',
+                                    db_column='best_snatch', null=True, blank=True)
 
-    total_lift = models.IntegerField(verbose_name='Total poeng', blank=True, null=True)  # best_clean_and_jerk + best_snatch
-    points_with_sinclair = models.FloatField(verbose_name='Poeng med sinclair', blank=True, null=True)  # total_lift*sinclair_coefficient
-    points_with_veteran = models.FloatField(verbose_name='Veteranpoeng', blank=True, null=True)   # points_with_sinclair*melzerfaber_coefficient
+    total_lift = models.IntegerField(verbose_name='Total poeng',
+                                     blank=True, null=True)  # best_clean_and_jerk + best_snatch
+    points_with_sinclair = models.FloatField(verbose_name='Poeng med sinclair',
+                                             blank=True, null=True)  # total_lift*sinclair_coefficient
+    points_with_veteran = models.FloatField(verbose_name='Veteranpoeng',
+                                            blank=True, null=True)   # points_with_sinclair*melzerfaber_coefficient
 
     def __str__(self):
         return self.lifter.fullname() + str(self.group.competition)
@@ -158,4 +153,3 @@ class Judge(Person):
 
 class Staff(Person):
     pass
-
