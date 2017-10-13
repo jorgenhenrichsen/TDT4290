@@ -1,6 +1,6 @@
 from django.test import TestCase
 from .search import SearchFiltering
-from resultregistration.models import Result, Lifter, Club, Group, Competition, Gender, Staff
+from resultregistration.models import Result, Lifter, Club, Group, Competition, Staff
 
 
 class SearchFilteringTestCase(TestCase):

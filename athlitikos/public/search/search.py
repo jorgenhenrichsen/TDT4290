@@ -26,7 +26,7 @@ class SearchFiltering:
         :return: bool, true if the input is a none-value.
         """
         return value is None or SearchFiltering.NONE_VALUES.__contains__(str(value))\
-               or SearchFiltering.NONE_VALUES.__contains__(value)
+            or SearchFiltering.NONE_VALUES.__contains__(value)
 
     @classmethod
     def search_for_results(cls, lifters, clubs, from_date, to_date):
