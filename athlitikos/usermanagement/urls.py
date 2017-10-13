@@ -4,5 +4,5 @@ from django.conf.urls import url
 urlpatterns = [
     url(r'^admin-startside/', views.admin, name='home'),
     url(r'^admin/', views.admin, name='home'),
-    url(r'^ny-bruker/', views.create_new_user, name='home'),
+    url(r'^ny-bruker/', views.UserFormView.as_view(), name='home'),
 ]

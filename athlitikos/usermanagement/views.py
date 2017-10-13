@@ -36,8 +36,30 @@ class UserFormView(View):
         form = self.form_class(None)
         return render(request, self.template_name, {'form' : form})
 
+    #process form data
     def post(self, request):
-        pass
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+
+            user = form.save(commit=False)
+
+            #cleaned (normalized) data
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user.set_password(password)
+            user.save()
+
+            #Returns user object if credentials are correct
+            user = authenticate(username=username, password=password)
+
+            if user.is_active:
+
+                login(request, user)
+                request.user
+                return redirect('http://127.0.0.1:8000/admin-startside/')
+
+        return render(request, self.template_name, {'form' : form})
 
 
 
