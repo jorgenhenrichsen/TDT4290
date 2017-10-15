@@ -85,4 +85,4 @@ class SearchFiltering:
         :param query: The query
         :return: The clubs where the club name contains the query string.
         """
-        return Club.objects.filter(clubName__icontains=query)
+        return Club.objects.filter(club_name__icontains=query)

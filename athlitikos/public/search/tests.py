@@ -19,28 +19,27 @@ class SearchFilteringTestCase(TestCase):
         staff = Staff.objects.create(
             first_name="Staff",
             last_name="Staff",
-            birth_date="1990-09-09",
         )
 
-        self.club1 = Club.objects.create(clubName="Club1")
-        self.club2 = Club.objects.create(clubName="Club2")
+        self.club1 = Club.objects.create(club_name="Club1")
+        self.club2 = Club.objects.create(club_name="Club2")
 
         competition = Competition.objects.create(
-            competitionCategory="Category",
-            startDate="2017-08-19",
+            competition_category="Category",
+            start_date="2017-08-19",
             location="Location"
         )
 
         group = Group.objects.create(
             competition=competition,
             date="2017-08-20",
-            groupNumber=1,
-            competitionLeader=staff,
+            group_number=1,
+            competition_leader=staff,
             secretary=staff,
             speaker=staff,
-            technicalController=staff,
-            cheifMarshall=staff,
-            timeKeeper=staff,
+            technical_controller=staff,
+            cheif_marshall=staff,
+            time_keeper=staff,
         )
 
         self.lifter1 = Lifter.objects.create(
@@ -60,21 +59,27 @@ class SearchFilteringTestCase(TestCase):
         )
 
         self.result1 = Result.objects.create(
-            resultID=1,
-            total=200,
-            points=400,
-            points_veteran=500,
+            points_with_veteran=1000,
+            points_with_sinclair=900,
+            total_lift=200,
+            age=40,
             sinclair_coefficient=1.1,
+            veteran_coefficient=1.1,
+            body_weight=70,
+            age_group="M1",
             group=group,
-            lifter=self.lifter1
+            lifter=self.lifter1,
         )
 
         self.result2 = Result.objects.create(
-            resultID=2,
-            total=300,
-            points=500,
-            points_veteran=1000,
+            points_with_veteran=1000,
+            points_with_sinclair=900,
+            total_lift=200,
+            age=40,
             sinclair_coefficient=1.1,
+            veteran_coefficient=1.1,
+            body_weight=70,
+            age_group="M1",
             group=group,
             lifter=self.lifter2,
         )
