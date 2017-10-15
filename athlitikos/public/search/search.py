@@ -46,11 +46,9 @@ class SearchFiltering:
         results = Result.objects.all()
 
         if not SearchFiltering.is_none_value(lifters):
-            print("Filtering for lifters")
             results = results.filter(lifter_id__in=lifters)
 
         if not SearchFiltering.is_none_value(clubs):
-            print("Filtering for clubs")
             results = results.filter(lifter__club_id__in=clubs)
 
         if not SearchFiltering.is_none_value(from_date):
