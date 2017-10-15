@@ -39,7 +39,7 @@ def search_for_lifter(request):
 
             lifter_string = lifter.lifter.first_name +\
                             " " + lifter.lifter.last_name +\
-                            ", " + lifter.club.clubName
+                            ", " + lifter.club.club_name
 
             lifter_json = {
                 'label': lifter_string,
