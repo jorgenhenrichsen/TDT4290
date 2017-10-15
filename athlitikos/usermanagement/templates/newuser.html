@@ -4,10 +4,9 @@
 
   <h1>Ny bruker</h1>
 
-  <form method="post">
-    {% csrf_token %}
-    {{form.as_p}}
-    <button>Fortsett</button>
-  </form>
+   <form method="POST" class="post-form">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default">Fortsett</button>
+    </form>
 
 {% endblock %}

@@ -8,6 +8,7 @@ from django.views.generic import View
 from .forms import SignUpForm, UserForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import Group
 
 class UserFormView(View):
     form_class = UserForm
@@ -25,20 +26,23 @@ class UserFormView(View):
             user = form.save(commit=False)
 
             #cleaned normalized data
-            email = form.cleaned_data['epost']
-            password = form.cleaned_data['passord']
-            status = form.cleaned_data['status']
+            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
             user.set_password(password)
             user.save()
+            
+            group = Group.objects.get(name='ClubOfficial')
+            user.groups.add(group)
 
-            user = authenticate(email=email, password=password)
+            group.save()
+
+            user = authenticate(username=username, password=password)
 
             if user is not None:
 
-                if user.is_active:
-
-                    login(request, user)
-                    return redirect('/home')
+                login(request, user)
+                return redirect('/home')
 
         return render(request, self.template_name, {'form': form})
 
