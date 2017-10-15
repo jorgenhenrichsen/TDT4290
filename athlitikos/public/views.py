@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, Http404
 import json
 from .search.search import SearchFiltering
 import athlitikos.settings as settings
@@ -11,8 +11,18 @@ def search(request):
     :return:
     """
     if request.method == 'GET' and request.is_ajax():
-        lifters = json.loads(request.GET.get('lifters'))
-        clubs = json.loads(request.GET.get('clubs'))
+
+        lifters_json = request.GET.get('lifters')
+        clubs_json = request.GET.get('clubs')
+        lifters = None
+        clubs = None
+
+        if lifters_json is not None:
+            lifters = json.loads(lifters_json)
+
+        if clubs_json is not None:
+            clubs = json.loads(clubs_json)
+
         from_date = request.GET.get('from_date')
         to_date = request.GET.get('to_date')
         results = SearchFiltering.search_for_results(lifters, clubs, from_date, to_date)
@@ -38,8 +48,10 @@ def search_for_lifter(request):
         for lifter in lifters:
 
             lifter_string = lifter.lifter.first_name +\
-                            " " + lifter.lifter.last_name +\
-                            ", " + lifter.club.club_name
+                            " " + lifter.lifter.last_name
+
+            if lifter.club is not None:
+                lifter_string += ", " + lifter.club.club_name
 
             lifter_json = {
                 'label': lifter_string,
@@ -52,7 +64,7 @@ def search_for_lifter(request):
         data = json.dumps(results)
 
     else:
-        data = 'error'
+        raise Http404()
 
     if settings.DEBUG:
         print(data)
@@ -83,7 +95,7 @@ def search_for_clubs(request):
         data = json.dumps(results)
 
     else:
-        data = 'error'
+        raise Http404()
 
     if settings.DEBUG:
         print(data)
