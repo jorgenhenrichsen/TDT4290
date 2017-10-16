@@ -1,6 +1,6 @@
 from django.test import TestCase
 from .search import SearchFiltering
-from resultregistration.models import Result, Lifter, Club, Group, Competition, Staff
+from resultregistration.models import Result, Lifter, Club, Group, Competition, Judge
 
 
 class SearchFilteringTestCase(TestCase):
@@ -16,9 +16,12 @@ class SearchFilteringTestCase(TestCase):
 
     def setUp(self):
 
-        staff = Staff.objects.create(
-            first_name="Staff",
-            last_name="Staff",
+        staff = 'Staff Staff'
+
+        judge = Judge.objects.create(
+            first_name='Judge',
+            last_name='Judge',
+            judge_level=1,
         )
 
         self.club1 = Club.objects.create(club_name="Club1")
@@ -37,9 +40,9 @@ class SearchFilteringTestCase(TestCase):
             competition_leader=staff,
             secretary=staff,
             speaker=staff,
-            technical_controller=staff,
-            cheif_marshall=staff,
-            time_keeper=staff,
+            technical_controller=judge,
+            cheif_marshall=judge,
+            time_keeper=judge,
         )
 
         self.lifter1 = Lifter.objects.create(
