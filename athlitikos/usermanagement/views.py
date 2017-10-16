@@ -23,13 +23,21 @@ class UserFormView(View):
             #cleaned (normalized) data
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
+            status = form.cleaned_data['status']
             user.set_password(password)
             user.save()
 
-            group = Group.objects.get(name='ClubOfficial')
-            user.groups.add(group)
+            if(status == "1"):
 
-            group.save()
+                group = Group.objects.get(name='Admin')
+                user.groups.add(group)
+                group.save()
+
+            if(status == "2"):
+
+                group = Group.objects.get(name='ClubOfficial')
+                user.groups.add(group)
+                group.save()
 
             user = authenticate(username=username, password=password)
 
