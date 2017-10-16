@@ -1,8 +1,10 @@
 
 $(document).ready(function () {
-   $("#result-table").tablesorter({
-       cancelSelection:true,
-   });
+    $("#result-table").tablesorter({
+        cancelSelection:true,
+    });
+
+
 });
 
 var selectedLifters = [];
@@ -138,9 +140,61 @@ function removeClub(id) {
     container.removeChild(button);
 }
 
+var selectedGender;
+var selectedAgeGroup;
+var selectedWeightClass;
+
+var selectedCategories = {};
+
+function didSelectGender(element) {
+    //selectedGender = $('option:selected',element).index() - 1; /* -1 because of the placeholder option */
+    selectedGender = element.value;
+    $("#age-group-selector").css({"display":"block"});
+
+}
+
 function didSelectAgeGroup(element) {
-    var selectedIndex = $('option:selected',element).index() - 1; /* -1 because of the placeholder option */
+    //selectedAgeGroup = $('option:selected',element).index() - 1; /* -1 because of the placeholder option */
+    selectedAgeGroup = element.value;
+    $("#weight-class-selector").css({"display":"block"});
+    getAvailableWeightClasses();
+}
 
+function didSelectWeightClass(element) {
+    selectedWeightClass = element.value;
+}
 
+function getAvailableWeightClasses() {
+
+    if (selectedGender != undefined && selectedAgeGroup != undefined) {
+        console.log("HEYYE");
+    }
+    else {
+        console.log("Show error");
+    }
+
+}
+
+function addCurrentCategoryFilter() {
+    if (selectedGender != undefined && selectedAgeGroup != undefined && selectedWeightClass != undefined) {
+
+        var id = selectedGender + selectedAgeGroup + selectedWeightClass;
+        console.log(id);
+
+        if (!(id in selectedCategories)) {
+            selectedCategories[id] = [selectedGender, selectedAgeGroup, selectedWeightClass];
+
+            var html = "<button id='" + id +"' onclick='removeCategory(this.id)' class='filter-button'> "+ selectedGender + ", " + selectedAgeGroup + selectedWeightClass +"</button>";
+            var categories = document.getElementById("categories-container");
+            categories.innerHTML += html;
+        }
+
+    }
+    else {
+        console.log("Error");
+    }
+}
+
+function removeCategory(id) {
 
 }
