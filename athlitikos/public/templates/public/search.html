@@ -28,6 +28,31 @@
 
                 </div>
 
+                <div class="category-filter-container">
+
+                    <label>Filtrer resultater på kategori</label>
+
+                    <select class="cat-selector" id="gender-selector">
+                        <option value="" disabled selected>Velg kjønn</option>
+                        {% for gender in genders %}
+                            <option>{{ gender }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <select class=cat-selector" id="age-group-selector" onchange="didSelectAgeGroup(this)">
+                        <option value="" disabled selected>Velg aldersgruppe</option>
+                        {% for age_group in age_groups %}
+                            <option>{{ age_group }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <select class="cat-selector" id="weight-class-selector">
+                        <option value="" disabled selected>Velg vektklasse</option>
+                    </select>
+                    <button class="search-button" id="add-category-button">Legg til</button>
+                    <div class="categories-container"></div>
+                </div>
+
                 <div class="date-filter-container">
 
                     <label>Filtrer resultater på tidsrom</label><br>

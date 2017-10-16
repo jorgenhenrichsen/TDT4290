@@ -137,3 +137,10 @@ function removeClub(id) {
 
     container.removeChild(button);
 }
+
+function didSelectAgeGroup(element) {
+    var selectedIndex = $('option:selected',element).index() - 1; /* -1 because of the placeholder option */
+
+
+
+}

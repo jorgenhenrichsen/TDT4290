@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponse, Http404
 import json
 from .search.search import SearchFiltering
 import athlitikos.settings as settings
+from resultregistration.enums import AgeGroup, Gender
 
 
 def search(request):
@@ -29,7 +30,10 @@ def search(request):
 
         return render(request, 'public/result-table.html', {'results': results})
 
-    return render(request, 'public/search.html')
+    age_groups = map(lambda x: x[0], AgeGroup.choices())
+    genders = map(lambda x: x[0], Gender.choices())
+
+    return render(request, 'public/search.html', {'age_groups': age_groups, 'genders': genders})
 
 
 def search_for_lifter(request):
@@ -38,7 +42,6 @@ def search_for_lifter(request):
     :param request:
     :return:
     """
-
     if request.is_ajax():
         query = request.GET.get('term', '')
 
