@@ -61,7 +61,7 @@ class Group(models.Model):
 
     competition_leader = models.CharField(max_length=100, verbose_name='Stevneleder')
     # , related_name='competition_leader')
-    jury = models.CharField(max_length=500, verbose_name='Jurie')  # related_name='jury'
+    jury = models.CharField(max_length=500, verbose_name='Jurie', default='')  # related_name='jury'
     # jury = models.ManyToManyField('Staff', related_name='jury')
     judges = models.ManyToManyField('Judge', related_name='judges')
     secretary = models.CharField(max_length=100, verbose_name='Sekretær')  # , related_name='secretary')
@@ -200,7 +200,7 @@ class PendingGroup(models.Model):
 
     competition_leader = models.CharField(max_length=100, verbose_name='Stevneleder')
     # , related_name='competition_leader')
-    jury = models.CharField(max_length=500, verbose_name='Jurie')   # related_name='jury'
+    jury = models.CharField(max_length=500, verbose_name='Jurie', default='')   # related_name='jury'
     # jury = models.ManyToManyField('Staff', related_name='jury')
     judges = models.ManyToManyField('Judge', related_name='pending_judges')
     secretary = models.CharField(max_length=100, verbose_name='Sekretær')   # , related_name='secretary')
