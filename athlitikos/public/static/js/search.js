@@ -167,7 +167,34 @@ function didSelectWeightClass(element) {
 function getAvailableWeightClasses() {
 
     if (selectedGender != undefined && selectedAgeGroup != undefined) {
-        console.log("HEYYE");
+
+        $.ajax({
+        type: "GET",
+        url: "/search/weight-classes/",
+        dataType: "json",
+        data: {
+                "selected_gender": selectedGender,
+                "selected_age_group": selectedAgeGroup
+        },
+        success: function (json) {
+            console.log(json);
+            var options = "<option value='' disabled selected>Velg vektklasse</option>";
+            for (var weightClass in json) {
+                options += "<option value='" + json[weightClass] + "'>" + json[weightClass] + "</option>";
+            }
+
+            var selector = document.getElementById("weight-class-selector");
+            selector.innerHTML = options;
+
+        },
+        error: function () {
+          console.log("ERROR");
+        },
+        complete: function () {
+            console.log("COMPLETE");
+        }
+    });
+
     }
     else {
         console.log("Show error");
@@ -198,7 +225,7 @@ function addCurrentCategoryFilter() {
 function removeCategory(id) {
 
     delete selectedCategories[id]
-    
+
     var container = document.getElementById("categories-container");
     var button = document.getElementById(id);
 

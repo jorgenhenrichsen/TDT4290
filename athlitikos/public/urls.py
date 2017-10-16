@@ -8,4 +8,5 @@ urlpatterns = [
     url(r'^search/$', views.search, name='search'),
     url(r'^search/lifter/$', views.search_for_lifter, name='search_for_lifter'),
     url(r'^search/club/$', views.search_for_clubs, name='search_for_clubs'),
+    url(r'^search/weight-classes/$', views.get_available_weight_classes, name='get_available_weight_classes'),
 ]

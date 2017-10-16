@@ -105,3 +105,24 @@ def search_for_clubs(request):
 
     mime_type = 'application/json'
     return HttpResponse(data, mime_type)
+
+
+def get_available_weight_classes(request):
+    if request.is_ajax():
+
+        gender = request.GET.get('selected_gender')
+        age_group = request.GET.get('selected_age_group')
+
+        print(gender, age_group)
+
+        weight_classes = [52, 67, 87, 110]  # TODO: Insert real classes
+        data = json.dumps(weight_classes)
+
+    else:
+        raise Http404()
+
+    if settings.DEBUG:
+        print(data)
+
+    mime_type = 'application/json'
+    return HttpResponse(data, mime_type)
