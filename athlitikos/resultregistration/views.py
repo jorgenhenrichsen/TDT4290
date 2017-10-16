@@ -134,7 +134,15 @@ def get_age_for_lifter_in_result(request, pk):
     return JsonResponse({'age': str(age)})
 
 
+def result_view(request):
+    return render(request, 'resultregistration/result_form.html', context={'MoveAttemptForm': MoveAttemptForm,
+                                                                           'ResultForm': ResultForm,
+                                                                           'LifterForm': LifterForm})
+
+
 def result_registration(request):
+    result_form = ResultForm.declared_fields.values()
+
     return render(request, 'resultregistration/resultregistration.html', context={'MoveAttemptForm': MoveAttemptForm,
                                                                                   'ResultForm': ResultForm,
                                                                                   'GroupForm': GroupForm,

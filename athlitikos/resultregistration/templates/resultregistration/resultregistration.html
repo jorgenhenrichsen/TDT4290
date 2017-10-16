@@ -1,20 +1,45 @@
 
 {% extends 'base.html' %}
 
-
 {% block head %}
-        <link rel="stylesheet" type="text/css" href="/static//css/resultregistration.css">
+        {% load staticfiles %}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/resultregistration.css' %}">
 {%  endblock %}
 
 {% block content %}
 
     <h1>Register result</h1>
     <form method="POST" class="post-form">{% csrf_token %}
+    {{ CompetitonForm.as_p }}
+    </form>
+
+    <form method="POST" class="post-form">{% csrf_token %}
 
 {#        {% include 'betterforms/form_as_fieldsets.html' %}#}
-        {{ CompetitonForm.as_p }}
-        {{ ResultForm.as_p }}
-        {{ MoveAttemptForm.as_p }}
+{#        {{ CompetitonForm.as_p }}#}
+{#        {% for  %}#}
+
+        <table style="width: 90%">
+            <tr>
+                <th>vektklasse</th>
+                <th>kropsvekt</th>
+                <th>Kategori</th>
+                <th>fødselsdato</th>
+                <th>navn</th>
+            </tr>
+            {% for i in 'xxxxxxxxxx'%}
+                <tr>
+                    {{ ResultForm.as_p }}
+                    {% for i in 'xxxxxx' %}
+                        <th>
+                            {{ MoveAttemptForm.as_p }}
+                        </th>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+
+        </table>
+
         {{ GroupForm.as_p }}
         {{ ClubForm.as_p }}
         {#        <div class="competition_information">#}

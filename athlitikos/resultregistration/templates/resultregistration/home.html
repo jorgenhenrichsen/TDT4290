@@ -1,10 +1,12 @@
 
 {% extends 'base.html' %}
-
+{#{% block title %}Home{% endblock %}#}
 
 {% block content %}
     <div class="form" id="loginform">
-            <a href="/resultregistration/"><input type="redirect" value="Registrer resultater"></a>
-            <a href="none"><input type="redirect" value="Endre resultater"></a>
+            <a href="{% url 'resultregistration:result_registration' %}">
+                <input type="redirect" value="Registrer resultater">
+            </a>
+{#            <a href="none"><input type="redirect" value="Endre resultater"></a>#}
     </div>
 {% endblock %}

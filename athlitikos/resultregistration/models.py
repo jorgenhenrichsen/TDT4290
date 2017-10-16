@@ -153,3 +153,4 @@ class Judge(Person):
 
 class Staff(Person):
     pass
+
