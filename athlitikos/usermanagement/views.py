@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from django.views.generic import View
@@ -47,6 +48,13 @@ class UserFormView(View):
                 return redirect('/home')
 
         return render(request, self.template_name, {'form': form})
+
+
+
+def club_official_options(request):
+
+    # html = ''
+    return HttpResponse()
 
 
 @login_required(login_url='/login')

@@ -22,3 +22,15 @@ class JudgeLevel(ChoiceEnum):
 class Gender(ChoiceEnum):
     male = 'M'
     female = 'K'
+
+
+class MoveTypes(ChoiceEnum):
+    snatch = 'Snatch'
+    clean_and_jerk = 'Clean and jerk'
+
+
+class AgeGroup(ChoiceEnum):
+    youth = 'U'
+    junior = 'J'
+    senior = 'S'
+    master = 'M'
