@@ -197,4 +197,10 @@ function addCurrentCategoryFilter() {
 
 function removeCategory(id) {
 
+    delete selectedCategories[id]
+    
+    var container = document.getElementById("categories-container");
+    var button = document.getElementById(id);
+
+    container.removeChild(button);
 }
