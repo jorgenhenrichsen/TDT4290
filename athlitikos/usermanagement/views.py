@@ -29,12 +29,14 @@ class UserFormView(View):
             user.set_password(password)
             user.save()
 
+            #Status 1 links to the user-group admin
             if(status == "1"):
 
                 group = Group.objects.get(name='Admin')
                 user.groups.add(group)
                 group.save()
 
+            #Status 2 links to the user-group clubOfficial
             if(status == "2"):
 
                 group = Group.objects.get(name='ClubOfficial')
