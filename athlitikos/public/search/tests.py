@@ -137,7 +137,7 @@ class SearchFilteringTestCase(TestCase):
         self.assertEqual(len(results), 0)
 
     def test_search_for_results_by_category(self):
-        category = {"age_group": "M1", "gender":"M", "weight_class": "72"}
+        category = {"age_group": "M1", "gender": "M", "weight_class": "72"}
         results = SearchFiltering.search_for_results(categories=[category])
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0], self.result1)

@@ -36,7 +36,8 @@ class SearchFiltering:
         :param clubs: Only include results with lifters belonging to a club in this list.
         :param from_date: Only include results that has a competition start_date that are after or equal to this date.
         :param to_date: Only include results that has a competition start_date that are before or equal to this date.
-        :param categories: Dictionary of categories to include results from. Form: {"age":age, "gender":gender, "weight_class":weight_class}
+        :param categories: Dictionary of categories to include results from.
+                           Form: {"age":age, "gender":gender, "weight_class":weight_class}
         :return: The filtered results.
         """
 
