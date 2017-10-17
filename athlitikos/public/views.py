@@ -115,6 +115,22 @@ def search_for_clubs(request):
     return HttpResponse(data, mime_type)
 
 
+def get_age_groups(request):
+    if request.is_ajax():
+        gender = request.GET.get('selected_gender')
+        all_groups = list(map(lambda x: x[0], AgeGroup.choices()))
+        groups = list(filter(lambda x: gender in x, all_groups))
+        data = json.dumps(groups)
+    else:
+        raise Http404()
+
+    if settings.DEBUG:
+        print(data)
+
+    mime_type = 'application/json'
+    return HttpResponse(data, mime_type)
+
+
 def get_available_weight_classes(request):
     if request.is_ajax():
 

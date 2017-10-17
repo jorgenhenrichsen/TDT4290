@@ -41,14 +41,10 @@
 
                     <select class=cat-selector" id="age-group-selector" onchange="didSelectAgeGroup(this)">
                         <option value="" disabled selected>Velg aldersgruppe</option>
-                        {% for age_group in age_groups %}
-                            <option value="{{ age_group }}">{{ age_group }}</option>
-                        {% endfor %}
                     </select>
 
                     <select class="cat-selector" id="weight-class-selector" onchange="didSelectWeightClass(this)">
                         <option value="" disabled selected>Velg vektklasse</option>
-                        <option valeu="67">67</option>
                     </select>
                     <button class="search-button" id="add-category-button" onclick="addCurrentCategoryFilter()">Legg til</button>
                     <div id="categories-container"></div>

@@ -155,7 +155,7 @@ function didSelectGender(element) {
     //selectedGender = $('option:selected',element).index() - 1; /* -1 because of the placeholder option */
     selectedGender = element.value;
     $("#age-group-selector").css({"display":"block"});
-
+    getAgeGroups();
 }
 
 /* User selects age group */
@@ -169,6 +169,38 @@ function didSelectAgeGroup(element) {
 /* User selects a weight class */
 function didSelectWeightClass(element) {
     selectedWeightClass = element.value;
+}
+
+function getAgeGroups() {
+
+    if (selectedGender != undefined) {
+        $.ajax({
+            type: "GET",
+            url: "/search/age-groups/",
+            dataType: "json",
+            data: {
+                "selected_gender": selectedGender
+            },
+            success: function (json) {
+            console.log(json);
+            var options = "<option value='' disabled selected>Velg aldersgruppe</option>";
+            for (var ageGroup in json) {
+                options += "<option value='" + json[ageGroup] + "'>" + json[ageGroup] + "</option>";
+            }
+
+            var selector = document.getElementById("age-group-selector");
+            selector.innerHTML = options;
+
+            },
+            error: function () {
+              console.log("ERROR");
+            },
+            complete: function () {
+                console.log("COMPLETE");
+            }
+            })
+    }
+
 }
 
 /* Fetches the weight classes according to the selected gender and age group */
