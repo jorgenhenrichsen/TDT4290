@@ -1,10 +1,14 @@
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
-from django.views.generic import View
+from django.views.generic import View, ListView
 from .forms import UserForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import Group
+
+class UserListView(ListView):
+    template_name = ""
+
 
 
 class UserFormView(View):
