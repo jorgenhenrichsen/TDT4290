@@ -161,7 +161,7 @@ class Staff(Person):
 
 class PendingResult(models.Model):
 
-    group = models.ForeignKey(Group, null=True)  # The Group that this result belongs to.
+    group = models.ForeignKey('PendingGroup', null=True)  # The PendingGroup that this result belongs to.
     lifter = models.ForeignKey('Lifter', null=True)  # The Lifter that this result belongs to
     body_weight = models.FloatField(verbose_name='Kroppsvekt', null=True)
     age_group = models.CharField(max_length=20, verbose_name='Kategori', choices=AgeGroup.choices(), null=True)
