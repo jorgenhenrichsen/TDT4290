@@ -8,9 +8,13 @@
 {% block content %}
 
     <div style="" class="button-box" >
-        <a href="{% url 'new-user'%}" id="buttonLink">
+        <a href="{% url 'new-user'%}" id="new-user-btn">
             <button>Brukeradministrasjon</button></a>
-        <button>Stevner til godkjenning</button>
+
+        <a href="{% url 'results-for-approval'%}" id="results-for-approval-btn">
+            <button>Stevner til godkjenning</button>
+        </a>
+
         <button>Rediger godkjente stevner</button>
         <button>Ikke-godkjente stevner</button>
 

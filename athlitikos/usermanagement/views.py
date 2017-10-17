@@ -10,6 +10,11 @@ class UserListView(ListView):
     template_name = ""
 
 
+class ResultsForApprovalView(View):
+
+    def get(self, request):
+        return render(request, 'resultsforapproval.html')
+
 
 class UserFormView(View):
     form_class = UserForm
@@ -64,4 +69,7 @@ def club_official_options(request):
 
 @login_required(login_url='/login')
 def admin(request):
-    return render(request, 'admin.html')
+    return render(request, 'adminpanel.html')
+
+
+
