@@ -34,7 +34,7 @@ class Sinclair(models.Model):
 
 class Competition(models.Model):
     competition_category = models.CharField(max_length=100, validators=[validate_name])
-
+    host = models.CharField(max_length=100, verbose_name="Arrangør")
     location = models.CharField(max_length=100)
     start_date = models.DateField(help_text="år-måned-dag")
 
@@ -46,7 +46,6 @@ class Club(models.Model):
     club_name = models.CharField(max_length=100)
     region = models.CharField(max_length=100)
     address = models.CharField(max_length=100)
-    competition = models.ManyToManyField(Competition, blank=True)   # One Club can join many competitions
 
     def __str__(self):
         return self.club_name
