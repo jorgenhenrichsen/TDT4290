@@ -61,6 +61,9 @@ class AgeGroup(ChoiceEnum):
     @classmethod
     def get_weight_classes(cls, age_group):
 
+        if age_group is None:
+            return []
+
         standard_women = [
             "48",
             "53",

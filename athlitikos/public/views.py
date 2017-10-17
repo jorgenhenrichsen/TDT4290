@@ -119,7 +119,12 @@ def get_age_groups(request):
     if request.is_ajax():
         gender = request.GET.get('selected_gender')
         all_groups = list(map(lambda x: x[0], AgeGroup.choices()))
-        groups = list(filter(lambda x: gender in x, all_groups))
+
+        if gender is not None:
+            groups = list(filter(lambda x: gender in x, all_groups))
+        else:
+            groups = all_groups
+
         data = json.dumps(groups)
     else:
         raise Http404()
