@@ -149,3 +149,11 @@ class SearchFilteringTestCase(TestCase):
         results = SearchFiltering.search_for_results(categories=[category])
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0], self.result2)
+
+    def test_search_for_multiple_categories(self):
+        categories = [
+            {"age_group": "M1", "gender": "M", "weight_class": "72"},
+            {"age_group": "M1", "gender": "F", "weight_class": "72"},
+        ]
+        results = SearchFiltering.search_for_results(categories=categories)
+        self.assertEqual(len(results), 2, "Failed to search for multiple categories")
