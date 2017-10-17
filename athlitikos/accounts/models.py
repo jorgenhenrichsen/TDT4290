@@ -100,7 +100,7 @@ class Security(models.Model):#nøkklene brukes til å tilordne de forskjellige b
     ps_key = models.CharField(max_length=200)
     club_admin_key_used = models.BooleanField(default=False)
     def save(self,*args,**kwargs):
-        self.club_admin_key = code_generator()#generer en tilfeldig alphanumerisk kode
+        self.club_admin_key = code_generator()# generer en tilfeldig alphanumerisk kode
         self.activate_key = code_generator()  # generer en tilfeldig alphanumerisk kode
         self.ps_key = code_generator()  # generer en tilfeldig alphanumerisk kode
         super(Security, self).save(*args, **kwargs)
