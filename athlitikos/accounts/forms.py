@@ -25,13 +25,6 @@ class UserLoginForm(forms.Form):
         #if not our_user:
         #    raise forms.ValidationError("feil epost eller passord") #does the same as code above
 
-    #def clean_email(self): # related to the field
-    #    email = self.cleaned_data.get("email")
-    #    email_qs = User.objects.filter(email=email)
-    #    email_exists = email_qs.exists()
-    #    if not email_exists and email_qs.count() != 1:
-    #        raise forms.ValidationError("feil epost eller passord") #wrong email
-    #    return email
 
 class UserCreationForm(forms.ModelForm):
     """A form for creating new users. Includes all the required
