@@ -29,7 +29,7 @@ class SearchFiltering:
             or SearchFiltering.NONE_VALUES.__contains__(value)
 
     @classmethod
-    def search_for_results(cls, lifters, clubs, from_date, to_date, categories):
+    def search_for_results(cls, lifters=None, clubs=None, from_date=None, to_date=None, categories=None):
         """
         Filter out results.
         :param lifters: Only inlcude results from the lifters ids in this list.
