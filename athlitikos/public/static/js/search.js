@@ -218,7 +218,7 @@ function addCurrentCategoryFilter() {
         console.log(id);
 
         if (!(id in selectedCategories)) {
-            selectedCategories[id] = {"gender": selectedGender, "age": selectedAgeGroup, "weight_class": selectedWeightClass};
+            selectedCategories[id] = {"gender": selectedGender, "age_group": selectedAgeGroup, "weight_class": selectedWeightClass};
 
             var html = "<button id='" + id +"' onclick='removeCategory(this.id)' class='filter-button'> "+ selectedGender + ", " + selectedAgeGroup + selectedWeightClass +"</button>";
             var categories = document.getElementById("categories-container");

@@ -69,6 +69,7 @@ class SearchFilteringTestCase(TestCase):
             age_group="M1",
             group=group,
             lifter=self.lifter1,
+            weight_class=72,
         )
 
         self.result2 = Result.objects.create(
@@ -82,6 +83,7 @@ class SearchFilteringTestCase(TestCase):
             age_group="M1",
             group=group,
             lifter=self.lifter2,
+            weight_class=72,
         )
 
     def test_value_validation(self):
@@ -133,3 +135,14 @@ class SearchFilteringTestCase(TestCase):
         self.assertEqual(len(results), 2)
         results = SearchFiltering.search_for_results(to_date="19/08/2017")
         self.assertEqual(len(results), 0)
+
+    def test_search_for_results_by_category(self):
+        category = {"age_group": "M1", "gender":"M", "weight_class": "72"}
+        results = SearchFiltering.search_for_results(categories=[category])
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0], self.result1)
+
+        category = {"age_group": "M1", "gender": "F", "weight_class": "72"}
+        results = SearchFiltering.search_for_results(categories=[category])
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0], self.result2)

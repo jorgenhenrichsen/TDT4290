@@ -65,11 +65,11 @@ class SearchFiltering:
             all_results = []
 
             for category in categories:
-                age = category["age"]
+                age_group = category["age_group"]
                 gender = category["gender"]
                 weight_class = int(category["weight_class"])
 
-                part_result = results.filter(age__exact=age,
+                part_result = results.filter(age_group__exact=age_group,
                                              lifter__gender__exact=gender,
                                              weight_class__exact=weight_class
                                              )
