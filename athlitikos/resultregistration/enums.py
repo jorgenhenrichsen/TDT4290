@@ -34,3 +34,9 @@ class AgeGroup(ChoiceEnum):
     junior = 'J'
     senior = 'S'
     master = 'M'
+
+
+class Status(ChoiceEnum):
+    approved = 'Godkjent'
+    pending = 'Til godkjenning'
+    denied = 'Ikke godkjent'
