@@ -118,3 +118,9 @@ class AgeGroup(ChoiceEnum):
                 return youth_women
             else:
                 return standard_women
+
+
+class Status(ChoiceEnum):
+    approved = 'Godkjent'
+    pending = 'Til godkjenning'
+    denied = 'Ikke godkjent'
