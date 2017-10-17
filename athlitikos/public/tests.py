@@ -1,5 +1,5 @@
 from django.test import TestCase, RequestFactory
-from .views import search_for_lifter, search_for_clubs, search
+from .views import search_for_lifter, search_for_clubs, search, get_available_weight_classes
 from resultregistration.models import Lifter, Club
 
 
@@ -41,3 +41,8 @@ class SearchTestCase(TestCase):
         })
         response = search_for_clubs(request)
         self.assertEqual(response.status_code, 200, "Error searching for clubs")
+
+    def test_get_weight_classes(self):
+        request = self.factory.get('get_available_weight_classes', HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        response = get_available_weight_classes(request)
+        self.assertEqual(response.status_code, 200, "Error getting weightclasses")

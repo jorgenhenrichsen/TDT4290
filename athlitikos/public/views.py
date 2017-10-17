@@ -15,8 +15,10 @@ def search(request):
 
         lifters_json = request.GET.get('lifters')
         clubs_json = request.GET.get('clubs')
+        categories_json = request.GET.get('categories')
         lifters = None
         clubs = None
+        categories = None
 
         if lifters_json is not None:
             lifters = json.loads(lifters_json)
@@ -24,9 +26,15 @@ def search(request):
         if clubs_json is not None:
             clubs = json.loads(clubs_json)
 
+        if categories_json is not None:
+            categories_dict = json.loads(categories_json)
+            categories = []
+            for key, value in categories_dict.items():
+                categories.append(value)
+
         from_date = request.GET.get('from_date')
         to_date = request.GET.get('to_date')
-        results = SearchFiltering.search_for_results(lifters, clubs, from_date, to_date)
+        results = SearchFiltering.search_for_results(lifters, clubs, from_date, to_date, categories)
 
         return render(request, 'public/result-table.html', {'results': results})
 
@@ -112,8 +120,6 @@ def get_available_weight_classes(request):
 
         gender = request.GET.get('selected_gender')
         age_group = request.GET.get('selected_age_group')
-
-        print(gender, age_group)
 
         weight_classes = [52, 67, 87, 110]  # TODO: Insert real classes
         data = json.dumps(weight_classes)

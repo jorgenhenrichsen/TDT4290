@@ -70,7 +70,7 @@ $.datepicker.setDefaults({
 
 $(function () {
     $("#from-date-picker").datepicker();
-    $("#to-date-picker").datepicker()
+    $("#to-date-picker").datepicker();
 });
 
 /*
@@ -85,6 +85,8 @@ function submitForm() {
     /* Fetching search results and reloading the table with the new values */
     var serializedLifters = JSON.stringify(selectedLifters);
     var serializedClubs = JSON.stringify(selectedClubs);
+    var serializedCategories = JSON.stringify(selectedCategories);
+    console.log(serializedCategories);
     $.ajax({
         type: "GET",
         url: "/search/",
@@ -93,7 +95,8 @@ function submitForm() {
                 "lifters": serializedLifters,
                 "clubs": serializedClubs,
                 "from_date": fromDate,
-                "to_date": toDate
+                "to_date": toDate,
+                "categories": serializedCategories
         },
         success: function (html) {
 
@@ -140,12 +143,14 @@ function removeClub(id) {
     container.removeChild(button);
 }
 
+/* Category filtering */
+
 var selectedGender;
 var selectedAgeGroup;
 var selectedWeightClass;
-
 var selectedCategories = {};
 
+/* Called when user selects a gender */
 function didSelectGender(element) {
     //selectedGender = $('option:selected',element).index() - 1; /* -1 because of the placeholder option */
     selectedGender = element.value;
@@ -153,6 +158,7 @@ function didSelectGender(element) {
 
 }
 
+/* User selects age group */
 function didSelectAgeGroup(element) {
     //selectedAgeGroup = $('option:selected',element).index() - 1; /* -1 because of the placeholder option */
     selectedAgeGroup = element.value;
@@ -160,10 +166,12 @@ function didSelectAgeGroup(element) {
     getAvailableWeightClasses();
 }
 
+/* User selects a weight class */
 function didSelectWeightClass(element) {
     selectedWeightClass = element.value;
 }
 
+/* Fetches the weight classes according to the selected gender and age group */
 function getAvailableWeightClasses() {
 
     if (selectedGender != undefined && selectedAgeGroup != undefined) {
@@ -202,6 +210,7 @@ function getAvailableWeightClasses() {
 
 }
 
+/* Adds a filter according to the selected gender, age group and weight class */
 function addCurrentCategoryFilter() {
     if (selectedGender != undefined && selectedAgeGroup != undefined && selectedWeightClass != undefined) {
 
@@ -209,7 +218,7 @@ function addCurrentCategoryFilter() {
         console.log(id);
 
         if (!(id in selectedCategories)) {
-            selectedCategories[id] = [selectedGender, selectedAgeGroup, selectedWeightClass];
+            selectedCategories[id] = {"gender": selectedGender, "age": selectedAgeGroup, "weight_class": selectedWeightClass};
 
             var html = "<button id='" + id +"' onclick='removeCategory(this.id)' class='filter-button'> "+ selectedGender + ", " + selectedAgeGroup + selectedWeightClass +"</button>";
             var categories = document.getElementById("categories-container");
@@ -222,9 +231,10 @@ function addCurrentCategoryFilter() {
     }
 }
 
+/* Remove a category filter */
 function removeCategory(id) {
 
-    delete selectedCategories[id]
+    delete selectedCategories[id];
 
     var container = document.getElementById("categories-container");
     var button = document.getElementById(id);
