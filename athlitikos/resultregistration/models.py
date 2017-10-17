@@ -88,7 +88,7 @@ class Result(models.Model):
     lifter = models.ForeignKey('Lifter', null=True)    # The Lifter that this result belongs to
     body_weight = models.FloatField(verbose_name='Kroppsvekt', null=True)
     age_group = models.CharField(max_length=20, verbose_name='Kategori', choices=AgeGroup.choices(), null=True)
-    weight_class = models.IntegerField(verbose_name='Vektklasse', null=True)
+    weight_class = models.CharField(max_length=10, verbose_name='Vektklasse', null=True)
 
     sinclair_coefficient = models.FloatField(db_column='sinclair_coefficient', null=True, blank=True)
     veteran_coefficient = models.FloatField(db_column='melzer_faber_coefficient', null=True, blank=True)
