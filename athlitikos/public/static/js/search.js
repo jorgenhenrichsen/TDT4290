@@ -86,6 +86,7 @@ function submitForm() {
     var serializedLifters = JSON.stringify(selectedLifters);
     var serializedClubs = JSON.stringify(selectedClubs);
     var serializedCategories = JSON.stringify(selectedCategories);
+    $("#result-table").innerHTML;
     console.log(serializedCategories);
     $.ajax({
         type: "GET",

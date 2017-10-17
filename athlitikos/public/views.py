@@ -133,11 +133,8 @@ def get_age_groups(request):
 
 def get_available_weight_classes(request):
     if request.is_ajax():
-
-        gender = request.GET.get('selected_gender')
         age_group = request.GET.get('selected_age_group')
-
-        weight_classes = [52, 67, 87, 110]  # TODO: Insert real classes
+        weight_classes = AgeGroup.get_weight_classes(age_group)
         data = json.dumps(weight_classes)
 
     else:
