@@ -1,14 +1,19 @@
 #from django.db import models
-#from django.conf import settings
-#from django.db.models.signals import post_save
+from django.db.models.signals import post_save
 
 from django.db import models
 from django.contrib.auth.models import (
-    BaseUserManager, AbstractBaseUser
+    BaseUserManager, AbstractBaseUser,
 )
+from django.conf import settings
+from .utils import code_generator
+
+
 #Har basicly stjålet det meste fra django sin nettside:
 #https://docs.djangoproject.com/en/1.11/topics/auth/customizing/
 #Foretrekker dette alternativet, kan brukes til forenkling ect
+
+
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None):
         """
@@ -36,6 +41,9 @@ class CustomUserManager(BaseUserManager):
             password=password,
         )
         user.is_admin = True
+        user.is_staff = True
+        user.is_active = True
+        user.is_club_admin = True
         user.save(using=self._db)
         return user
 
@@ -46,8 +54,10 @@ class CustomUser(AbstractBaseUser):
         max_length=255,
         unique=True,
     )
-    is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False) # en lovlig bruker
+    is_club_admin = models.BooleanField(default=False) # klubb administrator godkjenner stevner ect
+    is_staff = models.BooleanField(default=False) # for at man skal få adgang til /admin, var opprinelig en property
+    is_admin = models.BooleanField(default=False) # database admininistrator
     objects = CustomUserManager()
     club = models.CharField(max_length=250, null=True)
 
@@ -76,32 +86,32 @@ class CustomUser(AbstractBaseUser):
         # Simplest possible answer: Yes, always
         return True
 
-    @property
-    def is_staff(self):
-        "Is the user a member of staff?"
-        # Simplest possible answer: All admins are staff
-        return self.is_admin
+#    @property
+#    def is_staff(self):
+#        "Is the user a member of staff?"
+#        # Simplest possible answer: All admins are staff
+#        return self.is_admin
 
 
-# !!Dokumentasjon!!
-#kan bruke dette til
-#if request.user.is_authenticated():
-#   request.user.profile.stuff på denne her
-#
-#class Profile(models.Model):
-#    #vil binde denne her til en django bruker hver gang man registerer seg
-#    user = models.OneToOneField(settings.AUTH_USER_MODEL)
-#    club = models.ForeignKey(Club,null=True)
-#    email = models.EmailField(max_length=254, unique=True) #dette feltet finnes egentlig i USER
-#
-#    def __str__(self):
-#        return str(self.user.username)
-#
-#def post_save_user_model_receiver(sender,instance,created,*args,**kwargs):
-#    if created:
-#        try:
-#            Profile.objects.create(user=instance)
-#        except:
-#            pass
-#
-#post_save.connect(post_save_user_model_receiver, sender=settings.AUTH_USER_MODEL)
+class Security(models.Model):#nøkklene brukes til å tilordne de forskjellige brukerene egenskaper
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    activate_key = models.CharField(max_length=200)
+    club_admin_key = models.CharField(max_length=200)
+    ps_key = models.CharField(max_length=200)
+    club_admin_key_used = models.BooleanField(default=False)
+    def save(self,*args,**kwargs):
+        self.club_admin_key = code_generator()#generer en tilfeldig alphanumerisk kode
+        self.activate_key = code_generator()  # generer en tilfeldig alphanumerisk kode
+        self.ps_key = code_generator()  # generer en tilfeldig alphanumerisk kode
+        super(Security, self).save(*args, **kwargs)
+    def __str__(self):
+        return self.user.email
+
+def post_save_user_model_receiver(sender,instance,created,*args,**kwargs): #knytter en bruker model mot aktivering som klubadministrator
+    if created:
+        try:
+            Security.objects.create(user=instance)
+        except:
+            pass
+
+post_save.connect(post_save_user_model_receiver, sender=settings.AUTH_USER_MODEL)
