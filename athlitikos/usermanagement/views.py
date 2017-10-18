@@ -5,6 +5,7 @@ from django.views.generic import View
 from .forms import UserForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import Group
+from resultregistration.models import Group as ResultGroup
 
 
 class UserFormView(View):
@@ -63,4 +64,8 @@ def admin(request):
 
 @login_required(login_url='/login')
 def home(request):
-    return render(request, 'home.html')
+
+    groups = ResultGroup.objects.all()
+    print(groups)
+
+    return render(request, 'home.html', {'pending_groups': groups})

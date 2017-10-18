@@ -10,8 +10,33 @@
 
         <table>
 
+            <thead>
+
+                <tr>
+                    <th>Konkurranse</th>
+                    <th>Pulje nr.</th>
+                    <th>Dato</th>
+                    <th>Status</th>
+                    <th>Handlinger</th>
+                </tr>
+
+            </thead>
 
 
+            {% for pending_group in pending_groups %}
+
+                <tr>
+                    <th>{{ pending_group.competition.competition_category }}</th>
+                    <th>{{ pending_group.group_number }}</th>
+                    <th>{{ pending_group.date }}</th>
+                    <th>{{ pending_group.status }}</th>
+                    <th>
+                        <button>Endre</button>
+                        <button>Slett</button>
+                    </th>
+                </tr>
+
+            {% endfor %}
         </table>
     </div>
 
