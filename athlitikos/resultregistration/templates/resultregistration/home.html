@@ -1,10 +1,50 @@
 
 {% extends 'base.html' %}
 
+{% block title %}Home{% endblock %}
+
+{% block head %}
+
+    <script type="text/javascript" src="/static/js/home.js"></script>
+
+{% endblock %}
 
 {% block content %}
-    <div class="form" id="loginform">
-            <a href="/resultregistration/"><input type="redirect" value="Registrer resultater"></a>
-            <a href="none"><input type="redirect" value="Endre resultater"></a>
+
+    <h1>Mine Resultater</h1>
+
+    <div id="registered-results-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Konkurranse</th>
+                    <th>Pulje nr.</th>
+                    <th>Dato</th>
+                    <th>Status</th>
+                    <th>Handlinger</th>
+                </tr>
+
+            </thead>
+
+
+            {% for pending_group in pending_groups %}
+
+                <tr>
+                    <th>{{ pending_group.competition.competition_category }}</th>
+                    <th>{{ pending_group.group_number }}</th>
+                    <th>{{ pending_group.date }}</th>
+                    <th>{{ pending_group.status }}</th>
+                    <th>
+                        <button onclick="editPendingGroup()">Endre</button>
+                        <button onclick="deletePendingGroup()">Slett</button>
+                    </th>
+                </tr>
+
+            {% endfor %}
+        </table>
     </div>
+
 {% endblock %}
