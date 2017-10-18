@@ -3,6 +3,7 @@ from .search import SearchFiltering
 from resultregistration.models import Result, Lifter, Club, Group, Competition, Judge
 from resultregistration.enums import Status
 
+
 class SearchFilteringTestCase(TestCase):
 
     club1 = None

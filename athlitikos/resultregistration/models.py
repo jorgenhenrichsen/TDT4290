@@ -5,7 +5,7 @@ from .validators import validate_name
 # from django.db.models.signals import pre_save is usefull ;)
 from django.contrib.auth.models import User
 
-# Create your models here.
+
 class MelzerFaber(models.Model):
     age = models.IntegerField(verbose_name='Alder')
     coefficient = models.FloatField(verbose_name='Koeffisient')
