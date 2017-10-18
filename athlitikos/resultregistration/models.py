@@ -3,7 +3,7 @@ from .enums import MoveTypes, AgeGroup, Gender, JudgeLevel, Status
 from .validators import validate_name
 # from datetime import datetime
 # from django.db.models.signals import pre_save is usefull ;)
-
+from django.contrib.auth.models import User
 
 # Create your models here.
 class MelzerFaber(models.Model):
@@ -76,6 +76,8 @@ class Group(models.Model):
 
     notes = models.CharField(max_length=300, null=True, blank=True)
     records_description = models.CharField(max_length=300, null=True, blank=True)
+
+    author = models.ForeignKey(User, null=True)
 
     def __str__(self):
         return '{0}, gruppe {1}, {2}'.format(self.competition, self.group_number, self.date)

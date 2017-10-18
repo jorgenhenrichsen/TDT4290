@@ -9,10 +9,7 @@ from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm
 
 @login_required(login_url='/login')
 def home(request):
-
-    groups = Group.objects.all()
-    print(groups)
-
+    groups = Group.objects.filter(author=request.user)
     return render(request, 'resultregistration/home.html', {'pending_groups': groups})
 
 
