@@ -7,14 +7,6 @@ from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm
 # from django.views.generic import UpdateView
 
 
-# Create your views here.
-
-
-@login_required(login_url='/login')
-def home(request):
-    return render(request, 'resultregistration/home.html')
-
-
 def lifter_detail(request, pk):
     lifter = get_object_or_404(Lifter, pk=pk)
     return render(request, 'resultregistration/lifter_detail.html',

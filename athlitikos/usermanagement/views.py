@@ -59,3 +59,8 @@ def club_official_options(request):
 @login_required(login_url='/login')
 def admin(request):
     return render(request, 'admin.html')
+
+
+@login_required(login_url='/login')
+def home(request):
+    return render(request, 'home.html')
