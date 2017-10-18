@@ -2,9 +2,18 @@ from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from datetime import date
-from .models import Lifter, Judge, Staff, Result, MoveAttempt
+from .models import Lifter, Judge, Staff, Result, MoveAttempt, Group
 from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm, CompetitonForm
 # from django.views.generic import UpdateView
+
+
+@login_required(login_url='/login')
+def home(request):
+
+    groups = Group.objects.all()
+    print(groups)
+
+    return render(request, 'resultregistration/home.html', {'pending_groups': groups})
 
 
 def lifter_detail(request, pk):

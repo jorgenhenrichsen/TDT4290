@@ -1,11 +1,20 @@
-/**
- * Created by jorgenhenrichsen on 18/10/2017.
- */
 
-function editPendingGroup() {
-    alert("Edit")
+$(function(){
+
+    // Disable sorting for the actions column.
+    $("#result-table").tablesorter({
+        headers: {
+            '.actions' : {
+                sorter: false
+            }
+        }
+    });
+});
+
+function editPendingGroup(id) {
+    alert("Edit" + id);
 }
 
-function deletePendingGroup() {
-    alert("Delete")
+function deletePendingGroup(id) {
+    alert("Delete"+ id);
 }
