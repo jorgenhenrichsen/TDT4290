@@ -194,7 +194,8 @@ class PendingGroup(models.Model):
 
     competitors = models.ManyToManyField('Lifter')
 
-    competition_leader = models.ForeignKey('Judge', verbose_name='Stevneleder', related_name='pending_competitionleader')
+    competition_leader = models.ForeignKey('Judge', verbose_name='Stevneleder',
+                                           related_name='pending_competitionleader')
     jury = models.ManyToManyField('Judge', verbose_name='Jurie', default='', related_name='pending_juries')
     judges = models.ManyToManyField('Judge', related_name='pending_judges')
     secretary = models.CharField(max_length=100, verbose_name='Sekretær')   # , related_name='secretary')
