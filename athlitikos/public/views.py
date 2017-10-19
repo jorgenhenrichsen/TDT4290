@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponse, Http404
 import json
 from .search.search import SearchFiltering
 import athlitikos.settings as settings
+from resultregistration.enums import AgeGroup, Gender
 
 
 def search(request):
@@ -14,8 +15,10 @@ def search(request):
 
         lifters_json = request.GET.get('lifters')
         clubs_json = request.GET.get('clubs')
+        categories_json = request.GET.get('categories')
         lifters = None
         clubs = None
+        categories = None
 
         if lifters_json is not None:
             lifters = json.loads(lifters_json)
@@ -23,13 +26,22 @@ def search(request):
         if clubs_json is not None:
             clubs = json.loads(clubs_json)
 
+        if categories_json is not None:
+            categories_dict = json.loads(categories_json)
+            categories = []
+            for key, value in categories_dict.items():
+                categories.append(value)
+
         from_date = request.GET.get('from_date')
         to_date = request.GET.get('to_date')
-        results = SearchFiltering.search_for_results(lifters, clubs, from_date, to_date)
+        results = SearchFiltering.search_for_results(lifters, clubs, from_date, to_date, categories)
 
         return render(request, 'public/result-table.html', {'results': results})
 
-    return render(request, 'public/search.html')
+    age_groups = map(lambda x: x[0], AgeGroup.choices())
+    genders = map(lambda x: x[0], Gender.choices())
+
+    return render(request, 'public/search.html', {'age_groups': age_groups, 'genders': genders})
 
 
 def search_for_lifter(request):
@@ -38,7 +50,6 @@ def search_for_lifter(request):
     :param request:
     :return:
     """
-
     if request.is_ajax():
         query = request.GET.get('term', '')
 
@@ -93,6 +104,43 @@ def search_for_clubs(request):
             results.append(club_json)
 
         data = json.dumps(results)
+
+    else:
+        raise Http404()
+
+    if settings.DEBUG:
+        print(data)
+
+    mime_type = 'application/json'
+    return HttpResponse(data, mime_type)
+
+
+def get_age_groups(request):
+    if request.is_ajax():
+        gender = request.GET.get('selected_gender')
+        all_groups = list(map(lambda x: x[0], AgeGroup.choices()))
+
+        if gender is not None:
+            groups = list(filter(lambda x: gender in x, all_groups))
+        else:
+            groups = all_groups
+
+        data = json.dumps(groups)
+    else:
+        raise Http404()
+
+    if settings.DEBUG:
+        print(data)
+
+    mime_type = 'application/json'
+    return HttpResponse(data, mime_type)
+
+
+def get_available_weight_classes(request):
+    if request.is_ajax():
+        age_group = request.GET.get('selected_age_group')
+        weight_classes = AgeGroup.get_weight_classes(age_group)
+        data = json.dumps(weight_classes)
 
     else:
         raise Http404()

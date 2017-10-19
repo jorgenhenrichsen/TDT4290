@@ -23,6 +23,10 @@
     width: 40%;
 }
 
+#age-group-selector, #weight-class-selector {
+    display: none; /* These two element are hidden initially */
+}
+
 .search-selector {
     width: 150px;
 }
