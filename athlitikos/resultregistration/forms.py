@@ -39,7 +39,26 @@ class CompetitonForm(forms.ModelForm):
     class Meta:
         model = Competition
         fields = '__all__'
+    def add_competition_if_not_exists(self):
 
+        competition = self.cleaned_data
+
+        competition_category = competition.get('competition_category'),
+        start_date = competition.get('start_date'),
+        location = competition.get('location')
+        print(Competition.objects.filter(competition_category=competition_category,
+                                          start_date=start_date,
+                                          location=location))
+        if not Competition.objects.filter(competition_category=competition_category,
+                                          start_date=start_date,
+                                          location=location):
+            Competition.objects.create(competition_category=competition_category,
+                                       start_date=start_date,
+                                       location=location)
+            print('yey object created')
+            return competition
+        else:
+            print('neyy, object exists')
 
 class ClubForm(forms.ModelForm):
     class Meta:
@@ -60,6 +79,8 @@ class ResultForm(forms.ModelForm):
         fields = '__all__'
         # https://docs.djangoproject.com/en/1.11/topics/forms/modelforms/#selecting-the-fields-to-use
 
+# class ResultRow(forms.):
+#     pass
 
 class MoveAttemptForm(forms.ModelForm):
     class Meta:

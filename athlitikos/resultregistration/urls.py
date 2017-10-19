@@ -18,6 +18,7 @@ urlpatterns = [
 
 
 
-
+    url(r'^resultregistration/competition/new/$', views.CompetitionFormView.as_view(), name='add_competition'),
+    url(r'^resultregistration/competition/new/register$', views.CompetitionFormView.as_view, name='add_competition'),
     url(r'^resultform/$', views.result_view, name='result_view'),
 ]

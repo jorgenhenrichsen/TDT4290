@@ -1,51 +1,15 @@
-
-{% extends 'base.html' %}
-
-{% block content %}
-<form method="POST" class="post-form">
-    {% csrf_token %}
-    <table>
-        <tr>
-            <th>Vektklasse</th>
-            <th>Kropsvekt</th>
-            <th>Kategori</th>
-
-            <th>F.dato</th>
-            <th>Navn</th>
-            <th>Lag</th>
-
-            <th>ry1</th>
-            <th>ry2</th>
-            <th>ry3</th>
-
-            <th>St1</th>
-            <th>St2</th>
-            <th>St3</th>
-
-            <th>BestR</th>
-            <th>bestS</th>
-
-            <th>sum</th>
-            <th>total</th>
-            <th>vet</th>
-
-            <th>pl</th>
-            <th>rekord</th>
-            <th>sinc coef</th>
-
-        </tr>
-        {% for foo in 'xxxx' %}
+{% for foo in 'x' %}
             <tr>
-                <th> {{ ResultForm.weight_class }} </th>
+                <th class=""> {{ ResultForm.weight_class }} </th>
                 <th> {{ ResultForm.body_weight }} </th>
                 <th> {{ ResultForm.age_group }} </th>
-                <th> {{ LifterForm.birth_date }} </th>
-                <th> {{ LifterForm.first_name}} {{ LifterForm.last_name }} </th>
-{#                <th> {{ LifterForm. }}</th>#}
             </tr>
-        {% endfor %}
-
-    </table>
-</form>
-
-{% endblock %}
+{% endfor %}
+{#<tr>#}
+{#{% for field in form %}#}
+{##}
+{#    <div class="" >#}
+{#        {{ field }}#}
+{#    </div>#}
+{#{% endfor%}#}
+{#</tr>#}

@@ -2,59 +2,42 @@
 {% extends 'base.html' %}
 
 {% block head %}
-        {% load staticfiles %}
-        <link rel="stylesheet" type="text/css" href="{% static 'css/resultregistration.css' %}">
-{%  endblock %}
-
-{% block content %}
-
-    <h1>Register result</h1>
-    <form method="POST" class="post-form">{% csrf_token %}
-    {{ CompetitonForm.as_p }}
-    </form>
-
-    <form method="POST" class="post-form">{% csrf_token %}
-
-{#        {% include 'betterforms/form_as_fieldsets.html' %}#}
-{#        {{ CompetitonForm.as_p }}#}
-{#        {% for  %}#}
-
-        <table style="width: 90%">
-            <tr>
-                <th>vektklasse</th>
-                <th>kropsvekt</th>
-                <th>Kategori</th>
-                <th>fødselsdato</th>
-                <th>navn</th>
-            </tr>
-            {% for i in 'xxxxxxxxxx'%}
-                <tr>
-                    {{ ResultForm.as_p }}
-                    {% for i in 'xxxxxx' %}
-                        <th>
-                            {{ MoveAttemptForm.as_p }}
-                        </th>
-                    {% endfor %}
-                </tr>
-            {% endfor %}
-
-        </table>
-
-        {{ GroupForm.as_p }}
-        {{ ClubForm.as_p }}
-        {#        <div class="competition_information">#}
-{#            <label>Stevnekategori: {{ competition_category }}</label>#}
-{#        </div>#}
-
-{#        <label for="id_competition-details-competition_category">Stevnekategori: {{ competition_category }}</label>#}
-
-
-        <input class="save-button" type="submit" value="Lagre">
-    </form>
-
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/resultregistration.css' %}">
+    <script type="text/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
 {% endblock %}
 
+{% block content %}
+    <h2>Resultatrgistrering</h2>
+
+    <form class="ajax_form" id="competition_form" method="POST" action="." data-url="competition/new/">
+        {% csrf_token %}
+        {{ CompetitonForm.as_p|safe }}
+        <input type="submit" value="Submit">
+    </form>
+    <script type="text/javascript" src="{% static 'js/resultregistration.js' %}"></script>
 
 
 
 
+{#    <button onclick="submitResult()">Submit{% csrf_token %}</button>#}
+{#    {% load static %}#}
+{#     e.preventDefault();#}
+{##}
+{#            $.ajax({#}
+{#                type:'POST',#}
+{#                url:'{% url 'resultregistration:add_competition' %}',#}
+{#                data:{#}
+{#                    competition_form:$('#competition_form')#}
+{#                },#}
+{#                success:function(){#}
+{##}
+{#                }#}
+{##}
+{#            });#}
+{#    <script type="text/javascript">#}
+{#        $(document).on('submit', '#competition_form', function(e){#}
+{#           #}
+{#        });#}
+{#    </script>#}
+{% endblock %}

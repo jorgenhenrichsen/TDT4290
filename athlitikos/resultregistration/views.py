@@ -1,9 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from datetime import date
-from .models import Lifter, Judge, Staff, Result, MoveAttempt
+from django.views.generic import FormView
+from django.template import RequestContext
+from .mixins import AjaxFormMixin
+
+from .models import Lifter, Judge, Staff, Result, MoveAttempt, Competition
 from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm, CompetitonForm
+from .forms import forms
 # from django.views.generic import UpdateView
 
 
@@ -135,13 +140,55 @@ def get_age_for_lifter_in_result(request, pk):
 
 
 def result_view(request):
+    form = forms.M
     return render(request, 'resultregistration/result_form.html', context={'MoveAttemptForm': MoveAttemptForm,
                                                                            'ResultForm': ResultForm,
                                                                            'LifterForm': LifterForm})
 
+class CompetitionFormView(AjaxFormMixin, FormView):
+    form_class = CompetitonForm
+    template_name = 'resultregistration/competition_form.html'
+    success_url = '/form-success/'
+
+    # def add_competition_if_not_exists(self):
+    #
+    #     if self.request.method == 'POST':
+    #         competition = self.request.POST['competition_form']
+    #         competition_category = competition.competition_category,
+    #         start_date = competition.start_date,
+    #         location = competition.location
+    #         print(Competition.objects.filter(competition_category=competition_category,
+    #                                           start_date=start_date,
+    #                                           location=location))
+    #         if not Competition.objects.filter(competition_category=competition_category,
+    #                                           start_date=start_date,
+    #                                           location=location):
+    #             Competition.objects.create(competition_category=competition_category,
+    #                                        start_date=start_date,
+    #                                        location=location)
+    #             print('yey object created')
+    #         else:
+    #             print('neyy, object exists')
+    #         return self.request
+
+
+
+    # def add_competition(FormView):
+    #     context_instance = RequestContext(request)
+    #     if request.method=='POST':
+    #         competition = request.POST['competition_form']
+    #         print('kommet inn i views')
+    #         Competition.objects.Create(
+    #             competition_category=competition.competition_category,
+    #             start_date=competition.start_date,
+    #             location=competition.location
+    #         )
+    #         print('ferdig med competitioncreate')
+    #         return HttpResponse('')
+
 
 def result_registration(request):
-    result_form = ResultForm.declared_fields.values()
+    # result_form = ResultForm.
 
     return render(request, 'resultregistration/resultregistration.html', context={'MoveAttemptForm': MoveAttemptForm,
                                                                                   'ResultForm': ResultForm,
