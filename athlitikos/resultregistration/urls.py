@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^staff/(?P<pk>\d+)/$', views.staff_detail, name='staff_detail'),
     url(r'^staff/new/$', views.add_new_staff, name='add_new_staff'),
     url(r'^resultregistration/$', views.result_registration, name="result_registration"),
+    url(r'^judges/$', views.list_all_judges, name="result_registration"),
 ]

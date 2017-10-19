@@ -77,6 +77,19 @@ def staff_detail(request, pk):
     })
 
 
+@login_required(login_url='/login')
+def list_all_judges(request):
+    list_of_judges = Judge.objects.all()
+    for judge in list_of_judges:
+        print(judge)
+        print(judge.judge_level)
+        print('Jurie:', judge.group_jury.all())
+        print('Dommer:', judge.group_judge.all())
+        # judge.group_set.all()
+
+    return render(request, 'resultregistration/judge_list.html', {'judgelist': list_of_judges})
+
+
 def get_best_snatch_for_result(request, pk):
     all_attempts = MoveAttempt.objects.filter(parent_result=pk, move_type='Snatch')
     best_attempt = 0
