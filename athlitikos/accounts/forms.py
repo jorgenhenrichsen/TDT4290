@@ -4,6 +4,7 @@ from django import forms
 
 #this gets the user model regardless of customization
 from django.contrib.auth import authenticate,get_user_model
+from django.contrib.auth.models import Group
 
 User = get_user_model()
 

@@ -7,7 +7,7 @@ from django.contrib.auth.models import (
 )
 from django.conf import settings
 from .utils import code_generator
-
+from django.contrib.auth.models import Group
 
 #Har basicly stjålet det meste fra django sin nettside:
 #https://docs.djangoproject.com/en/1.11/topics/auth/customizing/
@@ -45,6 +45,9 @@ class CustomUserManager(BaseUserManager):
         user.is_active = True
         user.is_club_admin = True
         user.save(using=self._db)
+        group = Group.objects.get(name='Admin')
+        user.groups.add(group)
+        group.save()
         return user
 
 
