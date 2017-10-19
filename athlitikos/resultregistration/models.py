@@ -58,18 +58,15 @@ class Group(models.Model):
 
     competitors = models.ManyToManyField('Lifter')
 
-    competition_leader = models.CharField(max_length=100, verbose_name='Stevneleder')
+    competition_leader = models.ForeignKey('Judge', verbose_name='Stevneleder')
     # , related_name='competition_leader')
-    jury = models.ManyToManyField('Judge', verbose_name='Jurie', default='', related_name='group_jury')  # related_name='jury'
-    # jury = models.ManyToManyField('Staff', related_name='jury')
-    judges = models.ManyToManyField('Judge', related_name='group_judge')
+    jury = models.ManyToManyField('Judge', verbose_name='Jurie', default='', related_name='groups_juries')
+    judges = models.ManyToManyField('Judge', related_name='groups_judges')
     secretary = models.CharField(max_length=100, verbose_name='Sekretær')  # , related_name='secretary')
-    # secretary = models.ForeignKey('Staff', related_name='secretary')
     speaker = models.CharField(max_length=100, verbose_name='Taler')  # , related_name='speaker')
-    # speaker = models.ForeignKey('Staff', related_name='speaker')
     technical_controller = models.ForeignKey('Judge', verbose_name='Teknisk kontrollør',
-                                             related_name='technical_controller')
-    cheif_marshall = models.ForeignKey('Judge', verbose_name='Chief Marshall', related_name='chief_marshall')
+                                             related_name='groups_technical_controller')
+    cheif_marshall = models.ForeignKey('Judge', verbose_name='Chief Marshall', related_name='groups_chief_marshall')
     time_keeper = models.ForeignKey('Judge', verbose_name='Tidtaker', related_name='time_keeper')
 
     notes = models.CharField(max_length=300, null=True, blank=True)
@@ -197,10 +194,9 @@ class PendingGroup(models.Model):
 
     competitors = models.ManyToManyField('Lifter')
 
-    competition_leader = models.CharField(max_length=100, verbose_name='Stevneleder')
-    # , related_name='competition_leader')
-    jury = models.CharField(max_length=500, verbose_name='Jurie', default='')   # related_name='jury'
-    # jury = models.ManyToManyField('Staff', related_name='jury')
+    competition_leader = models.ForeignKey('Judge', verbose_name='Stevneleder',
+                                           related_name='pending_competitionleader')
+    jury = models.ManyToManyField('Judge', verbose_name='Jurie', default='', related_name='pending_juries')
     judges = models.ManyToManyField('Judge', related_name='pending_judges')
     secretary = models.CharField(max_length=100, verbose_name='Sekretær')   # , related_name='secretary')
     # secretary = models.ForeignKey('Staff', related_name='secretary')
