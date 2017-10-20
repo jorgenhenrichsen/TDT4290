@@ -160,7 +160,7 @@ class Staff(Person):
 
 
 class PendingResult(Result):
-    
+
     sent = models.BooleanField(verbose_name='Sendt til godkjenning', default=False)
     approved = models.CharField(max_length=20, verbose_name='Status', choices=Status.choices(), default=Status.denied)
 
