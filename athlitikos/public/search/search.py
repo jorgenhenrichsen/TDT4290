@@ -46,7 +46,7 @@ class SearchFiltering:
             print("Searching with lifters={}, clubs={}, from_date={}, to_date={}, categories={}"
                   .format(lifters, clubs, from_date, to_date, categories))
 
-        results = Result.objects.all().filter(group__status__exact=Status.approved)
+        results = Result.objects.all().filter(group__status__exact=Status.approved.value)
 
         if not SearchFiltering.is_none_value(lifters):
             results = results.filter(lifter_id__in=lifters)

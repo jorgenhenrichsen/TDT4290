@@ -44,7 +44,7 @@ class SearchFilteringTestCase(TestCase):
             technical_controller=judge,
             cheif_marshall=judge,
             time_keeper=judge,
-            status=Status.approved,
+            status=Status.approved.value,
         )
 
         denied_group = Group.objects.create(
@@ -57,7 +57,7 @@ class SearchFilteringTestCase(TestCase):
             technical_controller=judge,
             cheif_marshall=judge,
             time_keeper=judge,
-            status=Status.denied,
+            status=Status.denied.value,
         )
 
         self.lifter1 = Lifter.objects.create(
