@@ -3,6 +3,17 @@ import json
 from .search.search import SearchFiltering
 import athlitikos.settings as settings
 from resultregistration.enums import AgeGroup, Gender
+from easy_pdf.rendering import render_to_pdf_response
+
+
+def get_result_report(request):
+    results = SearchFiltering.search_for_results()
+    return render_to_pdf_response(request=request,
+                                  template='public/result-report-table.html',
+                                  context={'results': results},
+                                  download_filename='resultater.pdf',
+                                  encoding='utf-8',
+                                  )
 
 
 def search(request):
@@ -42,6 +53,10 @@ def search(request):
     genders = map(lambda x: x[0], Gender.choices())
 
     return render(request, 'public/search.html', {'age_groups': age_groups, 'genders': genders})
+
+
+
+
 
 
 def search_for_lifter(request):
