@@ -76,15 +76,15 @@ thead {
     box-shadow: 0px 2px 2px grey;
 }
 
-th.header {
+.tablesorter-header {
     font-weight: bold;
     background: no-repeat center right url(../icons/UpAndDownArrowBlack.svg);
 }
 
-th.headerSortUp {
+.tablesorter-headerAsc {
     background-image: url(../icons/UpArrowBlack.svg);
 }
 
-th.headerSortDown {
+.tablesorter-headerDesc {
     background-image: url(../icons/DownArrowBlack.svg);
 }

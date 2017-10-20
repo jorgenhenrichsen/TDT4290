@@ -2,6 +2,7 @@
 $(document).ready(function () {
     $("#result-table").tablesorter({
         cancelSelection:true,
+        cssIconAsc: "background: no-repeat center right url(../icons/UpAndDownArrowBlack.svg);",
     });
 
 

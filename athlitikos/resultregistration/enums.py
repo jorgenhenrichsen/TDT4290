@@ -124,3 +124,4 @@ class Status(ChoiceEnum):
     approved = 'Godkjent'
     pending = 'Til godkjenning'
     denied = 'Ikke godkjent'
+    not_sent = 'Ikke sendt'
