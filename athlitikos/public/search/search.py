@@ -1,6 +1,7 @@
 from datetime import datetime
 import athlitikos.settings as settings
 from resultregistration.models import Club, Result, Lifter
+from resultregistration.enums import Status
 
 """
 Contains helpers to search for objects in the database.
@@ -45,7 +46,7 @@ class SearchFiltering:
             print("Searching with lifters={}, clubs={}, from_date={}, to_date={}, categories={}"
                   .format(lifters, clubs, from_date, to_date, categories))
 
-        results = Result.objects.all()
+        results = Result.objects.all().filter(group__status__exact=Status.approved.value)
 
         if not SearchFiltering.is_none_value(lifters):
             results = results.filter(lifter_id__in=lifters)

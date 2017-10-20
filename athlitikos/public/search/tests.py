@@ -1,6 +1,7 @@
 from django.test import TestCase
 from .search import SearchFiltering
 from resultregistration.models import Result, Lifter, Club, Group, Competition, Judge
+from resultregistration.enums import Status
 
 
 class SearchFilteringTestCase(TestCase):
@@ -43,6 +44,20 @@ class SearchFilteringTestCase(TestCase):
             technical_controller=judge,
             cheif_marshall=judge,
             time_keeper=judge,
+            status=Status.approved.value,
+        )
+
+        denied_group = Group.objects.create(
+            competition=competition,
+            date="2017-08-20",
+            group_number=2,
+            competition_leader=staff,
+            secretary=staff,
+            speaker=staff,
+            technical_controller=judge,
+            cheif_marshall=judge,
+            time_keeper=judge,
+            status=Status.denied.value,
         )
 
         self.lifter1 = Lifter.objects.create(
@@ -85,6 +100,20 @@ class SearchFilteringTestCase(TestCase):
             body_weight=70,
             age_group="M1",
             group=group,
+            lifter=self.lifter2,
+            weight_class=72,
+        )
+
+        self.result3 = Result.objects.create(
+            points_with_veteran=1000,
+            points_with_sinclair=900,
+            total_lift=200,
+            age=40,
+            sinclair_coefficient=1.1,
+            veteran_coefficient=1.1,
+            body_weight=70,
+            age_group="M1",
+            group=denied_group,
             lifter=self.lifter2,
             weight_class=72,
         )
