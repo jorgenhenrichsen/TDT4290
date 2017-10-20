@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block head %}
+
+    <link rel="stylesheet" type="text/css" href="/static/css/home.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript">
+    </script> <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="/static/js/jquery.tablesorter.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/static/js/home.js"></script>
+
+{% endblock %}
+
+{% block content %}
+
+    <h1>Forhåndsvisning av pulje</h1>
+
+    <button id="add-result-button">Godkjenn</button>
+
+    <div id="registered-results-container">
+
+        <table id="result-table" class="tablesorter">
+
+            <thead>
+
+                <tr>
+                    <th>Utøver</th>
+                    <th>Kroppsvekt</th>
+                    <th>Aldersgruppe</th>
+                    <th>Vektklasse</th>
+                    <th>Sinclair-koeffisient</th>
+                    <th>Veteran-koeffisient</th>
+                    <th>Alder</th>
+                    <th>Beste clean-and-jerk</th>
+                    <th>Beste snatch</th>
+                    <th>Totalvekt</th>
+                    <th>Poeng med Sinclair</th>
+                    <th>Poeng med Veteran</th>
+                    <th class="no-icon"><span class="actions"></span></th>
+                </tr>
+
+            </thead>
+
+
+            {% for pending_result in pending_results %}
+
+                <tr>
+                    <th>{{ pending_result.lifter }}</th>
+                    <th>{{ pending_result.body_weight }}</th>
+                    <th>{{ pending_result.age_group }}</th>
+                    <th>{{ pending_result.weight_class }}</th>
+                    <th>{{ pending_result.sinclair_coefficient }}</th>
+                    <th>{{ pending_result.veteran_coefficient }}</th>
+                    <th>{{ pending_result.age }}</th>
+                    <th>{{ pending_result.best_clean_and_jerk }}</th>
+                    <th>{{ pending_result.best_snatch }}</th>
+                    <th>{{ pending_result.total_lift }}</th>
+                    <th>{{ pending_result.points_with_sinclair }}</th>
+                    <th>{{ pending_result.points_with_veteran }}</th>
+                    <th>
+                        <button onclick="editPendingGroup({{ pending_group.pk }})">Endre</button>
+                        <button onclick="deletePendingGroup({{ pending_group.pk }})">Slett</button>
+                    </th>
+                </tr>
+
+            {% endfor %}
+        </table>
+    </div>
+
+{% endblock %}

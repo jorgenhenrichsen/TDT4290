@@ -138,3 +138,10 @@ def result_registration(request):
                                                                                   'GroupForm': GroupForm,
                                                                                   'ClubForm': ClubForm,
                                                                                   'CompetitonForm': CompetitonForm})
+def edit_result(request, pk):
+    result = get_object_or_404(Result, pk=pk)
+    group = Group.objects.filter(pk=pk)
+    results = Result.objects.filter(group=group)
+
+
+    return render(request, 'resultregistration/editresult.html', {'pending_results': results})

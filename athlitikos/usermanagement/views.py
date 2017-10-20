@@ -14,7 +14,7 @@ class UserListView(ListView):
 class ListOfResultsView(View):
 
     def get(self, request):
-        return render(request, 'resultsforapproval.html')
+        return render(request, 'editresult.html')
 
 
 class UserFormView(View):
