@@ -51,7 +51,7 @@ class SearchFilteringTestCase(TestCase):
             competition=competition,
             date="2017-08-20",
             group_number=2,
-            competition_leader=staff,
+            competition_leader=judge,
             secretary=staff,
             speaker=staff,
             technical_controller=judge,
