@@ -1,6 +1,8 @@
-from django.test import TestCase
+from django.test import TestCase, RequestFactory
 from .models import Competition, Club
 from .validators import validate_name
+from .views import home
+from django.contrib.auth.models import User
 
 
 class CompetitionTestCase(TestCase):
@@ -19,3 +21,16 @@ class CompetitionTestCase(TestCase):
 
         self.assertEqual(validate_name(norgesmesterskap.competition_category), "Norgesmesterskap")
         self.assertEqual(validate_name(norgesmesterskap.location), "Bodø")
+
+
+class HomeTestCase(TestCase):
+
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.user = User.objects.create(username="user")
+
+    def test_home_view_response(self):
+        request = self.factory.get('home')
+        request.user = self.user
+        response = home(request)
+        self.assertEqual(response.status_code, 200, "Failed to get /home/")
