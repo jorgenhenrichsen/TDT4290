@@ -5,12 +5,13 @@ from django.views.generic import View, ListView
 from .forms import UserForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import Group
+from resultregistration.models import Group as Pool
 
 class UserListView(ListView):
     template_name = ""
 
 
-class ResultsForApprovalView(View):
+class ListOfResultsView(View):
 
     def get(self, request):
         return render(request, 'resultsforapproval.html')
