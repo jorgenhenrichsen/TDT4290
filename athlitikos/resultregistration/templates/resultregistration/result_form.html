@@ -1,10 +1,6 @@
-{% for foo in 'x' %}
-            <tr>
-                <th class=""> {{ ResultForm.weight_class }} </th>
-                <th> {{ ResultForm.body_weight }} </th>
-                <th> {{ ResultForm.age_group }} </th>
-            </tr>
-{% endfor %}
+{#{% for field in ResultForm %}#}
+{#            <th> {{ field }}</th>#}
+{#{% endfor %}#}
 {#<tr>#}
 {#{% for field in form %}#}
 {##}
@@ -13,3 +9,23 @@
 {#    </div>#}
 {#{% endfor%}#}
 {#</tr>#}
+{#{% extends 'resultregistration/resultregistration.html' %}#}
+{#{% block results %}#}
+{% for row in '123456' %}
+<form class="ajax_form result" id="pending_result{{ row }}" method="POST" action="." data-url="result/pending/new">
+        {% csrf_token %}
+{#        <script type="text/javascript">#}
+{#            $("form").addClass("result")#}
+{#        </script>#}
+{#        <table>#}
+{#                <tr>#}
+{#                    {% include 'resultregistration/result_form.html' %}#}
+            {{ ResultForm.as_p|safe }}
+{#                </tr>#}
+{#        <div id="best_snatch{{ row }}"><input title="heeh" type="text" placeholder="bestSnatch" ></div>#}
+{#        </table>#}
+        <button onclick="ajaxSubmit('#pending_result'+'{{ row }}')" >sub</button>
+{#        <input type="submit" name="submit_result" value="Submit">#}
+</form>
+{% endfor %}
+{#{% endblock %}#}

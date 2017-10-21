@@ -29,32 +29,73 @@ $.ajaxSetup({
         }
     }
 });
+//
+// $(document).ready(function(){
+//     var $myForm = $('#competition_form')
+//     $myForm.submit(function(event){
+//         event.preventDefault()
+//         var $formData = $(this).serialize()
+//         var $thisURL = $myForm.attr('data-url') || window.location.href // or set your own url
+//         $.ajax({
+//             method: "POST",
+//             url: $thisURL,
+//             data: $formData,
+//             success: handleFormSuccess,
+//             error: handleFormError,
+//         })
+//     })
+//
+//     function handleFormSuccess(data, textStatus, jqXHR){
+//         console.log('youhooo')
+//         console.log(data)
+//         console.log(textStatus)
+//         console.log(jqXHR)
+//         // $myForm.reset(); // reset form data
+//     }
+//
+//     function handleFormError(jqXHR, textStatus, errorThrown){
+//         console.log('fuckthis')
+//         console.log(jqXHR)
+//         console.log(textStatus)
+//         console.log(errorThrown)
+//     }
+// });
+function newRow(id){
+    var $table = $(id)
+    console.log($table.children.length)
+    console.log($table.append('<div>urgh</div>'))
+}
 
-$(document).ready(function(){
-    var $myForm = $('.ajax_form')
+function ajaxSubmit(id) {
+    var $myForm = $(id)
     $myForm.submit(function(event){
-        event.preventDefault()
-        var $formData = $(this).serialize()
-        var $thisURL = $myForm.attr('data-url') || window.location.href // or set your own url
-        $.ajax({
-            method: "POST",
-            url: $thisURL,
-            data: $formData,
-            success: handleFormSuccess,
-            error: handleFormError,
-        })
+        event.preventDefault();
+        var $formData = $($myForm).serialize()
+    var $thisURL = $myForm.attr('data-url') || window.location.href // or set your own url
+    console.log($formData, JSON.stringify($thisURL))
+    $.ajax({
+        method: "POST",
+        url: $thisURL,
+        data: $formData,
+        success: handleFormSuccess,
+        error: handleFormError,
     })
 
+    })
+
+
     function handleFormSuccess(data, textStatus, jqXHR){
-        console.log(data)
-        console.log(textStatus)
-        console.log(jqXHR)
+        console.log('youhooo')
+        // console.log(data)
+        // console.log(textStatus)
+        // console.log(jqXHR)
         // $myForm.reset(); // reset form data
     }
 
     function handleFormError(jqXHR, textStatus, errorThrown){
-        console.log(jqXHR)
-        console.log(textStatus)
-        console.log(errorThrown)
+        console.log('fuckthis')
+        // console.log(jqXHR)
+        // console.log(textStatus)
+        // console.log(errorThrown)
     }
-});
+};

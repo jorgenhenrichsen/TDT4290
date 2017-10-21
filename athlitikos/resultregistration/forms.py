@@ -82,7 +82,34 @@ class ResultForm(forms.ModelForm):
 # class ResultRow(forms.):
 #     pass
 
+
 class MoveAttemptForm(forms.ModelForm):
     class Meta:
         model = MoveAttempt
         fields = '__all__'
+
+
+class PendingResultForm(forms.Form):
+    weight_class = forms.CharField(max_length=3)
+    body_weight = forms.FloatField()
+    category = forms.CharField(max_length=4)
+    birth_date = forms.DateField()
+    lifter_name = forms.CharField(max_length=200)
+    club = forms.CharField()
+
+    snatch1 = forms.IntegerField()
+    snatch2 = forms.IntegerField()
+    snatch3 = forms.IntegerField()
+
+    clean_and_jerk1 = forms.IntegerField()
+    clean_and_jerk2 = forms.IntegerField()
+    clean_and_jerk3 = forms.IntegerField()
+
+    best_snatch = forms.CharField(max_length=4, required=False)
+    best_clean_and_jerk = forms.CharField(max_length=4, required=False)
+    total = forms.CharField(max_length=5, required=False)
+    points = forms.CharField(max_length=6, required=False)
+    veteran_points = forms.CharField(max_length=6, required=False)
+    pl = forms.CharField(max_length=6, required=False)
+    rekord = forms.CharField(max_length=8, required=False)
+    sinclair_coefficient = forms.CharField(max_length=9, required=False)

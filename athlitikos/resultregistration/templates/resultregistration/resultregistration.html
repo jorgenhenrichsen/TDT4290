@@ -3,7 +3,8 @@
 
 {% block head %}
     {% load staticfiles %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/resultregistration.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/resultregistration.css' %}"
+          xmlns="http://www.w3.org/1999/html">
     <script type="text/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
 {% endblock %}
 
@@ -13,8 +14,35 @@
     <form class="ajax_form" id="competition_form" method="POST" action="." data-url="competition/new/">
         {% csrf_token %}
         {{ CompetitonForm.as_p|safe }}
-        <input type="submit" value="Submit">
+        <button onclick="ajaxSubmit('#competition_form')" >SUB</button>
+        <input type="submit" name="submit_competition" value="Submit">
     </form>
+
+    <div class="results" id="result_registration_table">
+{#        {% block results %}#}
+{#        {% endblock %}#}
+        {% for row in '123456' %}
+        <form class="ajax_form result" id="pending_result{{ row }}" method="POST" action="." data-url="result/pending/new">
+                {% csrf_token %}
+        {#        <script type="text/javascript">#}
+        {#            $("form").addClass("result")#}
+        {#        </script>#}
+        {#        <table>#}
+        {#                <tr>#}
+        {#                    {% include 'resultregistration/result_form.html' %}#}
+                    {{ ResultForm.as_p|safe }}
+        {#                </tr>#}
+        {#        <div id="best_snatch{{ row }}"><input title="heeh" type="text" placeholder="bestSnatch" ></div>#}
+        {#        </table>#}
+                <button onclick="ajaxSubmit('#pending_result'+'{{ row }}')" >sub</button>
+        {#        <input type="submit" name="submit_result" value="Submit">#}
+        </form>
+        {% endfor %}
+{#    {% include 'resultregistration/result_form.html' %}#}
+    <br>
+    <button onclick="newRow('#result_registration_table')">Ny rad</button>
+    </div>
+
     <script type="text/javascript" src="{% static 'js/resultregistration.js' %}"></script>
 
 

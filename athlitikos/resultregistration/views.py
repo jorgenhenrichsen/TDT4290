@@ -8,6 +8,7 @@ from .mixins import AjaxFormMixin
 
 from .models import Lifter, Judge, Staff, Result, MoveAttempt, Competition
 from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm, CompetitonForm
+from .forms import PendingResultForm
 from .forms import forms
 # from django.views.generic import UpdateView
 
@@ -140,7 +141,7 @@ def get_age_for_lifter_in_result(request, pk):
 
 
 def result_view(request):
-    form = forms.M
+    # form = forms.M
     return render(request, 'resultregistration/result_form.html', context={'MoveAttemptForm': MoveAttemptForm,
                                                                            'ResultForm': ResultForm,
                                                                            'LifterForm': LifterForm})
@@ -150,6 +151,30 @@ class CompetitionFormView(AjaxFormMixin, FormView):
     template_name = 'resultregistration/competition_form.html'
     success_url = '/form-success/'
 
+    def post(self, request, *args, **kwargs):
+        competition = CompetitonForm(request.POST)
+        # competition = self.request.POST['competition_form']
+        print('enters post')
+        # print(competition)
+        if competition.is_valid():
+            print(competition.cleaned_data, 'competition valid')
+            competition_category = competition['competition_category'],
+            start_date = competition['start_date'],
+            location = competition['location']
+        return render(request, 'resultregistration/resultregistration.html')
+
+
+class PendingResultFormView(AjaxFormMixin, FormView):
+    form_class = PendingResultForm
+    template_name = 'resultregistration/result_form.html'
+    success_url = '/form-success'
+
+    def post(self, request, *args, **kwargs):
+        result = PendingResultForm(request.POST)
+        print('enters post')
+        if result.is_valid():
+            print(result.cleaned_data, 'we have done it')
+        return render(request, 'resultregistration/resultregistration.html')
     # def add_competition_if_not_exists(self):
     #
     #     if self.request.method == 'POST':
@@ -191,7 +216,7 @@ def result_registration(request):
     # result_form = ResultForm.
 
     return render(request, 'resultregistration/resultregistration.html', context={'MoveAttemptForm': MoveAttemptForm,
-                                                                                  'ResultForm': ResultForm,
+                                                                                  'ResultForm': PendingResultForm,
                                                                                   'GroupForm': GroupForm,
                                                                                   'ClubForm': ClubForm,
                                                                                   'CompetitonForm': CompetitonForm})
