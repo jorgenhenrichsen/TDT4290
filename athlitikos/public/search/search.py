@@ -52,15 +52,22 @@ class SearchFiltering:
 
         best_results = []
 
-        if filter_by == "p":
-            for key, value in results_dict.items():
-                best_result = value[0]
-                for i in range(1, len(value)):
-                    result = value[i]
+        for key, value in results_dict.items():
+            best_result = value[0]
+            for i in range(1, len(value)):
+                result = value[i]
+
+                if filter_by == "p":
                     if result.points_with_sinclair > best_result.points_with_sinclair:
                         best_result = result
+                elif filter_by == "pv":
+                    if result.points_with_veteran > best_result.points_with_veteran:
+                        best_result = result
+                else:
+                    if result.total_lift > best_result.total_lift:
+                        best_result = result
 
-                best_results.append(best_result)
+            best_results.append(best_result)
 
         return best_results
 
