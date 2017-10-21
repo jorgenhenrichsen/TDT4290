@@ -79,7 +79,32 @@
 
         <button class="search-button" id="generate-report-button" onclick="generateReport()">Generer rapport fra resultater</button>
 
-        {% include 'public/result-table.html' %}
+        <table class="tablesorter" id="result-table">
+
+            <thead>
+
+                <tr>
+                    <th>Utøver</th>
+                    <th>Kroppsvekt</th>
+                    <th>Alder</th>
+                    <th>Klubb</th>
+                    <th>Kategori</th>
+                    <th>Arrangør</th>
+                    <th>Rykk</th>
+                    <th>Støt</th>
+                    <th>Total</th>
+                    <th>SP</th>
+                    <th>Poeng</th>
+                    <th>VP</th>
+                    <th>Veteranpoeng</th>
+                </tr>
+
+                <tbody>
+
+                </tbody>
+        </table>
+
+    </thead>
 
 
     </section>

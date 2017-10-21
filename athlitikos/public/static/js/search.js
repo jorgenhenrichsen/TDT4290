@@ -2,10 +2,7 @@
 $(document).ready(function () {
     $("#result-table").tablesorter({
         cancelSelection:true,
-        cssIconAsc: "background: no-repeat center right url(../icons/UpAndDownArrowBlack.svg);",
     });
-
-
 });
 
 var selectedLifters = [];
@@ -107,17 +104,9 @@ function submitForm() {
                 "best_results": bestResults
         },
         success: function (html) {
-
-            /* Replace the html of the result table with the new one. */
-            $('#result-table').html(html);
-
-            /* Add tablesorter behavior to the result table */
-            document.getElementById('result-table').classList.add('tablesorter');
-
-           $("#result-table").tablesorter({
-               cancelSelection:true,
-            });
-
+            /* Replace the html of the result table's tbody with the new entries. */
+            $("table tbody").html(html);
+            $("#result-table").trigger("update");
         },
         error: function () {
           console.log("ERROR");  
