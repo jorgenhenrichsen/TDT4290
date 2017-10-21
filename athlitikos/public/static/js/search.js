@@ -87,7 +87,9 @@ function submitForm() {
     var serializedLifters = JSON.stringify(selectedLifters);
     var serializedClubs = JSON.stringify(selectedClubs);
     var serializedCategories = JSON.stringify(selectedCategories);
-    $("#result-table").innerHTML;
+
+    currentParameters = "?lifters=" + serializedLifters + "&clubs=" + serializedClubs + "&from_date=" + fromDate + "&to_date=" + toDate + "&categories=" + serializedCategories;
+
     console.log(serializedCategories);
     $.ajax({
         type: "GET",
@@ -98,7 +100,7 @@ function submitForm() {
                 "clubs": serializedClubs,
                 "from_date": fromDate,
                 "to_date": toDate,
-                "categories": serializedCategories
+                "categories": serializedCategories,
         },
         success: function (html) {
 
@@ -274,4 +276,13 @@ function removeCategory(id) {
     var button = document.getElementById(id);
 
     container.removeChild(button);
+}
+
+var currentParameters = ""; // The parameters the current search was generated with.
+
+function generateReport() {
+
+    window.open("/search/report.pdf" + currentParameters);
+    //window.location.href = "/search/report.pdf" + currentParameters;
+
 }
