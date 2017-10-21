@@ -1,11 +1,15 @@
 {% extends 'base.html' %}
 
+{%  block head %}
+    <link rel="stylesheet" type="text/css" href="/static/css/home.css">
+{% endblock %}
+
 {% block content %}
-    <table class="judgetable" TABLE BORDER="3">
+    <table class="judgetable" border="1">
             <tr>
                 <td>Navn</td>
                 <td>Dommergrad</td>
-                <td>Konkurranse</td>
+                <td>Deltatt på</td>
             </tr>
             {% for entry in judgelist %}
                 <tr>
