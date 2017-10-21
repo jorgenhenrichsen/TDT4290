@@ -88,7 +88,10 @@ function submitForm() {
     var serializedClubs = JSON.stringify(selectedClubs);
     var serializedCategories = JSON.stringify(selectedCategories);
 
-    currentParameters = "?lifters=" + serializedLifters + "&clubs=" + serializedClubs + "&from_date=" + fromDate + "&to_date=" + toDate + "&categories=" + serializedCategories;
+    var bestResults = document.getElementById("best-results-selector").value;
+
+
+    currentParameters = "?lifters=" + serializedLifters + "&clubs=" + serializedClubs + "&from_date=" + fromDate + "&to_date=" + toDate + "&categories=" + serializedCategories + "&best_results=" + bestResults;
 
     console.log(serializedCategories);
     $.ajax({
@@ -101,6 +104,7 @@ function submitForm() {
                 "from_date": fromDate,
                 "to_date": toDate,
                 "categories": serializedCategories,
+                "best_results": bestResults
         },
         success: function (html) {
 

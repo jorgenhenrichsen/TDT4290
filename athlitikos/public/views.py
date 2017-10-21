@@ -7,7 +7,11 @@ from easy_pdf.rendering import render_to_pdf_response
 
 
 def generate_report(request):
-
+    """
+    Generates a simple PDF version of a search result.
+    :param request:
+    :return:
+    """
     if request.method == 'GET':
         results = SearchFiltering.search_for_results_with_request(request)
         return render_to_pdf_response(request=request,

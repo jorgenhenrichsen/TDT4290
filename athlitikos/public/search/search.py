@@ -32,10 +32,45 @@ class SearchFiltering:
             or SearchFiltering.NONE_VALUES.__contains__(value)
 
     @classmethod
+    def get_best_results(cls, results, filter_by: str="p"):
+        """
+        Get all the unique best results in a QuerySet with results.
+        :param results: QuerySet with results
+        :param filter_by: What value is considered when finding the best results. Possible values:
+            - p: points
+            - pv: points veteran
+            - w: total weight lifted
+        :return:
+        """
+        filter_by = filter_by.lower()
+        results_dict = {}
+
+        for result in results:
+            if result.lifter.pk not in results_dict:
+                results_dict[result.lifter.pk] = []
+            results_dict[result.lifter.pk].append(result)
+
+        best_results = []
+
+        if filter_by == "p":
+            for key, value in results_dict.items():
+                best_result = value[0]
+                for i in range(1, len(value)):
+                    result = value[i]
+                    if result.points_with_sinclair > best_result.points_with_sinclair:
+                        best_result = result
+
+                best_results.append(best_result)
+
+        return best_results
+
+
+
+    @classmethod
     def search_for_results_with_request(cls, request):
         """
         Search for result with a HTTP request.
-        The request can container the parameters: lifters, clubs, from_date, to_date and categories.
+        The request can contain the parameters: lifters, clubs, from_date, to_date and categories.
         :param request:
         :return:
         """
@@ -61,11 +96,12 @@ class SearchFiltering:
 
         from_date = request.GET.get('from_date')
         to_date = request.GET.get('to_date')
+        best_results = request.GET.get('best_results')
 
-        return SearchFiltering.search_for_results(lifters, clubs, from_date, to_date, categories)
+        return SearchFiltering.search_for_results(lifters, clubs, from_date, to_date, categories, best_results)
 
     @classmethod
-    def search_for_results(cls, lifters=None, clubs=None, from_date=None, to_date=None, categories=None):
+    def search_for_results(cls, lifters=None, clubs=None, from_date=None, to_date=None, categories=None, best_results=None):
         """
         Filter out results.
         :param lifters: Only inlcude results from the lifters ids in this list.
@@ -74,12 +110,13 @@ class SearchFiltering:
         :param to_date: Only include results that has a competition start_date that are before or equal to this date.
         :param categories: Dictionary of categories to include results from.
                            Form: {"age":age, "gender":gender, "weight_class":weight_class}
+        :param best_results: If this is given, only the best results according to this value is included.
         :return: The filtered results.
         """
 
         if settings.DEBUG:
-            print("Searching with lifters={}, clubs={}, from_date={}, to_date={}, categories={}"
-                  .format(lifters, clubs, from_date, to_date, categories))
+            print("Searching with lifters={}, clubs={}, from_date={}, to_date={}, categories={}, best_results={}"
+                  .format(lifters, clubs, from_date, to_date, categories, best_results))
 
         results = Result.objects.all().filter(group__status__exact=Status.approved.value)
 
@@ -121,6 +158,9 @@ class SearchFiltering:
 
             else:
                 results = all_results[0]
+
+        if not SearchFiltering.is_none_value(best_results):
+            results = SearchFiltering.get_best_results(results, filter_by=best_results)
 
         if settings.DEBUG:
             print(results)
