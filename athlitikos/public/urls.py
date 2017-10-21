@@ -10,5 +10,5 @@ urlpatterns = [
     url(r'^search/club/$', views.search_for_clubs, name='search_for_clubs'),
     url(r'^search/weight-classes/$', views.get_available_weight_classes, name='get_available_weight_classes'),
     url(r'^search/age-groups/$', views.get_age_groups, name='get_age_groups'),
-    url(r'^search.pdf$', views.get_result_report, name='search.pdf'),
+    url(r'^search/report.pdf$', views.generate_report, name='generate_report')
 ]

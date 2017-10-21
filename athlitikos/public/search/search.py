@@ -2,6 +2,8 @@ from datetime import datetime
 import athlitikos.settings as settings
 from resultregistration.models import Club, Result, Lifter
 from resultregistration.enums import Status
+import json
+
 
 """
 Contains helpers to search for objects in the database.
@@ -28,6 +30,39 @@ class SearchFiltering:
         """
         return value is None or SearchFiltering.NONE_VALUES.__contains__(str(value))\
             or SearchFiltering.NONE_VALUES.__contains__(value)
+
+    @classmethod
+    def search_for_results_with_request(cls, request):
+        """
+        Search for result with a HTTP request.
+        The request can container the parameters: lifters, clubs, from_date, to_date and categories.
+        :param request:
+        :return:
+        """
+
+        lifters_json = request.GET.get('lifters')
+        clubs_json = request.GET.get('clubs')
+        categories_json = request.GET.get('categories')
+        lifters = None
+        clubs = None
+        categories = None
+
+        if lifters_json is not None:
+            lifters = json.loads(lifters_json)
+
+        if clubs_json is not None:
+            clubs = json.loads(clubs_json)
+
+        if categories_json is not None:
+            categories_dict = json.loads(categories_json)
+            categories = []
+            for key, value in categories_dict.items():
+                categories.append(value)
+
+        from_date = request.GET.get('from_date')
+        to_date = request.GET.get('to_date')
+
+        return SearchFiltering.search_for_results(lifters, clubs, from_date, to_date, categories)
 
     @classmethod
     def search_for_results(cls, lifters=None, clubs=None, from_date=None, to_date=None, categories=None):

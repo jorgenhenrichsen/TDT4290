@@ -6,57 +6,33 @@ from resultregistration.enums import AgeGroup, Gender
 from easy_pdf.rendering import render_to_pdf_response
 
 
-def get_result_report(request):
-    results = SearchFiltering.search_for_results()
-    return render_to_pdf_response(request=request,
-                                  template='public/result-report-table.html',
-                                  context={'results': results},
-                                  download_filename='resultater.pdf',
-                                  encoding='utf-8',
-                                  )
+def generate_report(request):
+
+    if request.method == 'GET':
+        results = SearchFiltering.search_for_results_with_request(request)
+        return render_to_pdf_response(request=request,
+                                      template='public/result-report-table.html',
+                                      context={'results': results},
+                                      download_filename='resultater.pdf',
+                                      encoding='utf-8',
+                                      )
 
 
 def search(request):
     """
-    The search page
+    The search page.
+    Can generate a PDF of the result if is_pdf=true in the request.
     :param request:
     :return:
     """
+
     if request.method == 'GET' and request.is_ajax():
-
-        lifters_json = request.GET.get('lifters')
-        clubs_json = request.GET.get('clubs')
-        categories_json = request.GET.get('categories')
-        lifters = None
-        clubs = None
-        categories = None
-
-        if lifters_json is not None:
-            lifters = json.loads(lifters_json)
-
-        if clubs_json is not None:
-            clubs = json.loads(clubs_json)
-
-        if categories_json is not None:
-            categories_dict = json.loads(categories_json)
-            categories = []
-            for key, value in categories_dict.items():
-                categories.append(value)
-
-        from_date = request.GET.get('from_date')
-        to_date = request.GET.get('to_date')
-        results = SearchFiltering.search_for_results(lifters, clubs, from_date, to_date, categories)
-
+        results = SearchFiltering.search_for_results_with_request(request)
         return render(request, 'public/result-table.html', {'results': results})
-
-    age_groups = map(lambda x: x[0], AgeGroup.choices())
-    genders = map(lambda x: x[0], Gender.choices())
-
-    return render(request, 'public/search.html', {'age_groups': age_groups, 'genders': genders})
-
-
-
-
+    else:
+        age_groups = map(lambda x: x[0], AgeGroup.choices())
+        genders = map(lambda x: x[0], Gender.choices())
+        return render(request, 'public/search.html', {'age_groups': age_groups, 'genders': genders})
 
 
 def search_for_lifter(request):
