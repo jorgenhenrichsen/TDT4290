@@ -60,7 +60,9 @@ class Group(models.Model):
 
     competitors = models.ManyToManyField('Lifter')
 
-    competition_leader = models.ForeignKey('Judge', verbose_name='Stevneleder')
+    competition_leader = models.ForeignKey('Judge',
+                                           verbose_name='Stevneleder',
+                                           related_name="groups_competition_leader")
     # , related_name='competition_leader')
     jury = models.ManyToManyField('Judge', verbose_name='Jurie', default='', related_name='groups_juries')
     judges = models.ManyToManyField('Judge', related_name='groups_judges')
@@ -69,7 +71,7 @@ class Group(models.Model):
     technical_controller = models.ForeignKey('Judge', verbose_name='Teknisk kontrollør',
                                              related_name='groups_technical_controller')
     cheif_marshall = models.ForeignKey('Judge', verbose_name='Chief Marshall', related_name='groups_chief_marshall')
-    time_keeper = models.ForeignKey('Judge', verbose_name='Tidtaker', related_name='time_keeper')
+    time_keeper = models.ForeignKey('Judge', verbose_name='Tidtaker', related_name='groups_time_keeper')
 
     notes = models.CharField(max_length=300, null=True, blank=True)
     records_description = models.CharField(max_length=300, null=True, blank=True)
@@ -157,15 +159,3 @@ class Judge(Person):
 
 class Staff(Person):
     pass
-
-
-class PendingResult(Result):
-
-    sent = models.BooleanField(verbose_name='Sendt til godkjenning', default=False)
-    approved = models.CharField(max_length=20, verbose_name='Status', choices=Status.choices(), default=Status.denied)
-
-
-class PendingGroup(Group):
-
-    sent = models.BooleanField(verbose_name='Sendt til godkjenning', default=False)
-    approved = models.CharField(max_length=20, verbose_name='Status', choices=Status.choices(), default=Status.denied)

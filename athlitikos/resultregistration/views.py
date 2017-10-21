@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from django.db.models import Q
 from datetime import date
 from .models import Lifter, Judge, Staff, Result, MoveAttempt, Group
 from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm, CompetitonForm
@@ -80,12 +81,48 @@ def list_all_judges(request):
     list_of_judges = Judge.objects.all()
     for judge in list_of_judges:
         print(judge)
-        print(judge.judge_level)
-        print('Jurie:', judge.group_jury.all())
-        print('Dommer:', judge.group_judge.all())
-        # judge.group_set.all()
+        # print(judge.judge_level)
+        competitionlist = []
+        if Q(judge.groups_competition_leader.all().exists()) |
+            competitionlist.append(judge.groups_competition_leader.all().values('competition', 'date'))
+            # competitionlist.append(judge.groups_competition_leader.all())
+            print('LISTEN', competitionlist)
+            # for group in competitionlist:
+            #     print('Competition leader i:')
+            #     print(group[0]['competition'])
+            #     print(group[0]['date'])
+            # print('Stevneleder', judge.groups_competition_leader.all().values('competition', 'date')[0])
+        if judge.groups_juries.all().exists():
+            competitionlist.append(judge.groups_juries.all().values('competition', 'date'))
+            # print('Jurie:', judge.groups_juries.all())
+        if judge.groups_judges.all().exists():
+            competitionlist.append(judge.groups_judges.all().values('competition', 'date'))
+            # print('Dommer:', judge.groups_judges.all())
+        if judge.groups_technical_controller.all().exists():
+            competitionlist.append(judge.groups_technical_controller.all().values('competition', 'date'))
+            # print('Technical controller', judge.groups_technical_controller.all())
+        if judge.groups_chief_marshall.all().exists():
+            competitionlist.append(judge.groups_chief_marshall.all().values('competition', 'date'))
+            # print('Chief marshall', judge.groups_chief_marshall.all())
+        if judge.groups_time_keeper.all().exists():
+            competitionlist.append(judge.groups_time_keeper.all().values('competition', 'date'))
+            # print('Time keeper', judge.groups_time_keeper.all())
+            print(str(competitionlist))
+        # temp = {}
+        # temp['name'] =
+        # temp['competitions'] =
+        # hovedliste.append(temp)
+        # morten_list = []
+
 
     return render(request, 'resultregistration/judge_list.html', {'judgelist': list_of_judges})
+
+# def extract_date_time(competitionlist):
+#
+#     for group in competitionlist:
+#         print(group[0]['competition, ''date'])
+#
+#     return
 
 
 def get_best_snatch_for_result(request, pk):
