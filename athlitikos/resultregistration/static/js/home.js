@@ -25,3 +25,4 @@ function editPendingGroup(id) {
 function deletePendingGroup(id) {
     alert("Delete"+ id);
 }
+

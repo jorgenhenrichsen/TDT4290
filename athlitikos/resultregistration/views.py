@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from datetime import date
 from .models import Lifter, Judge, Staff, Result, MoveAttempt, Group
 from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm, CompetitonForm
+from .enums import Status
+from django.views.decorators.csrf import csrf_exempt
 # from django.views.generic import UpdateView
 
 
@@ -142,6 +144,16 @@ def edit_result(request, pk):
     result = get_object_or_404(Result, pk=pk)
     group = Group.objects.filter(pk=pk)
     results = Result.objects.filter(group=group)
+    context = {
+        'pending_results': results,
+        'groups': group
+    }
 
+    return render(request, 'resultregistration/editresult.html', context)
 
-    return render(request, 'resultregistration/editresult.html', {'pending_results': results})
+@csrf_exempt
+def approve_group(request, pk):
+    group = Group.objects.get(pk=pk)
+    group.status = Status.approved
+    group.save()
+    return HttpResponsePermanentRedirect('http://127.0.0.1:8000/home')

@@ -13,5 +13,6 @@ urlpatterns = [
     url(r'^staff/new/$', views.add_new_staff, name='add_new_staff'),
     url(r'^resultregistration/$', views.result_registration, name="result_registration"),
     url(r'^home/$', views.home, name='home'),
-    url(r'^result/edit/(?P<pk>\d+)/$', views.edit_result, name='edit_result')
+    url(r'^result/edit/(?P<pk>\d+)/$', views.edit_result, name='edit_result'),
+    url(r'^result/approve/(?P<pk>\d+)/$', views.approve_group, name ='approve_group'),
 ]
