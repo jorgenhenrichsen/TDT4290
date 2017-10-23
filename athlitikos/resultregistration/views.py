@@ -156,4 +156,4 @@ def approve_group(request, pk):
     group = Group.objects.get(pk=pk)
     group.status = Status.approved
     group.save()
-    return HttpResponsePermanentRedirect('http://127.0.0.1:8000/home')
+    return redirect('/home/')
