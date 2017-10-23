@@ -14,6 +14,7 @@ class UserForm(forms.ModelForm):
         model = User
         fields = ['username', 'password', 'first_name', 'last_name', 'status']
 
+
 class ResultsForApprovalForm(forms.ModelForm):
 
     pass

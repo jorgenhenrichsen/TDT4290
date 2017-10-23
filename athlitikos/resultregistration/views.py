@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.http import JsonResponse
 from datetime import date
 from .models import Lifter, Judge, Staff, Result, MoveAttempt, Group
 from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm, CompetitonForm
@@ -134,8 +134,11 @@ def get_age_for_lifter_in_result(request, pk):
 def result_registration(request):
     return render(request, 'resultregistration/resultregistration.html', context={'MoveAttemptForm': MoveAttemptForm,
                                                                                   'ResultForm': ResultForm,
-                                                                                  'GroupForm': GroupForm,                                                           'ClubForm': ClubForm,
-                                                                               'CompetitonForm': CompetitonForm})
+                                                                                  'GroupForm': GroupForm,
+                                                                                  'ClubForm': ClubForm,
+                                                                                  'CompetitonForm': CompetitonForm})
+
+
 def edit_result(request, pk):
     group = Group.objects.filter(pk=pk)
     results = Result.objects.filter(group=group)
