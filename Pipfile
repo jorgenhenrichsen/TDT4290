@@ -1,11 +1,15 @@
 [[source]]
+
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 
+
 [packages]
-psycopg2 = "*"
-enum34 = "*"
-Django = "*"
-flake8 = "*"
-pep8 = "*"
-pep8-naming = "*"
+
+"psycopg2" = "*"
+"enum34" = "*"
+django = "*"
+"flake8" = "*"
+"pep8" = "*"
+"pep8-naming" = "*"
+django-easy-pdf = "*"
