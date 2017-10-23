@@ -4,7 +4,6 @@ from django.http import JsonResponse
 from datetime import date
 from .models import Lifter, Judge, Staff, Result, MoveAttempt, Group
 from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm, CompetitonForm
-# from django.views.generic import UpdateView
 
 
 @login_required(login_url='/login')
@@ -138,3 +137,28 @@ def result_registration(request):
                                                                                   'GroupForm': GroupForm,
                                                                                   'ClubForm': ClubForm,
                                                                                   'CompetitonForm': CompetitonForm})
+
+
+def edit_result(request, pk):
+    group = Group.objects.filter(pk=pk)
+    results = Result.objects.filter(group=group)
+    context = {
+        'pending_results': results,
+        'groups': group
+    }
+
+    return render(request, 'resultregistration/editresult.html', context)
+
+
+def approve_group(request, pk):
+    group = Group.objects.get(pk=pk)
+    group.status = "Godkjent"
+    group.save()
+    return redirect('/home/')
+
+
+def reject_group(request, pk):
+    group = Group.objects.get(pk=pk)
+    group.status = "Ikke godkjent"
+    group.save()
+    return redirect('/home/')

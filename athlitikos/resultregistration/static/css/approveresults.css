@@ -28,3 +28,21 @@ thead {
 .no-icon {
     background-image: none;
 }
+
+#approve-btn {
+    position: absolute;
+    right: 110px;
+    top: 140px;
+}
+
+#underkjenn-btn {
+    position: absolute;
+    right: 30px;
+    top: 140px;
+}
+
+#avbryt-btn {
+    position: absolute;
+    left: 10px;
+    top: 100px;
+}

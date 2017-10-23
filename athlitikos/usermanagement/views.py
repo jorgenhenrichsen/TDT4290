@@ -1,10 +1,21 @@
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
-from django.views.generic import View
+from django.views.generic import View, ListView
 from .forms import UserForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import Group
+
+
+class UserListView(ListView):
+
+    template_name = ""
+
+
+class ListOfResultsView(View):
+
+    def get(self, request):
+        return render(request, 'editresult.html')
 
 
 class UserFormView(View):
@@ -29,12 +40,14 @@ class UserFormView(View):
             user.set_password(password)
             user.save()
 
+            # Status 1 links to the user-group admin
             if(status == "1"):
 
                 group = Group.objects.get(name='Admin')
                 user.groups.add(group)
                 group.save()
 
+            # Status 2 links to the user-group clubOfficial
             if(status == "2"):
 
                 group = Group.objects.get(name='ClubOfficial')
@@ -58,4 +71,4 @@ def club_official_options(request):
 
 @login_required(login_url='/login')
 def admin(request):
-    return render(request, 'admin.html')
+    return render(request, 'adminpanel.html')
