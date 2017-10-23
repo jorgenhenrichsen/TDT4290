@@ -59,15 +59,56 @@ $.ajaxSetup({
 //         console.log(textStatus)
 //         console.log(errorThrown)
 //     }
-// });
-function newRow(id){
-    var $table = $(id)
-    console.log($table.children.length)
-    console.log($table.append('<div>urgh</div>'))
+// // });
+// function newRow(div){
+//     // var $table = $(id)
+//     // // console.log($table.append('<div>urgh</div>'))
+//     // var rownumber = $table.childNodes.length
+//     // console.log($table.children.length, rownumber)
+//     // var row = '<div>this is a row <br></div>'
+//     var $row =
+//
+//     return $row
+//
+// }
+var numberOfRows = 0
+function addRow(elem) {
+    var $myDiv = $(elem)
+    $.ajax({
+        method: "POST",
+        url: 'resultform/',
+        data:{
+            'rowId': numberOfRows,
+        },
+        dataType: 'html',
+        success: function(data){
+            // console.log($myDiv)
+
+            $myDiv.append(data)
+            console.log($myDiv, $myDiv.children.length.toString())
+            console.log('id: ',$myDiv,' length: '+$myDiv.children.length.toString())
+            console.log('success')
+            numberOfRows ++
+        },
+        error: function () {
+            $myDiv.append('<div>error<br></div>')
+        }
+    })
 }
 
-function ajaxSubmit(id) {
-    var $myForm = $(id)
+function initiateResultRows(div){
+    var $table = $(div)
+    for( i =0; i<10; i++){
+        addRow($table)
+        // $table.append(newRow('result_registration_table'))
+        // $table.append('<div>this is a row <br></div>')
+        $('#initiate').hide()
+    }
+}
+
+function ajaxSubmit(node) {
+    var $myForm = $(node)
+    console.log($myForm )
     $myForm.submit(function(event){
         event.preventDefault();
         var $formData = $($myForm).serialize()

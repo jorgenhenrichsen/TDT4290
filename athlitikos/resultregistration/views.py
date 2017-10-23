@@ -142,9 +142,9 @@ def get_age_for_lifter_in_result(request, pk):
 
 def result_view(request):
     # form = forms.M
-    return render(request, 'resultregistration/result_form.html', context={'MoveAttemptForm': MoveAttemptForm,
-                                                                           'ResultForm': ResultForm,
-                                                                           'LifterForm': LifterForm})
+    rowId = request.POST.get('rowId')
+    return render(request, 'resultregistration/result_form.html',
+                  context={'ResultForm' : PendingResultForm, 'rowId' : rowId})
 
 class CompetitionFormView(AjaxFormMixin, FormView):
     form_class = CompetitonForm
