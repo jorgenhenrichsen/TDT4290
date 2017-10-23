@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'usermanagement',
     'userRoles',
     'public',
+    'easy_pdf',
 ]
 
 MIDDLEWARE = [
