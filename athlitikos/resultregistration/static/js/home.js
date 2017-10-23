@@ -19,9 +19,10 @@ $(function () {
 });
 
 function editPendingGroup(id) {
-    alert("Edit" + id);
+    window.location.href = "/result/edit/" + id;
 }
 
 function deletePendingGroup(id) {
     alert("Delete"+ id);
 }
+
