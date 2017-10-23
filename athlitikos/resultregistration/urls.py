@@ -5,7 +5,6 @@ from . import views
 app_name = 'resultregistration'
 
 urlpatterns = [
-    url(r'^home/$', views.home, name='home'),
     url(r'^lifter/(?P<pk>\d+)/$', views.lifter_detail, name='lifter_detail'),
     url(r'^lifter/new/$', views.add_new_lifter, name='add_new_lifter'),
     url(r'^judge/(?P<pk>\d+)/$', views.judge_detail, name='judge_detail'),
@@ -21,4 +20,5 @@ urlpatterns = [
     url(r'^resultregistration/competition/new/$', views.CompetitionFormView.as_view(), name='add_competition'),
     # url(r'^resultregistration/competition/new/register$', views.CompetitionFormView.as_view, name='add_competition'),
     url(r'^resultregistration/resultform/$', views.result_view, name='result_view'),
+    url(r'^home/$', views.home, name='home'),
 ]

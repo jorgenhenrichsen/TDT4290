@@ -1,6 +1,8 @@
-from django.test import TestCase
+from django.test import TestCase, RequestFactory
 from .models import Competition, Club
 from .validators import validate_name
+from .views import home
+from django.contrib.auth.models import User
 
 
 class CompetitionTestCase(TestCase):
@@ -20,19 +22,15 @@ class CompetitionTestCase(TestCase):
         self.assertEqual(validate_name(norgesmesterskap.competition_category), "Norgesmesterskap")
         self.assertEqual(validate_name(norgesmesterskap.location), "Bodø")
 
-    def test_if_one_club_can_join_many_competitions(self):
 
-        """Two competitions are added to a club, to test that the many-to-many relationship works in the database"""
+class HomeTestCase(TestCase):
 
-        norgesmesterskap = Competition.objects.get(competition_category="Norgesmesterskap")
-        midtnorsk = Competition.objects.get(competition_category="Midtnorsk")
-        trondheim_il = Club.objects.get(club_name="TrondheimIL")
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.user = User.objects.create(username="user")
 
-        trondheim_il.competition.add(norgesmesterskap, midtnorsk)
-
-        # Checking for club names, which contain the competition Norgesmesterskap
-
-        club_name = Club.objects.filter(competition__competition_category="Norgesmesterskap")\
-            .values_list('club_name', flat=True).first()
-
-        self.assertEqual(club_name, "TrondheimIL")
+    def test_home_view_response(self):
+        request = self.factory.get('home')
+        request.user = self.user
+        response = home(request)
+        self.assertEqual(response.status_code, 200, "Failed to get /home/")

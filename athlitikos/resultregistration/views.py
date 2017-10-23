@@ -3,22 +3,18 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponse
 from datetime import date
 from django.views.generic import FormView
-from django.template import RequestContext
 from .mixins import AjaxFormMixin
-
-from .models import Lifter, Judge, Staff, Result, MoveAttempt, Competition
+from .models import Lifter, Judge, Staff, Result, MoveAttempt, Group, Competition
 from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm, CompetitonForm
 from .forms import PendingResultForm
 from .forms import forms
 # from django.views.generic import UpdateView
 
 
-# Create your views here.
-
-
 @login_required(login_url='/login')
 def home(request):
-    return render(request, 'resultregistration/home.html')
+    groups = Group.objects.filter(author=request.user)
+    return render(request, 'resultregistration/home.html', {'pending_groups': groups})
 
 
 def lifter_detail(request, pk):

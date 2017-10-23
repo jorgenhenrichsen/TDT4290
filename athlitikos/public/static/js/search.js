@@ -1,8 +1,11 @@
 
 $(document).ready(function () {
-   $("#result-table").tablesorter({
-       cancelSelection:true,
-   });
+    $("#result-table").tablesorter({
+        cancelSelection:true,
+        cssIconAsc: "background: no-repeat center right url(../icons/UpAndDownArrowBlack.svg);",
+    });
+
+
 });
 
 var selectedLifters = [];
@@ -68,7 +71,7 @@ $.datepicker.setDefaults({
 
 $(function () {
     $("#from-date-picker").datepicker();
-    $("#to-date-picker").datepicker()
+    $("#to-date-picker").datepicker();
 });
 
 /*
@@ -83,6 +86,9 @@ function submitForm() {
     /* Fetching search results and reloading the table with the new values */
     var serializedLifters = JSON.stringify(selectedLifters);
     var serializedClubs = JSON.stringify(selectedClubs);
+    var serializedCategories = JSON.stringify(selectedCategories);
+    $("#result-table").innerHTML;
+    console.log(serializedCategories);
     $.ajax({
         type: "GET",
         url: "/search/",
@@ -91,7 +97,8 @@ function submitForm() {
                 "lifters": serializedLifters,
                 "clubs": serializedClubs,
                 "from_date": fromDate,
-                "to_date": toDate
+                "to_date": toDate,
+                "categories": serializedCategories
         },
         success: function (html) {
 
@@ -133,6 +140,137 @@ function removeClub(id) {
     selectedClubs.splice( selectedClubs.indexOf(id), 1 );
 
     var container = document.getElementById("clubs-container");
+    var button = document.getElementById(id);
+
+    container.removeChild(button);
+}
+
+/* Category filtering */
+
+var selectedGender;
+var selectedAgeGroup;
+var selectedWeightClass;
+var selectedCategories = {};
+
+/* Called when user selects a gender */
+function didSelectGender(element) {
+    //selectedGender = $('option:selected',element).index() - 1; /* -1 because of the placeholder option */
+    selectedGender = element.value;
+    $("#age-group-selector").css({"display":"block"});
+    getAgeGroups();
+}
+
+/* User selects age group */
+function didSelectAgeGroup(element) {
+    //selectedAgeGroup = $('option:selected',element).index() - 1; /* -1 because of the placeholder option */
+    selectedAgeGroup = element.value;
+    $("#weight-class-selector").css({"display":"block"});
+    getAvailableWeightClasses();
+}
+
+/* User selects a weight class */
+function didSelectWeightClass(element) {
+    selectedWeightClass = element.value;
+}
+
+function getAgeGroups() {
+
+    if (selectedGender != undefined) {
+        $.ajax({
+            type: "GET",
+            url: "/search/age-groups/",
+            dataType: "json",
+            data: {
+                "selected_gender": selectedGender
+            },
+            success: function (json) {
+            console.log(json);
+            var options = "<option value='' disabled selected>Velg aldersgruppe</option>";
+            for (var ageGroup in json) {
+                options += "<option value='" + json[ageGroup] + "'>" + json[ageGroup] + "</option>";
+            }
+
+            var selector = document.getElementById("age-group-selector");
+            selector.innerHTML = options;
+
+            },
+            error: function () {
+              console.log("ERROR");
+            },
+            complete: function () {
+                console.log("COMPLETE");
+            }
+            })
+    }
+
+}
+
+/* Fetches the weight classes according to the selected gender and age group */
+function getAvailableWeightClasses() {
+
+    if (selectedGender != undefined && selectedAgeGroup != undefined) {
+
+        $.ajax({
+        type: "GET",
+        url: "/search/weight-classes/",
+        dataType: "json",
+        data: {
+                "selected_gender": selectedGender,
+                "selected_age_group": selectedAgeGroup
+        },
+        success: function (json) {
+            console.log(json);
+            var options = "<option value='' disabled selected>Velg vektklasse</option>";
+            for (var weightClass in json) {
+                options += "<option value='" + json[weightClass] + "'>" + json[weightClass] + "</option>";
+            }
+
+            var selector = document.getElementById("weight-class-selector");
+            selector.innerHTML = options;
+
+        },
+        error: function () {
+          console.log("ERROR");
+        },
+        complete: function () {
+            console.log("COMPLETE");
+        }
+    });
+
+    }
+    else {
+        console.log("Show error");
+    }
+
+}
+
+/* Adds a filter according to the selected gender, age group and weight class */
+function addCurrentCategoryFilter() {
+    if (selectedGender != undefined && selectedAgeGroup != undefined && selectedWeightClass != undefined) {
+
+        var id = selectedGender + selectedAgeGroup + selectedWeightClass;
+        console.log(id);
+
+        if (!(id in selectedCategories)) {
+            selectedCategories[id] = {"gender": selectedGender, "age_group": selectedAgeGroup, "weight_class": selectedWeightClass};
+
+            var html = "<button id='" + id +"' onclick='removeCategory(this.id)' class='filter-button'>" + selectedAgeGroup + " " + selectedWeightClass +"</button>";
+            var categories = document.getElementById("categories-container");
+            categories.innerHTML += html;
+        }
+
+    }
+    else {
+        console.log("Error");
+    }
+}
+
+/* Remove a category filter */
+function removeCategory(id) {
+
+    delete selectedCategories[id];
+
+    var container = document.getElementById("categories-container");
     var button = document.getElementById(id);
 
     container.removeChild(button);

@@ -1,6 +1,7 @@
 from datetime import datetime
 import athlitikos.settings as settings
 from resultregistration.models import Club, Result, Lifter
+from resultregistration.enums import Status
 
 """
 Contains helpers to search for objects in the database.
@@ -29,21 +30,23 @@ class SearchFiltering:
             or SearchFiltering.NONE_VALUES.__contains__(value)
 
     @classmethod
-    def search_for_results(cls, lifters, clubs, from_date, to_date):
+    def search_for_results(cls, lifters=None, clubs=None, from_date=None, to_date=None, categories=None):
         """
         Filter out results.
         :param lifters: Only inlcude results from the lifters ids in this list.
         :param clubs: Only include results with lifters belonging to a club in this list.
         :param from_date: Only include results that has a competition start_date that are after or equal to this date.
         :param to_date: Only include results that has a competition start_date that are before or equal to this date.
+        :param categories: Dictionary of categories to include results from.
+                           Form: {"age":age, "gender":gender, "weight_class":weight_class}
         :return: The filtered results.
         """
 
         if settings.DEBUG:
-            print("Searching with lifters={}, clubs={}, from_date={}, to_date={}"
-                  .format(lifters, clubs, from_date, to_date))
+            print("Searching with lifters={}, clubs={}, from_date={}, to_date={}, categories={}"
+                  .format(lifters, clubs, from_date, to_date, categories))
 
-        results = Result.objects.all()
+        results = Result.objects.all().filter(group__status__exact=Status.approved)
 
         if not SearchFiltering.is_none_value(lifters):
             results = results.filter(lifter_id__in=lifters)
@@ -58,6 +61,31 @@ class SearchFiltering:
         if not SearchFiltering.is_none_value(to_date):
             to_date_formatted = datetime.strptime(to_date, "%d/%m/%Y").date()
             results = results.filter(group__date__lte=to_date_formatted)
+
+        if not SearchFiltering.is_none_value(categories):
+
+            all_results = []
+
+            for category in categories:
+                age_group = category["age_group"]
+                gender = category["gender"]
+                weight_class = int(category["weight_class"])
+
+                part_result = results.filter(age_group__exact=age_group,
+                                             lifter__gender__exact=gender,
+                                             weight_class__exact=weight_class
+                                             )
+
+                all_results.append(part_result)
+
+            if len(all_results) > 1:
+                end_result = all_results[0]
+
+                for i in range(1, len(all_results)):
+                    end_result = (end_result | all_results[i]).distinct()
+
+            else:
+                results = all_results[0]
 
         if settings.DEBUG:
             print(results)
