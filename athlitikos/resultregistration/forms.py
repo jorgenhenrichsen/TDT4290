@@ -90,11 +90,20 @@ class MoveAttemptForm(forms.ModelForm):
 
 
 class PendingResultForm(forms.Form):
+    # weight_class = result.weight_class #forms.CharField(max_length=3)
+    # body_weight = Result.body_weight #forms.FloatField()
+    # category = Result.age_group#forms.CharField(max_length=4)
+    # birth_date = Lifter.birth_date# forms.DateField()
+    # lifter_first_name = Lifter.first_name#forms.CharField(max_length=200)
+    # lifter_last_name = Lifter.last_name  # forms.CharField(max_length=200)
+    # club = Lifter.club#forms.CharField()
+
     weight_class = forms.CharField(max_length=3)
     body_weight = forms.FloatField()
     category = forms.CharField(max_length=4)
     birth_date = forms.DateField()
-    lifter_name = forms.CharField(max_length=200)
+    lifter_first_name = forms.CharField(max_length=200)
+    lifter_last_name = forms.CharField(max_length=200)
     club = forms.CharField()
 
     snatch1 = forms.IntegerField()

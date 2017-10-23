@@ -153,19 +153,23 @@ class CompetitionFormView(AjaxFormMixin, FormView):
         # print('enters post')
         # print(competition)
         if competition.is_valid():
-            # data = competition.cleaned_data
-            # print(competition.cleaned_data, 'competition valid')
-            competition_category = competition['competition_category'].value()
-            start_date = competition['start_date'].value()
-            location = competition['location'].value()
+            data = competition.cleaned_data
+            # print(competition.cleaned_data)
+            print('competition valid')
+            competition_category = data['competition_category']
+            start_date = data['start_date']
+            location = data['location']
+            host = data['host']
             # print(competition_category, start_date, location)
             # print(Competition.objects.filter())
             if not Competition.objects.filter(competition_category=competition_category,
                                               start_date=start_date,
-                                              location=location):
+                                              location=location,
+                                              host=host):
                 Competition.objects.create(competition_category=competition_category,
                                            start_date=start_date,
-                                           location=location)
+                                           location=location,
+                                           host=host)
         return render(request, 'resultregistration/resultregistration.html')
 
 

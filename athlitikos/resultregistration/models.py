@@ -113,6 +113,8 @@ class Result(models.Model):
     points_with_veteran = models.FloatField(verbose_name='Veteranpoeng',
                                             blank=True, null=True)   # points_with_sinclair*melzerfaber_coefficient
 
+    class Meta:
+        unique_together = ('group', 'lifter')
     def __str__(self):
         return 'resultat for {0} i {1}'.format(self.lifter.fullname(), str(self.group))
 

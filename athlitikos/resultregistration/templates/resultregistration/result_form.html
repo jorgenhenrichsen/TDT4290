@@ -12,23 +12,26 @@
 {#{% extends 'resultregistration/resultregistration.html' %}#}
 {#{% block results %}#}
 {#{% for row in '123456' %}#}
+<div id="result-div{{ rowId }}">
 
-<form class="ajax_form result" id="pending_result{{ rowId }}" method="POST" action="" data-url="result/pending/new">
-    {% csrf_token %}
-{#        <script type="text/javascript">#}
-{#            $("form").addClass("result")#}
-{#        </script>#}
-{#        <table>#}
-{#                <tr>#}
-{#                    {% include 'resultregistration/result_form.html' %}#}
-                    {{ ResultForm.as_p|safe }}
-{#                </tr>#}
-{#        <div id="best_snatch{{ row }}"><input title="heeh" type="text" placeholder="bestSnatch" ></div>#}
+    <form class="ajax_form" id="pending_result{{ rowId }}" method="POST" action="." data-url="result/pending/new">
+        {% csrf_token %}
+    {#        <script type="text/javascript">#}
+    {#            $("form").addClass("result")#}
+    {#        </script>#}
+    {#        <table>#}
+    {#                <tr>#}
+    {#                    {% include 'resultregistration/result_form.html' %}#}
+                        {{ ResultForm.as_p|safe }}
+    {#                </tr>#}
+    {#        <div id="best_snatch{{ row }}"><input title="heeh" type="text" placeholder="bestSnatch" ></div>#}
 
-{#        </table>#}
-    <button type="submit" onclick="ajaxSubmit(this.parentNode)" >SUB</button>
-{#        <input type="submit" name="submit_result" value="Submit">#}
-</form>
+    {#        </table>#}
+        <button type="submit" >SUB</button>
+    {#    onclick="ajaxSubmit(this.parentNode)" #}
+    {#        <input type="submit" name="submit_result" value="Submit">#}
+    </form>
+</div>
 
 
 {#<div> result_form is here</div>#}

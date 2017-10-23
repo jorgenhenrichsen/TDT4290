@@ -15,18 +15,21 @@
     <form class="ajax_form" id="competition_form" method="POST" action="."  data-url="competition/new/">
         {% csrf_token %}
         {{ CompetitonForm.as_p|safe }}
-        <button type="submit" onclick="ajaxSubmit(this.parentNode)" >SUB</button>
+        <button type="submit">SUB</button>
+{#         onclick="ajaxSubmit(this.parentNode)"#}
+{#onclick="ajaxSubmit(this.parentNode)"#}
     </form>
 
-    <div class="result_section" id="results">
+    <div class="result_section" id="results" >
+{#    onload="initiateResultRows(this.children[0])"#}
         <div class="results" id="result_registration_table">
-            <div class="result" id="result0">
-                Result1 here
-
-            </div>
+{#            <div class="result" id="result0">#}
+{#                Result1 here#}
+            {% include 'resultregistration/result_form.html' %}
+{#            </div>#}
         </div>
 
-        <button id="initiate" onclick="initiateResultRows(this.parentNode.children[0])">initiate the basscannon</button>
+        <button id="initiate" onclick="initiateResultRows(this.parentNode.children[0])">Initialize</button>
         <br>
         <button onclick="addRow(this.parentNode.children[0])">Ny rad</button>
     </div>
