@@ -3,6 +3,8 @@ $(document).ready(function () {
     $("#result-table").tablesorter({
         cancelSelection:true,
     });
+
+    submitForm();
 });
 
 var selectedLifters = [];
