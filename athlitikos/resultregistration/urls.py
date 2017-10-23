@@ -16,7 +16,7 @@ urlpatterns = [
 
 
 
-
+    url(r'^resultregistration/group/new$', views.GroupFormView.as_view(), name='add_group'),
     url(r'^resultregistration/result/pending/new$', views.PendingResultFormView.as_view(), name='add_pending_result'),
     url(r'^resultregistration/competition/new/$', views.CompetitionFormView.as_view(), name='add_competition'),
     # url(r'^resultregistration/competition/new/register$', views.CompetitionFormView.as_view, name='add_competition'),

@@ -153,14 +153,39 @@ class CompetitionFormView(AjaxFormMixin, FormView):
 
     def post(self, request, *args, **kwargs):
         competition = CompetitonForm(request.POST)
-        # competition = self.request.POST['competition_form']
-        print('enters post')
+        # competition = self.request.POST
+        # print('enters post')
         # print(competition)
         if competition.is_valid():
-            print(competition.cleaned_data, 'competition valid')
-            competition_category = competition['competition_category'],
-            start_date = competition['start_date'],
-            location = competition['location']
+            # data = competition.cleaned_data
+            # print(competition.cleaned_data, 'competition valid')
+            competition_category = competition['competition_category'].value()
+            start_date = competition['start_date'].value()
+            location = competition['location'].value()
+            # print(competition_category, start_date, location)
+            # print(Competition.objects.filter())
+            if not Competition.objects.filter(competition_category=competition_category,
+                                              start_date=start_date,
+                                              location=location):
+                Competition.objects.create(competition_category=competition_category,
+                                           start_date=start_date,
+                                           location=location)
+        return render(request, 'resultregistration/resultregistration.html')
+
+
+class GroupFormView(AjaxFormMixin, FormView):
+    form_class = GroupForm
+    template_name = 'resultregistration/group_form.html'
+    success_url = '/form-success/'
+
+    def post(self, request, *args, **kwargs):
+        group = GroupForm(request.POST)
+        print('group in post', group.is_valid(), group.cleaned_data)
+        if group.is_valid():
+            #TODO: CHECK THAT GROUP IS NOT IN DB, AND CREATE
+            # if not
+            print(group.cleaned_data)
+            pass
         return render(request, 'resultregistration/resultregistration.html')
 
 

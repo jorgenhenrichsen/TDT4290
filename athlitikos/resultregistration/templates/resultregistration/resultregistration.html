@@ -30,7 +30,12 @@
         <br>
         <button onclick="addRow(this.parentNode.children[0])">Ny rad</button>
     </div>
-    
+
+    <form class="ajax_form" id="group_form" method="post" action="." data-url="group/new">
+        {% csrf_token %}
+        {{ GroupForm.as_p|safe }}
+        <button type="submit" onclick="ajaxSubmit(this.parentNode)" >SUB</button>
+    </form>
     <script type="text/javascript" src="{% static 'js/resultregistration.js' %}"></script>
 
 {% endblock %}
