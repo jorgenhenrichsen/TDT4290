@@ -71,8 +71,6 @@ class SearchFiltering:
 
         return best_results
 
-
-
     @classmethod
     def search_for_results_with_request(cls, request):
         """
@@ -108,7 +106,8 @@ class SearchFiltering:
         return SearchFiltering.search_for_results(lifters, clubs, from_date, to_date, categories, best_results)
 
     @classmethod
-    def search_for_results(cls, lifters=None, clubs=None, from_date=None, to_date=None, categories=None, best_results=None):
+    def search_for_results(cls, lifters=None, clubs=None, from_date=None, to_date=None, categories=None,
+                           best_results=None):
         """
         Filter out results.
         :param lifters: Only inlcude results from the lifters ids in this list.
