@@ -14,14 +14,15 @@
 
     <h1>Forhåndsvisning av pulje</h1>
 
-
-    <button id="underkjenn-btn" onclick="approvePendingGroup({{ pending_group.pk }})">Underkjenn</button>
-    <button id="avbryt-btn">Avbryt</button>
+    <button id="avbryt-btn" onclick="goBackToHome()">Avbryt</button>
 
     {% for group in groups %}
-        <button id="approve-btn" onclick="approvePendingGroup({{ group.pk }})">Approve</button>
+        <button id="approve-btn" onclick="approvePendingGroup({{ group.pk }})">Godkjenn</button>
     {% endfor %}
 
+    {% for group in groups %}
+    <button id="underkjenn-btn" onclick="rejectPendingGroup({{ group.pk }})">Underkjenn</button>
+    {% endfor %}
 
 
 

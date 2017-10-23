@@ -4,9 +4,6 @@ from django.http import JsonResponse, HttpResponse, HttpResponseRedirect, HttpRe
 from datetime import date
 from .models import Lifter, Judge, Staff, Result, MoveAttempt, Group
 from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm, CompetitonForm
-from .enums import Status
-from django.views.decorators.csrf import csrf_exempt
-# from django.views.generic import UpdateView
 
 
 @login_required(login_url='/login')
@@ -139,7 +136,7 @@ def result_registration(request):
                                                                                   'ResultForm': ResultForm,
                                                                                   'GroupForm': GroupForm,
                                                                                   'ClubForm': ClubForm,
-                                                                                  'CompetitonForm': CompetitonForm})
+                                                                               'CompetitonForm': CompetitonForm})
 def edit_result(request, pk):
     result = get_object_or_404(Result, pk=pk)
     group = Group.objects.filter(pk=pk)
@@ -151,9 +148,16 @@ def edit_result(request, pk):
 
     return render(request, 'resultregistration/editresult.html', context)
 
-@csrf_exempt
+
 def approve_group(request, pk):
     group = Group.objects.get(pk=pk)
-    group.status = Status.approved
+    group.status = "Godkjent"
+    group.save()
+    return redirect('/home/')
+
+
+def reject_group(request, pk):
+    group = Group.objects.get(pk=pk)
+    group.status = "Ikke godkjent"
     group.save()
     return redirect('/home/')
