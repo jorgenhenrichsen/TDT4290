@@ -134,11 +134,9 @@ def get_age_for_lifter_in_result(request, pk):
 def result_registration(request):
     return render(request, 'resultregistration/resultregistration.html', context={'MoveAttemptForm': MoveAttemptForm,
                                                                                   'ResultForm': ResultForm,
-                                                                                  'GroupForm': GroupForm,
-                                                                                  'ClubForm': ClubForm,
+                                                                                  'GroupForm': GroupForm,                                                           'ClubForm': ClubForm,
                                                                                'CompetitonForm': CompetitonForm})
 def edit_result(request, pk):
-    result = get_object_or_404(Result, pk=pk)
     group = Group.objects.filter(pk=pk)
     results = Result.objects.filter(group=group)
     context = {
