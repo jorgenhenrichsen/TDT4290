@@ -2,10 +2,9 @@
 $(document).ready(function () {
     $("#result-table").tablesorter({
         cancelSelection:true,
-        cssIconAsc: "background: no-repeat center right url(../icons/UpAndDownArrowBlack.svg);",
     });
 
-
+    submitForm();
 });
 
 var selectedLifters = [];
@@ -87,7 +86,12 @@ function submitForm() {
     var serializedLifters = JSON.stringify(selectedLifters);
     var serializedClubs = JSON.stringify(selectedClubs);
     var serializedCategories = JSON.stringify(selectedCategories);
-    $("#result-table").innerHTML;
+
+    var bestResults = document.getElementById("best-results-selector").value;
+
+
+    currentParameters = "?lifters=" + serializedLifters + "&clubs=" + serializedClubs + "&from_date=" + fromDate + "&to_date=" + toDate + "&categories=" + serializedCategories + "&best_results=" + bestResults;
+
     console.log(serializedCategories);
     $.ajax({
         type: "GET",
@@ -98,20 +102,13 @@ function submitForm() {
                 "clubs": serializedClubs,
                 "from_date": fromDate,
                 "to_date": toDate,
-                "categories": serializedCategories
+                "categories": serializedCategories,
+                "best_results": bestResults
         },
         success: function (html) {
-
-            /* Replace the html of the result table with the new one. */
-            $('#result-table').html(html);
-
-            /* Add tablesorter behavior to the result table */
-            document.getElementById('result-table').classList.add('tablesorter');
-
-           $("#result-table").tablesorter({
-               cancelSelection:true,
-            });
-
+            /* Replace the html of the result table's tbody with the new entries. */
+            $("table tbody").html(html);
+            $("#result-table").trigger("update");
         },
         error: function () {
           console.log("ERROR");  
@@ -274,4 +271,13 @@ function removeCategory(id) {
     var button = document.getElementById(id);
 
     container.removeChild(button);
+}
+
+var currentParameters = ""; // The parameters the current search was generated with.
+
+function generateReport() {
+
+    window.open("/search/report.pdf" + currentParameters);
+    //window.location.href = "/search/report.pdf" + currentParameters;
+
 }
