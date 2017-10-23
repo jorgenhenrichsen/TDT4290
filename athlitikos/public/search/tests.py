@@ -44,7 +44,7 @@ class SearchFilteringTestCase(TestCase):
             technical_controller=judge,
             cheif_marshall=judge,
             time_keeper=judge,
-            status=Status.approved,
+            status=Status.approved.value,
         )
 
         denied_group = Group.objects.create(
@@ -57,7 +57,7 @@ class SearchFilteringTestCase(TestCase):
             technical_controller=judge,
             cheif_marshall=judge,
             time_keeper=judge,
-            status=Status.denied,
+            status=Status.denied.value,
         )
 
         self.lifter1 = Lifter.objects.create(
@@ -105,9 +105,9 @@ class SearchFilteringTestCase(TestCase):
         )
 
         self.result3 = Result.objects.create(
-            points_with_veteran=1000,
-            points_with_sinclair=900,
-            total_lift=200,
+            points_with_veteran=900,
+            points_with_sinclair=800,
+            total_lift=180,
             age=40,
             sinclair_coefficient=1.1,
             veteran_coefficient=1.1,
@@ -186,3 +186,15 @@ class SearchFilteringTestCase(TestCase):
         ]
         results = SearchFiltering.search_for_results(categories=categories)
         self.assertEqual(len(results), 2, "Failed to search for multiple categories")
+
+    def test_search_for_results_best_points(self):
+        results = SearchFiltering.search_for_results(best_results="p")
+        self.assertEqual(len(results), 2, "Failed to filter on best points")
+
+    def test_search_for_results_best_points_veteran(self):
+        results = SearchFiltering.search_for_results(best_results="pv")
+        self.assertEqual(len(results), 2, "Failed to filter on best points")
+
+    def test_search_for_results_best_total_weight(self):
+        results = SearchFiltering.search_for_results(best_results="w")
+        self.assertEqual(len(results), 2, "Failed to filter on best points")
