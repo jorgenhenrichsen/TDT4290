@@ -1,7 +1,6 @@
 from django.test import TestCase, RequestFactory
 from .models import Competition, Club
 from .validators import validate_name
-from .views import home
 from django.contrib.auth.models import User, Group
 from .views import home, list_all_judges
 
