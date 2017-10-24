@@ -4,7 +4,12 @@ from .search.search import SearchFiltering
 import athlitikos.settings as settings
 from resultregistration.enums import AgeGroup, Gender
 from easy_pdf.rendering import render_to_pdf_response
+from djqscsv import render_to_csv_response
 
+
+def generate_csv_report(request):
+    results = SearchFiltering.search_for_results_with_request(request).values('lifter__first_name')
+    return render_to_csv_response(results)
 
 def generate_report(request):
     """
