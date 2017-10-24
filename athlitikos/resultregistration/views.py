@@ -8,14 +8,20 @@ from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm
 
 @login_required(login_url='/login')
 def home(request):
-    groups = Group.objects.filter(author=request.user)
-    return render(request, 'resultregistration/home.html', {'pending_groups': groups})
+    # TODO: This should redirect to the correct homepage for the logged in user. Admin or club official.
+    return None
 
 
 @login_required(login_url='/login')
 def home_admin(request):
     groups = Group.objects.all()
     return render(request, 'resultregistration/home_admin.html', {'pending_groups': groups})
+
+
+@login_required(login_url='/login')
+def home_club_official(request):
+    groups = Group.objects.filter(author=request.user)
+    return render(request, 'resultregistration/home_club_official.html', {'pending_groups': groups})
 
 
 def lifter_detail(request, pk):

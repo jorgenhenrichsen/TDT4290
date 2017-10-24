@@ -10,6 +10,7 @@
     </script> <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
     <script src="/static/js/jquery.tablesorter.js" type="text/javascript"></script>
     <script type="text/javascript" src="/static/js/home.js"></script>
+    <script type="text/javascript" src="/static/js/home_admin.js"></script>
 
 {% endblock %}
 
@@ -17,7 +18,7 @@
 
 
     <button id="judge-statistic-button">Dommerstatistikk</button>
-    <button id="add-new-user-button">Ny bruker</button>
+    <button id="add-new-user-button" onclick="addNewUser()">Ny bruker</button>
     <button id="change-existing-user-button">Endre eksisterende bruker</button>
 
     <h1>Resultater</h1>
