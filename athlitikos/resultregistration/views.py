@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from datetime import date
-from .models import Lifter, Judge, Staff, Result, MoveAttempt, Group
+from .models import Lifter, Judge, Staff, Result, MoveAttempt, Group, InternationalResult
 from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm, CompetitonForm, \
     InternationalResultForm
 
@@ -50,6 +50,7 @@ def add_new_judge(request):
     form = JudgeForm()
     return render(request, 'resultregistration/edit_person.html', {'title': 'Legg til ny dommer', 'form': form})
 
+
 @login_required(login_url='/login')
 def add_new_internationalresult(request):
 
@@ -57,10 +58,33 @@ def add_new_internationalresult(request):
         form = InternationalResultForm(request.POST)
         if form.is_valid():
             international_result = form.save()
-            #return redirect(reverse('resultregistration:lifter_detail', args=[lifter.pk]))
+            return redirect(reverse('resultregistration:international_result_detail',
+                                    args=[international_result.pk]))
+
     form = InternationalResultForm()
-    return render(request, 'resultregistration/edit_person.html', {'title': 'Legg til nytt internasjonalt resultat',
-                                                                   'form': form})
+    return render(request, 'resultregistration/edit_person.html',
+                  {'title': 'Legg til nytt internasjonalt resultat', 'form': form})
+
+
+
+def international_result_detail(request, pk):
+    international_result = get_object_or_404(InternationalResult, pk=pk)
+    context = {
+        'fullname': international_result.__str__(),
+        'body_weight': international_result.body_weight,
+        'group': international_result.group,
+        'snatch': international_result.snatch,
+        'clean_and_jerk': international_result.clean_and_jerk,
+        'total': international_result.total
+    }
+
+    return render(request, 'resultregistration/international_result_detail.html',
+                  context={'fullname': international_result.__str__(),
+                            'body_weight': international_result.body_weight,
+                            'group': international_result.group,
+                            'snatch': international_result.snatch,
+                            'clean_and_jerk': international_result.clean_and_jerk,
+                            'total': international_result.total})
 
 
 def judge_detail(request, pk):
@@ -70,6 +94,8 @@ def judge_detail(request, pk):
         # 'birth_date': judge.birth_date.strftime('%Y-%m-%d'),
         'level': judge.judge_level,
     })
+
+
 
 
 @login_required(login_url='/login')
