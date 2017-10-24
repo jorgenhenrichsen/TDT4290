@@ -155,6 +155,23 @@ class Judge(Person):
     judge_level = models.CharField(max_length=10, choices=JudgeLevel.choices(), default=JudgeLevel.Level0)
 
 
+class PentathlonResult(models.Model):
+
+    lifter = models.ForeignKey(Lifter, null=True)
+    competition = models.ForeignKey(Competition, null=True)
+
+    shot_put = models.DecimalField(max_digits=10, decimal_places=5)
+    shot_put_points = models.DecimalField(max_digits=10, decimal_places=5)
+    forty_meter = models.DecimalField(max_digits=10, decimal_places=5)
+    forty_meter_points = models.DecimalField(max_digits=10, decimal_places=5)
+    jump = models.DecimalField(max_digits=10, decimal_places=5)
+    jump_points = models.DecimalField(max_digits=10, decimal_places=5)
+    sum_all = models.DecimalField(max_digits=10, decimal_places=5)
+
+    def __str__(self):
+        return "Fem-kamp resultat til: " + "{} {}".format(self.lifter.first_name, self.lifter.last_name)
+
+
 class Staff(Person):
     pass
 
