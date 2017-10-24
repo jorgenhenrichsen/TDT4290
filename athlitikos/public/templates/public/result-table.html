@@ -1,48 +1,22 @@
-<table class="tablesorter" id="result-table">
+{% if results %}
+    {% for result in results %}
 
-    {% if results %}
-            <thead>
+        <tr>
 
-                <tr>
-                    <th>Utøver</th>
-                    <th>Kroppsvekt</th>
-                    <th>Alder</th>
-                    <th>Klubb</th>
-                    <th>Kategori</th>
-                    <th>Arrangør</th>
-                    <th>Rykk</th>
-                    <th>Støt</th>
-                    <th>Total</th>
-                    <th>SP</th>
-                    <th>Poeng</th>
-                    <th>VP</th>
-                    <th>Veteranpoeng</th>
-                </tr>
+            <th>{{ result.lifter.first_name }} {{ result.lifter.last_name }}</th>
+            <th>{{ result.body_weight }}</th>
+            <th>{{ result.age }}</th>
+            <th>{{ result.lifter.club }}</th>
+            <th>{{ result.age_group }} {{ result.weight_class }}</th>
+            <th>{{ result.group.competition.host }}</th>
+            <th>{{ result.best_snatch.weight }}</th>
+            <th>{{ result.best_clean_and_jerk.weight }}</th>
+            <th>{{ result.total_lift }}</th>
+            <th>{{ result.sinclair_coefficient }}</th>
+            <th>{{ result.points_with_sinclair }}</th>
+            <th>{{ result.veteran_coefficient }}</th>
+            <th>{{ result.points_with_veteran }}</th>
 
-            </thead>
-
-
-            {% for result in results %}
-
-                <tr class="result-element">
-
-                    <th>{{ result.lifter.first_name }} {{ result.lifter.last_name }}</th>
-                    <th>{{ result.body_weight }}</th>
-                    <th>{{ result.age }}</th>
-                    <th>{{ result.lifter.club }}</th>
-                    <th>{{ result.age_group }} {{ result.weight_class }}</th>
-                    <th>{{ result.group.competition.host }}</th>
-                    <th>{{ result.best_snatch.weight }}</th>
-                    <th>{{ result.best_clean_and_jerk.weight }}</th>
-                    <th>{{ result.total_lift }}</th>
-                    <th>{{ result.sinclair_coefficient }}</th>
-                    <th>{{ result.points_with_sinclair }}</th>
-                    <th>{{ result.veteran_coefficient }}</th>
-                    <th>{{ result.points_with_veteran }}</th>
-
-                </tr>
-
-            {% endfor %}
-        {% endif %}
-
-</table>
+        </tr>
+    {% endfor %}
+{% endif %}
