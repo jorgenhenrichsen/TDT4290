@@ -41,12 +41,16 @@ td {
             {%endif%}
         </td>
         <th>
-        <a href="http://127.0.0.1:8000/endre-bruker/{{user.id}}" id="buttonLink">
+        <a href="http://127.0.0.1:8000/endre-bruker/{{user.id}}">
             <button>endre bruker</button></a>
         </th>
     </tr>
 </table>
 {% endfor %}
+<hr>
+<br>
+<a href="http://127.0.0.1:8000/register/">
+            <button>opprett ny bruker</button></a>
 
 {% endblock %}
 

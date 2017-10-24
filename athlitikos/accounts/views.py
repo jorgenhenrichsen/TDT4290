@@ -14,40 +14,27 @@ from django.conf import settings
 
 User = get_user_model()
 
-@login_required(login_url='/login')
+@login_required(login_url='/login') # bruk denne til å erstatt; < if not request.user.is_authenticated: >
 def admin(request):
+    if (not request.user.is_club_admin or not request.user.is_staff):
+        return HttpResponseRedirect('/login2')
     return render(request, 'accounts/admin.html')
-
-def home(request):
-    if request.user.is_authenticated():
-        print(request.user.email)
-    return render(request, "base.html", {})
-
 
 def display_users_view(request, *args, **kwargs):
     if not request.user.is_authenticated:
        return HttpResponseRedirect("/login2")
     if not request.user.is_club_admin:
-        return HttpResponseRedirect("/home2")
+        return HttpResponseRedirect("/home")
     user_qs = User.objects.all()
     userlist = [] #ikke akkurat standard django, men YOLO
     for user_object in user_qs:
         userlist.append(user_object)
     return render(request, "accounts/display_users.html", {'userlist': userlist})
 
-    #UserModelFormset = modelformset_factory(User,form=UsersDisplayForm)
-    #formset = UserModelFormset(request.POST or None, queryset=User.objects.all())
-    #if formset.is_valid():
-    #    for form in formset:
-    #        user_obj = form.save()
-    #        if form.cleaned_data:
-    #            user_obj.save()
-    #return render(request, "accounts/display_users.html", {'formset': formset})
-
 def edit_user_view(request, id=None, *args, **kwargs):
     if( not id or not request.user.is_authenticated):
         return HttpResponseRedirect('/home')
-    if not (request.user.is_club_admin or request.user.is_staff):
+    if (not request.user.is_club_admin or not request.user.is_staff):
         return HttpResponseRedirect('/login2')
     user_object_qs = User.objects.filter(id=id)
     if not user_object_qs.exists():
@@ -60,12 +47,15 @@ def edit_user_view(request, id=None, *args, **kwargs):
 
 #By Admin
 def register(request,*args,**kwargs):
+    if (not id or not request.user.is_authenticated):
+        return HttpResponseRedirect('/home')
+    if (not request.user.is_club_admin or not request.user.is_staff):
+        return HttpResponseRedirect('/login2')
     form = UserCreationByAdminForm(request.POST or None)
     if form.is_valid():
         user_obj = form.save()
         from_email = settings.EMAIL_HOST_USER
         security_qs = Security.objects.filter(user=user_obj)
-        ps_key = ""
         html_message = ""
         if security_qs.exists() and security_qs.count() == 1:
             security_obj = security_qs.first()
@@ -77,7 +67,7 @@ def register(request,*args,**kwargs):
             url = "http://127.0.0.1:8000/reset-password/" + ps_key
             html_message += '<a href="' + url + '"> Trykk her for å legge inn passord </a>'
             send_mail(subject=subject, from_email=from_email, recipient_list=[email], message=msg,html_message=html_message)
-            return HttpResponseRedirect("/home2")
+            return HttpResponseRedirect("/brukere")
 
     return render(request,'accounts/register.html',{"form":form})
 
@@ -96,7 +86,6 @@ def user_login(request, *args, **kwargs):
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect("/login2")
-
 
 def reset_password_mailer_view(request, *args,**kwargs):
     form = UserSetResetPasswordForm(request.POST or None)
@@ -130,7 +119,7 @@ def set_password_view(request, code=None, *args,**kwargs):
                 form.save()
                 user_obj.is_active = True
                 user_obj.save()
-                return HttpResponseRedirect("/home2")
+                return HttpResponseRedirect("/home")
             return render(request, "accounts/reset_password.html", {'form':form})
     messages.warning(request, 'ugyldig kode eller allerde brukt')  # brukt opp
-    return HttpResponseRedirect("/home2", )
+    return HttpResponseRedirect("/home", )

@@ -1,4 +1,9 @@
+<style>
+#logginn{
+    width: 100px;
+}
+</style>
 <form method="Post" action='.'> {%csrf_token%}
     {{form.as_p}}
-<input type="submit" value="Submit" class="btn btn-primary">
+<input type="submit" value="Submit" class="btn btn-primary" id="logginn">
 </form>
