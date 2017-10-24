@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{%  block head %}
+    <link rel="stylesheet" type="text/css" href="/static/css/home.css">
+{% endblock %}
+
+{% block content %}
+    <table class="judgetable" border="1">
+            <tr>
+                <td>Navn</td>
+                <td>Dommergrad</td>
+                <td>Deltatt på</td>
+            </tr>
+            {% for entry in judgelist %}
+                <tr>
+                    <td>{{ entry.judge.fullname }}</td>
+                    <td>{{ entry.judge.judge_level }}</td>
+                    <td>
+                        <table>
+                            <tr>
+                                <td>Konkurranse:</td>
+                                <td>Dato:</td>
+                                <td>Gruppenummer:</td>
+                            </tr>
+
+                            {% for competition in entry.competitions %}
+                                <tr>
+                                    <td>{{ competition.competition.competition_category }}</td>
+                                    <td>Dato: {{ competition.competition.start_date}}</td>
+                                    <td>Gruppe nummer: {{ competition.group_number}}</td>
+                                </tr>
+                        {% endfor %}
+                        </table>
+                    </td>
+                </tr>
+            {% endfor %}
+    </table>
+{% endblock %}

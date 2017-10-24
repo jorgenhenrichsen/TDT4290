@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'userRoles',
     'accounts',
     'public',
+    'easy_pdf',
 ]
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
