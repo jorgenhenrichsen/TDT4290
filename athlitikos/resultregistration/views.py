@@ -88,6 +88,31 @@ def staff_detail(request, pk):
     })
 
 
+@login_required(login_url='/login')
+def list_all_judges(request):
+    list_of_judges = Judge.objects.all()
+    judgelist = []
+    for judge in list_of_judges:
+        entry = {}
+        entry['judge'] = judge
+
+        role_leader = judge.groups_competition_leader.all()
+        role_jury = judge.groups_juries.all()
+        role_judge = judge.groups_judges.all()
+        role_techcontroller = judge.groups_technical_controller.all()
+        role_chiefmarshall = judge.groups_chief_marshall.all()
+        role_timekeeper = judge.groups_time_keeper.all()
+
+        all_competitions = role_leader | role_jury | role_judge | \
+            role_techcontroller | role_chiefmarshall | role_timekeeper
+
+        entry['competitions'] = all_competitions.distinct()
+
+        judgelist.append(entry)
+
+    return render(request, 'resultregistration/judge_list.html', {'judgelist': judgelist})
+
+
 def get_best_snatch_for_result(request, pk):
     all_attempts = MoveAttempt.objects.filter(parent_result=pk, move_type='Snatch')
     best_attempt = 0
@@ -175,4 +200,12 @@ def reject_group(request, pk):
     group = Group.objects.get(pk=pk)
     group.status = "Ikke godkjent"
     group.save()
+    return redirect('/home/')
+
+
+def delete_group(request, pk):
+    group = Group.objects.get(pk=pk)
+    results = Result.objects.filter(group=group)
+    group.delete()
+    results.delete()
     return redirect('/home/')

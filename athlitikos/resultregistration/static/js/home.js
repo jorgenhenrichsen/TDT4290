@@ -13,6 +13,6 @@ $(function(){
 
 
 function deletePendingGroup(id) {
-    alert("Delete"+ id);
+    window.location.href = "/result/delete/" + id;
 }
 
