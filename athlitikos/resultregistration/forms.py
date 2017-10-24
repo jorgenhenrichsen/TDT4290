@@ -1,5 +1,5 @@
 from django import forms
-from .models import Competition, Club, Group, Result, MoveAttempt, Lifter, Judge, Staff
+from .models import Competition, Club, Group, Result, MoveAttempt, Lifter, Judge, Staff, InternationalResult
 from django.utils import timezone
 
 YEAR_CHOICES = [y for y in range(1900, timezone.now().year)]
@@ -13,6 +13,7 @@ class LifterForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(LifterForm, self).__init__(*args, **kwargs)
         self.fields['birth_date'].widget = forms.widgets.SelectDateWidget(years=YEAR_CHOICES)
+
 
 
 class JudgeForm(forms.ModelForm):
@@ -64,4 +65,10 @@ class ResultForm(forms.ModelForm):
 class MoveAttemptForm(forms.ModelForm):
     class Meta:
         model = MoveAttempt
+        fields = '__all__'
+
+
+class InternationalResultForm(forms.ModelForm):
+    class Meta:
+        model = InternationalResult
         fields = '__all__'

@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from datetime import date
 from .models import Lifter, Judge, Staff, Result, MoveAttempt, Group
-from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm, CompetitonForm
+from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm, CompetitonForm, \
+    InternationalResultForm
 
 
 @login_required(login_url='/login')
@@ -48,6 +49,18 @@ def add_new_judge(request):
             return redirect(reverse('resultregistration:judge_detail', args=[judge.pk]))
     form = JudgeForm()
     return render(request, 'resultregistration/edit_person.html', {'title': 'Legg til ny dommer', 'form': form})
+
+@login_required(login_url='/login')
+def add_new_internationalresult(request):
+
+    if request.method == "POST":
+        form = InternationalResultForm(request.POST)
+        if form.is_valid():
+            international_result = form.save()
+            #return redirect(reverse('resultregistration:lifter_detail', args=[lifter.pk]))
+    form = InternationalResultForm()
+    return render(request, 'resultregistration/edit_person.html', {'title': 'Legg til nytt internasjonalt resultat',
+                                                                   'form': form})
 
 
 def judge_detail(request, pk):

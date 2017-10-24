@@ -173,6 +173,31 @@ class PentathlonResult(models.Model):
     def __str__(self):
         return "Fem-kamp resultat til: " + "{} {}".format(self.lifter.first_name, self.lifter.last_name)
 
+class InternationalLifter(Person):
+
+    birth_date = models.DateField(verbose_name='Fødselsdato', null=True)
+    gender = models.CharField(max_length=10, verbose_name='Kjønn', choices=Gender.choices(), null=True)
+    country = models.CharField(max_length=100, verbose_name='Land')
+
+
+
+class InternationalResult(models.Model):
+
+    lifter = models.ForeignKey(InternationalLifter, null=True)
+
+    body_weight = models.FloatField(verbose_name='Kroppsvekt', null=True)
+
+    # International group can be (for example) "A" or "B"
+    group = models.CharField(max_length=5, verbose_name='kategori')
+
+    snatch = models.IntegerField()
+    clean_and_jerk = models.IntegerField()
+    total = models.IntegerField()
+
+    def __str__(self):
+        return "Internasjonalt resultat til: " + "{} {}".format(self.lifter.first_name, self.lifter.last_name)
+
+
 
 class Staff(Person):
     pass

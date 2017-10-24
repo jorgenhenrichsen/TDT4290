@@ -19,4 +19,6 @@ urlpatterns = [
     url(r'^result/reject/(?P<pk>\d+)/$', views.reject_group, name='reject_group'),
     url(r'^result/delete/(?P<pk>\d+)/$', views.delete_group, name='delete_group'),
     url(r'^home/admin/', views.home_admin, name='home_admin'),
+    url(r'^internationalresult/new/$', views.add_new_internationalresult,
+        name='add_new_internationalresult')
 ]
