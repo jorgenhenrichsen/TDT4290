@@ -14,7 +14,8 @@ def home(request):
 
 @login_required(login_url='/login')
 def home_admin(request):
-    return render(request, 'resultregistration/home_admin.html')
+    groups = Group.objects.all()
+    return render(request, 'resultregistration/home_admin.html', {'pending_groups': groups})
 
 
 def lifter_detail(request, pk):
