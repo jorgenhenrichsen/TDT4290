@@ -45,9 +45,12 @@ class CustomUserManager(BaseUserManager):
         user.is_active = True
         user.is_club_admin = True
         user.save(using=self._db)
-        group = Group.objects.get(name='Admin')
-        user.groups.add(group)
-        group.save()
+
+        #alternative security tokens
+        #group = Group.objects.get(name='ClubAdmin')
+        #user.groups.add(group)
+        #group.save()
+
         return user
 
 
@@ -57,7 +60,7 @@ class CustomUser(AbstractBaseUser):
         max_length=255,
         unique=True,
     )
-    is_active = models.BooleanField(default=False) # en lovlig bruker
+    is_active = models.BooleanField(default=False) # en aktiv bruker
     is_club_admin = models.BooleanField(default=False) # klubb administrator godkjenner stevner ect
     is_staff = models.BooleanField(default=False) # for at man skal få adgang til /admin, var opprinelig en property
     is_admin = models.BooleanField(default=False) # database admininistrator
@@ -66,8 +69,9 @@ class CustomUser(AbstractBaseUser):
 
     USERNAME_FIELD = 'email'
 
+    #Hvis man skal kreve at bruker oppgir data til et spesifikk felt
     #REQUIRED_FIELDS = ['date_of_birth']
-
+    #metoder som django krever
     def get_full_name(self):
         # The user is identified by their email address
         return self.email
@@ -80,9 +84,7 @@ class CustomUser(AbstractBaseUser):
         return self.email
 
     def has_perm(self, perm, obj=None):
-        "Does the user have a specific permission?"
-        # Simplest possible answer: Yes, always
-        return True
+        return self.is_club_admin
 
     def has_module_perms(self, app_label):
         "Does the user have permissions to view the app `app_label`?"

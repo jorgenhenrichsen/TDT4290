@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Oversikt over brukere i systemet</h1>
+{% for user in userlist %}
+<style>
+th, td, p {
+    border: 1px solid black;
+}
+td {
+  width: 200px;
+}
+</style>
+<table>
+    <br>
+    <tr>
+        <th>Email</th>
+        <th>Sist logget inn</th>
+        <th>Bruker er aktiv</th>
+        <th>Rolle</th>
+    </tr>
+    <tr>
+        <td>
+            {{user.email}}
+        </td>
+        <td>
+            {{user.last_login}}
+        </td>
+        <td>
+            {%if user.is_active == True %}
+            har satt passord
+            {%else%}
+            ikke satt passord
+            {%endif%}
+        </td>
+        <td>
+            {%if user.is_club_admin == True %}
+            Administrator
+            {%else%}
+            Klubbrepresentant
+            {%endif%}
+        </td>
+        <th>
+        <a href="http://127.0.0.1:8000/endre-bruker/{{user.id}}" id="buttonLink">
+            <button>endre bruker</button></a>
+        </th>
+    </tr>
+</table>
+{% endfor %}
+
+{% endblock %}
+

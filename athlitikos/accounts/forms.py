@@ -1,5 +1,6 @@
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django import forms
+from accounts.utils import code_generator
 #from accounts.models import CustomUser works but not django convention
 
 #this gets the user model regardless of customization
@@ -10,7 +11,7 @@ User = get_user_model()
 
 class UserLoginForm(forms.Form):
     email = forms.EmailField(label="Epost")
-    password = forms.CharField(label='password', widget=forms.PasswordInput)
+    password = forms.CharField(label='passord', widget=forms.PasswordInput)
 
     def clean(self, *args, **kwargs): #to only the form
         email = self.cleaned_data.get("email")
@@ -26,7 +27,15 @@ class UserLoginForm(forms.Form):
         #if not our_user:
         #    raise forms.ValidationError("feil epost eller passord") #does the same as code above
 
+class UserSetResetPasswordForm(forms.Form):
+    email = forms.EmailField(label="Epost")
+    def clean(self, *args, **kwargs):  # to only the form
+        email = self.cleaned_data.get("email")
+        user_obj = User.objects.filter(email=email).first()
+        if not user_obj:
+            raise forms.ValidationError("Feil eller inaktiv epostaddresse")#wrong email
 
+#if User wants to create it self, optinal if needed by client.
 class UserCreationForm(forms.ModelForm):
     """A form for creating new users. Includes all the required
     fields, plus a repeated password."""
@@ -53,6 +62,21 @@ class UserCreationForm(forms.ModelForm):
             user.save()
         return user
 
+class UserCreationByAdminForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+        fields = ('email','club')
+
+    def save(self, commit=True):
+        # Save the provided password in hashed format
+        user = super(UserCreationByAdminForm, self).save(commit=False)
+        user.set_password(code_generator())
+        if commit:
+            user.save()
+        return user
+
+
 class UserChangePasswordForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
@@ -75,6 +99,17 @@ class UserChangePasswordForm(forms.ModelForm):
         model = User
         #må eksludere mange felt så ikke dette kan endres av bruker
         exclude = ('email', 'club', 'is_active', 'is_admin','is_staff','password', 'is_club_admin', 'last_login')
+
+class UsersEditForm(forms.ModelForm):
+    def save(self, commit=True):
+        user_obj = self.instance
+        if commit:
+            user_obj.save()
+        return user_obj
+    class Meta:
+        model = User
+        include = ('club', 'is_club_admin',)
+        exclude = ('email','last_login','is_admin', 'is_staff', 'password', 'is_active')
 
 
 class UserChangeForm(forms.ModelForm):
