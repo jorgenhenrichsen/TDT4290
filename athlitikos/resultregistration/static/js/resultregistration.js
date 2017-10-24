@@ -84,12 +84,13 @@ function addRow(elem) {
         success: function(data){
             // console.log($myDiv)
             $myDiv.append(data)
+            data.trigger()
             // $(data).trigger('create')
             // $myDiv.page()
             // console.log($myDiv, $myDiv.children.length.toString())
             // console.log('id: ',$myDiv,' length: '+$myDiv.children.length.toString())
             // console.log('success')
-            
+
             numberOfRows ++
         },
         error: function () {
@@ -97,6 +98,11 @@ function addRow(elem) {
         }
     })
 }
+
+// function getCompetitionId(div){
+//     var competitionId = $('#competition_id')
+//     competitionId.value = $('#competition_form').getAttribute('')
+// }
 
 function initiateResultRows(div){
     var $table = $(div)
@@ -108,40 +114,117 @@ function initiateResultRows(div){
     }
 }
 $(document).ready(function() {
-    var $myForm = $('.ajax_form')
-    $myForm.submit(function (event) {
-        console.log('submit')
-        event.preventDefault();
-        var $formData = $($myForm).serialize()
-        var $thisURL = $myForm.attr('data-url') || window.location.href // or set your own url
-        // console.log($formData, JSON.stringify($thisURL))
+    // var $myForm = $('.ajax_form')
+    // $myForm.submit(function (event) {
+    //     console.log('submitting')
+    //     event.preventDefault();
+    //     var $formData = $($myForm).serialize()
+    //     var $thisURL = $myForm.attr('data-url') || window.location.href // or set your own url
+    //     console.log($formData, JSON.stringify($thisURL))
+    //     console.log($myForm)
+    //     if ($myForm.hasClass('.group_form')) {
+    //         $.ajax({
+    //             method: "POST",
+    //             url: $thisURL,
+    //             data: $formData,
+    //             success: function () {
+    //             },
+    //             error: function () {
+    //             },
+    //             complete: function () {
+    //                 console.log('complete')
+    //             }
+    //         })
+    //     } else if ($myForm.hasClass('competition_form')) {
+    //         $.ajax({
+    //             method: "POST",
+    //             url: $thisURL,
+    //             dataType: 'html',
+    //             data: $formData,
+    //             success: function (json) {
+    //
+    //             },
+    //             error: function () {
+    //             },
+    //             complete: function () {
+    //                 console.log('complete')
+    //             }
+    //         })
+    //     }
+    //
+    //
+    // })
+
+    var $competition_form = $('.competition_form')
+    $competition_form.submit(function (event){
+        console.log('submitting competition')
+        event.preventDefault()
+        var $formData = $($competition_form).serialize()
+        var $thisURL = $competition_form.attr('data-url')
         $.ajax({
             method: "POST",
             url: $thisURL,
+            dataType: 'html',
             data: $formData,
-            success: handleFormSuccess,
-            error: handleFormError,
+            success: function(json){
+                    var jsonObj = JSON.parse(json)
+                    console.log('id:', jsonObj.competition_id)
+                    if (jsonObj.competition_id !== 0) {
+                        // console.log('id:', jsonObj.competition_id)
+                        $('#competition_id').val(jsonObj.competition_id)//json.getAttribute('competition_id')
+                        // console.log($('#competition_id').)
+                    }
+            },
+            error: function(){},
             complete: function () {
-                console.log('eh?')
+                console.log('complete')
             }
         })
+    })
 
+    var $group_form = $('.group_form')
+    $group_form.submit(function (event) {
+        console.log('submitting group')
+        event.preventDefault()
+        var $formData = $($group_form).serialize()
+        var $thisURL = $group_form.attr('data-url')
+        $.ajax({
+            method: "POST",
+            url: $thisURL,
+            dataType: 'html',
+            data: $formData,
+            success: function(){},
+            error: function(){},
+            complete: function () {
+                console.log('complete')
+            }
+        })
     })
 });
-
-function handleFormSuccess(data, textStatus, jqXHR){
-    console.log('youhooo')
-    // console.log(data)
-    // console.log(textStatus)
-    // console.log(jqXHR)
-    // $myForm.reset(); // reset form data
-}
-
-function handleFormError(jqXHR, textStatus, errorThrown){
-    console.log(jqXHR)
-    // console.log(textStatus)
-    // console.log(errorThrown)
-}
+// function group_success(data) {
+//
+// }
+//
+// function competition_success(json){
+//     var jsonObj = JSON.parse(json)
+//     console.log('id:',jsonObj.competition_id)
+//     if(jsonObj.competition_id !== 0){
+//         $('#competition_id').value = jsonObj.competition_id//json.getAttribute('competition_id')
+//     }
+// }
+// function handleFormSuccess(data, textStatus, jqXHR){
+//     console.log('youhooo')
+//     // console.log(data)
+//     // console.log(textStatus)
+//     // console.log(jqXHR)
+//     // $myForm.reset(); // reset form data
+// }
+//
+// function handleFormError(jqXHR, textStatus, errorThrown){
+//     console.log(jqXHR)
+//     // console.log(textStatus)
+//     // console.log(errorThrown)
+// }
 // function ajaxSubmit(node) {
 //     console.log('ahaajsubmit')
 // // $(document).ready(function(){

@@ -138,9 +138,10 @@ def get_age_for_lifter_in_result(request, pk):
 
 def result_view(request):
     # form = forms.M
-    rowId = request.POST.get('rowId')
+    row_id = request.POST.get('row_id')
     return render(request, 'resultregistration/result_form.html',
-                  context={'ResultForm' : PendingResultForm, 'rowId' : rowId})
+                  context={'ResultForm': PendingResultForm, 'row_id': row_id})
+
 
 class CompetitionFormView(AjaxFormMixin, FormView):
     form_class = CompetitonForm
@@ -148,29 +149,27 @@ class CompetitionFormView(AjaxFormMixin, FormView):
     success_url = '/form-success/'
 
     def post(self, request, *args, **kwargs):
-        competition = CompetitonForm(request.POST)
+        competition_form = CompetitonForm(request.POST)
         # competition = self.request.POST
         # print('enters post')
         # print(competition)
-        if competition.is_valid():
-            data = competition.cleaned_data
+        if competition_form.is_valid():
+            data = competition_form.cleaned_data
             # print(competition.cleaned_data)
-            print('competition valid')
+            print('\ncompetition valid\n', data)
             competition_category = data['competition_category']
             start_date = data['start_date']
             location = data['location']
             host = data['host']
             # print(competition_category, start_date, location)
             # print(Competition.objects.filter())
-            if not Competition.objects.filter(competition_category=competition_category,
-                                              start_date=start_date,
-                                              location=location,
-                                              host=host):
-                Competition.objects.create(competition_category=competition_category,
-                                           start_date=start_date,
-                                           location=location,
-                                           host=host)
-        return render(request, 'resultregistration/resultregistration.html')
+            competition = Competition.objects.get_or_create(competition_category=competition_category,
+                                                            host=host,
+                                                            location=location,
+                                                            start_date=start_date,)
+            print('competition: \n', competition, '\n')
+            return JsonResponse({'competition_id': competition[0].pk})
+        return render(request, 'resultregistration/resultregistration.html', context={'competition_id': 0})
 
 
 class GroupFormView(AjaxFormMixin, FormView):
@@ -179,13 +178,21 @@ class GroupFormView(AjaxFormMixin, FormView):
     success_url = '/form-success/'
 
     def post(self, request, *args, **kwargs):
-        group = GroupForm(request.POST)
-        print('group in post', group.is_valid(), group.cleaned_data)
-        if group.is_valid():
-            #TODO: CHECK THAT GROUP IS NOT IN DB, AND CREATE
+        groupForm = GroupForm(request.POST)
+        competition_id = request.POST.get('competition_id')
+        print('\n {} \n'.format(competition_id))
+        print('group in post', groupForm.is_valid(), groupForm.cleaned_data)
+        print(Group.objects.filter(competition=competition_id))
+        if groupForm.is_valid() and competition_id >0:
+            # TODO: CHECK THAT GROUP IS NOT IN DB, AND CREATE
+            print('group valid')
             # if not
-            print(group.cleaned_data)
-            pass
+            # print(group.cleaned_data)
+            data = groupForm.cleaned_data
+            group_number = data['group_number']
+            competition = data['competition']
+            # if not Group.objects.filter(competition=competition_id, )
+
         return render(request, 'resultregistration/resultregistration.html')
 
 
@@ -199,6 +206,7 @@ class PendingResultFormView(AjaxFormMixin, FormView):
         print('enters post')
         if result.is_valid():
             print(result.cleaned_data, 'we have done it')
+
         return render(request, 'resultregistration/resultregistration.html')
     # def add_competition_if_not_exists(self):
     #

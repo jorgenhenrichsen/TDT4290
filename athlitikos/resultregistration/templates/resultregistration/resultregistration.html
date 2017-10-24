@@ -12,7 +12,7 @@
 
     <h2>Resultatrgistrering</h2>
 
-    <form class="ajax_form" id="competition_form" method="POST" action="."  data-url="competition/new/">
+    <form class="ajax_form competition_form" id="competition_form" method="POST" action="."  data-url="competition/new/">
         {% csrf_token %}
         {{ CompetitonForm.as_p|safe }}
         <button type="submit">SUB</button>
@@ -25,8 +25,10 @@
         <div class="results" id="result_registration_table">
 {#            <div class="result" id="result0">#}
 {#                Result1 here#}
+{#            {%  for x in 'xxxxxxxxxx' %}#}
             {% include 'resultregistration/result_form.html' %}
 {#            </div>#}
+{#            {% endfor %}#}
         </div>
 
         <button id="initiate" onclick="initiateResultRows(this.parentNode.children[0])">Initialize</button>
@@ -34,10 +36,15 @@
         <button onclick="addRow(this.parentNode.children[0])">Ny rad</button>
     </div>
 
-    <form class="ajax_form" id="group_form" method="post" action="." data-url="group/new">
+    <form class="group_form ajax_form" id="group_form" method="post" action="." data-url="group/new">
         {% csrf_token %}
+        <p>
+            <input type="hidden" id="competition_id" name="competition_id" required value="-1">
+        </p>
         {{ GroupForm.as_p|safe }}
-        <button type="submit" onclick="ajaxSubmit(this.parentNode)" >SUB</button>
+        <button type="submit">SUB</button>
+{#        onclick="getCompetitionId(this.parentNode)"#}
+{#    onclick="ajaxSubmit(this.parentNode)"#}
     </form>
     <script type="text/javascript" src="{% static 'js/resultregistration.js' %}"></script>
 
