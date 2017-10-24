@@ -1,5 +1,4 @@
 from django.http import HttpResponse
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from django.views.generic import View, ListView
 from .forms import UserForm
@@ -67,8 +66,3 @@ class UserFormView(View):
 def club_official_options(request):
     # html = ''
     return HttpResponse()
-
-
-@login_required(login_url='/login')
-def admin(request):
-    return render(request, 'adminpanel.html')
