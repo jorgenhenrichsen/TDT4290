@@ -1,23 +1,63 @@
+
 {% extends 'base.html' %}
 
-{% block head %}
-        <link rel="stylesheet" type="text/css" href="/static/css/home_admin.css">
-{%  endblock %}
+{% block title %}Admin{% endblock %}
 
+{% block head %}
+
+    <link rel="stylesheet" type="text/css" href="/static/css/home.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript">
+    </script> <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="/static/js/jquery.tablesorter.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/static/js/home.js"></script>
+    <script type="text/javascript" src="/static/js/home_admin.js"></script>
+
+{% endblock %}
 
 {% block content %}
 
-    <div style="" class="button-box" >
-        <a href="{% url 'new-user'%}" id="new-user-btn">
-            <button>Brukeradministrasjon</button></a>
 
-        <a href="{% url 'resultregistration:home' %}" id="results-for-approval-btn">
-            <button>Stevner til godkjenning</button>
-        </a>
+    <button id="judge-statistic-button" onclick="judges()">Dommerstatistikk</button>
+    <button id="add-new-user-button" onclick="addNewUser()">Ny bruker</button>
+    <button id="change-existing-user-button" onclick="usersList()">Endre eksisterende bruker</button>
 
-        <button>Rediger godkjente stevner</button>
-        <button>Ikke-godkjente stevner</button>
+    <h1>Resultater</h1>
 
+    <div id="registered-results-container">
+
+        <table id="result-table" class="tablesorter">
+
+            <thead>
+
+                <tr>
+                    <th>Konkurranse</th>
+                    <th>Pulje nr.</th>
+                    <th>Dato</th>
+                    <th>Status</th>
+                    <th>Innsendt av</th>
+                    <th class="no-icon"><span class="actions">Handlinger</span></th>
+                </tr>
+
+            </thead>
+
+
+            {% for pending_group in pending_groups %}
+
+                <tr>
+                    <th>{{ pending_group.competition.competition_category }}</th>
+                    <th>{{ pending_group.group_number }}</th>
+                    <th>{{ pending_group.date }}</th>
+                    <th>{{ pending_group.status }}</th>
+                    <th>{{ pending_group.author.first_name }} {{ pending_group.author.last_name }}</th>
+                    <th>
+                        <button onclick="editPendingGroup({{ pending_group.pk }})">Endre</button>
+                        <button onclick="approvePendingGroup({{ pending_group.pk }})">Slett</button>
+                    </th>
+                </tr>
+
+            {% endfor %}
+        </table>
     </div>
+
 {% endblock %}
 
