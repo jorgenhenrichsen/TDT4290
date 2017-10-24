@@ -192,3 +192,11 @@ def reject_group(request, pk):
     group.status = "Ikke godkjent"
     group.save()
     return redirect('/home/')
+
+
+def delete_group(request, pk):
+    group = Group.objects.get(pk=pk)
+    results = Result.objects.filter(group=group)
+    group.delete()
+    results.delete()
+    return redirect('/home/')
