@@ -67,8 +67,3 @@ class UserFormView(View):
 def club_official_options(request):
     # html = ''
     return HttpResponse()
-
-
-@login_required(login_url='/login')
-def admin(request):
-    return render(request, 'adminpanel.html')
