@@ -48,4 +48,3 @@ class HomeTestCase(TestCase):
         request.user = self.club_ofc
         response = home(request)
         self.assertEqual(response.status_code, 200, "Failed to get /home/ for club official user")
-
