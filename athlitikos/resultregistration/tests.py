@@ -1,7 +1,7 @@
 from django.test import TestCase, RequestFactory
 from .models import Competition, Club
 from .validators import validate_name
-from .views import home
+from .views import home, list_all_judges
 from django.contrib.auth.models import User
 
 
@@ -34,3 +34,16 @@ class HomeTestCase(TestCase):
         request.user = self.user
         response = home(request)
         self.assertEqual(response.status_code, 200, "Failed to get /home/")
+
+
+class JudgeTestCase(TestCase):
+
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.user = User.objects.create(username="user")
+
+    def test_judge_list_view_response(self):
+        request = self.factory.get('judges')
+        request.user = self.user
+        response = list_all_judges(request)
+        self.assertEqual(response.status_code, 200, "Failed to get /judges/")
