@@ -10,3 +10,7 @@ function usersList() {
 function judges() {
     window.location.href = "/judges/";
 }
+
+function editPendingGroup(id) {
+    window.location.href = "/result/edit/" + id;
+}

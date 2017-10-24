@@ -11,9 +11,6 @@ $(function(){
     });
 });
 
-function editPendingGroup(id) {
-    window.location.href = "/result/edit/" + id;
-}
 
 function deletePendingGroup(id) {
     alert("Delete"+ id);

@@ -4,3 +4,7 @@ $(function () {
         location.href = "/resultregistration/";
     }
 });
+
+function editPendingGroup(id) {
+    window.location.href = "/resultregistration/";
+}
