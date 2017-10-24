@@ -1,6 +1,5 @@
 from django.db import models
-from .enums import MoveTypes, AgeGroup
-from .enums import Gender, JudgeLevel
+from .enums import MoveTypes, AgeGroup, Gender, JudgeLevel, Status
 from .validators import validate_name
 from django.core.validators import MaxValueValidator
 from django.core.validators import MinValueValidator
@@ -36,7 +35,7 @@ class Sinclair(models.Model):
 
 class Competition(models.Model):
     competition_category = models.CharField(max_length=100, validators=[validate_name])
-
+    host = models.CharField(max_length=100, verbose_name="Arrangør")
     location = models.CharField(max_length=100)
     start_date = models.DateField(help_text="år-måned-dag")
 
@@ -48,7 +47,7 @@ class Club(models.Model):
     club_name = models.CharField(max_length=100)
     region = models.CharField(max_length=100)
     address = models.CharField(max_length=100)
-    competition = models.ManyToManyField(Competition, blank=True)  # One Club can join many competitions
+
     def __str__(self):
         return self.club_name
 
@@ -61,20 +60,25 @@ class Group(models.Model):
 
     competitors = models.ManyToManyField('Lifter')
 
-    competition_leader = models.ForeignKey('Staff', related_name='competition_leader')
-    jury = models.ManyToManyField('Staff', related_name='jury')
+    competition_leader = models.CharField(max_length=100, verbose_name='Stevneleder')
+    # , related_name='competition_leader')
+    jury = models.CharField(max_length=500, verbose_name='Jurie', default='')  # related_name='jury'
+    # jury = models.ManyToManyField('Staff', related_name='jury')
     judges = models.ManyToManyField('Judge', related_name='judges')
-    secretary = models.ForeignKey('Staff', related_name='secretary')
-    speaker = models.ForeignKey('Staff', related_name='speaker')
-    technical_controller = models.ForeignKey('Staff', related_name='technical_controller')
-    cheif_marshall = models.ForeignKey('Staff', related_name='chief_marshall')
-    time_keeper = models.ForeignKey('Staff', related_name='time_keeper')
+    secretary = models.CharField(max_length=100, verbose_name='Sekretær')  # , related_name='secretary')
+    # secretary = models.ForeignKey('Staff', related_name='secretary')
+    speaker = models.CharField(max_length=100, verbose_name='Taler')  # , related_name='speaker')
+    # speaker = models.ForeignKey('Staff', related_name='speaker')
+    technical_controller = models.ForeignKey('Judge', verbose_name='Teknisk kontrollør',
+                                             related_name='technical_controller')
+    cheif_marshall = models.ForeignKey('Judge', verbose_name='Chief Marshall', related_name='chief_marshall')
+    time_keeper = models.ForeignKey('Judge', verbose_name='Tidtaker', related_name='time_keeper')
 
     notes = models.CharField(max_length=300, null=True, blank=True)
     records_description = models.CharField(max_length=300, null=True, blank=True)
 
     def __str__(self):
-        return '{0}, group {1}, {2}'.format(self.competition, self.group_number, self.date)
+        return '{0}, gruppe {1}, {2}'.format(self.competition, self.group_number, self.date)
 
     class Meta:
         unique_together = ('group_number', 'competition')
@@ -89,7 +93,7 @@ class Result(models.Model):
     lifter = models.ForeignKey('Lifter', null=True)    # The Lifter that this result belongs to
     body_weight = models.FloatField(verbose_name='Kroppsvekt', null=True)
     age_group = models.CharField(max_length=20, verbose_name='Kategori', choices=AgeGroup.choices(), null=True)
-    weight_class = models.IntegerField(verbose_name='Vektklasse', null=True)
+    weight_class = models.CharField(max_length=10, verbose_name='Vektklasse', null=True)
 
     sinclair_coefficient = models.FloatField(db_column='sinclair_coefficient', null=True, blank=True)
     veteran_coefficient = models.FloatField(db_column='melzer_faber_coefficient', null=True, blank=True)
@@ -108,7 +112,7 @@ class Result(models.Model):
                                             blank=True, null=True)   # points_with_sinclair*melzerfaber_coefficient
 
     def __str__(self):
-        return self.lifter.fullname() + str(self.group.competition)
+        return 'resultat for {0} i {1}'.format(self.lifter.fullname(), str(self.group))
 
 
 class MoveAttempt(models.Model):
@@ -153,3 +157,67 @@ class Judge(Person):
 
 class Staff(Person):
     pass
+
+
+class PendingResult(models.Model):
+
+    group = models.ForeignKey(Group, null=True)  # The Group that this result belongs to.
+    lifter = models.ForeignKey('Lifter', null=True)  # The Lifter that this result belongs to
+    body_weight = models.FloatField(verbose_name='Kroppsvekt', null=True)
+    age_group = models.CharField(max_length=20, verbose_name='Kategori', choices=AgeGroup.choices(), null=True)
+    weight_class = models.IntegerField(verbose_name='Vektklasse', null=True)
+
+    sinclair_coefficient = models.FloatField(db_column='sinclair_coefficient', null=True, blank=True)
+    veteran_coefficient = models.FloatField(db_column='melzer_faber_coefficient', null=True, blank=True)
+    age = models.IntegerField()
+
+    best_clean_and_jerk = models.ForeignKey('MoveAttempt', related_name='pending_best_clean_and_jerk',
+                                            db_column='best_clean_and_jerk', null=True, blank=True)
+    best_snatch = models.ForeignKey('MoveAttempt', related_name='pending_best_snatch',
+                                    db_column='best_snatch', null=True, blank=True)
+
+    total_lift = models.IntegerField(verbose_name='Total poeng',
+                                     blank=True, null=True)  # best_clean_and_jerk + best_snatch
+    points_with_sinclair = models.FloatField(verbose_name='Poeng med sinclair',
+                                             blank=True, null=True)  # total_lift*sinclair_coefficient
+    points_with_veteran = models.FloatField(verbose_name='Veteranpoeng',
+                                            blank=True, null=True)  # points_with_sinclair*melzerfaber_coefficient
+
+    def __str__(self):
+        return '{0} i {1}'.format(self.lifter.fullname(), str(self.group))
+
+
+class PendingGroup(models.Model):
+
+    sent = models.BooleanField(verbose_name='Sendt til godkjenning', default=False)
+    approved = models.CharField(max_length=20, verbose_name='Status', choices=Status.choices(), default=Status.denied)
+
+    group_number = models.IntegerField()
+    competition = models.ForeignKey(Competition)
+    date = models.DateField()
+
+    competitors = models.ManyToManyField('Lifter')
+
+    competition_leader = models.CharField(max_length=100, verbose_name='Stevneleder')
+    # , related_name='competition_leader')
+    jury = models.CharField(max_length=500, verbose_name='Jurie', default='')   # related_name='jury'
+    # jury = models.ManyToManyField('Staff', related_name='jury')
+    judges = models.ManyToManyField('Judge', related_name='pending_judges')
+    secretary = models.CharField(max_length=100, verbose_name='Sekretær')   # , related_name='secretary')
+    # secretary = models.ForeignKey('Staff', related_name='secretary')
+    speaker = models.CharField(max_length=100, verbose_name='Taler')    # , related_name='speaker')
+    # speaker = models.ForeignKey('Staff', related_name='speaker')
+    technical_controller = models.ForeignKey('Judge', verbose_name='Teknisk kontrollør',
+                                             related_name='pending_technical_controller')
+    cheif_marshall = models.ForeignKey('Judge', verbose_name='Chief Marshall', related_name='pending_chief_marshall')
+    time_keeper = models.ForeignKey('Judge', verbose_name='Tidtaker', related_name='pending_time_keeper')
+
+    notes = models.CharField(max_length=300, null=True, blank=True)
+    records_description = models.CharField(max_length=300, null=True, blank=True)
+
+    def __str__(self):
+        return '{0}, group {1}, {2} \n {3} og {4}'.format(self.competition, self.group_number, self.date,
+                                                          self.sent, self.approved)
+
+    class Meta:
+        unique_together = ('group_number', 'competition')

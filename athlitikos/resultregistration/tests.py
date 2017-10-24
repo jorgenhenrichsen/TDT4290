@@ -19,20 +19,3 @@ class CompetitionTestCase(TestCase):
 
         self.assertEqual(validate_name(norgesmesterskap.competition_category), "Norgesmesterskap")
         self.assertEqual(validate_name(norgesmesterskap.location), "Bodø")
-
-    def test_if_one_club_can_join_many_competitions(self):
-
-        """Two competitions are added to a club, to test that the many-to-many relationship works in the database"""
-
-        norgesmesterskap = Competition.objects.get(competition_category="Norgesmesterskap")
-        midtnorsk = Competition.objects.get(competition_category="Midtnorsk")
-        trondheim_il = Club.objects.get(club_name="TrondheimIL")
-
-        trondheim_il.competition.add(norgesmesterskap, midtnorsk)
-
-        # Checking for club names, which contain the competition Norgesmesterskap
-
-        club_name = Club.objects.filter(competition__competition_category="Norgesmesterskap")\
-            .values_list('club_name', flat=True).first()
-
-        self.assertEqual(club_name, "TrondheimIL")
