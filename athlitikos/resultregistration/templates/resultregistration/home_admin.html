@@ -17,9 +17,9 @@
 {% block content %}
 
 
-    <button id="judge-statistic-button">Dommerstatistikk</button>
+    <button id="judge-statistic-button" onclick="judges()">Dommerstatistikk</button>
     <button id="add-new-user-button" onclick="addNewUser()">Ny bruker</button>
-    <button id="change-existing-user-button">Endre eksisterende bruker</button>
+    <button id="change-existing-user-button" onclick="usersList()">Endre eksisterende bruker</button>
 
     <h1>Resultater</h1>
 
@@ -34,6 +34,7 @@
                     <th>Pulje nr.</th>
                     <th>Dato</th>
                     <th>Status</th>
+                    <th>Innsendt av</th>
                     <th class="no-icon"><span class="actions">Handlinger</span></th>
                 </tr>
 
@@ -47,6 +48,7 @@
                     <th>{{ pending_group.group_number }}</th>
                     <th>{{ pending_group.date }}</th>
                     <th>{{ pending_group.status }}</th>
+                    <th>{{ pending_group.author.first_name }} {{ pending_group.author.last_name }}</th>
                     <th>
                         <button onclick="editPendingGroup({{ pending_group.pk }})">Endre</button>
                         <button onclick="approvePendingGroup({{ pending_group.pk }})">Slett</button>

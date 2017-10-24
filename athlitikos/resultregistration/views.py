@@ -8,8 +8,10 @@ from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm
 
 @login_required(login_url='/login')
 def home(request):
-    # TODO: This should redirect to the correct homepage for the logged in user. Admin or club official.
-    return None
+    if request.user.groups.all()[0].name == 'Admin':
+        return home_admin(request)
+    elif request.user.groups.all()[0].name == 'ClubOfficial':
+        return home_club_official(request)
 
 
 @login_required(login_url='/login')
