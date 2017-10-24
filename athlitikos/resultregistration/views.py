@@ -12,6 +12,11 @@ def home(request):
     return render(request, 'resultregistration/home.html', {'pending_groups': groups})
 
 
+@login_required(login_url='/login')
+def home_admin(request):
+    return render(request, 'resultregistration/home_admin.html')
+
+
 def lifter_detail(request, pk):
     lifter = get_object_or_404(Lifter, pk=pk)
     return render(request, 'resultregistration/lifter_detail.html',
