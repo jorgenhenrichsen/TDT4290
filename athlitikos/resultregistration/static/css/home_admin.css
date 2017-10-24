@@ -9,6 +9,14 @@ button{
     font-size: large;
 }
 
-#buttonLink {
+#new-user-btn {
     text-decoration: none;
+}
+
+#results-for-approval-btn {
+    text-decoration: none;
+}
+
+#godkjenn-skjema-btn {
+
 }

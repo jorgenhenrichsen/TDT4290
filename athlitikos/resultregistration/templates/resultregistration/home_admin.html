@@ -1,16 +1,20 @@
 {% extends 'base.html' %}
 
 {% block head %}
-        <link rel="stylesheet" type="text/css" href="/static/usermanagement/adminpanel.css">
+        <link rel="stylesheet" type="text/css" href="/static/css/home_admin.css">
 {%  endblock %}
 
 
 {% block content %}
 
     <div style="" class="button-box" >
-        <a href="http://127.0.0.1:8000/ny-bruker/" id="buttonLink">
+        <a href="{% url 'new-user'%}" id="new-user-btn">
             <button>Brukeradministrasjon</button></a>
-        <button>Stevner til godkjenning</button>
+
+        <a href="{% url 'resultregistration:home' %}" id="results-for-approval-btn">
+            <button>Stevner til godkjenning</button>
+        </a>
+
         <button>Rediger godkjente stevner</button>
         <button>Ikke-godkjente stevner</button>
 
