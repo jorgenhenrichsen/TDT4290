@@ -1,5 +1,5 @@
 from django.test import TestCase, RequestFactory
-from .models import Competition, Club, Judge, Group, Lifter
+from .models import Competition, Club
 from .validators import validate_name
 from .views import home, list_all_judges
 from django.contrib.auth.models import User
@@ -34,6 +34,7 @@ class HomeTestCase(TestCase):
         request.user = self.user
         response = home(request)
         self.assertEqual(response.status_code, 200, "Failed to get /home/")
+
 
 class JudgeTestCase(TestCase):
 

@@ -94,7 +94,9 @@ def list_all_judges(request):
         role_chiefmarshall = judge.groups_chief_marshall.all()
         role_timekeeper = judge.groups_time_keeper.all()
 
-        all_competitions = role_leader | role_jury | role_judge | role_techcontroller | role_chiefmarshall | role_timekeeper
+        all_competitions = role_leader | role_jury | role_judge | \
+            role_techcontroller | role_chiefmarshall | role_timekeeper
+
         entry['competitions'] = all_competitions.distinct()
 
         judgelist.append(entry)
