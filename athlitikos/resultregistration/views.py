@@ -65,18 +65,17 @@ def add_new_internationalresult(request):
     return render(request, 'resultregistration/new_international_result.html',
                   {'title': 'Legg til nytt internasjonalt resultat', 'form': form})
 
+
 def add_new_international_group(request):
 
     if request.method == "POST":
         form = InternationalGroupForm(request.POST)
         if form.is_valid():
-            international_group = form.save()
             return redirect('resultregistration:add_new_internationalresult')
 
     form = InternationalGroupForm()
     return render(request, 'resultregistration/new_international_group.html',
                   {'title': 'Legg til ny internasjonal pulje', 'form': form})
-
 
 
 def international_result_detail(request, pk):
@@ -85,17 +84,17 @@ def international_result_detail(request, pk):
 
     return render(request, 'resultregistration/international_result_detail.html',
                   context={'lifter': international_result.__str__(),
-                            'body_weight': international_result.body_weight,
-                            'age_group': international_result.age_group,
-                            'weight_class': international_result.weight_class,
-                            'sinclair_coefficient': international_result.sinclair_coefficient,
-                            'veteran_coefficient': international_result.veteran_coefficient,
-                            'age': international_result.age,
-                            'best_clean_and_jerk': international_result.best_clean_and_jerk,
-                            'best_snatch': international_result.best_snatch,
-                            'total_lift': international_result.total_lift,
-                            'points_with_sinclair': international_result.points_with_sinclair,
-                            'points_with_veteran': international_result.points_with_veteran})
+                           'body_weight': international_result.body_weight,
+                           'age_group': international_result.age_group,
+                           'weight_class': international_result.weight_class,
+                           'sinclair_coefficient': international_result.sinclair_coefficient,
+                           'veteran_coefficient': international_result.veteran_coefficient,
+                           'age': international_result.age,
+                           'best_clean_and_jerk': international_result.best_clean_and_jerk,
+                           'best_snatch': international_result.best_snatch,
+                           'total_lift': international_result.total_lift,
+                           'points_with_sinclair': international_result.points_with_sinclair,
+                           'points_with_veteran': international_result.points_with_veteran})
 
 
 def judge_detail(request, pk):
@@ -105,8 +104,6 @@ def judge_detail(request, pk):
         # 'birth_date': judge.birth_date.strftime('%Y-%m-%d'),
         'level': judge.judge_level,
     })
-
-
 
 
 @login_required(login_url='/login')

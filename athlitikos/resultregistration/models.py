@@ -192,7 +192,7 @@ class InternationalGroup(models.Model):
 
 class InternationalResult(models.Model):
 
-    group = models.ForeignKey(InternationalGroup, null=True, verbose_name='Pulje')  # The Group that this result belongs to.
+    group = models.ForeignKey(InternationalGroup, null=True, verbose_name='Pulje')
     lifter = models.ForeignKey('Lifter', null=True, verbose_name='Utøver')  # The Lifter that this result belongs to
     body_weight = models.FloatField(verbose_name='Kroppsvekt', null=True)
     age_group = models.CharField(max_length=20, verbose_name='Kategori', choices=AgeGroup.choices(), null=True)
@@ -202,7 +202,8 @@ class InternationalResult(models.Model):
     veteran_coefficient = models.FloatField(db_column='melzer_faber_coefficient', null=True, blank=True)
     age = models.IntegerField(null=True)
 
-    best_clean_and_jerk = models.ForeignKey('MoveAttempt', db_column='best_clean_and_jerk', related_name='international_best_clean',
+    best_clean_and_jerk = models.ForeignKey('MoveAttempt', db_column='best_clean_and_jerk',
+                                            related_name='international_best_clean',
                                             null=True, blank=True)
     best_snatch = models.ForeignKey('MoveAttempt', db_column='best_snatch', related_name='international_best_snatch',
                                     null=True, blank=True)
@@ -214,10 +215,8 @@ class InternationalResult(models.Model):
     points_with_veteran = models.FloatField(verbose_name='Veteranpoeng',
                                             blank=True, null=True)  # points_with_sinclair*melzerfaber_coefficient
 
-
     def __str__(self):
         return "Internasjonalt resultat til: " + "{} {}".format(self.lifter.first_name, self.lifter.last_name)
-
 
 
 class Staff(Person):

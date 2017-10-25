@@ -16,7 +16,6 @@ class LifterForm(forms.ModelForm):
         self.fields['birth_date'].widget = forms.widgets.SelectDateWidget(years=YEAR_CHOICES)
 
 
-
 class JudgeForm(forms.ModelForm):
     class Meta:
         model = Judge
@@ -73,6 +72,7 @@ class InternationalResultForm(forms.ModelForm):
     class Meta:
         model = InternationalResult
         fields = '__all__'
+
 
 class InternationalGroupForm(forms.ModelForm):
     class Meta:
