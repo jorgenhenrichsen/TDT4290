@@ -173,26 +173,47 @@ class PentathlonResult(models.Model):
     def __str__(self):
         return "Fem-kamp resultat til: " + "{} {}".format(self.lifter.first_name, self.lifter.last_name)
 
-class InternationalLifter(Person):
 
-    birth_date = models.DateField(verbose_name='Fødselsdato', null=True)
-    gender = models.CharField(max_length=10, verbose_name='Kjønn', choices=Gender.choices(), null=True)
-    country = models.CharField(max_length=100, verbose_name='Land')
+class InternationalGroup(models.Model):
 
+    group_number = models.IntegerField()
+    competition = models.ForeignKey(Competition)
+    date = models.DateField()
+
+    status = models.CharField(max_length=30, default=Status.not_sent, choices=Status.choices(), null=False)
+
+    competitors = models.ManyToManyField('Lifter')
+
+    notes = models.CharField(max_length=300, null=True, blank=True)
+
+    def __str__(self):
+        return '{0}, gruppe {1}, {2}'.format(self.competition, self.group_number, self.date)
 
 
 class InternationalResult(models.Model):
 
-    lifter = models.ForeignKey(InternationalLifter, null=True)
-
+    group = models.ForeignKey(InternationalGroup, null=True, verbose_name='Pulje')  # The Group that this result belongs to.
+    lifter = models.ForeignKey('Lifter', null=True, verbose_name='Utøver')  # The Lifter that this result belongs to
     body_weight = models.FloatField(verbose_name='Kroppsvekt', null=True)
+    age_group = models.CharField(max_length=20, verbose_name='Kategori', choices=AgeGroup.choices(), null=True)
+    weight_class = models.CharField(max_length=10, verbose_name='Vektklasse', null=True)
 
-    # International group can be (for example) "A" or "B"
-    group = models.CharField(max_length=5, verbose_name='kategori')
+    sinclair_coefficient = models.FloatField(db_column='sinclair_coefficient', null=True, blank=True)
+    veteran_coefficient = models.FloatField(db_column='melzer_faber_coefficient', null=True, blank=True)
+    age = models.IntegerField(null=True)
 
-    snatch = models.IntegerField()
-    clean_and_jerk = models.IntegerField()
-    total = models.IntegerField()
+    best_clean_and_jerk = models.ForeignKey('MoveAttempt', db_column='best_clean_and_jerk', related_name='international_best_clean',
+                                            null=True, blank=True)
+    best_snatch = models.ForeignKey('MoveAttempt', db_column='best_snatch', related_name='international_best_snatch',
+                                    null=True, blank=True)
+
+    total_lift = models.IntegerField(verbose_name='Total poeng',
+                                     blank=True, null=True)  # best_clean_and_jerk + best_snatch
+    points_with_sinclair = models.FloatField(verbose_name='Poeng med sinclair',
+                                             blank=True, null=True)  # total_lift*sinclair_coefficient
+    points_with_veteran = models.FloatField(verbose_name='Veteranpoeng',
+                                            blank=True, null=True)  # points_with_sinclair*melzerfaber_coefficient
+
 
     def __str__(self):
         return "Internasjonalt resultat til: " + "{} {}".format(self.lifter.first_name, self.lifter.last_name)

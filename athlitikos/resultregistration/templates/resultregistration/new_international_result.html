@@ -1,0 +1,28 @@
+
+{% extends 'base.html' %}
+
+{% block head %}
+        <link rel="stylesheet" type="text/css" href="/static/css/personforms.css">
+        <script type="text/javascript" src="/static/js/newinternationalresult.js"></script>
+{%  endblock %}
+
+
+{% block content %}
+
+    <div class="container">
+        <h1>{{ title }}</h1>
+
+        <button onclick="newInternationalGroup()">Ny internasjonal pulje</button>
+
+        <form method="POST" class="person-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <input class="save-button" type="submit" value="Lagre">
+
+        </form>
+
+    </div>
+
+
+{% endblock %}

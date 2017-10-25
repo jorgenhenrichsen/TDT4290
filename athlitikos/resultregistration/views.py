@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from datetime import date
 from .models import Lifter, Judge, Staff, Result, MoveAttempt, Group, InternationalResult
 from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm, CompetitonForm, \
-    InternationalResultForm
+    InternationalResultForm, InternationalGroupForm
 
 
 @login_required(login_url='/login')
@@ -62,29 +62,40 @@ def add_new_internationalresult(request):
                                     args=[international_result.pk]))
 
     form = InternationalResultForm()
-    return render(request, 'resultregistration/edit_person.html',
+    return render(request, 'resultregistration/new_international_result.html',
                   {'title': 'Legg til nytt internasjonalt resultat', 'form': form})
+
+def add_new_international_group(request):
+
+    if request.method == "POST":
+        form = InternationalGroupForm(request.POST)
+        if form.is_valid():
+            international_group = form.save()
+            return redirect('resultregistration:add_new_internationalresult')
+
+    form = InternationalGroupForm()
+    return render(request, 'resultregistration/new_international_group.html',
+                  {'title': 'Legg til ny internasjonal pulje', 'form': form})
 
 
 
 def international_result_detail(request, pk):
+
     international_result = get_object_or_404(InternationalResult, pk=pk)
-    context = {
-        'fullname': international_result.__str__(),
-        'body_weight': international_result.body_weight,
-        'group': international_result.group,
-        'snatch': international_result.snatch,
-        'clean_and_jerk': international_result.clean_and_jerk,
-        'total': international_result.total
-    }
 
     return render(request, 'resultregistration/international_result_detail.html',
-                  context={'fullname': international_result.__str__(),
+                  context={'lifter': international_result.__str__(),
                             'body_weight': international_result.body_weight,
-                            'group': international_result.group,
-                            'snatch': international_result.snatch,
-                            'clean_and_jerk': international_result.clean_and_jerk,
-                            'total': international_result.total})
+                            'age_group': international_result.age_group,
+                            'weight_class': international_result.weight_class,
+                            'sinclair_coefficient': international_result.sinclair_coefficient,
+                            'veteran_coefficient': international_result.veteran_coefficient,
+                            'age': international_result.age,
+                            'best_clean_and_jerk': international_result.best_clean_and_jerk,
+                            'best_snatch': international_result.best_snatch,
+                            'total_lift': international_result.total_lift,
+                            'points_with_sinclair': international_result.points_with_sinclair,
+                            'points_with_veteran': international_result.points_with_veteran})
 
 
 def judge_detail(request, pk):

@@ -1,5 +1,6 @@
 from django import forms
-from .models import Competition, Club, Group, Result, MoveAttempt, Lifter, Judge, Staff, InternationalResult
+from .models import Competition, Club, Group, Result, MoveAttempt, Lifter, Judge, Staff, \
+    InternationalResult, InternationalGroup
 from django.utils import timezone
 
 YEAR_CHOICES = [y for y in range(1900, timezone.now().year)]
@@ -71,4 +72,9 @@ class MoveAttemptForm(forms.ModelForm):
 class InternationalResultForm(forms.ModelForm):
     class Meta:
         model = InternationalResult
+        fields = '__all__'
+
+class InternationalGroupForm(forms.ModelForm):
+    class Meta:
+        model = InternationalGroup
         fields = '__all__'
