@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'userRoles',
     'public',
     'easy_pdf',
+    'djqscsv',
 ]
 
 MIDDLEWARE = [

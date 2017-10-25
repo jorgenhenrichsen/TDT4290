@@ -4,6 +4,29 @@ from .search.search import SearchFiltering
 import athlitikos.settings as settings
 from resultregistration.enums import AgeGroup, Gender
 from easy_pdf.rendering import render_to_pdf_response
+from djqscsv import render_to_csv_response
+
+
+def generate_csv_report(request):
+    """
+    Generates a CSV file version of a search result.
+    :param request:
+    :return:
+    """
+    results = SearchFiltering.search_for_results_with_request(request).values('lifter__first_name',
+                                                                              'lifter__last_name',
+                                                                              'body_weight', 'age',
+                                                                              'lifter__club__club_name',
+                                                                              'age_group',
+                                                                              'weight_class',
+                                                                              'best_snatch',
+                                                                              'best_clean_and_jerk',
+                                                                              'total_lift',
+                                                                              'sinclair_coefficient',
+                                                                              'points_with_sinclair',
+                                                                              'veteran_coefficient',
+                                                                              'points_with_veteran')
+    return render_to_csv_response(results)
 
 
 def generate_report(request):
