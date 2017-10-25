@@ -5,8 +5,8 @@ from django.core.validators import MaxValueValidator
 from django.core.validators import MinValueValidator
 # from datetime import datetime
 # from django.db.models.signals import pre_save is usefull ;)
-from django.contrib.auth.models import User
-
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 class MelzerFaber(models.Model):
     age = models.IntegerField(verbose_name='Alder')
