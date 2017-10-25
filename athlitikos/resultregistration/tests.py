@@ -1,8 +1,8 @@
 from django.test import TestCase, RequestFactory
 from .models import Competition, Club
 from .validators import validate_name
+from django.contrib.auth.models import User, Group
 from .views import home, list_all_judges
-from django.contrib.auth.models import User
 
 
 class CompetitionTestCase(TestCase):
@@ -27,13 +27,27 @@ class HomeTestCase(TestCase):
 
     def setUp(self):
         self.factory = RequestFactory()
-        self.user = User.objects.create(username="user")
 
-    def test_home_view_response(self):
+        admin_group = Group.objects.create(name='Admin')
+        club_group = Group.objects.create(name='ClubOfficial')
+
+        self.admin = User.objects.create(username="admin")
+        self.admin.groups.add(admin_group)
+
+        self.club_ofc = User.objects.create(username="club_ofc")
+        self.club_ofc.groups.add(club_group)
+
+    def test_home_routing_to_admin(self):
         request = self.factory.get('home')
-        request.user = self.user
+        request.user = self.admin
         response = home(request)
-        self.assertEqual(response.status_code, 200, "Failed to get /home/")
+        self.assertEqual(response.status_code, 200, "Failed to get /home/ for admin user")
+
+    def test_home_routing_to_club_official(self):
+        request = self.factory.get('home')
+        request.user = self.club_ofc
+        response = home(request)
+        self.assertEqual(response.status_code, 200, "Failed to get /home/ for club official user")
 
 
 class JudgeTestCase(TestCase):
