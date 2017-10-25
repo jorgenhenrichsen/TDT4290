@@ -21,7 +21,7 @@ class UserLoginForm(forms.Form):
             raise forms.ValidationError("feil epost eller passord")#wrong email
         else:
             if not user_obj.check_password(password):
-                #log aut tries
+                # log aut tries
                 raise forms.ValidationError("feil epost eller passord")#wrong ps
         #our_user = authenticate(email=email, password=password)
         #if not our_user:

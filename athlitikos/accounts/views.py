@@ -34,7 +34,7 @@ def display_users_view(request, *args, **kwargs):
 def edit_user_view(request, id=None, *args, **kwargs):
     if( not id or not request.user.is_authenticated):
         return HttpResponseRedirect('/home')
-    if (not request.user.is_club_admin or not request.user.is_staff):
+    if (not (request.user.is_club_admin or request.user.is_staff)):
         return HttpResponseRedirect('/login2')
     user_object_qs = User.objects.filter(id=id)
     if not user_object_qs.exists():

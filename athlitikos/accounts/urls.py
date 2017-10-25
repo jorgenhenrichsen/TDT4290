@@ -5,7 +5,7 @@ from accounts.views import register, user_login,user_logout,set_password_view,re
 urlpatterns = [
 
     url(r'^adminPanel/', views.admin, name='home'),
-    url(r'^home/admin/$', views.admin, name='home'),
+    url(r'^home/admin2/$', views.admin, name='home'),
     url(r'^register/$', register),
     url(r'^login2/$', user_login),
     url(r'^logout/$', user_logout),
