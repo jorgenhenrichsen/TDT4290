@@ -41,6 +41,7 @@
         <p>
             <input type="hidden" id="competition_id" name="competition_id" required value="-1">
         </p>
+{#        {{ Groupform.comptetition.as_hidden }}#}
         {{ GroupForm.as_p|safe }}
         <button type="submit">SUB</button>
 {#        onclick="getCompetitionId(this.parentNode)"#}

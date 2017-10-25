@@ -39,26 +39,27 @@ class CompetitonForm(forms.ModelForm):
     class Meta:
         model = Competition
         fields = '__all__'
-    def add_competition_if_not_exists(self):
+    # def add_competition_if_not_exists(self):
+    #
+    #     competition = self.cleaned_data
+    #
+    #     competition_category = competition.get('competition_category'),
+    #     start_date = competition.get('start_date'),
+    #     location = competition.get('location')
+    #     print(Competition.objects.filter(competition_category=competition_category,
+    #                                       start_date=start_date,
+    #                                       location=location))
+    #     if not Competition.objects.filter(competition_category=competition_category,
+    #                                       start_date=start_date,
+    #                                       location=location):
+    #         Competition.objects.create(competition_category=competition_category,
+    #                                    start_date=start_date,
+    #                                    location=location)
+    #         print('yey object created')
+    #         return competition
+    #     else:
+    #         print('neyy, object exists')
 
-        competition = self.cleaned_data
-
-        competition_category = competition.get('competition_category'),
-        start_date = competition.get('start_date'),
-        location = competition.get('location')
-        print(Competition.objects.filter(competition_category=competition_category,
-                                          start_date=start_date,
-                                          location=location))
-        if not Competition.objects.filter(competition_category=competition_category,
-                                          start_date=start_date,
-                                          location=location):
-            Competition.objects.create(competition_category=competition_category,
-                                       start_date=start_date,
-                                       location=location)
-            print('yey object created')
-            return competition
-        else:
-            print('neyy, object exists')
 
 class ClubForm(forms.ModelForm):
     class Meta:
@@ -72,6 +73,11 @@ class GroupForm(forms.ModelForm):
         exclude = ['competition', 'records_description', 'competitors']
         # May have to remove the foreign key models
 
+
+class GroupFormV2(forms.ModelForm):
+    class Meta:
+        model = Group
+        exclude = ['competition']
 
 class ResultForm(forms.ModelForm):
     class Meta:
@@ -90,14 +96,6 @@ class MoveAttemptForm(forms.ModelForm):
 
 
 class PendingResultForm(forms.Form):
-    # weight_class = result.weight_class #forms.CharField(max_length=3)
-    # body_weight = Result.body_weight #forms.FloatField()
-    # category = Result.age_group#forms.CharField(max_length=4)
-    # birth_date = Lifter.birth_date# forms.DateField()
-    # lifter_first_name = Lifter.first_name#forms.CharField(max_length=200)
-    # lifter_last_name = Lifter.last_name  # forms.CharField(max_length=200)
-    # club = Lifter.club#forms.CharField()
-
     weight_class = forms.CharField(max_length=3)
     body_weight = forms.FloatField()
     category = forms.CharField(max_length=4)

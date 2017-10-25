@@ -19,7 +19,10 @@ urlpatterns = [
     url(r'^resultregistration/result/pending/new$', views.PendingResultFormView.as_view(), name='add_pending_result'),
     url(r'^resultregistration/competition/new/$', views.CompetitionFormView.as_view(), name='add_competition'),
     # url(r'^resultregistration/competition/new/register$', views.CompetitionFormView.as_view, name='add_competition'),
+
     url(r'^resultregistration/resultform/$', views.result_view, name='result_view'),
+    url(r'^resultregistration/groupform/$', views.group_registration, name='group_view'),
+
     url(r'^home/$', views.home, name='home'),
     url(r'^home/admin/$', views.home_admin, name='home_admin'),
     url(r'^home/clubofc/$', views.home_club_official, name='home_club_official'),

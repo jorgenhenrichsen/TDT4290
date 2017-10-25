@@ -5,7 +5,9 @@ from datetime import date
 from django.views.generic import FormView
 from .mixins import AjaxFormMixin
 from .models import Lifter, Judge, Staff, Result, MoveAttempt, Group, Competition
-from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm, CompetitonForm
+from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm
+from .forms import CompetitonForm, GroupFormV2
+
 from .forms import PendingResultForm
 from .forms import forms
 # from django.views.generic import UpdateView
@@ -217,22 +219,67 @@ class GroupFormView(AjaxFormMixin, FormView):
     success_url = '/form-success/'
 
     def post(self, request, *args, **kwargs):
-        groupForm = GroupForm(request.POST)
+        # group_post = request.POST
+        # print(group_post)
+        group_form = GroupFormV2(request.POST)
+        group_form.is_valid()
         competition_id = request.POST.get('competition_id')
+        print(group_form.is_valid(), group_form.cleaned_data)
+        group_fields = group_form.cleaned_data
+        # data[competition'']=Competition.objects.get(pk=competition_id)
+        # group_post['competition'] = competition_id
+        # print(request.POST)
+        # groupForm.competition = Competition.objects.get(pk=competition_id)
         print('\n {} \n'.format(competition_id))
-        print('group in post', groupForm.is_valid(), groupForm.cleaned_data)
-        print(Group.objects.filter(competition=competition_id))
-        if groupForm.is_valid() and competition_id >0:
+        # print(groupForm)
+        # print('group in post', groupForm.is_valid(), groupForm.cleaned_data, '\n', groupForm.errors)
+        competition = Competition.objects.get(pk=competition_id)
+        if group_form.is_valid() and competition:
             # TODO: CHECK THAT GROUP IS NOT IN DB, AND CREATE
+            # print(Group.objects.filter(competition=competition_id))
+            print(competition)
             print('group valid')
+            # competition.group_set.create(data)
+            # group_fields = groupForm.__getattribute__('group_number')
+            # print(groupForm.group_number)
+            # group_fields = group_form.cleaned_data
+            # print(group_fields)
+            # group_fields
+            group_query = competition.group_set.filter(group_number=int(group_fields['group_number']))
+            if not group_query:
+                group = Group.objects.create(
+                    competition=competition,
+                    group_number=group_fields['group_number'],
+                    date=group_fields['date'],
+                    status=group_fields['status'],
+                    competition_leader=group_fields['competition_leader'],
+
+                    secretary=group_fields['secretary'],
+                    speaker=group_fields['speaker'],
+
+                    technical_controller=group_fields['technical_controller'],
+                    cheif_marshall=group_fields['cheif_marshall'],
+                    time_keeper=group_fields['time_keeper'],
+
+                    notes=group_fields['notes'],
+                    records_description=group_fields['records_description'],
+                    author=group_fields['author'],
+                )
+                return JsonResponse({'group_id': group.pk})
+                # jury = group_fields['jury'],
+                # judges = group_fields['judges'],
+                # competitiors = group_fields['competitors'],
+
+                # print(clean_group['status'])
             # if not
             # print(group.cleaned_data)
-            data = groupForm.cleaned_data
-            group_number = data['group_number']
-            competition = data['competition']
+            # data = groupForm.cleaned_data
+            # group_number = data['group_number']
+            # competition = data['competition']
+            # group= Group.objects.get_or_create(competition=competition, )
             # if not Group.objects.filter(competition=competition_id, )
 
-        return render(request, 'resultregistration/resultregistration.html')
+        return render(request, 'resultregistration/resultregistration.html', context={'group_id': -1})
 
 
 class PendingResultFormView(AjaxFormMixin, FormView):
@@ -269,7 +316,6 @@ class PendingResultFormView(AjaxFormMixin, FormView):
     #         return self.request
 
 
-
     # def add_competition(FormView):
     #     context_instance = RequestContext(request)
     #     if request.method=='POST':
@@ -284,12 +330,16 @@ class PendingResultFormView(AjaxFormMixin, FormView):
     #         return HttpResponse('')
 
 
+def group_registration(request):
+    return render(request, 'resultregistration/group_form.html', context={'GroupForm': GroupFormV2})
+
+
 def result_registration(request):
     # result_form = ResultForm.
 
     return render(request, 'resultregistration/resultregistration.html', context={'MoveAttemptForm': MoveAttemptForm,
-                                                                                  'ResultForm': ResultForm,
-                                                                                  'GroupForm': GroupForm,
+                                                                                  'ResultForm': PendingResultForm,
+                                                                                  'GroupForm': GroupFormV2,
                                                                                   'ClubForm': ClubForm,
                                                                                   'CompetitonForm': CompetitonForm})
 

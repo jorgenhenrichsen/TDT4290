@@ -1,3 +1,20 @@
-{% block group %}
+{%  extends 'base.html' %}
 
+{% block head %}
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/resultregistration.css' %}"
+          xmlns="http://www.w3.org/1999/html">
+    <script type="text/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <form class="group_form ajax_form" id="group_form" method="post" action="." data-url="../group/new">
+        {% csrf_token %}
+        <p>
+            <input type="hidden" id="competition_id" name="competition_id" required value="-1">
+        </p>
+        {{ GroupForm.as_p|safe }}
+        <button type="submit">SUB</button>
+    </form>
+    <script type="text/javascript" src="{% static 'js/resultregistration.js' %}"></script>
 {% endblock %}
