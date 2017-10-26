@@ -193,14 +193,85 @@ $(document).ready(function() {
             url: $thisURL,
             dataType: 'html',
             data: $formData,
-            success: function(){},
+            success: function(json){
+                    var jsonObj = JSON.parse(json)
+                    console.log('id:', jsonObj.group_id)
+                    if (jsonObj.group_id !== -1) {
+                        // console.log('id:', jsonObj.competition_id)
+                        $('#group_id').val(jsonObj.group_id)//json.getAttribute('competition_id')
+                        // console.log($('#competition_id').)
+                    }
+            },
             error: function(){},
             complete: function () {
                 console.log('complete')
             }
         })
     })
+
+    var $result_form = $('.result_form')
+    console.log($result_form)
+    $result_form.submit(function (event) {
+        // console.log(document.getElementsByClassName('result_form').length)
+        event.preventDefault()
+        var elements = $('.result_form').length
+        console.log(elements)
+        console.log('submitting result')
+        var $form
+        var $thisURL
+        var id
+        var pushstring = {name:"group_id", value:$('#group_id').val()}
+        // var pushstring = $('#group_id_p')
+        console.log('pushstring: ', pushstring)
+        for (var i=1; i<=elements; i++) {
+            id = "#pending_result"+i.toString()
+            $form = $(id)
+            $thisURL = $form.attr('data-url')
+            console.log($form)
+            // var $formData = $($form).serialize()
+            var $formData = $form.serializeArray()
+            $formData.push(pushstring)
+            $.ajax({
+                method: "POST",
+                url: $thisURL,
+                dataType: 'html',
+                data: $formData,
+                success: function () {
+                },
+                error: function () {
+                },
+                complete: function () {
+                    console.log('complete')
+                }
+            })
+        }
+    })
 });
+
+// function submitResult(form_id){
+//     // var $result_form = document.getElementById(from_id)
+//     var $result_form =$(form_id)
+//     console.log(form_id, $result_form)
+//     // console.log('submitting result')
+//     $result_form.event.preventDefault()
+//     // var $formData = $($result_form).serialize()
+//     // // var $formData = $($result_form).serializeArray()
+//     // // $formData.push({group_id: $('#group_id').toString()})
+//     // var $thisURL = $result_form.attr('data-url')
+//     // console.log($thisURL)
+//     // $.ajax({
+//     //     method: "POST",
+//     //     url: $thisURL,
+//     //     dataType: 'html',
+//     //     data: $formData,
+//     //     success: function(){},
+//     //     error: function(){},
+//     //     complete: function () {
+//     //         console.log('complete')
+//     //     }
+//     // })
+// }
+
 // function group_success(data) {
 //
 // }

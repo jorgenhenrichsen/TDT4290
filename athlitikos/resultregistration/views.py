@@ -265,6 +265,10 @@ class GroupFormView(AjaxFormMixin, FormView):
                     records_description=group_fields['records_description'],
                     author=group_fields['author'],
                 )
+                # competitors are added by registering the results
+                group.judges = group_fields['judges']
+                group.jury = group_fields['jury']
+                group.save()
                 return JsonResponse({'group_id': group.pk})
                 # jury = group_fields['jury'],
                 # judges = group_fields['judges'],
@@ -289,10 +293,14 @@ class PendingResultFormView(AjaxFormMixin, FormView):
 
     def post(self, request, *args, **kwargs):
         result = PendingResultForm(request.POST)
-        print('enters post')
+        print('enters post\n')
+        # print(request.POST, '\n')
         if result.is_valid():
-            print(result.cleaned_data, 'we have done it')
-
+            print('result valid')
+            print(result.cleaned_data)
+        else:
+            # print(result.errors, '\n', result.cleaned_data)
+            print('error')
         return render(request, 'resultregistration/resultregistration.html')
     # def add_competition_if_not_exists(self):
     #

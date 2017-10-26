@@ -77,7 +77,7 @@ class GroupForm(forms.ModelForm):
 class GroupFormV2(forms.ModelForm):
     class Meta:
         model = Group
-        exclude = ['competition']
+        exclude = ['competition', 'competitors']
 
 class ResultForm(forms.ModelForm):
     class Meta:
