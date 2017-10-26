@@ -18,12 +18,17 @@
     <div class="navbar">
         <ul><a href="">Logo</a></ul>
 
-        {% if request.user.is_authenticated %}
-                <label>{{ request.user.get_full_name }}</label>
-                <button onclick="logoutCurrentUser()">Logout</button>
+
+        <div id="user-status-container">
+            {% if request.user.is_authenticated %}
+            <label>{{ request.user.get_full_name }}</label>
+            <button onclick="logoutCurrentUser()">Logout</button>
             {% else %}
-                <button>Login</button>
-            {% endif %}
+            <button onclick="login()">Login</button>
+        {% endif %}
+        </div>
+
+
 
     </div>
     {#    adds the content of the subpage#}

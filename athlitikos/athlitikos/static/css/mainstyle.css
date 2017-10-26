@@ -13,11 +13,23 @@
 }
 
 /*gives all the elements in the navbar some styling*/
-.navbar a, label {
+.navbar a {
     margin: 20px;
     display: block;
     text-decoration: none;
     color: white;
+}
+
+#user-status-container label {
+    margin: 20px;
+    display: block;
+    text-decoration: none;
+    color: white;
+}
+
+#user-status-container button {
+    display: block;
+    margin: 0 auto;
 }
 
 /*standard styling for forms. Aligning + making things more easy to make responsive */
