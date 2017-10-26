@@ -18,6 +18,12 @@
     <div class="navbar">
         <ul><a href="">Logo</a></ul>
 
+        <button onclick="redirectToResults()">Resultater</button>
+        <button onclick="redirectToCompetitions()">Stevner</button>
+
+        {% if request.user.is_authenticated %}
+            <button onclick="redirectToHome()">Hjem</button>
+        {% endif %}
 
         <div id="user-status-container">
             {% if request.user.is_authenticated %}
