@@ -13,7 +13,7 @@
 }
 
 /*gives all the elements in the navbar some styling*/
-.navbar a {
+.navbar a, label {
     margin: 20px;
     display: block;
     text-decoration: none;
