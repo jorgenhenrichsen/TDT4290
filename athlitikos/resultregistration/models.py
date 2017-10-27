@@ -99,7 +99,7 @@ class Result(models.Model):
 
     sinclair_coefficient = models.FloatField(db_column='sinclair_coefficient', null=True, blank=True)
     veteran_coefficient = models.FloatField(db_column='melzer_faber_coefficient', null=True, blank=True)
-    age = models.IntegerField()
+    # age = models.IntegerField()
 
     best_clean_and_jerk = models.ForeignKey('MoveAttempt', related_name='best_clean_and_jerk',
                                             db_column='best_clean_and_jerk', null=True, blank=True)

@@ -293,11 +293,67 @@ class PendingResultFormView(AjaxFormMixin, FormView):
 
     def post(self, request, *args, **kwargs):
         result = PendingResultForm(request.POST)
+        group_id = request.POST['group_id']
         print('enters post\n')
         # print(request.POST, '\n')
-        if result.is_valid():
+        group = Group.objects.get(pk=group_id)
+        if result.is_valid() and group:
             print('result valid')
             print(result.cleaned_data)
+            data = result.cleaned_data
+            # TODO: NEED TO FIX THE FORM TO PROPERLY GET THESE VALUES
+            lifter_first = data['lifter_first_name']
+            lifter_last = data['lifter_last_name']
+            result_query = group.result_set.filter(lifter__first_name=lifter_first,
+                                                   lifter__last_name=lifter_last)
+            print(lifter_first, lifter_last)
+            lifter_query = Lifter.objects.filter(first_name=lifter_first, last_name=lifter_last)
+            print('\n',lifter_query,'\n')
+            # lifter = Lifter.objects.get(lifter_query)
+            lifter = lifter_query.first()
+            print(lifter)
+
+
+            print(result_query)
+            if not result_query:
+                age_group = data['category']
+
+                result_instance = group.result_set.create(lifter=lifter,
+                                                          body_weight=data['body_weight'],
+                                                          age_group=age_group,
+                                                          weight_class=data['weight_class'],
+                                                          age=14,
+                                                          )
+            else:
+                result_instance = result_query
+            # add move_attempts
+            for i in range(1,4):
+                snatch = data['snatch{}'.format(i)]
+                if snatch[0].lower() == 'n':
+                    success = False
+                    snatch = snatch[1:]
+                else:
+                    success = True
+                attempt_weight = snatch
+
+                result_instance.moveattempt_set.create(move_type='Snatch',
+                                                       attempt_num=i,
+                                                       weight=snatch,
+                                                       success=success)
+            for i in range(1, 4):
+                clean_and_jerk = data['clean_and_jerk{}'.format(i)]
+                if clean_and_jerk[0].lower() == 'n':
+                    success = False
+                    clean_and_jerk = clean_and_jerk[1:]
+                else:
+                    success = True
+                attempt_weight = clean_and_jerk
+
+                result_instance.moveattempt_set.create(move_type='Clean and jerk',
+                                                       attempt_num=i,
+                                                       weight=clean_and_jerk,
+                                                       success=success)
+            # best_clean_and_jerk = get_best_clean_and_jerk_for_result()
         else:
             # print(result.errors, '\n', result.cleaned_data)
             print('error')
