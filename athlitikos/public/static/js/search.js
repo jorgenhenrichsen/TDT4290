@@ -281,3 +281,7 @@ function generateReport() {
     //window.location.href = "/search/report.pdf" + currentParameters;
 
 }
+
+function generateCsv() {
+    window.open("/search/report.csv" + currentParameters);
+}

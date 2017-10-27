@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'accounts',
     'public',
     'easy_pdf',
+    'djqscsv',
 ]
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
