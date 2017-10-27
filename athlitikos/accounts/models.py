@@ -71,7 +71,8 @@ class CustomUser(AbstractBaseUser):
     last_name = models.CharField(max_length=250, null=True)
     is_active = models.BooleanField(default=False)  # en aktiv bruker
     is_club_admin = models.BooleanField(default=False)  # klubb administrator godkjenner stevner ect
-    is_staff = models.BooleanField(default=False)  # for at man skal få adgang til djangos /admin/, var opprinelig en property
+    is_staff = models.BooleanField(default=False)  # for at man skal få adgang til djangos /admin/,
+    #  var opprinelig en property
     is_admin = models.BooleanField(default=False)  # database admininistrator, egentlig det samme som staff
     objects = CustomUserManager()
     club = models.CharField(max_length=250, null=True)
@@ -96,11 +97,11 @@ class CustomUser(AbstractBaseUser):
     def __str__(self):
         return self.email
 
-    def has_perm(self, perm, obj=None):
+    def has_perm(self):  # obj=None
         return self.is_club_admin
 
-    def has_module_perms(self, app_label):
-        "Does the user have permissions to view the app `app_label`?"
+    def has_module_perms(self):  # app_label parameter.
+        # "Does the user have permissions to view the app `app_label`?"
         # Simplest possible answer: Yes, always
         return True
 
@@ -115,9 +116,11 @@ class Security(models.Model):  # nøkklene brukes til å tilordne de forskjellig
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     ps_key = models.CharField(max_length=200)
     club_admin_key_used = models.BooleanField(default=False)
+
     def save(self, *args, **kwargs):
         self.ps_key = code_generator()  # generer en tilfeldig alphanumerisk kode
         super(Security, self).save(*args, **kwargs)
+
     def __str__(self):
         return self.user.email
 

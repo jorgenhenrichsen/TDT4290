@@ -9,6 +9,7 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+
 class UserLoginForm(forms.Form):
     email = forms.EmailField(label="Epost")
     password = forms.CharField(label='passord', widget=forms.PasswordInput)
@@ -27,8 +28,10 @@ class UserLoginForm(forms.Form):
         #  if not our_user:
         #      raise forms.ValidationError("feil epost eller passord") #does the same as code above
 
+
 class UserSetResetPasswordForm(forms.Form):
     email = forms.EmailField(label="Epost")
+
     def clean(self, *args, **kwargs):
         email = self.cleaned_data.get("email")
         user_obj = User.objects.filter(email=email).first()
@@ -36,6 +39,8 @@ class UserSetResetPasswordForm(forms.Form):
             raise forms.ValidationError("Feil eller inaktiv epostaddresse")  # wrong email
 
 #  if User wants to create it self, optinal if needed by client.
+
+
 class UserCreationForm(forms.ModelForm):
     """A form for creating new users. Includes all the required
     fields, plus a repeated password."""
@@ -61,6 +66,7 @@ class UserCreationForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+
 
 class UserCreationByAdminForm(forms.ModelForm):
 
@@ -102,18 +108,22 @@ class UserChangePasswordForm(forms.ModelForm):
         exclude = ('email', 'club', 'is_active', 'is_admin', 'is_staff',
                    'password', 'is_club_admin', 'last_login', 'first_name', 'last_name')
 
+
 class UsersEditForm(forms.ModelForm):
     def save(self, commit=True):
         user_obj = self.instance
         if commit:
             user_obj.save()
         return user_obj
+
     class Meta:
         model = User
         include = ('club', 'is_club_admin', 'first_name', 'last_name')
         exclude = ('email', 'last_login', 'is_admin', 'is_staff', 'password', 'is_active')
 
 # for å vise formatet til senere bruk
+
+
 class UserChangeForm(forms.ModelForm):
     """A form for updating users. Includes all the fields on
     the user, but replaces the password field with admin's

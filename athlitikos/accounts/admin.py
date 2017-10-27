@@ -1,14 +1,15 @@
-#hvis alternativ 2, ps kan bruke begge to samtidig hvis ønskelig
-from django.contrib import admin
-#from .models import Profile
+# hvis alternativ 2, ps kan bruke begge to samtidig hvis ønskelig
+# from django.contrib import admin
+# from .models import Profile
 
-#admin.site.register(Profile)
+# admin.site.register(Profile)
 
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib import admin
-from django.contrib.auth.models import Group
-from .forms import UserChangeForm,UserCreationForm
-from accounts.models import CustomUser,Security
+# from django.contrib.auth.models import Group
+from .forms import UserChangeForm, UserCreationForm
+from accounts.models import CustomUser, Security
+
 
 class UserAdmin(BaseUserAdmin):
     # The forms to add and change user instances
@@ -23,7 +24,7 @@ class UserAdmin(BaseUserAdmin):
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         ('Personal info', {'fields': ('club',)}),
-        ('Permissions', {'fields': ('is_admin','is_staff', 'is_club_admin','is_active')}),
+        ('Permissions', {'fields': ('is_admin', 'is_staff', 'is_club_admin', 'is_active')}),
         ('Access', {'fields': ('is_admin',)}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
@@ -32,10 +33,10 @@ class UserAdmin(BaseUserAdmin):
         (None, {
             'classes': ('wide',),
             'fields': ('email', 'club', 'password1', 'password2')}
-        ),
+         ),
     )
-    search_fields = ('email','club')
-    ordering = ('club','email',)
+    search_fields = ('email', 'club')
+    ordering = ('club', 'email',)
     filter_horizontal = ()
 
 
