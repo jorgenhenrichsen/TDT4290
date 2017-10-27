@@ -64,7 +64,8 @@ def search(request):
 
 
 def search_for_competitions(request):
-    latest_competitions = Competition.objects.all()  # Todo: Should not fetch all competitions, should limit by date maybe.
+    # Todo: Should not fetch all competitions, should limit by date maybe.
+    latest_competitions = Competition.objects.all()
     return render(request, 'public/competitions.html', {'latest_competitions': latest_competitions})
 
 
