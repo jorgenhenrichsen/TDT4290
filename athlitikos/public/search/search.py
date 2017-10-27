@@ -1,6 +1,6 @@
 from datetime import datetime
 import athlitikos.settings as settings
-from resultregistration.models import Club, Result, Lifter
+from resultregistration.models import Club, Result, Lifter, Competition
 from resultregistration.enums import Status
 import json
 

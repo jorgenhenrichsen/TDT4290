@@ -14,6 +14,12 @@
 
 {% block content %}
 
+    <select id="category-selector" onchange="didSelectCategory()">
+        <option value="all">Alle</option>
+        {% for category in categories %}
+            <option value="{{ category.1 }}">{{ category.0 }}</option>
+        {%  endfor %}
+    </select>
 
     <table class="tablesorter" id="competitions-table">
 
@@ -28,20 +34,7 @@
 
                 <tbody>
 
-                {% for competition in latest_competitions %}
-                    <tr onclick="openCompetition({{ competition.pk}})">
-                        <td>{{ competition.competition_category }}</td>
-                        <td>{{ competition.host }}</td>
-                        <td>
-                            {% for group in competition.group_set.all %}
-                                {{ group.group_number }},
-                            {% endfor %}
-                        </td>
-                        <td>{{ competition.start_date }}</td>
 
-                    </tr>
-
-                {% endfor %}
 
                 </tbody>
 

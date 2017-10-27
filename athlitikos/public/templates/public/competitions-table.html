@@ -1,0 +1,12 @@
+{% for competition in latest_competitions %}
+    <tr onclick="openCompetition({{ competition.pk}})">
+        <td>{{ competition.competition_category }}</td>
+        <td>{{ competition.host }}</td>
+        <td>
+            {% for group in competition.group_set.all %}
+                {{ group.group_number }},
+            {% endfor %}
+        </td>
+        <td>{{ competition.start_date }}</td>
+    </tr>
+{% endfor %}

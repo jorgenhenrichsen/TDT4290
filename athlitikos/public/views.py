@@ -2,7 +2,7 @@ from django.shortcuts import render, HttpResponse, Http404
 import json
 from .search.search import SearchFiltering
 import athlitikos.settings as settings
-from resultregistration.enums import AgeGroup, Gender
+from resultregistration.enums import AgeGroup, Gender, CompetitionCategory
 from easy_pdf.rendering import render_to_pdf_response
 from djqscsv import render_to_csv_response
 from resultregistration.models import Competition
@@ -64,8 +64,19 @@ def search(request):
 
 
 def search_for_competitions(request):
-    latest_competitions = Competition.objects.all()
-    return render(request, 'public/competitions.html', {'latest_competitions': latest_competitions})
+
+    if request.is_ajax():
+
+        category = request.GET.get('category')
+
+        if category == "all":
+
+
+        latest_competitions = Competition.objects.all()
+        return render(request, 'public/competitions-table.html', {'latest_competitions': latest_competitions})
+    else:
+        categories = CompetitionCategory.choices()#map(lambda x: x[0], CompetitionCategory.choices())
+        return render(request, 'public/competitions.html', {'categories': categories})
 
 
 def search_for_lifter(request):
