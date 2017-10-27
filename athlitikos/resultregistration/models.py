@@ -8,6 +8,7 @@ from django.core.validators import MinValueValidator
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
+
 class MelzerFaber(models.Model):
     age = models.IntegerField(verbose_name='Alder')
     coefficient = models.FloatField(verbose_name='Koeffisient')
@@ -122,7 +123,7 @@ class MoveAttempt(models.Model):
     # Currently only made for the lifting attempts, not the pentathlon
     parent_result = models.ForeignKey('Result', on_delete=models.CASCADE)    # The Result this is part of
     move_type = models.CharField(max_length=20, choices=MoveTypes.choices())
-    attempt_num = models.IntegerField(validators=[MaxValueValidator(3),MinValueValidator(1)])
+    attempt_num = models.IntegerField(validators=[MaxValueValidator(3), MinValueValidator(1)])
     weight = models.IntegerField()  # Weight that was attempted lifted
     success = models.BooleanField()
 

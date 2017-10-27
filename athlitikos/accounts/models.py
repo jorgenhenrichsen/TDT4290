@@ -124,7 +124,11 @@ class Security(models.Model):  # nøkklene brukes til å tilordne de forskjellig
     def __str__(self):
         return self.user.email
 
-def post_save_user_model_receiver(sender,instance,created,*args,**kwargs): #knytter en bruker model mot aktivering som klubadministrator
+
+def post_save_user_model_receiver(sender, instance, created, *args, **kwargs):
+
+    #  knytter en bruker model mot aktivering som klubadministrator
+
     if created:
         try:
             Security.objects.create(user=instance)
