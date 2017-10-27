@@ -308,10 +308,10 @@ class PendingResultFormView(AjaxFormMixin, FormView):
                                                    lifter__last_name=lifter_last)
             print(lifter_first, lifter_last)
             lifter_query = Lifter.objects.filter(first_name=lifter_first, last_name=lifter_last)
-            print('\n',lifter_query,'\n')
+            print('lifter_query:\n',lifter_query,'\n')
             # lifter = Lifter.objects.get(lifter_query)
             lifter = lifter_query.first()
-            print(lifter)
+            print('lifter: ',lifter)
 
 
             print(result_query)
@@ -322,38 +322,61 @@ class PendingResultFormView(AjaxFormMixin, FormView):
                                                           body_weight=data['body_weight'],
                                                           age_group=age_group,
                                                           weight_class=data['weight_class'],
-                                                          age=14,
+                                                          # age=14,
                                                           )
             else:
-                result_instance = result_query
+                result_instance = result_query.first()
             # add move_attempts
+            print('result_instance: ',result_instance)
             for i in range(1,4):
                 snatch = data['snatch{}'.format(i)]
-                if snatch[0].lower() == 'n':
+                if str(snatch)[0].lower == 'n':
                     success = False
                     snatch = snatch[1:]
                 else:
                     success = True
                 attempt_weight = snatch
+                move_attempt = MoveAttempt.objects.filter(parent_result=result_instance,
+                                                          move_type='Snatch',
+                                                          attempt_num=i).first()
+                if not move_attempt:
+                    print('\n move_attempt:\n{}\n'.format(move_attempt))
+                    result_instance.moveattempt_set.create(move_type='Snatch',
+                                                           attempt_num=i,
+                                                           weight=snatch,
+                                                           success=success)
+                else:
+                    move_attempt.weight = snatch
+                    move_attempt.success = success
+                    move_attempt.save()
 
-                result_instance.moveattempt_set.create(move_type='Snatch',
-                                                       attempt_num=i,
-                                                       weight=snatch,
-                                                       success=success)
             for i in range(1, 4):
                 clean_and_jerk = data['clean_and_jerk{}'.format(i)]
-                if clean_and_jerk[0].lower() == 'n':
+                if str(clean_and_jerk)[0].lower() == 'n':
                     success = False
                     clean_and_jerk = clean_and_jerk[1:]
                 else:
                     success = True
                 attempt_weight = clean_and_jerk
-
-                result_instance.moveattempt_set.create(move_type='Clean and jerk',
-                                                       attempt_num=i,
-                                                       weight=clean_and_jerk,
-                                                       success=success)
+                # print('Parent_result = {}, move_type = {}, attempt_num = {}'.format(result_instance,
+                #                                                                     'Clean and jerk',
+                #                                                                     i))
+                move_attempt = MoveAttempt.objects.filter(parent_result=result_instance.pk,
+                                                          move_type='Clean and jerk',
+                                                          attempt_num=i).first()
+                # print(move_attempt)
+                if not move_attempt:
+                    print('\n move_attempt:\n{}\n'.format(move_attempt))
+                    result_instance.moveattempt_set.create(move_type='Clean and jerk',
+                                                           attempt_num=i,
+                                                           weight=clean_and_jerk,
+                                                           success=success)
+                else:
+                    move_attempt.weight = clean_and_jerk
+                    move_attempt.success = success
+                    move_attempt.save()
             # best_clean_and_jerk = get_best_clean_and_jerk_for_result()
+
         else:
             # print(result.errors, '\n', result.cleaned_data)
             print('error')
