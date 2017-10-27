@@ -5,6 +5,7 @@ import athlitikos.settings as settings
 from resultregistration.enums import AgeGroup, Gender
 from easy_pdf.rendering import render_to_pdf_response
 from djqscsv import render_to_csv_response
+from resultregistration.models import Competition
 
 
 def generate_csv_report(request):
@@ -60,6 +61,11 @@ def search(request):
         age_groups = map(lambda x: x[0], AgeGroup.choices())
         genders = map(lambda x: x[0], Gender.choices())
         return render(request, 'public/search.html', {'age_groups': age_groups, 'genders': genders})
+
+
+def search_for_competitions(request):
+    latest_competitions = Competition.objects.all()  # Todo: Should not fetch all competitions, should limit by date maybe.
+    return render(request, 'public/competitions.html', {'latest_competitions': latest_competitions})
 
 
 def search_for_lifter(request):
