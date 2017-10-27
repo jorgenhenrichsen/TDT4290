@@ -1,4 +1,4 @@
-{% for competition in latest_competitions %}
+{% for competition in competitions %}
     <tr onclick="openCompetition({{ competition.pk}})">
         <td>{{ competition.competition_category }}</td>
         <td>{{ competition.host }}</td>

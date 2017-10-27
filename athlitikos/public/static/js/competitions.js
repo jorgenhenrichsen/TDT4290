@@ -3,9 +3,9 @@ $(document).ready(function () {
     $("#competitions-table").tablesorter({
         cancelSelection:true,
     });
-
-    fetchCompetitions();
 });
+
+window.onload = fetchCompetitions();
 
 var selectedCategory = "all";
 

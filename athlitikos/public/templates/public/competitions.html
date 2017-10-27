@@ -17,7 +17,7 @@
     <select id="category-selector" onchange="didSelectCategory()">
         <option value="all">Alle</option>
         {% for category in categories %}
-            <option value="{{ category.1 }}">{{ category.0 }}</option>
+            <option value="{{ category.0 }}">{{ category.0 }}</option>
         {%  endfor %}
     </select>
 

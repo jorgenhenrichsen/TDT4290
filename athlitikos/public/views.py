@@ -66,14 +66,9 @@ def search(request):
 def search_for_competitions(request):
 
     if request.is_ajax():
-
         category = request.GET.get('category')
-
-        if category == "all":
-
-
-        latest_competitions = Competition.objects.all()
-        return render(request, 'public/competitions-table.html', {'latest_competitions': latest_competitions})
+        competitions = SearchFiltering.get_competitions(category)
+        return render(request, 'public/competitions-table.html', {'competitions': competitions})
     else:
         categories = CompetitionCategory.choices()#map(lambda x: x[0], CompetitionCategory.choices())
         return render(request, 'public/competitions.html', {'categories': categories})

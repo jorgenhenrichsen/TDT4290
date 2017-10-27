@@ -32,6 +32,21 @@ class SearchFiltering:
             or SearchFiltering.NONE_VALUES.__contains__(value)
 
     @classmethod
+    def get_competitions(cls, category):
+        """
+        Get competitions belonging to a category.
+        :param category: 
+        :return:
+        """
+        if settings.DEBUG:
+            print("Getting competitions with category={}".format(category))
+
+        if not SearchFiltering.is_none_value(category):
+            return Competition.objects.filter(competition_category__iexact=category)
+        else:
+            return Competition.objects.all()
+
+    @classmethod
     def get_best_results(cls, results, filter_by: str="p"):
         """
         Get all the unique best results in a QuerySet with results.
