@@ -132,7 +132,8 @@ def post_save_user_model_receiver(sender, instance, created, *args, **kwargs):
     if created:
         try:
             Security.objects.create(user=instance)
-        except:
+        except models.exceptions.ObjectDoesNotExist:
             pass
+
 
 post_save.connect(post_save_user_model_receiver, sender=settings.AUTH_USER_MODEL)

@@ -56,7 +56,7 @@ def edit_user_view(request, id=None, *args, **kwargs):
         return HttpResponseRedirect("/brukere")
     return render(request, 'accounts/change_user.html', {'form': form})
 
-#By Admin
+# By Admin
 
 
 def register(request, *args, **kwargs):
