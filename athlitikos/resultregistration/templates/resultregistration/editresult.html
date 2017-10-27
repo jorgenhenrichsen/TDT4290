@@ -3,11 +3,8 @@
 {% block title %}Home{% endblock %}
 
 {% block head %}
-
     <link rel="stylesheet" type="text/css" href="/static/css/approveresults.css">
     <script type="text/javascript" src="/static/js/approvegroup.js"></script>
-
-
 {% endblock %}
 
 {% block content %}
@@ -21,15 +18,20 @@
     {% endfor %}
 
     {% for group in groups %}
-    <button id="underkjenn-btn" onclick="rejectPendingGroup({{ group.pk }})">Underkjenn</button>
+        <button id="underkjenn-btn" onclick="rejectPendingGroup({{ group.pk }})">Underkjenn</button>
     {% endfor %}
 
-
+    {% for group in groups %}
+        <div id="group_info_before_table">
+            <label>Stevnekategori: {{ group.competition.competition_category }}</label>
+            <label>Arrangør: {{ group.competition.host }}</label>
+            <label>Sted: {{ group.competition.location}}</label>
+            <label>Dato: {{ group.competition.start_date}}</label>
+            <label>Gruppe nummer: {{ group.group_number }}</label>
+        </div>
+    {%  endfor %}
 
     <div id="registered-results-container">
-
-
-
         <table id="result-table">
 
             <thead>
@@ -67,15 +69,38 @@
                     <th>{{ pending_result.total_lift }}</th>
                     <th>{{ pending_result.points_with_sinclair }}</th>
                     <th>{{ pending_result.points_with_veteran }}</th>
-                    <th>
-
-                    </th>
+                    <th></th>
                 </tr>
 
             {% endfor %}
 
-
         </table>
     </div>
+
+    {% for group in groups %}
+        <div id="group_info_after_table">
+            <div class="group_info_after_table_col">
+                <label>Stevneleder: {{ group.competition_leader }}</label>
+                <label>Jury:
+                    {% for jurymember in group.jury.all %}
+                        {{ jurymember.fullname }}<br/>
+                    {% endfor %}
+                </label>
+                <label>Sekretær: {{ group.secretary }}</label>
+                <label>Speaker: {{ group.speaker }}</label>
+            </div>
+            <div class="group_info_after_table_col">
+                <label>Dommere:
+                    {% for judge in group.judges.all %}
+                        {{ judge.fullname }}<br/>
+                    {% endfor %}
+                </label>
+{#                <label>Dommere: {{ group.groups_judges.fullname }}</label>#}
+                <label>Teknisk kontrollør: {{ group.technical_controller }}</label>
+                <label>Chief marshall: {{ group.cheif_marshall }}</label>
+                <label>Tidtaker: {{ group.time_keeper }}</label>
+            </div>
+        </div>
+    {%  endfor %}
 
 {% endblock %}
