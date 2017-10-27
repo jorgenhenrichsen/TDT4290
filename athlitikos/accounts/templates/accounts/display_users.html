@@ -2,6 +2,7 @@
 
 {% block content %}
 <h1>Oversikt over brukere i systemet</h1>
+<h5> Innlogget: {{request.user.get_name_of_user}}</h5>
 {% for user in userlist %}
 <style>
 th, td, p {
@@ -15,6 +16,7 @@ td {
     <br>
     <tr>
         <th>Email</th>
+        <th>Navn:</th>
         <th>Sist logget inn</th>
         <th>Bruker er aktiv</th>
         <th>Rolle</th>
@@ -23,6 +25,7 @@ td {
         <td>
             {{user.email}}
         </td>
+        <td>{{user.get_name_of_user}}</td>
         <td>
             {{user.last_login}}
         </td>
