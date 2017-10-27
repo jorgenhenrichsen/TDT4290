@@ -29,8 +29,7 @@
                 <tbody>
 
                 {% for competition in latest_competitions %}
-
-                    <tr>
+                    <tr onclick="openCompetition({{ competition.pk}})">
                         <th>{{ competition.competition_category }}</th>
                         <th>{{ competition.host }}</th>
                         <th>
