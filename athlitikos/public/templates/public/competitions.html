@@ -30,14 +30,14 @@
 
                 {% for competition in latest_competitions %}
                     <tr onclick="openCompetition({{ competition.pk}})">
-                        <th>{{ competition.competition_category }}</th>
-                        <th>{{ competition.host }}</th>
-                        <th>
+                        <td>{{ competition.competition_category }}</td>
+                        <td>{{ competition.host }}</td>
+                        <td>
                             {% for group in competition.group_set.all %}
                                 {{ group.group_number }},
                             {% endfor %}
-                        </th>
-                        <th>{{ competition.start_date }}</th>
+                        </td>
+                        <td>{{ competition.start_date }}</td>
 
                     </tr>
 
