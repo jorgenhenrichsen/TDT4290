@@ -69,6 +69,11 @@ def search_for_competitions(request):
         category = request.GET.get('category')
         from_date = request.GET.get('from_date')
         to_date = request.GET.get('to_date')
+        hosts_json = request.GET.get('hosts')
+
+        if hosts_json is not None:
+            hosts = json.loads(hosts_json)
+
         competitions = SearchFiltering.get_competitions(category=category, from_date=from_date, to_date=to_date)
         return render(request, 'public/competitions-table.html', {'competitions': competitions})
     else:

@@ -31,19 +31,22 @@ class SearchFilteringTestCase(TestCase):
         competition = Competition.objects.create(
             competition_category=CompetitionCategory.cat1.value,
             start_date="2017-08-19",
-            location="Location"
+            location="Location",
+            host=self.club1.club_name
         )
 
         Competition.objects.create(
             competition_category=CompetitionCategory.cat2.value,
             start_date="2017-08-27",
             location="Location2",
+            host=self.club1.club_name
         )
 
         Competition.objects.create(
             competition_category=CompetitionCategory.cat2.value,
             start_date="2017-08-30",
             location="Location2",
+            host=self.club2.club_name
         )
 
         group = Group.objects.create(
@@ -238,3 +241,9 @@ class SearchFilteringTestCase(TestCase):
         self.assertEqual(len(competitions), 2)
         competitions = SearchFiltering.get_competitions(from_date="19/08/2017", to_date="27/08/2017")
         self.assertEqual(len(competitions), 2)
+
+    def test_get_competitions_by_host(self):
+        competitions = SearchFiltering.get_competitions(hosts=["Club1"])
+        self.assertEqual(len(competitions), 2)
+        competitions = SearchFiltering.get_competitions(hosts=["Club1", "Club2"])
+        self.assertEqual(len(competitions), 3)

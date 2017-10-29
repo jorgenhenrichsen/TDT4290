@@ -32,14 +32,17 @@ class SearchFiltering:
             or SearchFiltering.NONE_VALUES.__contains__(value)
 
     @classmethod
-    def get_competitions(cls, category=None, from_date=None, to_date=None):
+    def get_competitions(cls, category=None, from_date=None, to_date=None, hosts=None):
         """
         Get competitions belonging to a category.
         :param category:
+        :param from_date:
+        :param to_date:
+        :param hosts:
         :return:
         """
         if settings.DEBUG:
-            print("Getting competitions with category={}".format(category))
+            print("Getting competitions with category={} from_date={} to_date={}".format(category, from_date, to_date))
 
         competitions = Competition.objects.all()
 
@@ -53,6 +56,22 @@ class SearchFiltering:
         if not SearchFiltering.is_none_value(to_date):
             to_date_formatted = datetime.strptime(to_date, "%d/%m/%Y").date()
             competitions = competitions.filter(start_date__lte=to_date_formatted)
+
+        if not SearchFiltering.is_none_value(hosts):
+            all_results = []
+            for host in hosts:
+                all_results.append(competitions.filter(host__icontains=host))
+
+            if len(all_results) > 1:
+                end_result = all_results[0]
+
+                for i in range(1, len(all_results)):
+                    end_result = (end_result | all_results[i]).distinct()
+
+                competitions = end_result
+
+            else:
+                competitions = all_results[0]
 
         return competitions
 
@@ -186,6 +205,8 @@ class SearchFiltering:
 
                 for i in range(1, len(all_results)):
                     end_result = (end_result | all_results[i]).distinct()
+
+                results = end_result
 
             else:
                 results = all_results[0]
