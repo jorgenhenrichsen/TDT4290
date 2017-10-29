@@ -32,7 +32,11 @@ class Sinclair(models.Model):
 
 
 class Competition(models.Model):
-    competition_category = models.CharField(max_length=100, choices=CompetitionCategory.choices(), verbose_name="Kategori")
+
+    competition_category = models.CharField(max_length=100,
+                                            choices=CompetitionCategory.choices(),
+                                            verbose_name="Kategori")
+
     host = models.CharField(max_length=100, verbose_name="Arrangør")
     location = models.CharField(max_length=100)
     start_date = models.DateField(help_text="år-måned-dag")

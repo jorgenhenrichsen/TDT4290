@@ -42,7 +42,8 @@ class SearchFiltering:
         :return:
         """
         if settings.DEBUG:
-            print("Getting competitions with category={} from_date={} to_date={} hosts={}".format(category, from_date, to_date, hosts))
+            print("Getting competitions with category={} from_date={} to_date={} hosts={}"
+                  .format(category, from_date, to_date, hosts))
 
         competitions = Competition.objects.all()
 

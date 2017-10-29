@@ -5,7 +5,6 @@ import athlitikos.settings as settings
 from resultregistration.enums import AgeGroup, Gender, CompetitionCategory
 from easy_pdf.rendering import render_to_pdf_response
 from djqscsv import render_to_csv_response
-from resultregistration.models import Competition
 
 
 def generate_csv_report(request):
