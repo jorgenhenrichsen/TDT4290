@@ -32,7 +32,7 @@ $(function () {
         source: "/search/club/",
         minLength: 1,
         select: function (event, ui) {
-            var id = ui.item.id;
+            var id = ui.item.label;
             console.log("Selected " + ui.item.label, "ID: " + id);
 
             if ($.inArray(id, selectedClubs) == -1) {

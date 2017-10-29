@@ -79,7 +79,7 @@ def search_for_competitions(request):
                                                         from_date=from_date,
                                                         to_date=to_date,
                                                         hosts=hosts)
-        
+
         return render(request, 'public/competitions-table.html', {'competitions': competitions})
     else:
         categories = CompetitionCategory.choices()
