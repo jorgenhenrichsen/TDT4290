@@ -14,12 +14,19 @@
 
 {% block content %}
 
+    <lable>Velg kategori</lable>
     <select id="category-selector" onchange="didSelectCategory()">
         <option value="all">Alle</option>
         {% for category in categories %}
             <option value="{{ category.0 }}">{{ category.0 }}</option>
         {%  endfor %}
     </select>
+
+    <label>Filtrer konkurranser på tidsrom</label><br>
+    <input type="text" class="datepicker" id="from-date-picker" placeholder="Fra dato: dd/mm/yyyy">
+    <input type="text" class="datepicker" id="to-date-picker" placeholder="Til dato: dd/mm/yyyy">
+
+    <button onclick="fetchCompetitions()">Oppdater</button>
 
     <table class="tablesorter" id="competitions-table">
 

@@ -32,7 +32,7 @@ class SearchFiltering:
             or SearchFiltering.NONE_VALUES.__contains__(value)
 
     @classmethod
-    def get_competitions(cls, category):
+    def get_competitions(cls, category=None, from_date=None, to_date=None):
         """
         Get competitions belonging to a category.
         :param category:
@@ -41,10 +41,20 @@ class SearchFiltering:
         if settings.DEBUG:
             print("Getting competitions with category={}".format(category))
 
+        competitions = Competition.objects.all()
+
         if not SearchFiltering.is_none_value(category) and category != "all":
-            return Competition.objects.filter(competition_category__iexact=category)
-        else:
-            return Competition.objects.all()
+            competitions = competitions.filter(competition_category__iexact=category)
+
+        if not SearchFiltering.is_none_value(from_date):
+            from_date_formatted = datetime.strptime(from_date, "%d/%m/%Y").date()
+            competitions = competitions.filter(start_date__gte=from_date_formatted)
+
+        if not SearchFiltering.is_none_value(to_date):
+            to_date_formatted = datetime.strptime(to_date, "%d/%m/%Y").date()
+            competitions = competitions.filter(start_date__lte=to_date_formatted)
+
+        return competitions
 
     @classmethod
     def get_best_results(cls, results, filter_by: str="p"):

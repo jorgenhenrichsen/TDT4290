@@ -67,10 +67,12 @@ def search_for_competitions(request):
 
     if request.is_ajax():
         category = request.GET.get('category')
-        competitions = SearchFiltering.get_competitions(category)
+        from_date = request.GET.get('from_date')
+        to_date = request.GET.get('to_date')
+        competitions = SearchFiltering.get_competitions(category=category, from_date=from_date, to_date=to_date)
         return render(request, 'public/competitions-table.html', {'competitions': competitions})
     else:
-        categories = CompetitionCategory.choices()#map(lambda x: x[0], CompetitionCategory.choices())
+        categories = CompetitionCategory.choices()
         return render(request, 'public/competitions.html', {'categories': categories})
 
 

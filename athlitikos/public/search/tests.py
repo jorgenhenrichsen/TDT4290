@@ -36,13 +36,13 @@ class SearchFilteringTestCase(TestCase):
 
         Competition.objects.create(
             competition_category=CompetitionCategory.cat2.value,
-            start_date="2017-08-19",
+            start_date="2017-08-27",
             location="Location2",
         )
 
         Competition.objects.create(
             competition_category=CompetitionCategory.cat2.value,
-            start_date="2017-08-19",
+            start_date="2017-08-30",
             location="Location2",
         )
 
@@ -215,6 +215,26 @@ class SearchFilteringTestCase(TestCase):
         competitions = SearchFiltering.get_competitions("all")
         self.assertEqual(len(competitions), 3)
 
-    def test_get__competitions_by_category(self):
+    def test_get_competitions_by_category(self):
         competitions = SearchFiltering.get_competitions(CompetitionCategory.cat2.value)
+        self.assertEqual(len(competitions), 2)
+
+    def test_get_competitions_by_from_date(self):
+        competitions = SearchFiltering.get_competitions(from_date="19/08/2017")
+        self.assertEqual(len(competitions), 3)
+        competitions = SearchFiltering.get_competitions(from_date="25/08/2017")
+        self.assertEqual(len(competitions), 2)
+
+    def test_get_competitions_by_to_date(self):
+        competitions = SearchFiltering.get_competitions(to_date="30/08/2017")
+        self.assertEqual(len(competitions), 3)
+        competitions = SearchFiltering.get_competitions(to_date="25/08/2017")
+        self.assertEqual(len(competitions), 1)
+
+    def test_get_competitions_by_date(self):
+        competitions = SearchFiltering.get_competitions(from_date="19/08/2017", to_date="30/08/2017")
+        self.assertEqual(len(competitions), 3)
+        competitions = SearchFiltering.get_competitions(from_date="27/08/2017", to_date="30/08/2017")
+        self.assertEqual(len(competitions), 2)
+        competitions = SearchFiltering.get_competitions(from_date="19/08/2017", to_date="27/08/2017")
         self.assertEqual(len(competitions), 2)
