@@ -35,13 +35,13 @@ class SearchFiltering:
     def get_competitions(cls, category):
         """
         Get competitions belonging to a category.
-        :param category: 
+        :param category:
         :return:
         """
         if settings.DEBUG:
             print("Getting competitions with category={}".format(category))
 
-        if not SearchFiltering.is_none_value(category):
+        if not SearchFiltering.is_none_value(category) and category != "all":
             return Competition.objects.filter(competition_category__iexact=category)
         else:
             return Competition.objects.all()

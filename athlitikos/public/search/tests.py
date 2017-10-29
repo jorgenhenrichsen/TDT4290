@@ -1,6 +1,6 @@
 from django.test import TestCase
 from .search import SearchFiltering
-from resultregistration.models import Result, Lifter, Club, Group, Competition, Judge
+from resultregistration.models import Result, Lifter, Club, Group, Competition, Judge, CompetitionCategory
 from resultregistration.enums import Status
 
 
@@ -29,9 +29,21 @@ class SearchFilteringTestCase(TestCase):
         self.club2 = Club.objects.create(club_name="Club2")
 
         competition = Competition.objects.create(
-            competition_category="Category",
+            competition_category=CompetitionCategory.cat1.value,
             start_date="2017-08-19",
             location="Location"
+        )
+
+        Competition.objects.create(
+            competition_category=CompetitionCategory.cat2.value,
+            start_date="2017-08-19",
+            location="Location2",
+        )
+
+        Competition.objects.create(
+            competition_category=CompetitionCategory.cat2.value,
+            start_date="2017-08-19",
+            location="Location2",
         )
 
         group = Group.objects.create(
@@ -198,3 +210,11 @@ class SearchFilteringTestCase(TestCase):
     def test_search_for_results_best_total_weight(self):
         results = SearchFiltering.search_for_results(best_results="w")
         self.assertEqual(len(results), 2, "Failed to filter on best points")
+
+    def test_get_all_competitions(self):
+        competitions = SearchFiltering.get_competitions("all")
+        self.assertEqual(len(competitions), 3)
+
+    def test_get__competitions_by_category(self):
+        competitions = SearchFiltering.get_competitions(CompetitionCategory.cat2.value)
+        self.assertEqual(len(competitions), 2)
