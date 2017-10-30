@@ -6,6 +6,27 @@
     font-family: sans-serif;
 }
 
+.navbar {
+    display: flex;
+    flex-direction: ;
+    background-color: #cb1e1f;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+/*#user-status-container label {*/
+    /*margin: 20px;*/
+    /*display: block;*/
+    /*text-decoration: none;*/
+    /*color: white;*/
+/*}*/
+
+/*#user-status-container button {*/
+    /*display: block;*/
+    /*margin: 0 auto;*/
+/*}*/
+
 /*standard styling for forms. Aligning + making things more easy to make responsive */
 .form {
     display: flex;

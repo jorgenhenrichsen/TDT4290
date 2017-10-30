@@ -1,0 +1,37 @@
+* {
+  font-weight: 400;
+}
+
+.navbar {
+    background-color: #cb1e1f;
+}
+
+#navbar-list {
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style-type: none;
+}
+
+li a {
+    text-decoration: none;
+    text-align: center;
+    padding: 14px 16px;
+    color: white;
+}
+
+li a:hover {
+    background-color: white;
+    color: black;
+}
+
+li a:active {
+    background-color: white;
+    color: black;
+}
