@@ -1,5 +1,5 @@
 from django.db import models
-from .enums import MoveTypes, AgeGroup, Gender, JudgeLevel, Status
+from .enums import MoveTypes, AgeGroup, Gender, JudgeLevel, Status, CompetitionCategory
 from .validators import validate_name
 # from datetime import datetime
 # from django.db.models.signals import pre_save is usefull ;)
@@ -32,7 +32,11 @@ class Sinclair(models.Model):
 
 
 class Competition(models.Model):
-    competition_category = models.CharField(max_length=100, validators=[validate_name])
+
+    competition_category = models.CharField(max_length=100,
+                                            choices=CompetitionCategory.choices(),
+                                            verbose_name="Kategori")
+
     host = models.CharField(max_length=100, verbose_name="Arrangør")
     location = models.CharField(max_length=100)
     start_date = models.DateField(help_text="år-måned-dag")

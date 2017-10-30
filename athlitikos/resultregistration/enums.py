@@ -125,3 +125,9 @@ class Status(ChoiceEnum):
     pending = 'Til godkjenning'
     denied = 'Ikke godkjent'
     not_sent = 'Ikke sendt'
+
+
+class CompetitionCategory(ChoiceEnum):
+    cat1 = 'Klubbstevne'
+    cat2 = '5-kamp'
+    cat3 = 'NM'
