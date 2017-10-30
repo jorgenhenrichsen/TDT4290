@@ -25,18 +25,18 @@
         <div class="results" id="result_registration_table">
 {#            <div class="result" id="result0">#}
 {#                Result1 here#}
-{#            {%  for x in 'xxxxxxxxxx' %}#}
+            {%  for x in '01' %}
             <p id="group_id_p">
                 <input type="hidden" id="group_id" name="group_id" required value="2">
             </p>
             {% include 'resultregistration/result_form.html' %}
 {#            </div>#}
-{#            {% endfor %}#}
+            {% endfor %}
         </div>
 
-        <button id="initiate" onclick="initiateResultRows(this.parentNode.children[0])">Initialize</button>
-        <br>
-        <button onclick="addRow(this.parentNode.children[0])">Ny rad</button>
+{#        <button id="initiate" onclick="initiateResultRows(this.parentNode.children[0])">Initialize</button>#}
+{#        <br>#}
+{#        <button onclick="addRow(this.parentNode.children[0])">Ny rad</button>#}
     </div>
 
     <form class="group_form ajax_form" id="group_form" method="post" action="." data-url="group/new">
