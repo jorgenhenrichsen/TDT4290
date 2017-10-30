@@ -1,6 +1,6 @@
 from django.test import TestCase
 from .search import SearchFiltering
-from resultregistration.models import Result, Lifter, Club, Group, Competition, Judge
+from resultregistration.models import Result, Lifter, Club, Group, Competition, Judge, CompetitionCategory
 from resultregistration.enums import Status
 
 
@@ -29,9 +29,24 @@ class SearchFilteringTestCase(TestCase):
         self.club2 = Club.objects.create(club_name="Club2")
 
         competition = Competition.objects.create(
-            competition_category="Category",
+            competition_category=CompetitionCategory.cat1.value,
             start_date="2017-08-19",
-            location="Location"
+            location="Location",
+            host=self.club1.club_name
+        )
+
+        Competition.objects.create(
+            competition_category=CompetitionCategory.cat2.value,
+            start_date="2017-08-27",
+            location="Location2",
+            host=self.club1.club_name
+        )
+
+        Competition.objects.create(
+            competition_category=CompetitionCategory.cat2.value,
+            start_date="2017-08-30",
+            location="Location2",
+            host=self.club2.club_name
         )
 
         group = Group.objects.create(
@@ -198,3 +213,37 @@ class SearchFilteringTestCase(TestCase):
     def test_search_for_results_best_total_weight(self):
         results = SearchFiltering.search_for_results(best_results="w")
         self.assertEqual(len(results), 2, "Failed to filter on best points")
+
+    def test_get_all_competitions(self):
+        competitions = SearchFiltering.get_competitions("all")
+        self.assertEqual(len(competitions), 3)
+
+    def test_get_competitions_by_category(self):
+        competitions = SearchFiltering.get_competitions(CompetitionCategory.cat2.value)
+        self.assertEqual(len(competitions), 2)
+
+    def test_get_competitions_by_from_date(self):
+        competitions = SearchFiltering.get_competitions(from_date="19/08/2017")
+        self.assertEqual(len(competitions), 3)
+        competitions = SearchFiltering.get_competitions(from_date="25/08/2017")
+        self.assertEqual(len(competitions), 2)
+
+    def test_get_competitions_by_to_date(self):
+        competitions = SearchFiltering.get_competitions(to_date="30/08/2017")
+        self.assertEqual(len(competitions), 3)
+        competitions = SearchFiltering.get_competitions(to_date="25/08/2017")
+        self.assertEqual(len(competitions), 1)
+
+    def test_get_competitions_by_date(self):
+        competitions = SearchFiltering.get_competitions(from_date="19/08/2017", to_date="30/08/2017")
+        self.assertEqual(len(competitions), 3)
+        competitions = SearchFiltering.get_competitions(from_date="27/08/2017", to_date="30/08/2017")
+        self.assertEqual(len(competitions), 2)
+        competitions = SearchFiltering.get_competitions(from_date="19/08/2017", to_date="27/08/2017")
+        self.assertEqual(len(competitions), 2)
+
+    def test_get_competitions_by_host(self):
+        competitions = SearchFiltering.get_competitions(hosts=["Club1"])
+        self.assertEqual(len(competitions), 2)
+        competitions = SearchFiltering.get_competitions(hosts=["Club1", "Club2"])
+        self.assertEqual(len(competitions), 3)

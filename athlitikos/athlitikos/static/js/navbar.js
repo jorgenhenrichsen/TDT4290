@@ -24,3 +24,15 @@ function logoutCurrentUser() {
 function login() {
     window.location.href = "/login/";
 }
+
+function redirectToResults() {
+    window.location.href = "/search/";
+}
+
+function redirectToCompetitions() {
+    window.location.href = "/search/competitions/";
+}
+
+function redirectToHome() {
+    window.location.href = "/home/";
+}
