@@ -10,6 +10,7 @@
     display: flex;
     margin: 0;
     padding: 0;
+    width: 100%;
 }
 
 li {
@@ -34,4 +35,8 @@ li a:hover {
 li a:active {
     background-color: white;
     color: black;
+}
+
+#logout-button {
+    margin-left: auto;
 }
