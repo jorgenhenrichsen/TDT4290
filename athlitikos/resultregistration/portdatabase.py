@@ -4,6 +4,10 @@ import codecs
 import pyodbc
 from meza import io
 import numpy as np
+import jaydebeapi
+
+
+
 
 def csvread (file):
     reader = csv.reader(open(file))
@@ -65,11 +69,44 @@ def mdb():
 
 def meza():
     d = {}
-    records = io.read_mdb('NVF_Historiske.mdb', '1992-1997 Resultater')
+    list = []
+    records = io.read_mdb('NVF_Historiske.mdb', '1938-1972 Oversikt - Resultater')
     #for r in records:
-        #np.save('my_file.npy', dictionary)
+        #list.extend(r)
+        #np.save('my_file', )
 
 
     print(records)
+
+def mdb2()
+    ucanaccess_jars = [
+        "/Users/ChristianRossow/Downloads/UCanAccess-4.0.2-bin/"
+    ]
+    classpath = ":".join(ucanaccess_jars)
+    cnxn = jaydebeapi.connect(
+        "net.ucanaccess.jdbc.UcanaccessDriver",
+        "jdbc:ucanaccess:///home/gord/test.accdb;newDatabaseVersion=V2010",
+        ["", ""],
+        classpath
+    )
+    crsr = cnxn.cursor()
+    try:
+        crsr.execute("DROP TABLE table1")
+        cnxn.commit()
+    except jaydebeapi.DatabaseError as de:
+        if "user lacks privilege or object not found: TABLE1" in str(de):
+            pass
+        else:
+            raise
+    crsr.execute("CREATE TABLE table1 (id COUNTER PRIMARY KEY, fname TEXT(50))")
+    cnxn.commit()
+    crsr.execute("INSERT INTO table1 (fname) VALUES ('Gord')")
+    cnxn.commit()
+    crsr.execute("SELECT * FROM table1")
+    for row in crsr.fetchall():
+        print(row)
+    crsr.close()
+    cnxn.close()
+
 
 meza()
