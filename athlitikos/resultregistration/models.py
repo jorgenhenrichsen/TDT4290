@@ -32,7 +32,7 @@ class Sinclair(models.Model):
 
 
 class Competition(models.Model):
-    competition_category = models.CharField(max_length=100, validators=[validate_name])
+    competition_category = models.CharField(max_length=100)  # validators=[validate_name] removed due to conflict
     host = models.CharField(max_length=100, verbose_name="Arrangør")
     location = models.CharField(max_length=100)
     start_date = models.DateField(help_text="år-måned-dag")
@@ -172,6 +172,25 @@ class PentathlonResult(models.Model):
 
     def __str__(self):
         return "Fem-kamp resultat til: " + "{} {}".format(self.lifter.first_name, self.lifter.last_name)
+
+
+class OldResults(models.Model):
+
+    lifter = models.ForeignKey(Person, null=True)  # The Lifter that this result belongs to
+    competition = models.ForeignKey(Competition, null=True)  # The competition that this result belongs to.
+
+    weight_class = models.CharField(max_length=10, verbose_name='Vektklasse', null=True)
+    age_group = models.CharField(max_length=2, verbose_name='Kategori', null=True)
+    body_weight = models.FloatField(verbose_name='Kroppsvekt', null=True)
+    best_press = models.FloatField(verbose_name='Press', null=True, blank=True)
+    best_snatch = models.FloatField(verbose_name='Rykk', null=True, blank=True)
+    best_clean_and_jerk = models.FloatField(verbose_name='Støt', null=True, blank=True)
+    total_lift = models.FloatField(verbose_name='Sammenlagt', blank=True, null=True)
+    points = models.FloatField(verbose_name='Poeng', blank=True, null=True)
+    sinclair_coefficient = models.FloatField(verbose_name='Koeffisient', blank=True, null=True)
+
+    def __str__(self):
+        return 'resultat for {0}'.format(self.lifter.fullname())
 
 
 class Staff(Person):
