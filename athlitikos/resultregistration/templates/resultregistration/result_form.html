@@ -11,12 +11,12 @@
 {#</tr>#}
 {#{% extends 'resultregistration/resultregistration.html' %}#}
 {#{% block results %}#}
-{#{% for row in '123456' %}#}
-{% for rowId in '1234567' %}
+{#{% for x in  %}#}
+{% for rowId in indexes %}
 
 
-<div id="result-div{{ x }}{{ rowId }}">
-    <form class="result_form ajax_form" id="pending_result{{ x }}{{ rowId }}" method="POST" action="." data-url="result/pending/new">
+<div id="result-div{{ rowId }}">
+    <form class="result_form ajax_form" id="pending_result{{ rowId }}" method="POST" action="." data-url="result/pending/new">
         {% csrf_token %}
     {#        <script type="text/javascript">#}
     {#            $("form").addClass("result")#}
@@ -69,7 +69,7 @@
 </div>
 
 {% endfor %}
+{#{% endfor %}#}
 
 {#<div> result_form is here</div>#}
-{#{% endfor %}#}
 {#{% endblock %}#}

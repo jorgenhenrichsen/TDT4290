@@ -214,8 +214,9 @@ $(document).ready(function() {
     $result_form.submit(function (event) {
         // console.log(document.getElementsByClassName('result_form').length)
         event.preventDefault()
-        var elements = $('.result_form').length
-        console.log(elements)
+        var rawElements = $('.result_form')
+        var elements = rawElements.length
+        // console.log(rawElements,elements)
         console.log('submitting result')
         var $form
         var $thisURL
@@ -223,13 +224,18 @@ $(document).ready(function() {
         var pushstring = {name:"group_id", value:$('#group_id').val()}
         // var pushstring = $('#group_id_p')
         console.log('pushstring: ', pushstring)
+        // for(var j=0, j<2, j++)
         for (var i=1; i<=elements; i++) {
+        // for(var $$form in rawElements){
+            // console.log($$form)
             id = "#pending_result"+i.toString()
             $form = $(id)
+            // $form = $$form
             $thisURL = $form.attr('data-url')
             console.log($form)
             // var $formData = $($form).serialize()
             var $formData = $form.serializeArray()
+            console.log($formData)
             $formData.push(pushstring)
             $.ajax({
                 method: "POST",

@@ -25,13 +25,13 @@
         <div class="results" id="result_registration_table">
 {#            <div class="result" id="result0">#}
 {#                Result1 here#}
-            {%  for x in '01' %}
             <p id="group_id_p">
                 <input type="hidden" id="group_id" name="group_id" required value="2">
             </p>
+{#            {%  for x in '0' %}#}
             {% include 'resultregistration/result_form.html' %}
 {#            </div>#}
-            {% endfor %}
+{#            {% endfor %}#}
         </div>
 
 {#        <button id="initiate" onclick="initiateResultRows(this.parentNode.children[0])">Initialize</button>#}
