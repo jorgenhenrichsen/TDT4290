@@ -1,8 +1,6 @@
 from django import forms
-from .models import Lifter, Judge, Staff, Result, MoveAttempt, Group, Competition, Club
+from .models import Competition, Club, Group, Result, MoveAttempt, Lifter, Judge, Staff
 from django.utils import timezone
-
-
 
 YEAR_CHOICES = [y for y in range(1900, timezone.now().year)]
 
@@ -36,7 +34,7 @@ class StaffForm(forms.ModelForm):
         super(StaffForm, self).__init__(*args, **kwargs)
 
 
-#For the resultregistration page
+# For the resultregistration page
 class CompetitonForm(forms.ModelForm):
     class Meta:
         model = Competition
@@ -46,23 +44,24 @@ class CompetitonForm(forms.ModelForm):
 class ClubForm(forms.ModelForm):
     class Meta:
         model = Club
-        fields = ('clubName',)
+        fields = ('club_name',)
+
 
 class GroupForm(forms.ModelForm):
     class Meta:
         model = Group
-        exclude = ['competition', 'recordsDescription', 'competitors']
+        exclude = ['competition', 'records_description', 'competitors']
+        # May have to remove the foreign key models
 
 
 class ResultForm(forms.ModelForm):
     class Meta:
         model = Result
-        exclude = ['resultID']
-
+        fields = '__all__'
+        # https://docs.djangoproject.com/en/1.11/topics/forms/modelforms/#selecting-the-fields-to-use
 
 
 class MoveAttemptForm(forms.ModelForm):
     class Meta:
         model = MoveAttempt
         fields = '__all__'
-

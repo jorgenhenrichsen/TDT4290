@@ -1,0 +1,112 @@
+
+{% extends 'base.html' %}
+
+{% block head %}
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" media="all" />
+        <link rel="stylesheet" type="text/css" href="/static/css/search.css">
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript">
+        </script> <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
+        <script src="/static/js/jquery.tablesorter.js" type="text/javascript"></script>
+        <script type="text/javascript" src="/static/js/search.js"></script>
+{%  endblock %}
+
+
+{% block content %}
+
+    <section class="search-section">
+
+        <h1>Søk etter resultater</h1>
+
+            <div class="ui-widget">
+
+                <div class="query-fields-container">
+
+                    <input type="text" id="query-lifter" class="query-text-input" placeholder="Navn...">
+                    <div id="lifters-container"></div>
+                    <input type="text" id="query-club" class="query-text-input" placeholder="Klubb...">
+                    <div id="clubs-container"></div>
+
+                </div>
+
+                <div class="category-filter-container">
+
+                    <label>Filtrer resultater på kategori</label>
+
+                    <select class="cat-selector" id="gender-selector" onchange="didSelectGender(this)">
+                        <option value="" disabled selected>Velg kjønn</option>
+                        {% for gender in genders %}
+                            <option value="{{ gender }}">{{ gender }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <select class=cat-selector" id="age-group-selector" onchange="didSelectAgeGroup(this)">
+                        <option value="" disabled selected>Velg aldersgruppe</option>
+                    </select>
+
+                    <select class="cat-selector" id="weight-class-selector" onchange="didSelectWeightClass(this)">
+                        <option value="" disabled selected>Velg vektklasse</option>
+                    </select>
+                    <button class="search-button" id="add-category-button" onclick="addCurrentCategoryFilter()">Legg til</button>
+                    <div id="categories-container"></div>
+                </div>
+
+                <div class="date-filter-container">
+
+                    <label>Filtrer resultater på tidsrom</label><br>
+                    <input type="text" class="datepicker" id="from-date-picker" placeholder="Fra dato: dd/mm/yyyy">
+                    <input type="text" class="datepicker" id="to-date-picker" placeholder="Til dato: dd/mm/yyyy">
+
+                </div>
+
+                <div>
+                    <label>Vis kun beste resultater etter:</label>
+                    <select id="best-results-selector">
+                        <option value="">Vis alle</option>
+                        <option value="p">Poeng</option>
+                        <option value="pv">Poeng veteran</option>
+                        <option value="w">Total vekt</option>
+                    </select>
+                </div>
+
+            </div>
+
+        <button class="search-button" onclick="submitForm()">Søk</button>
+
+    </section>
+
+
+    <section class="search-results-section">
+
+        <button class="search-button" id="generate-report-button" onclick="generateReport()">Generer rapport fra resultater</button>
+
+        <table class="tablesorter" id="result-table">
+
+            <thead>
+
+                <tr>
+                    <th>Utøver</th>
+                    <th>Kroppsvekt</th>
+                    <th>Alder</th>
+                    <th>Klubb</th>
+                    <th>Kategori</th>
+                    <th>Arrangør</th>
+                    <th>Rykk</th>
+                    <th>Støt</th>
+                    <th>Total</th>
+                    <th>SP</th>
+                    <th>Poeng</th>
+                    <th>VP</th>
+                    <th>Veteranpoeng</th>
+                </tr>
+
+                <tbody>
+
+                </tbody>
+        </table>
+
+    </thead>
+
+
+    </section>
+
+{% endblock %}

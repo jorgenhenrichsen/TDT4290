@@ -1,0 +1,22 @@
+{% if results %}
+    {% for result in results %}
+
+        <tr>
+
+            <th>{{ result.lifter.first_name }} {{ result.lifter.last_name }}</th>
+            <th>{{ result.body_weight }}</th>
+            <th>{{ result.age }}</th>
+            <th>{{ result.lifter.club }}</th>
+            <th>{{ result.age_group }} {{ result.weight_class }}</th>
+            <th>{{ result.group.competition.host }}</th>
+            <th>{{ result.best_snatch.weight }}</th>
+            <th>{{ result.best_clean_and_jerk.weight }}</th>
+            <th>{{ result.total_lift }}</th>
+            <th>{{ result.sinclair_coefficient }}</th>
+            <th>{{ result.points_with_sinclair }}</th>
+            <th>{{ result.veteran_coefficient }}</th>
+            <th>{{ result.points_with_veteran }}</th>
+
+        </tr>
+    {% endfor %}
+{% endif %}

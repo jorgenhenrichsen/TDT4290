@@ -1,0 +1,22 @@
+button{
+    margin:auto;
+    border-color: darkgrey;
+    margin-top:80px;
+    width: 250px;
+    height: 28px;
+    color: black;
+    display:block;
+    font-size: large;
+}
+
+#new-user-btn {
+    text-decoration: none;
+}
+
+#results-for-approval-btn {
+    text-decoration: none;
+}
+
+#godkjenn-skjema-btn {
+
+}

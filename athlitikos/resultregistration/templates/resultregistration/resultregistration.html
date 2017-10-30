@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}
 
 
@@ -17,31 +18,20 @@
                 <label>Pulje: {{ GroupForm.groupNumber }}</label>
             </div>
 
-            <table class="table">
-                <tr>
-                    <th>Vektklasse</th>
-                    <th>Kroppsvekt</th>
-                    <th>Kategori</th>
-                    <th>Fødselsdato</th>
-                    <th>Navn</th>
-                    <th>Lag</th>
-                    <th>Rykk</th>
-                    <th>Støt</th>
-                    <th>Beste rykk</th>
-                    <th>Beste støt</th>
-                    <th>Sammenlagt</th>
-                    <th>Poeng</th>
-                    <th>Poeng</th>
-                    <th>Peong veteran</th>
-                    <th>Plassering</th>
-                    <th>Rekord</th>
-                    <th>Sinclair</th>
-                </tr>
-                <tr>
+    <h1>Register result</h1>
+    <form method="POST" class="post-form">{% csrf_token %}
 
+{#        {% include 'betterforms/form_as_fieldsets.html' %}#}
+        {{ CompetitonForm.as_p }}
+        {{ ResultForm.as_p }}
+        {{ MoveAttemptForm.as_p }}
+        {{ GroupForm.as_p }}
+        {{ ClubForm.as_p }}
+        {#        <div class="competition_information">#}
+{#            <label>Stevnekategori: {{ competition_category }}</label>#}
+{#        </div>#}
 
-                </tr>
-            </table>
+{#        <label for="id_competition-details-competition_category">Stevnekategori: {{ competition_category }}</label>#}
 
             <div class="table-buttons">
                 <input class="new-judge-button" type="submit" value="Opprett dommer">

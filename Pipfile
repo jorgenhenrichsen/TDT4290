@@ -6,8 +6,12 @@ verify_ssl = true
 
 [packages]
 
-django = "*"
 "psycopg2" = "*"
 "enum34" = "*"
-django-betterforms = "*"
+django = "*"
+"flake8" = "*"
+"pep8" = "*"
+"pep8-naming" = "*"
+django-easy-pdf = "*"
 openpyxl = "*"
+
