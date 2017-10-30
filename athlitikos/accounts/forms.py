@@ -72,7 +72,7 @@ class UserCreationByAdminForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email', 'club', 'first_name', 'last_name')
+        fields = ('email', 'club', 'first_name', 'last_name', 'is_club_admin')
 
     def save(self, commit=True):
         # Save the provided password in hashed format

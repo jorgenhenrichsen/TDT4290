@@ -89,8 +89,6 @@ def register(request, *args, **kwargs):
 def user_login(request, *args, **kwargs):
     form = UserLoginForm(request.POST or None)
     if form.is_valid():
-        if request.user.is_authenticated:  # hvis en annen bruker er inne i systemet
-            logout(request)
         email_ = form.cleaned_data.get('email')
         user_obj = User.objects.get(email__iexact=email_)
         login(request, user_obj)  # logger inn bruker i systemet
