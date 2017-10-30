@@ -236,7 +236,9 @@ $(document).ready(function() {
                 url: $thisURL,
                 dataType: 'html',
                 data: $formData,
-                success: function () {
+                success: function (json) {
+                    var jsonObj = JSON.parse(json)
+                    console.log(jsonObj.successful)
                 },
                 error: function () {
                 },

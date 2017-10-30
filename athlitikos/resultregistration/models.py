@@ -115,6 +115,7 @@ class Result(models.Model):
 
     class Meta:
         unique_together = ('group', 'lifter')
+
     def __str__(self):
         return 'resultat for {0} i {1}'.format(self.lifter.fullname(), str(self.group))
 

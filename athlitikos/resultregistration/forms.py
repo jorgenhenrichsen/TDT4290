@@ -79,6 +79,7 @@ class GroupFormV2(forms.ModelForm):
         model = Group
         exclude = ['competition', 'competitors']
 
+
 class ResultForm(forms.ModelForm):
     class Meta:
         model = Result
@@ -99,18 +100,19 @@ class PendingResultForm(forms.Form):
     weight_class = forms.CharField(max_length=3)
     body_weight = forms.FloatField()
     category = forms.CharField(max_length=4)
+
     birth_date = forms.DateField()
     lifter_first_name = forms.CharField(max_length=200)
     lifter_last_name = forms.CharField(max_length=200)
-    club = forms.CharField()
+    club = forms.CharField(max_length=200)
 
-    snatch1 = forms.IntegerField()
-    snatch2 = forms.IntegerField()
-    snatch3 = forms.IntegerField()
+    snatch1 = forms.CharField(max_length=5)
+    snatch2 = forms.CharField(max_length=5)
+    snatch3 = forms.CharField(max_length=5)
 
-    clean_and_jerk1 = forms.IntegerField()
-    clean_and_jerk2 = forms.IntegerField()
-    clean_and_jerk3 = forms.IntegerField()
+    clean_and_jerk1 = forms.CharField(max_length=5)
+    clean_and_jerk2 = forms.CharField(max_length=5)
+    clean_and_jerk3 = forms.CharField(max_length=5)
 
     best_snatch = forms.CharField(max_length=4, required=False)
     best_clean_and_jerk = forms.CharField(max_length=4, required=False)

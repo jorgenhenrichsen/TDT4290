@@ -1,15 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse, HttpResponse
-from datetime import date
+from django.http import JsonResponse
 from django.views.generic import FormView
 from .mixins import AjaxFormMixin
-from .models import Lifter, Judge, Staff, Result, MoveAttempt, Group, Competition
+from .models import Lifter, Judge, Staff, Group, Competition
+from .models import Result, MoveAttempt
 from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm
 from .forms import CompetitonForm, GroupFormV2
-
+# from .utils import *
 from .forms import PendingResultForm
-from .forms import forms
+# from .forms import forms
 # from django.views.generic import UpdateView
 
 
@@ -100,9 +100,8 @@ def list_all_judges(request):
     list_of_judges = Judge.objects.all()
     judgelist = []
     for judge in list_of_judges:
-        entry = {}
-        entry['judge'] = judge
-
+        entry = {'judge': judge}
+        # entry['judge'] = judge
         role_leader = judge.groups_competition_leader.all()
         role_jury = judge.groups_juries.all()
         role_judge = judge.groups_judges.all()
@@ -120,68 +119,14 @@ def list_all_judges(request):
     return render(request, 'resultregistration/judge_list.html', {'judgelist': judgelist})
 
 
-def get_best_snatch_for_result(request, pk):
-    all_attempts = MoveAttempt.objects.filter(parent_result=pk, move_type='Snatch')
-    best_attempt = 0
-    for attempt in all_attempts:
-        if attempt.success and attempt.weight > best_attempt:
-            best_attempt = attempt.weight
-    result = Result.objects.get(pk=pk)
-    result.best_snatch = best_attempt
-    result.save()
-    return JsonResponse({'best_snatch': str(best_attempt)})
-
-
-def get_best_clean_and_jerk_for_result(request, pk):
-    all_attempts = MoveAttempt.objects.filter(parent_result=pk, move_type='Clean and jerk')
-    best_attempt = 0
-    for attempt in all_attempts:
-        if attempt.weight > best_attempt:
-            best_attempt = attempt.weight
-    result = Result.objects.get(pk=pk)
-    result.best_clean_and_jerk = best_attempt
-    result.save()
-    return JsonResponse({'best_clean_and_jerk': str(best_attempt)})
-
-
-def get_lift_total_for_result(request, pk):
-    result = get_object_or_404(Result, pk=pk)
-    best_clean_and_jerk = result.best_clean_and_jerk
-    best_snatch = result.best_snatch
-    total_lift = best_snatch.weight+best_clean_and_jerk.weight
-    result.total_lift = total_lift
-    return JsonResponse({'total_lift': str(total_lift)})
-
-
-def get_points_with_sinclair_for_result(request, pk):
-    result = get_object_or_404(Result, pk=pk)
-    total = result.total_lift*result.sinclair_coefficient
-    result.points_with_sinclair = total
-    result.save()
-    return JsonResponse({'points_with_sinclair': str(total)})
-
-
-def get_points_with_veteran_for_result(request, pk):
-    result = get_object_or_404(Result, pk=pk)
-    veteran_points = result.points_with_sinclair*result.veteran_coefficient
-    result.points_with_veteran = veteran_points
-    result.save()
-    return JsonResponse({'points_with_veteran': str(veteran_points)})
-
-
-def get_age_for_lifter_in_result(request, pk):
-    result = get_object_or_404(Result, pk=pk)
-    age = date.today().year - result.lifter.birth_date.year
-    result.age = age
-    result.save()
-    return JsonResponse({'age': str(age)})
-
-
 def result_view(request):
     # form = forms.M
     row_id = request.POST.get('row_id')
     return render(request, 'resultregistration/result_form.html',
-                  context={'ResultForm': PendingResultForm, 'row_id': row_id})
+                  context={'ResultForm': ResultForm,
+                           'LifterForm': LifterForm,
+                           'PendingForm': PendingResultForm,
+                           'row_id': row_id})
 
 
 class CompetitionFormView(AjaxFormMixin, FormView):
@@ -235,7 +180,7 @@ class GroupFormView(AjaxFormMixin, FormView):
         # print('group in post', groupForm.is_valid(), groupForm.cleaned_data, '\n', groupForm.errors)
         competition = Competition.objects.get(pk=competition_id)
         if group_form.is_valid() and competition:
-            # TODO: CHECK THAT GROUP IS NOT IN DB, AND CREATE
+            # TODONE: CHECK THAT GROUP IS NOT IN DB, AND CREATE
             # print(Group.objects.filter(competition=competition_id))
             print(competition)
             print('group valid')
@@ -294,27 +239,27 @@ class PendingResultFormView(AjaxFormMixin, FormView):
     def post(self, request, *args, **kwargs):
         result = PendingResultForm(request.POST)
         group_id = request.POST['group_id']
-        print('enters post\n')
+        # print('enters post\n')
         # print(request.POST, '\n')
         group = Group.objects.get(pk=group_id)
         if result.is_valid() and group:
-            print('result valid')
-            print(result.cleaned_data)
+            # print('result valid')
+            # print(result.cleaned_data)
             data = result.cleaned_data
-            # TODO: NEED TO FIX THE FORM TO PROPERLY GET THESE VALUES
+            # TODO: MAKE THE FORM AUTOFIL TO PROPERLY GET THESE VALUES
             lifter_first = data['lifter_first_name']
             lifter_last = data['lifter_last_name']
             result_query = group.result_set.filter(lifter__first_name=lifter_first,
                                                    lifter__last_name=lifter_last)
-            print(lifter_first, lifter_last)
+            # print(lifter_first, lifter_last)
             lifter_query = Lifter.objects.filter(first_name=lifter_first, last_name=lifter_last)
-            print('lifter_query:\n',lifter_query,'\n')
+            # print('lifter_query:\n', lifter_query, '\n')
             # lifter = Lifter.objects.get(lifter_query)
             lifter = lifter_query.first()
-            print('lifter: ',lifter)
 
+            # print('lifter: ', lifter)
+            # print(result_query)
 
-            print(result_query)
             if not result_query:
                 age_group = data['category']
 
@@ -327,20 +272,20 @@ class PendingResultFormView(AjaxFormMixin, FormView):
             else:
                 result_instance = result_query.first()
             # add move_attempts
-            print('result_instance: ',result_instance)
-            for i in range(1,4):
+            # print('result_instance: ', result_instance)
+            for i in range(1, 4):
                 snatch = data['snatch{}'.format(i)]
                 if str(snatch)[0].lower == 'n':
                     success = False
                     snatch = snatch[1:]
                 else:
                     success = True
-                attempt_weight = snatch
+                # attempt_weight = snatch
                 move_attempt = MoveAttempt.objects.filter(parent_result=result_instance,
                                                           move_type='Snatch',
                                                           attempt_num=i).first()
                 if not move_attempt:
-                    print('\n move_attempt:\n{}\n'.format(move_attempt))
+                    # print('\n move_attempt:\n{}\n'.format(move_attempt))
                     result_instance.moveattempt_set.create(move_type='Snatch',
                                                            attempt_num=i,
                                                            weight=snatch,
@@ -357,7 +302,7 @@ class PendingResultFormView(AjaxFormMixin, FormView):
                     clean_and_jerk = clean_and_jerk[1:]
                 else:
                     success = True
-                attempt_weight = clean_and_jerk
+                # attempt_weight = clean_and_jerk
                 # print('Parent_result = {}, move_type = {}, attempt_num = {}'.format(result_instance,
                 #                                                                     'Clean and jerk',
                 #                                                                     i))
@@ -366,7 +311,7 @@ class PendingResultFormView(AjaxFormMixin, FormView):
                                                           attempt_num=i).first()
                 # print(move_attempt)
                 if not move_attempt:
-                    print('\n move_attempt:\n{}\n'.format(move_attempt))
+                    # print('\n move_attempt:\n{}\n'.format(move_attempt))
                     result_instance.moveattempt_set.create(move_type='Clean and jerk',
                                                            attempt_num=i,
                                                            weight=clean_and_jerk,
@@ -375,12 +320,40 @@ class PendingResultFormView(AjaxFormMixin, FormView):
                     move_attempt.weight = clean_and_jerk
                     move_attempt.success = success
                     move_attempt.save()
+            # print('success')
             # best_clean_and_jerk = get_best_clean_and_jerk_for_result()
+            # pk = result_instance.pk,
+            # result_data = {
+            #     'age': get_age_for_lifter_in_result(pk),
+            #     'best_clean_and_jerk': get_best_clean_and_jerk_for_result(pk),
+            #     'best_snatch': get_best_snatch_for_result(pk),
+            #     'points_with_sinclair': get_points_with_sinclair_for_result(pk),
+            #     'points_with_veteran': get_points_with_veteran_for_result(pk)
+            # }
 
+            # returning dummy data before the methods are properly implemented and tested
+            result_data = {
+                'successful': True,
+                'best_snatch': 10,
+                'best_clean_and_jerk': 10,
+                'total': 20,
+                'point_with_sinclair': 25,
+                'points_with_veteran': 0,
+                'sinclair_coefficient': 1.25
+            }
+            # # result_data['success'] = True
+            # result_data['age'] = 10
+            # result_data[
+            # result_data[
+            # result_data['total'] = 20
+            # result_data['points_with_sinclair'] = 25
+            # result_data['points_with_veteran'] = 0
+            # result_data['sinclair_coefficient'] = 1.25
         else:
-            # print(result.errors, '\n', result.cleaned_data)
+            print(result.errors, '\n', result.cleaned_data)
             print('error')
-        return render(request, 'resultregistration/resultregistration.html')
+            result_data = {'successful': False}
+        return render(request, 'resultregistration/resultregistration.html', context=result_data)
     # def add_competition_if_not_exists(self):
     #
     #     if self.request.method == 'POST':
@@ -401,7 +374,6 @@ class PendingResultFormView(AjaxFormMixin, FormView):
     #         else:
     #             print('neyy, object exists')
     #         return self.request
-
 
     # def add_competition(FormView):
     #     context_instance = RequestContext(request)
@@ -425,7 +397,9 @@ def result_registration(request):
     # result_form = ResultForm.
 
     return render(request, 'resultregistration/resultregistration.html', context={'MoveAttemptForm': MoveAttemptForm,
-                                                                                  'ResultForm': PendingResultForm,
+                                                                                  'ResultForm': ResultForm,
+                                                                                  'PendingForm': PendingResultForm,
+                                                                                  'LifterForm': LifterForm,
                                                                                   'GroupForm': GroupFormV2,
                                                                                   'ClubForm': ClubForm,
                                                                                   'CompetitonForm': CompetitonForm})
