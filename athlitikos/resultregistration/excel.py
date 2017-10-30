@@ -116,5 +116,5 @@ def read_lifters_5kamp(sheet):
     return lifters
 
 
-# data = readexcel('testfil.xlsx')
-# print(read_lifters(data))
+data = readexcel('testfil.xlsx')
+print(read_lifters(data))
