@@ -44,3 +44,8 @@ li a:active {
 #nvf-logo {
     margin-left: 15px;
 }
+
+#logged-in-as-label {
+    color: white;
+    padding-right: 1em;
+}

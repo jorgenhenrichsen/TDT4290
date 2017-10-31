@@ -1,8 +1,11 @@
-{% extends "base.html" %}
+{% extends 'athlitikos/base.html' %}
 
 {% block content %}
 <h1>Oversikt over brukere i systemet</h1>
 <h5> Innlogget: {{request.user.get_name_of_user}}</h5>
+
+<a href="http://127.0.0.1:8000/register/"><button>opprett ny bruker</button></a>
+
 {% for user in userlist %}
 <style>
 th, td, p {
@@ -50,10 +53,6 @@ td {
     </tr>
 </table>
 {% endfor %}
-<hr>
-<br>
-<a href="http://127.0.0.1:8000/register/">
-            <button>opprett ny bruker</button></a>
 
 {% endblock %}
 

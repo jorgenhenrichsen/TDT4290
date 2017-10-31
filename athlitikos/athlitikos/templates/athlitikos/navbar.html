@@ -18,7 +18,7 @@
         </li>
         <li id="logout-button">
             {% if request.user.is_authenticated %}
-                <label>{{ request.user.get_full_name }}</label>
+                <label id="logged-in-as-label">Logget inn som {{ request.user.get_full_name }}</label>
                 <a href="#" onclick="logoutCurrentUser()">Logg ut</a>
             {% else %}
                 <a href="#" onclick="login()">Logg inn</a>
