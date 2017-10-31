@@ -15,9 +15,9 @@ from .forms import PendingResultForm
 
 @login_required(login_url='/login')
 def home(request):
-    if request.user.groups.all()[0].name == 'Admin':
+    if request.user.is_club_admin or request.user.is_staff:
         return home_admin(request)
-    elif request.user.groups.all()[0].name == 'ClubOfficial':
+    else:
         return home_club_official(request)
 
 
