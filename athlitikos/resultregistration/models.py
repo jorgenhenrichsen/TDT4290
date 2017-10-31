@@ -15,7 +15,7 @@ class MelzerFaber(models.Model):
         unique_together = ('age', 'coefficient', 'year')
 
     def __str__(self):
-        return 'M-F for år {}: {}:{}'.format(self.year, self.age, self.coefficient)
+        return 'M-F for år {}: age{}:{}'.format(self.year, self.age, self.coefficient)
 
 
 class Sinclair(models.Model):
@@ -28,7 +28,7 @@ class Sinclair(models.Model):
         unique_together = ('gender', 'sinclair_b', 'sinclair_A', 'year')
 
     def __str__(self):
-        return
+        return 'sinclair for {}: a: {}, b:{}'.format(self.year,self.sinclair_A, self.sinclair_b)
 
 
 class Competition(models.Model):

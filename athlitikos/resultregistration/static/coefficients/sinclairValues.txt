@@ -1,0 +1,3 @@
+Sinclair coefficients line 1= A, line 2 = b
+Women_A Women_b Men_A Men_b year
+0.783497476 153.655 0.751945030 175.508 2017
