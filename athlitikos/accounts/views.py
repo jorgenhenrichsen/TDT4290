@@ -16,19 +16,6 @@ from django.conf import settings
 User = get_user_model()
 
 
-#  denne skal slettes, men har den foreløpig
-@login_required(login_url='/login')
-def admin_view(request):
-    if (not request.user.is_club_admin) and (not request.user.is_staff):
-        return HttpResponseRedirect('/login')
-    return render(request, 'accounts/admin.html')
-#  denne skal slettes, men har den til testing atm
-
-
-def home_view(request):
-    return render(request, 'base.html')
-
-
 @login_required(login_url='/login')
 def display_users_view(request, *args, **kwargs):
     if not request.user.is_club_admin:
@@ -122,7 +109,7 @@ def reset_password_mailer_view(request, *args, **kwargs):
             html_message += '<a href="' + url + '"> Trykk her </a>'
             send_mail(subject=subject, from_email=from_email, recipient_list=[email_],
                       message=msg, html_message=html_message)
-            return HttpResponseRedirect("/login2")
+            return HttpResponseRedirect("/login")
     return render(request, "accounts/email_reset_password.html", {'form': form})
 
 
