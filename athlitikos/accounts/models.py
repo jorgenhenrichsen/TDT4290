@@ -97,7 +97,7 @@ class CustomUser(AbstractBaseUser):
     def __str__(self):
         return self.email
 
-    def has_perm(self,obj=None):
+    def has_perm(self, obj=None):
         return self.is_club_admin
 
     def has_module_perms(self, app_label=None):  # app_label parameter.
