@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+#logginn{
+    width: 100px;
+}
+</style>
+<form method="Post" action='.'> {%csrf_token%}
+    {{form.as_p}}
+    <input id="logginn" type="submit" value="Logg inn">
+</form>
+
+<a href="http://127.0.0.1:8000/glemt-passord/" id="buttonLink">
+    <button>Glemt passord</button></a>
+{% endblock %}
+

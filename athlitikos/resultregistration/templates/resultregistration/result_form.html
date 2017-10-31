@@ -1,0 +1,75 @@
+{#{% for field in ResultForm %}#}
+{#            <th> {{ field }}</th>#}
+{#{% endfor %}#}
+{#<tr>#}
+{#{% for field in form %}#}
+{##}
+{#    <div class="" >#}
+{#        {{ field }}#}
+{#    </div>#}
+{#{% endfor%}#}
+{#</tr>#}
+{#{% extends 'resultregistration/resultregistration.html' %}#}
+{#{% block results %}#}
+{#{% for x in  %}#}
+{% for rowId in indexes %}
+
+
+<div id="result-div{{ rowId }}">
+    <form class="result_form ajax_form" id="pending_result{{ rowId }}" method="POST" action="." data-url="result/pending/new">
+        {% csrf_token %}
+    {#        <script type="text/javascript">#}
+    {#            $("form").addClass("result")#}
+    {#        </script>#}
+    {#        <table>#}
+    {#                <tr>#}
+    {#                    {% include 'resultregistration/result_form.html' %}#}
+{#        {{ ResultForm.as_p|safe }}#}
+        {{ PendingForm.as_p|safe }}
+    {#                </tr>#}
+    {#        <div id="best_snatch{{ row }}"><input title="heeh" type="text" placeholder="bestSnatch" ></div>#}
+
+    {#        </table>#}
+{#        {{ ResultForm.weight_class }}#}
+{#        {{ ResultForm.body_weight }}#}
+{#        {{ ResultForm.age_group }}#}
+{##}
+{#        <input type="date" name="birth date" maxlength="200" id="id_birth_date">#}
+{#        {{ LifterForm.first_name }}#}
+{#        {{ LifterForm.last_name }}#}
+{##}
+{#        <p>#}
+{#            <label for="id_club">Club:</label>#}
+{#        <input type="text" name="club" maxlength="200" id="id_club">#}
+{#        </p>#}
+{##}
+{#        {{ PendingForm.snatch1 }}#}
+{#        {{ PendingForm.snatch2 }}#}
+{#        {{ PendingForm.snatch3 }}#}
+{##}
+{#        {{ PendingForm.clean_and_jerk1 }}#}
+{#        {{ PendingForm.clean_and_jerk2 }}#}
+{#        {{ PendingForm.clean_and_jerk3 }}#}
+{##}
+{#        {{ ResultForm.best_snatch }}#}
+{#        {{ ResultForm.best_clean_and_jerk }}#}
+{#        {{ ResultForm.total_lift }}#}
+{#        {{ ResultForm.points_with_sinclair }}#}
+{#        {{ ResultForm.points_with_veteran }}#}
+{#        {{ PendingForm.pl }}#}
+{#        {{ PendingForm.rekord }}#}
+{#        {{ ResultForm.sinclair_coefficient }}#}
+
+
+
+        <button type="submit" >SUB</button>
+    {#    onclick="ajaxSubmit(this.parentNode)" #}
+    {#        <input type="submit" name="submit_result" value="Submit">#}
+    </form>
+</div>
+
+{% endfor %}
+{#{% endfor %}#}
+
+{#<div> result_form is here</div>#}
+{#{% endblock %}#}

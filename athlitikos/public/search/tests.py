@@ -1,7 +1,8 @@
 from django.test import TestCase
 from .search import SearchFiltering
-from resultregistration.models import Result, Lifter, Club, Group, Competition, Judge, CompetitionCategory
+from resultregistration.models import Result, Lifter, Club, Group, Competition, Judge
 from resultregistration.enums import Status
+from resultregistration.enums import JudgeLevel, CompetitionCategory
 
 
 class SearchFilteringTestCase(TestCase):
@@ -22,28 +23,28 @@ class SearchFilteringTestCase(TestCase):
         judge = Judge.objects.create(
             first_name='Judge',
             last_name='Judge',
-            judge_level=1,
+            judge_level=JudgeLevel.forbundsdommer.value,
         )
 
         self.club1 = Club.objects.create(club_name="Club1")
         self.club2 = Club.objects.create(club_name="Club2")
 
         competition = Competition.objects.create(
-            competition_category=CompetitionCategory.cat1.value,
+            competition_category=CompetitionCategory.klubbstevne.value,
             start_date="2017-08-19",
             location="Location",
             host=self.club1.club_name
         )
 
         Competition.objects.create(
-            competition_category=CompetitionCategory.cat2.value,
+            competition_category=CompetitionCategory.seriestevne.value,
             start_date="2017-08-27",
             location="Location2",
             host=self.club1.club_name
         )
 
         Competition.objects.create(
-            competition_category=CompetitionCategory.cat2.value,
+            competition_category=CompetitionCategory.seriestevne.value,
             start_date="2017-08-30",
             location="Location2",
             host=self.club2.club_name
@@ -219,7 +220,7 @@ class SearchFilteringTestCase(TestCase):
         self.assertEqual(len(competitions), 3)
 
     def test_get_competitions_by_category(self):
-        competitions = SearchFiltering.get_competitions(CompetitionCategory.cat2.value)
+        competitions = SearchFiltering.get_competitions(CompetitionCategory.seriestevne.value)
         self.assertEqual(len(competitions), 2)
 
     def test_get_competitions_by_from_date(self):

@@ -1,9 +1,12 @@
 from django.db import models
 from .enums import MoveTypes, AgeGroup, Gender, JudgeLevel, Status, CompetitionCategory
 from .validators import validate_name
+from django.core.validators import MaxValueValidator
+from django.core.validators import MinValueValidator
 # from datetime import datetime
 # from django.db.models.signals import pre_save is usefull ;)
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 
 class MelzerFaber(models.Model):
@@ -72,6 +75,7 @@ class Group(models.Model):
     judges = models.ManyToManyField('Judge', related_name='groups_judges')
     secretary = models.CharField(max_length=100, verbose_name='Sekretær')  # , related_name='secretary')
     speaker = models.CharField(max_length=100, verbose_name='Taler')  # , related_name='speaker')
+
     technical_controller = models.ForeignKey('Judge', verbose_name='Teknisk kontrollør',
                                              related_name='groups_technical_controller')
     cheif_marshall = models.ForeignKey('Judge', verbose_name='Chief Marshall', related_name='groups_chief_marshall')
@@ -102,7 +106,7 @@ class Result(models.Model):
 
     sinclair_coefficient = models.FloatField(db_column='sinclair_coefficient', null=True, blank=True)
     veteran_coefficient = models.FloatField(db_column='melzer_faber_coefficient', null=True, blank=True)
-    age = models.IntegerField()
+    age = models.IntegerField(null=True, blank=True)
 
     best_clean_and_jerk = models.ForeignKey('MoveAttempt', related_name='best_clean_and_jerk',
                                             db_column='best_clean_and_jerk', null=True, blank=True)
@@ -116,16 +120,18 @@ class Result(models.Model):
     points_with_veteran = models.FloatField(verbose_name='Veteranpoeng',
                                             blank=True, null=True)   # points_with_sinclair*melzerfaber_coefficient
 
+    class Meta:
+        unique_together = ('group', 'lifter')
+
     def __str__(self):
         return 'resultat for {0} i {1}'.format(self.lifter.fullname(), str(self.group))
 
 
 class MoveAttempt(models.Model):
     # Currently only made for the lifting attempts, not the pentathlon
-
     parent_result = models.ForeignKey('Result', on_delete=models.CASCADE)    # The Result this is part of
     move_type = models.CharField(max_length=20, choices=MoveTypes.choices())
-    attempt_num = models.IntegerField()
+    attempt_num = models.IntegerField(validators=[MaxValueValidator(3), MinValueValidator(1)])
     weight = models.IntegerField()  # Weight that was attempted lifted
     success = models.BooleanField()
 
@@ -141,6 +147,7 @@ class MoveAttempt(models.Model):
 class Person(models.Model):
     first_name = models.CharField(max_length=40, verbose_name='Fornavn', validators=[validate_name])
     last_name = models.CharField(max_length=100, verbose_name='Etternavn', validators=[validate_name])
+    club = models.ForeignKey('Club', null=True)  # The club that this lifter< belongs to
 
     def __str__(self):
         return self.fullname()
@@ -153,12 +160,11 @@ class Lifter(Person):
     # Changed from dateTime, as we don't need time of birth
     birth_date = models.DateField(verbose_name='Fødselsdato', null=True)
     gender = models.CharField(max_length=10, verbose_name='Kjønn', choices=Gender.choices(), null=True)
-    club = models.ForeignKey('Club', null=True)  # The club that this lifter< belongs to
 
 
 class Judge(Person):
 
-    judge_level = models.CharField(max_length=10, choices=JudgeLevel.choices(), default=JudgeLevel.Level0)
+    judge_level = models.CharField(max_length=10, choices=JudgeLevel.choices(), default=JudgeLevel.kretsdommer)
 
 
 class PentathlonResult(models.Model):
