@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Endre bruker </h1>
+{{ form.instance }}
+<br>
+{% include "accounts/form.html" with form=form %}
+
+{% endblock %}

@@ -1,23 +1,23 @@
 
 function logoutCurrentUser() {
+    window.location.href = "/logout/";
+    //$.ajax({
+        //type: "GET",
+        //url: "/logout/",
+        //dataType: "html",
+        //success: function () {
 
-    $.ajax({
-        type: "GET",
-        url: "/logout/",
-        dataType: "html",
-        success: function () {
+            //console.log("Logged out");
+            //document.getElementById("user-status-container").innerHTML = "<button onclick='login()'>Login</button>"
 
-            console.log("Logged out");
-            document.getElementById("user-status-container").innerHTML = "<button onclick='login()'>Login</button>";
-
-        },
-        error: function () {
-          console.log("ERROR");
-        },
-        complete: function () {
-            console.log("COMPLETE");
-        },
-    })
+        //},
+        //error: function () {
+          //console.log("ERROR");
+        //},
+        //complete: function () {
+            //console.log("COMPLETE");
+        //},
+    //})
 
 }
 

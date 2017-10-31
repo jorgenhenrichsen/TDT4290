@@ -1,9 +1,12 @@
 from django.db import models
 from .enums import MoveTypes, AgeGroup, Gender, JudgeLevel, Status, CompetitionCategory
 from .validators import validate_name
+from django.core.validators import MaxValueValidator
+from django.core.validators import MinValueValidator
 # from datetime import datetime
 # from django.db.models.signals import pre_save is usefull ;)
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 
 class MelzerFaber(models.Model):
@@ -126,10 +129,9 @@ class Result(models.Model):
 
 class MoveAttempt(models.Model):
     # Currently only made for the lifting attempts, not the pentathlon
-
     parent_result = models.ForeignKey('Result', on_delete=models.CASCADE)    # The Result this is part of
     move_type = models.CharField(max_length=20, choices=MoveTypes.choices())
-    attempt_num = models.IntegerField()
+    attempt_num = models.IntegerField(validators=[MaxValueValidator(3), MinValueValidator(1)])
     weight = models.IntegerField()  # Weight that was attempted lifted
     success = models.BooleanField()
 
