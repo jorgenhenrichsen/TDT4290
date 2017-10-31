@@ -1,5 +1,5 @@
 from django.db import models
-from .enums import MoveTypes, AgeGroup, Gender, JudgeLevel, Status
+from .enums import MoveTypes, AgeGroup, Gender, JudgeLevel, Status, CompetitionCategory
 from .validators import validate_name
 from django.core.validators import MaxValueValidator
 from django.core.validators import MinValueValidator
@@ -35,7 +35,11 @@ class Sinclair(models.Model):
 
 
 class Competition(models.Model):
-    competition_category = models.CharField(max_length=100, validators=[validate_name])
+
+    competition_category = models.CharField(max_length=100,
+                                            choices=CompetitionCategory.choices(),
+                                            verbose_name="Kategori")
+
     host = models.CharField(max_length=100, verbose_name="Arrangør")
     location = models.CharField(max_length=100)
     start_date = models.DateField(help_text="år-måned-dag")
@@ -71,6 +75,7 @@ class Group(models.Model):
     judges = models.ManyToManyField('Judge', related_name='groups_judges')
     secretary = models.CharField(max_length=100, verbose_name='Sekretær')  # , related_name='secretary')
     speaker = models.CharField(max_length=100, verbose_name='Taler')  # , related_name='speaker')
+
     technical_controller = models.ForeignKey('Judge', verbose_name='Teknisk kontrollør',
                                              related_name='groups_technical_controller')
     cheif_marshall = models.ForeignKey('Judge', verbose_name='Chief Marshall', related_name='groups_chief_marshall')
@@ -101,7 +106,7 @@ class Result(models.Model):
 
     sinclair_coefficient = models.FloatField(db_column='sinclair_coefficient', null=True, blank=True)
     veteran_coefficient = models.FloatField(db_column='melzer_faber_coefficient', null=True, blank=True)
-    age = models.IntegerField()
+    age = models.IntegerField(null=True, blank=True)
 
     best_clean_and_jerk = models.ForeignKey('MoveAttempt', related_name='best_clean_and_jerk',
                                             db_column='best_clean_and_jerk', null=True, blank=True)
@@ -114,6 +119,9 @@ class Result(models.Model):
                                              blank=True, null=True)  # total_lift*sinclair_coefficient
     points_with_veteran = models.FloatField(verbose_name='Veteranpoeng',
                                             blank=True, null=True)   # points_with_sinclair*melzerfaber_coefficient
+
+    class Meta:
+        unique_together = ('group', 'lifter')
 
     def __str__(self):
         return 'resultat for {0} i {1}'.format(self.lifter.fullname(), str(self.group))
