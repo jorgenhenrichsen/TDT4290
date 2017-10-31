@@ -186,7 +186,9 @@ $(document).ready(function() {
     $group_form.submit(function (event) {
         console.log('submitting group')
         event.preventDefault()
-        var $formData = $($group_form).serialize()
+        var pushstring = {name:"competition_id", value:$('#competition_id').val()}
+        var $formData = $($group_form).serializeArray()
+        $formData.push(pushstring)
         var $thisURL = $group_form.attr('data-url')
         $.ajax({
             method: "POST",

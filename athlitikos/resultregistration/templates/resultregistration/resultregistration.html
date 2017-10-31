@@ -9,6 +9,16 @@
 {% endblock %}
 
 {% block content %}
+    <div class="form-container">
+        <h1>Stevne</h1>
+        <form method="POST" class="post-form">{% csrf_token %}
+            <div class="before-table">
+                <label>Stevnekategori: {{ CompetitonForm.competition_category }}</label>
+                <label>Arrangør: {{ ClubForm.club_name }}</label>
+                <label>Sted: {{ CompetitonForm.location }}</label>
+                <label>Dato: {{ CompetitonForm.start_date }}</label>
+                <label>Pulje: {{ GroupForm.group_number }}</label>
+            </div>
 
     <h2>Resultatrgistrering</h2>
 
@@ -39,17 +49,51 @@
 {#        <button onclick="addRow(this.parentNode.children[0])">Ny rad</button>#}
     </div>
 
+            <div class="table-buttons">
+                <input class="new-judge-button" type="submit" value="Opprett dommer">
+                <input class="new-competator-button" type="submit" value="Opprett utøver">
+            </div>
+
+            <div class="after-table">
+                <p>
+                    <input type="hidden" id="competition_id" name="competition_id" required value="-1">
+                </p>
+                <div class="first-column">
+                    <label>Stevnets leder {{ GroupForm.competition_leader }}</label>
+                    <label>Jury: {{ GroupForm.jury }}</label>
+                    <label>Sekretær: {{ GroupForm.secretary }}</label>
+                    <label>Speaker: {{ GroupForm.speaker }}</label>
+                </div>
+                <div class="second-column">
+                    <label>Dommer: {{ GroupForm.judges }}</label>
+                    <label>Teknisk kontrollør: {{ GroupForm.technical_controller }}</label>
+                    <label>Chief Marshall: {{ GroupForm.cheif_marshall }}</label>
+                    <label>Tidtaker: {{ GroupForm.time_keeper }}</label>
+                </div>
+                <div class="third-column">
+                    <label>Notater: {{ GroupForm.notes }}</label>
+                </div>
+            </div>
+
+            <div class="form-buttons">
+                <input class="submit-for-approval-button" type="submit" value="Ny pulje">
+                <input class="submit-for-approval-button" type="submit" value="Slett pulje">
+                <input class="save-button" type="submit" value="Lagre">
+                <input class="delete-button" type="submit" value="Slett">
+                <input class="submit-for-approval-button" type="submit" value="Send til godkjenning">
+            </div>
+        </form>
+    </div>
+
     <form class="group_form ajax_form" id="group_form" method="post" action="." data-url="group/new">
         {% csrf_token %}
-        <p>
-            <input type="hidden" id="competition_id" name="competition_id" required value="-1">
-        </p>
 {#        {{ Groupform.comptetition.as_hidden }}#}
         {{ GroupForm.as_p|safe }}
         <button type="submit">SUB</button>
 {#        onclick="getCompetitionId(this.parentNode)"#}
 {#    onclick="ajaxSubmit(this.parentNode)"#}
     </form>
+
     <script type="text/javascript" src="{% static 'js/resultregistration.js' %}"></script>
 
 {% endblock %}
