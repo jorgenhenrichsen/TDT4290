@@ -162,7 +162,7 @@ class Lifter(Person):
 
 class Judge(Person):
 
-    judge_level = models.CharField(max_length=10, choices=JudgeLevel.choices(), default=JudgeLevel.Level0)
+    judge_level = models.CharField(max_length=10, choices=JudgeLevel.choices(), default=JudgeLevel.kretsdommer)
 
 
 class PentathlonResult(models.Model):

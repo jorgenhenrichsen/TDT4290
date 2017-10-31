@@ -13,10 +13,11 @@ class ChoiceEnum(Enum):
 
 
 class JudgeLevel(ChoiceEnum):
-    Level0 = 0
-    Level1 = 1
-    Level2 = 2
-    Level3 = 3
+    kretsdommer = "K"
+    forbundsdommer = "F"
+    forbunds_krets_dommer = "F-K"
+    internasjonal_kategori_1 = "Int. I"
+    internasjonal_kategori_2 = "Int. II"
 
 
 class Gender(ChoiceEnum):
@@ -128,6 +129,6 @@ class Status(ChoiceEnum):
 
 
 class CompetitionCategory(ChoiceEnum):
-    cat1 = 'Klubbstevne'
-    cat2 = '5-kamp'
-    cat3 = 'NM'
+    klubbstevne = 'Klubbstevne'
+    femkamp = '5-kamp'
+    nm = 'NM'
