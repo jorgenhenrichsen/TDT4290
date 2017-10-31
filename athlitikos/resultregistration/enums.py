@@ -130,5 +130,20 @@ class Status(ChoiceEnum):
 
 class CompetitionCategory(ChoiceEnum):
     klubbstevne = 'Klubbstevne'
-    femkamp = '5-kamp'
+    klubbmesterskap = "Klubbmesterskap"
+    kretsmesterskap = "Kretsmesterskap"
+    lagseriestevne = "Lagseriestevne"
+    nasjonalt_stevne = "Nasjonalt stevne"
+    seriestevne = "Seriestevne"
     nm = 'NM'
+    nm_junior = "NM-Junior"
+    nm_ungdom = "NM-Ungdom"
+    nm_senior = "NM-Senior"
+    nm_veteran = "NM-Veteran"
+    nordisk_junior = "Nordisk Junior"
+    nordisk_senior = "Nordisk Senior"
+    Nordisk_ungdom = "Nordisk Ungdom"
+    norges_cup = "Norgescup"
+    em = "EM"
+    vm = "VM"
+    ol = "OL"
