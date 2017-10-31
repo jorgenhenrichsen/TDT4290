@@ -10,14 +10,14 @@
 
 {% block content %}
 
-    <button id="avbryt-btn" onclick="goBackToHome()">Avbryt</button>
+    <button class="cancel-button" id="avbryt-btn" onclick="goBackToHome()">Avbryt</button>
 
     {% for group in groups %}
-        <button id="approve-btn" onclick="approvePendingGroup({{ group.pk }})">Godkjenn</button>
+        <button class="ok-button" id="approve-btn" onclick="approvePendingGroup({{ group.pk }})">Godkjenn</button>
     {% endfor %}
 
     {% for group in groups %}
-        <button id="underkjenn-btn" onclick="rejectPendingGroup({{ group.pk }})">Underkjenn</button>
+        <button class="cancel-button" id="underkjenn-btn" onclick="rejectPendingGroup({{ group.pk }})">Underkjenn</button>
     {% endfor %}
 
     <div>
