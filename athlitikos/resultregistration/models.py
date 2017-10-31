@@ -147,6 +147,7 @@ class MoveAttempt(models.Model):
 class Person(models.Model):
     first_name = models.CharField(max_length=40, verbose_name='Fornavn', validators=[validate_name])
     last_name = models.CharField(max_length=100, verbose_name='Etternavn', validators=[validate_name])
+    club = models.ForeignKey('Club', null=True)  # The club that this lifter< belongs to
 
     def __str__(self):
         return self.fullname()
@@ -159,12 +160,11 @@ class Lifter(Person):
     # Changed from dateTime, as we don't need time of birth
     birth_date = models.DateField(verbose_name='Fødselsdato', null=True)
     gender = models.CharField(max_length=10, verbose_name='Kjønn', choices=Gender.choices(), null=True)
-    club = models.ForeignKey('Club', null=True)  # The club that this lifter< belongs to
 
 
 class Judge(Person):
 
-    judge_level = models.CharField(max_length=10, choices=JudgeLevel.choices(), default=JudgeLevel.Level0)
+    judge_level = models.CharField(max_length=10, choices=JudgeLevel.choices(), default=JudgeLevel.kretsdommer)
 
 
 class PentathlonResult(models.Model):
