@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404, reverse
+from django.shortcuts import render, redirect, get_object_or_404, reverse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from datetime import date
@@ -8,9 +8,9 @@ from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm
 
 @login_required(login_url='/login')
 def home(request):
-    if request.user.groups.all()[0].name == 'Admin':
+    if request.user.is_club_admin or request.user.is_staff:
         return home_admin(request)
-    elif request.user.groups.all()[0].name == 'ClubOfficial':
+    else:
         return home_club_official(request)
 
 

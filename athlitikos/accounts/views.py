@@ -20,7 +20,7 @@ User = get_user_model()
 @login_required(login_url='/login')
 def admin_view(request):
     if (not request.user.is_club_admin) and (not request.user.is_staff):
-        return HttpResponseRedirect('/login2')
+        return HttpResponseRedirect('/login')
     return render(request, 'accounts/admin.html')
 #  denne skal slettes, men har den til testing atm
 
@@ -29,11 +29,10 @@ def home_view(request):
     return render(request, 'base.html')
 
 
+@login_required(login_url='/login')
 def display_users_view(request, *args, **kwargs):
-    if not request.user.is_authenticated:
-        return HttpResponseRedirect("/login2")
     if not request.user.is_club_admin:
-        return HttpResponseRedirect("/home2")
+        return HttpResponseRedirect("/home")
     user_qs = User.objects.all()
     userlist = []  # ikke akkurat standard django, men YOLO
     for user_object in user_qs:
@@ -41,11 +40,12 @@ def display_users_view(request, *args, **kwargs):
     return render(request, "accounts/display_users.html", {'userlist': userlist})
 
 
+@login_required(login_url='/login')
 def edit_user_view(request, id=None, *args, **kwargs):
-    if not id or not request.user.is_authenticated:
+    if not id:
         return HttpResponseRedirect('/home2')
     if not request.user.is_club_admin and not request.user.is_staff:
-        return HttpResponseRedirect('/login2')
+        return HttpResponseRedirect('/login')
     user_object_qs = User.objects.filter(id=id)
     if not user_object_qs.exists():
         return HttpResponseRedirect('/brukere')
@@ -59,11 +59,10 @@ def edit_user_view(request, id=None, *args, **kwargs):
 # By Admin
 
 
+@login_required(login_url='/login')
 def register(request, *args, **kwargs):
-    if not id or not request.user.is_authenticated:
-        return HttpResponseRedirect('/home2')
     if (not request.user.is_club_admin) and (not request.user.is_staff):
-        return HttpResponseRedirect('/login2')
+        return HttpResponseRedirect('/login')
     form = UserCreationByAdminForm(request.POST or None)
     if form.is_valid():
         user_obj = form.save()
@@ -93,15 +92,15 @@ def user_login(request, *args, **kwargs):
         user_obj = User.objects.get(email__iexact=email_)
         login(request, user_obj)  # logger inn bruker i systemet
         if user_obj.is_club_admin:
-            return HttpResponseRedirect("/home/admin2/")  # to the page
+            return HttpResponseRedirect("/home/admin/")  # to the page
         else:
-            return HttpResponseRedirect("/home2/")
+            return HttpResponseRedirect("/home/clubofc/")
     return render(request, 'accounts/login.html', {"form": form})
 
 
 def user_logout(request):
     logout(request)
-    return HttpResponseRedirect("/login2")
+    return HttpResponseRedirect("/home")
 
 
 def reset_password_mailer_view(request, *args, **kwargs):
@@ -139,7 +138,7 @@ def set_password_view(request, code=None, *args, **kwargs):
                 user_obj.is_active = True
                 user_obj.save()
                 login(request, user_obj)
-                return HttpResponseRedirect("/home2")
+                return HttpResponseRedirect("/home")
             return render(request, "accounts/reset_password.html", {'form': form})
     messages.warning(request, 'ugyldig kode eller allerde brukt')  # brukt opp
-    return HttpResponseRedirect("/home2/")
+    return HttpResponseRedirect("/home/")
