@@ -13,8 +13,21 @@ from django.forms import formset_factory
 
 def v2_result_registration(request):
 
-    set = formset_factory(ResultForm, extra=2)
-    return render(request, "resultregistration/resultregistration_v2.html", {'lifter_form_set': set})
+    ResultFormSet = formset_factory(ResultForm, extra=2)
+
+    if request.method == "POST":
+        r_formset = ResultFormSet(request.POST, request.FILES)
+
+        if r_formset.is_valid():
+            print("IS VALID")
+            data = r_formset.cleaned_data
+            print(data)
+        else:
+            print("NOT VALID")
+
+    else:
+        r_formset = ResultFormSet()
+    return render(request, "resultregistration/resultregistration_v2.html", {'result_formset': r_formset})
 
 @login_required(login_url='/login')
 def home(request):

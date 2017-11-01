@@ -9,28 +9,31 @@
 
 {% block content %}
 
-    {{ lifter_form_set.management_form }}
+    <form method="post">
+    {% csrf_token %}
+    {{ result_formset.management_form }}
     <table>
 
         <thead>
             <tr>
                 <th>Utøver</th>
-                <th>Vektklasse</th>
-                <th>Kroppsvekt</th>
+
             </tr>
         </thead>
 
-        <tbody class="class1">
-            {% for form in lifter_form_set %}
-                <tr class="class2">
+        <tbody>
+            {% for form in result_formset %}
+                <tr>
                     <td class="lifter-input-field">{{ form.lifter }}</td>
-                    <td>{{ form.weight_class }}</td>
-                    <td>{{ form.body_weight }}</td>
+
                 </tr>
             {% endfor %}
         </tbody>
 
     </table>
+    <input type="submit">
+
+    </form>
 
     <input type="button" value="Legg til utøver" id="add-lifter">
     <script>
@@ -38,6 +41,7 @@
             cloneMore('tr:last', 'form')
         })
     </script>
+
 
 
 

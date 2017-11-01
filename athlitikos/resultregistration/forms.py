@@ -99,8 +99,7 @@ class MoveAttemptForm(forms.ModelForm):
 class ResultForm(forms.Form):
 
     lifter = forms.CharField(max_length=200)
-    weight_class = forms.CharField()
-    body_weight = forms.IntegerField()
+
 
 
 
