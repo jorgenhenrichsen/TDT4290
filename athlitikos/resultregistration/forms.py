@@ -96,6 +96,14 @@ class MoveAttemptForm(forms.ModelForm):
         fields = '__all__'
 
 
+class ResultForm(forms.Form):
+
+    lifter = forms.CharField(max_length=200)
+    weight_class = forms.CharField()
+    body_weight = forms.IntegerField()
+
+
+
 class PendingResultForm(forms.Form):
     weight_class = forms.CharField(max_length=3)
     body_weight = forms.FloatField()

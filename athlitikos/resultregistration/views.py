@@ -8,10 +8,13 @@ from .models import Result, MoveAttempt
 from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm
 from .forms import CompetitonForm, GroupFormV2
 # from .utils import *
-from .forms import PendingResultForm
-# from .forms import forms
-# from django.views.generic import UpdateView
+from .forms import PendingResultForm, ResultForm
+from django.forms import formset_factory
 
+def v2_result_registration(request):
+
+    set = formset_factory(ResultForm, extra=2)
+    return render(request, "resultregistration/resultregistration_v2.html", {'lifter_form_set': set})
 
 @login_required(login_url='/login')
 def home(request):
