@@ -79,13 +79,6 @@ class GroupFormV2(forms.ModelForm):
         model = Group
         exclude = ['competition', 'competitors']
 
-
-class ResultForm(forms.ModelForm):
-    class Meta:
-        model = Result
-        fields = '__all__'
-        # https://docs.djangoproject.com/en/1.11/topics/forms/modelforms/#selecting-the-fields-to-use
-
 # class ResultRow(forms.):
 #     pass
 
@@ -98,7 +91,17 @@ class MoveAttemptForm(forms.ModelForm):
 
 class ResultForm(forms.Form):
 
-    lifter = forms.CharField(max_length=200)
+    lifter = forms.CharField(max_length=200, widget=forms.TextInput(attrs={'class': 'lifter-input-field'}))
+    lifter_id = forms.IntegerField(widget=forms.HiddenInput())
+
+    club = forms.CharField(max_length=200, widget=forms.TextInput(attrs={'class': 'club-input-field'}))
+    club_id = forms.IntegerField(widget=forms.HiddenInput())
+
+    birth_date = forms.DateField()
+
+    body_weight = forms.FloatField()
+    category = forms.CharField(max_length=10)
+
 
     def clean_lifter(self):
 
@@ -108,8 +111,7 @@ class ResultForm(forms.Form):
         lifter = cleaned_data.get('lifter')
 
         if len(lifter) > 0:
-            raise forms.ValidationError("Må ha utøver")
-            # self.add_error('lifter', "Må ha utøver")
+            self.add_error('lifter', "Må ha utøver")
 
         return lifter
 

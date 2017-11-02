@@ -26,6 +26,7 @@ def v2_result_registration(request):
             print(data)
         else:
             print("NOT VALID")
+            print(r_formset.errors)
 
     else:
         r_formset = ResultFormSet()

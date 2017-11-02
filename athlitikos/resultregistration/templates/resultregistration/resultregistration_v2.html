@@ -17,18 +17,44 @@
         <thead>
             <tr>
                 <th>Utøver</th>
-
+                <th>Klubb</th>
+                <th>Fødselsdato</th>
+                <th>Kategori</th>
+                <th>Kroppsvekt</th>
+                <th></th>
             </tr>
         </thead>
 
         <tbody>
             {% for form in result_formset %}
-
                 <tr>
-                    <td class="lifter-input-field">{{ form.lifter }}</td>
+                    <td>
+                        {{ form.lifter }}
+                        {{ form.lifter_id }}
+                        <div class="error-list"></div>
+                    </td>
+
+                    <td>
+                        {{ form.club }}
+                        {{ form.club_id }}
+                        <div class="error-list"></div>
+                    </td>
+
+                    <td>
+                        {{ form.birth_date }}
+                    </td>
+
+                    <td>
+                        {{ form.category }}
+                    </td>
+
+                    <td>
+                        {{ form.body_weight }}
+                    </td>
 
                 </tr>
             {% endfor %}
+
         </tbody>
 
     </table>
@@ -41,6 +67,8 @@
         $('#add-lifter').click(function () {
             cloneMore('tr:last', 'form')
         })
+
+        displayErrors("{{ result_formset.errors }}")
     </script>
 
 
