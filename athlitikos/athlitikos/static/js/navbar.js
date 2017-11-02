@@ -36,12 +36,3 @@ function redirectToCompetitions() {
 function redirectToHome() {
     window.location.href = "/home/";
 }
-
-function collapseNavbar() {
-    var x = document.getElementById("top-navbar");
-    if (x.className === "navbar") {
-        x.className += " responsive";
-    } else {
-        x.className = "navbar";
-    }
-}
