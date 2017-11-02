@@ -11,11 +11,6 @@ $(function(){
     });
 });
 
-
-function addNewUser() {
-    window.location.href = "/new-user/";
-}
-
 function addNewJudge() {
     window.location.href = "/judge/new";
 }
