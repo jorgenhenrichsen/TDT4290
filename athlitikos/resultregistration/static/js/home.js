@@ -11,8 +11,25 @@ $(function(){
     });
 });
 
+function addNewJudge() {
+    window.location.href = "/judge/new";
+}
+
+function addNewLifter() {
+    window.location.href = "/lifter/new";
+}
 
 function deletePendingGroup(id) {
     window.location.href = "/result/delete/" + id;
 }
 
+function editPendingGroup(id) {
+    window.location.href = "/result/edit/" + id;
+}
+
+// Redirect to resultregistration on click.
+$(function () {
+    document.getElementById("add-result-button").onclick = function () {
+        location.href = "/resultregistration/";
+    }
+});

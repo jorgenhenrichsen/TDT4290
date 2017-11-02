@@ -28,3 +28,22 @@ thead {
 .no-icon {
     background-image: none;
 }
+
+.button-wrapper {
+    display: flex;
+    justify-content: center;
+    /*align-content: center;*/
+}
+
+.button-column {
+    display: flex;
+    flex-direction: column;
+    padding: 0 2em;
+}
+
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+}
+

@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'athlitikos/base.html' %}
 
 {% block content %}
 {#    uses standard styling for forms #}
@@ -9,7 +9,7 @@
               {% csrf_token %}
 {#              standard for sending form elements in django#}
               <div >
-                  <label for="username">Brukernavn</label>
+                  <label for="username">Epostadresse</label>
                   <div>
                       <input type="text" name="username" placeholder="brukernavn">
                   </div>
@@ -21,7 +21,7 @@
                   </div>
               </div>
 {#              adds a submit button#}
-              <input type="submit" value="Logg inn">
+              <button class="ok-button" type="submit" value="Logg inn">Logg inn</button>
           </form>
     </div>
 {% endblock %}
