@@ -31,14 +31,20 @@ thead {
 
 #approve-btn {
     position: absolute;
-    right: 110px;
-    top: 140px;
+    right: 170px;
+    top: 110px;
 }
 
 #underkjenn-btn {
     position: absolute;
     left: 120px;
     top: 100px;
+}
+
+#gjør-endringer-btn {
+    position: absolute;
+    right: 10px;
+    top: 110px;
 }
 
 #avbryt-btn {
