@@ -100,7 +100,18 @@ class ResultForm(forms.Form):
 
     lifter = forms.CharField(max_length=200)
 
+    def clean_lifter(self):
 
+        print("CALLED")
+
+        cleaned_data = self.cleaned_data
+        lifter = cleaned_data.get('lifter')
+
+        if len(lifter) > 0:
+            raise forms.ValidationError("Må ha utøver")
+            # self.add_error('lifter', "Må ha utøver")
+
+        return lifter
 
 
 class PendingResultForm(forms.Form):

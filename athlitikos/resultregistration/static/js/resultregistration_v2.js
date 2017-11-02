@@ -2,8 +2,14 @@
 
 $(function () {
     $(".lifter-input-field").children().first().autocomplete({
-      source: "/search/lifter",
-      minLength: 2,
+        source: "/search/lifter",
+        minLength: 2,
+        select: function (event, ui) {
+            console.log(event);
+            console.log(ui);
+            $("#" + $(this).attr("id")).val(ui.id);
+            // TODO: Need to set value to id here...
+        }
   });
 })
 
