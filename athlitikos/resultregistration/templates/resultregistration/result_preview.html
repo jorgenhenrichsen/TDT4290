@@ -51,7 +51,10 @@
                 <th>{{ pending_result.total_lift }}</th>
                 <th>{{ pending_result.points_with_sinclair }}</th>
                 <th>{{ pending_result.points_with_veteran }}</th>
-                <th></th>
+
+                <th>
+                    <button class="ok-button" onclick="changePendingGroup({{ pending_result.pk }})">Gjør endringer</button>
+                </th>
             </tr>
 
         {% endfor %}

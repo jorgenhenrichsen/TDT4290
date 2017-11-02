@@ -122,3 +122,9 @@ class PendingResultForm(forms.Form):
     pl = forms.CharField(max_length=6, required=False)
     rekord = forms.CharField(max_length=8, required=False)
     sinclair_coefficient = forms.CharField(max_length=9, required=False)
+
+
+class ChangeResultForm(forms.ModelForm):
+    class Meta:
+        model = Result
+        fields = '__all__'

@@ -6,7 +6,7 @@ from .mixins import AjaxFormMixin
 from .models import Lifter, Judge, Staff, Group, Competition
 from .models import Result, MoveAttempt
 from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm
-from .forms import CompetitonForm, GroupFormV2
+from .forms import CompetitonForm, GroupFormV2, ChangeResultForm
 # from .utils import *
 from .forms import PendingResultForm
 # from .forms import forms
@@ -440,3 +440,12 @@ def delete_group(request, pk):
     group.delete()
     results.delete()
     return redirect('/home/')
+
+def change_result(request, pk):
+    if request.method == "POST":
+        form = ChangeResultForm(request.POST)
+        if form.is_valid():
+            change_result = form.save()
+            return redirect(reverse('resultregistration:edit_result', args=[change_result.pk]))
+    form = ChangeResultForm()
+    return render(request, 'resultregistration/edit_person.html', {'title': 'Endre valgt resultat', 'form': form})

@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^home/admin/$', views.home_admin, name='home_admin'),
     url(r'^home/clubofc/$', views.home_club_official, name='home_club_official'),
     url(r'^judges/$', views.list_all_judges, name="result_registration"),
+    url(r'^result/change/(?P<pk>\d+)/$', views.change_result, name="change_result")
 ]
