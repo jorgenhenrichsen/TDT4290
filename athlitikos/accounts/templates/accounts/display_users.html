@@ -1,10 +1,14 @@
 {% extends 'athlitikos/base.html' %}
 
+{% block head %}
+    <script type="text/javascript" src="/static/js/user_list.js"></script>
+{% endblock %}
+
 {% block content %}
 <h1>Oversikt over brukere i systemet</h1>
 <h5> Innlogget: {{request.user.get_name_of_user}}</h5>
 
-<a href="http://127.0.0.1:8000/register/"><button>opprett ny bruker</button></a>
+<button onclick="createNewUser()">opprett ny bruker</button>
 
 {% for user in userlist %}
 <style>
@@ -47,8 +51,7 @@ td {
             {%endif%}
         </td>
         <th>
-        <a href="http://127.0.0.1:8000/endre-bruker/{{user.id}}">
-            <button>endre bruker</button></a>
+            <button onclick="changeUser({{user.id}})">Endre bruker</button>
         </th>
     </tr>
 </table>
