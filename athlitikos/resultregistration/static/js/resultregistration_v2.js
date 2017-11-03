@@ -70,26 +70,22 @@ function displayErrors(errors) {
     var errorArray = $.parseJSON(errors);
     console.log(errorArray);
 
-    const fieldNames = new Array(["lifter", "lifter_id", "club", "club_id", "birth_date", "category", "body_weight"]);
+    const fieldNames = new Array("lifter", "lifter_id", "club", "club_id", "birth_date", "category", "body_weight");
 
     for (i = 0; i < errorArray.length; i++) {
-
+        const errorDict = errorArray[i]
+        console.log(errorDict);
         for (y = 0; y < fieldNames.length; y++) {
             const fieldName = fieldNames[y];
+            const fieldErrors = errorDict[fieldName];
             const id = "#id_form-" + i + "-" + fieldName;
-            const fieldErrors = errorArray[i][fieldName];
 
             if (fieldErrors != undefined) {
-                console.log(id, fieldErrors);
-
                 for (e = 0; e < fieldErrors.length; e++) {
                     const error = fieldErrors[e];
-                    console.log(error)
                     $(id).before("<label>" + error + "</label>")
                 }
-                    //
             }
         }
     }
-
 }
