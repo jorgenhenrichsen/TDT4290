@@ -63,6 +63,15 @@
         </tbody>
 
     </table>
+
+    <label>Feilmeldinger</label><li>
+        {% for error in result_formset.non_form_errors %}
+            <ul>
+                {{ error }}
+            </ul>
+        {% endfor %}
+    </li>
+
     <input type="submit">
 
     </form>

@@ -1,6 +1,7 @@
 from django import forms
 from .models import Competition, Club, Group, Result, MoveAttempt, Lifter, Judge, Staff
 from django.utils import timezone
+from datetime import datetime
 
 YEAR_CHOICES = [y for y in range(1900, timezone.now().year+1)]
 
@@ -91,28 +92,35 @@ class MoveAttemptForm(forms.ModelForm):
 
 class ResultForm(forms.Form):
 
-    lifter = forms.CharField(max_length=200, widget=forms.TextInput(attrs={'class': 'lifter-input-field'}))
+    lifter = forms.CharField(max_length=200, widget=forms.TextInput(
+        attrs={'class': 'lifter-input-field',
+               'placeholder': 'Utøver'}))
     lifter_id = forms.IntegerField(widget=forms.HiddenInput(), required=False)
 
-    club = forms.CharField(max_length=200, widget=forms.TextInput(attrs={'class': 'club-input-field'}))
+    club = forms.CharField(max_length=200, widget=forms.TextInput(attrs={'class': 'club-input-field', 'placeholder': 'Klubb'}))
     club_id = forms.IntegerField(widget=forms.HiddenInput(), required=False)
 
-    birth_date = forms.DateField()
+    birth_date = forms.DateField(widget=forms.DateInput(attrs={'placeholder': 'dd/mm/yyyy'}))
 
-    body_weight = forms.FloatField()
-    category = forms.CharField(max_length=10)
-
-    def clean_lifter_id(self):
-
-        cleaned_data = self.cleaned_data
-        lifter_id = cleaned_data.get('lifter_id')
-
-        if lifter_id is None:
-            self.add_error('lifter', "Skriv inn navn på utøver og velg fra listen.")
-
-        return lifter_id
+    body_weight = forms.FloatField(widget=forms.NumberInput(attrs={'placeholder': 'kg'}))
+    category = forms.CharField(max_length=10, widget=forms.TextInput(attrs={'placeholder': 'Kategori'}))
 
 
+class BaseResultFormSet(forms.BaseFormSet):
+
+    def clean(self):
+        if any(self.errors):
+            return
+
+        lifter_ids = []
+        for form in self.forms:
+            try:
+                lifter_id = form.cleaned_data["lifter_id"]
+            except KeyError:
+                continue
+            if lifter_id in lifter_ids:
+                raise forms.ValidationError("Kan ikke inneholde samme utøver to ganger")
+            lifter_ids.append(lifter_id)
 
 
 class PendingResultForm(forms.Form):

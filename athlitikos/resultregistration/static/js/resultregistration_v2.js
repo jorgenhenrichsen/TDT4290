@@ -42,6 +42,10 @@ $(function () {
     $(".club-input-field").autocomplete({
         source: "/search/club/",
         minLength: 2,
+        select: function (event, ui) {
+            var elementId = "#" + $(this).attr("id") + "_id";
+            $(elementId).val(ui.item.id);
+        }
     });
 });
 

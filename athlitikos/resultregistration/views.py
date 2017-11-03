@@ -8,7 +8,7 @@ from .models import Result, MoveAttempt
 from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm
 from .forms import CompetitonForm, GroupFormV2
 # from .utils import *
-from .forms import PendingResultForm, ResultForm
+from .forms import PendingResultForm, ResultForm, BaseResultFormSet
 from django.forms import formset_factory
 from resultregistration.models import Club, Lifter
 import json
@@ -16,7 +16,7 @@ from datetime import datetime
 
 def v2_result_registration(request):
 
-    ResultFormSet = formset_factory(ResultForm, extra=2)
+    ResultFormSet = formset_factory(ResultForm, extra=2, formset=BaseResultFormSet)
 
     if request.method == "POST":
         r_formset = ResultFormSet(request.POST, request.FILES)
