@@ -14,7 +14,7 @@
             {% for entry in judgelist %}
                 <tr>
                     <td>{{ entry.judge.fullname }}</td>
-                    <td>{{ entry.judge.judge_level }}</td>
+                    <td>{{ entry.judge.get_judge_level_display }}</td>
                     <td>
                         <table>
                             <tr>

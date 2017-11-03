@@ -71,7 +71,8 @@ def judge_detail(request, pk):
     judge = get_object_or_404(Judge, pk=pk)
     return render(request, 'resultregistration/judge_detail.html', {
         'fullname': judge.__str__(),
-        'level': judge.judge_level,
+        # 'level': judge.judge_level,
+        'level': judge.get_judge_level_display,
         'club': judge.club,
     })
 
