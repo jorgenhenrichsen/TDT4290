@@ -109,9 +109,12 @@ class ResultForm(forms.Form):
 
         cleaned_data = self.cleaned_data
         lifter = cleaned_data.get('lifter')
+        lifter_id = cleaned_data.get('lifter_id')
+        print(cleaned_data)
 
-        if len(lifter) > 0:
-            self.add_error('lifter', "Må ha utøver")
+        """This happens when the user just writes the lifter name instead of using autocomplete"""
+        if lifter_id is None:
+            self.add_error('lifter', "Skriv inn navn på utøver og velg fra listen.")
 
         return lifter
 

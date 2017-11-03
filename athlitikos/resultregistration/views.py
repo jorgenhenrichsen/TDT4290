@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404, reverse
+from django.shortcuts import render, redirect, get_object_or_404, reverse, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.generic import FormView
@@ -10,6 +10,9 @@ from .forms import CompetitonForm, GroupFormV2
 # from .utils import *
 from .forms import PendingResultForm, ResultForm
 from django.forms import formset_factory
+from resultregistration.models import Club, Lifter
+import json
+from datetime import datetime
 
 def v2_result_registration(request):
 
@@ -17,8 +20,6 @@ def v2_result_registration(request):
 
     if request.method == "POST":
         r_formset = ResultFormSet(request.POST, request.FILES)
-
-
 
         if r_formset.is_valid():
             print("IS VALID")
@@ -31,6 +32,27 @@ def v2_result_registration(request):
     else:
         r_formset = ResultFormSet()
     return render(request, "resultregistration/resultregistration_v2.html", {'result_formset': r_formset})
+
+
+def get_result_autofill_data(request):
+
+    lifter_id = request.GET.get('lifter_id')
+
+    lifter = get_object_or_404(Lifter, pk=lifter_id)
+
+    data = {
+        "club": {
+            "name": lifter.club.club_name,
+            "id": lifter.club.id,
+        },
+        "birth_date": lifter.birth_date.strftime('%d/%m/%Y')
+    }
+
+    json_data = json.dumps(data)
+    mime_type = "application/json"
+    return HttpResponse(json_data, mime_type)
+
+
 
 @login_required(login_url='/login')
 def home(request):

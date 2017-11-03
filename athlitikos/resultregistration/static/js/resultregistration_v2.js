@@ -5,8 +5,37 @@ $(function () {
         source: "/search/lifter",
         minLength: 2,
         select: function (event, ui) {
+
+            var baseElementId = $(this).attr("id").replace("lifter", "")
+            console.log(baseElementId);
             var elementId = "#" + $(this).attr("id") + "_id";
-            $(elementId).val(ui.id);
+            console.log(elementId);
+
+            $(elementId).val(ui.item.id);
+
+
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: "/autofill/result/",
+                data: {
+                    "lifter_id": ui.item.id
+                },
+                success: function (json) {
+                    console.log(json);
+
+                    const club_field = "#" + baseElementId + "club";
+                    $(club_field).val(json.club.name);
+
+                    const club_id = club_field + "_id";
+                    $(club_id).val(json.club.id);
+
+                    const birth_date_field = "#" + baseElementId + "birth_date";
+                    $(birth_date_field).val(json.birth_date);
+
+                }
+            })
+            
         }
     });
 
