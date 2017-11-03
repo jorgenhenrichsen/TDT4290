@@ -92,31 +92,27 @@ class MoveAttemptForm(forms.ModelForm):
 class ResultForm(forms.Form):
 
     lifter = forms.CharField(max_length=200, widget=forms.TextInput(attrs={'class': 'lifter-input-field'}))
-    lifter_id = forms.IntegerField(widget=forms.HiddenInput())
+    lifter_id = forms.IntegerField(widget=forms.HiddenInput(), required=False)
 
     club = forms.CharField(max_length=200, widget=forms.TextInput(attrs={'class': 'club-input-field'}))
-    club_id = forms.IntegerField(widget=forms.HiddenInput())
+    club_id = forms.IntegerField(widget=forms.HiddenInput(), required=False)
 
     birth_date = forms.DateField()
 
     body_weight = forms.FloatField()
     category = forms.CharField(max_length=10)
 
-
-    def clean_lifter(self):
-
-        print("CALLED")
+    def clean_lifter_id(self):
 
         cleaned_data = self.cleaned_data
-        lifter = cleaned_data.get('lifter')
         lifter_id = cleaned_data.get('lifter_id')
-        print(cleaned_data)
 
-        """This happens when the user just writes the lifter name instead of using autocomplete"""
         if lifter_id is None:
             self.add_error('lifter', "Skriv inn navn på utøver og velg fra listen.")
 
-        return lifter
+        return lifter_id
+
+
 
 
 class PendingResultForm(forms.Form):

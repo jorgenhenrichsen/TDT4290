@@ -20,7 +20,6 @@ def v2_result_registration(request):
 
     if request.method == "POST":
         r_formset = ResultFormSet(request.POST, request.FILES)
-
         if r_formset.is_valid():
             print("IS VALID")
             data = r_formset.cleaned_data

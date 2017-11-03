@@ -66,14 +66,11 @@ function cloneMore(selector, type) {
 
 // Display validation errors on load.
 function displayErrors(errors) {
-    console.log(errors);
     var errors = errors.replace(/&#39;/g, '"');
-    console.log(errors);
     var errorArray = $.parseJSON(errors);
     console.log(errorArray);
 
-
-    const fieldNames = new Array(["lifter"]);
+    const fieldNames = new Array(["lifter", "lifter_id", "club", "club_id", "birth_date", "category", "body_weight"]);
 
     for (i = 0; i < errorArray.length; i++) {
 
@@ -81,7 +78,6 @@ function displayErrors(errors) {
             const fieldName = fieldNames[y];
             const id = "#id_form-" + i + "-" + fieldName;
             const fieldErrors = errorArray[i][fieldName];
-
 
             if (fieldErrors != undefined) {
                 console.log(id, fieldErrors);
