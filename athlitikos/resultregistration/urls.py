@@ -31,4 +31,6 @@ urlpatterns = [
     url(r'^result/approve/(?P<pk>\d+)/$', views.approve_group, name ='approve_group'),
     url(r'^result/reject/(?P<pk>\d+)/$', views.reject_group, name='reject_group'),
     url(r'^result/delete/(?P<pk>\d+)/$', views.delete_group, name='delete_group'),
+
+    url(r'^resultregistration/fromexcel/$', views.result_from_excel, name='from_excel'),
 ]

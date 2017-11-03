@@ -41,35 +41,42 @@ def read_competition_details(sheet):
 
 
 def read_competition_staff(sheet):
-    competition_staff = []
-    competition_leader = sheet['C27'].value
-    jury1 = sheet['C29'].value
-    jury2 = sheet['C30'].value
-    jury3 = sheet['C31'].value
-    secretary = sheet['C34'].value
-    secretary2 = sheet['C35'].value
-    speaker = sheet['C36'].value
-    judge1 = sheet['I27'].value
-    judge2 = sheet['I28'].value
-    judge3 = sheet['I29'].value
-    extra_judge = sheet['I30'].value
-    technical_inspector = sheet['H32'].value
-    chief_marshall = sheet['H33'].value
-    timekeeper = sheet['H34'].value
-    competition_staff.extend((competition_leader, jury1, jury2, jury3, secretary, secretary2, speaker, judge1, judge2,
-                              judge3, extra_judge, technical_inspector, chief_marshall, timekeeper))
+    competition_staff = {
+        'competition_leader': sheet['C27'].value,
+        'jury': [sheet['C29'].value, sheet['C30'].value, sheet['C31'].value],
+        'secretary': sheet['C34'].value,
+        'secretary2': sheet['C35'].value,
+        'speaker': sheet['C36'].value,
+        'judges': [sheet['I27'].value, sheet['I28'].value, sheet['I29'].value],
+        'extra_judge': sheet['I30'].value,
+        'technical_inspector': sheet['H32'].value,
+        'chief_marshall': sheet['H33'].value,
+        'time_keeper': sheet['H34'].value,
+        'notes': sheet['C38'].value,
+        'records_description': sheet['H36'].value
+    }
+    # competition_staff.extend((competition_leader, jury1, jury2, jury3, secretary, secretary2, speaker, judge1, judge2,
+    #                           judge3, extra_judge, technical_inspector, chief_marshall, timekeeper))
     return competition_staff
 
 
 def read_lifters(sheet):
     lifters = []
     for row in range(9, 24):  # Here you can add or reduce the rows
+        lifter = []
         for column in "ABCDFGHIJKLM":  # Here you can add or reduce the columns
             cell_name = "{}{}".format(column, row)
             if isinstance(sheet[cell_name].value, datetime):  # Change the dates to correct type of date
-                lifters.append(sheet[cell_name].value.date())
+                lifter.append(sheet[cell_name].value.date())
             elif sheet[cell_name].value is not None:  # Checks if there is data in a cell
-                lifters.append(sheet[cell_name].value)
+                lifter.append(sheet[cell_name].value)
+            else:
+                lifter.append('')
+        for e in lifter:
+            if e:
+                lifters.append(lifter)
+                break
+        # lifters.append(lifter)
     return lifters
 
 
@@ -113,8 +120,10 @@ def read_lifters_5kamp(sheet):
                 lifters.append(sheet[cell_name].value.date())  # Change the dates to correct type of date
             elif sheet[cell_name].value is not None:  # Checks if there is data in a cell
                 lifters.append(sheet[cell_name].value)
+            else:
+                lifters.append('')
     return lifters
 
 
-data = readexcel('testfil.xlsx')
-print(read_lifters(data))
+# data = readexcel('testfil.xlsx')
+# print(read_lifters(data))

@@ -7,6 +7,7 @@ from .models import Lifter, Judge, Staff, Group, Competition
 from .models import Result, MoveAttempt
 from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm
 from .forms import CompetitonForm, GroupFormV2
+from .excel import *
 # from .utils import *
 from .forms import PendingResultForm
 # from .forms import forms
@@ -275,7 +276,7 @@ class PendingResultFormView(AjaxFormMixin, FormView):
             # print('result_instance: ', result_instance)
             for i in range(1, 4):
                 snatch = data['snatch{}'.format(i)]
-                if str(snatch)[0].lower == 'n':
+                if str(snatch)[0].lower == 'n' or snatch[0] < 0:
                     success = False
                     snatch = snatch[1:]
                 else:
@@ -297,7 +298,7 @@ class PendingResultFormView(AjaxFormMixin, FormView):
 
             for i in range(1, 4):
                 clean_and_jerk = data['clean_and_jerk{}'.format(i)]
-                if str(clean_and_jerk)[0].lower() == 'n':
+                if str(clean_and_jerk)[0].lower() == 'n' or clean_and_jerk[0] < 0:
                     success = False
                     clean_and_jerk = clean_and_jerk[1:]
                 else:
@@ -440,3 +441,59 @@ def delete_group(request, pk):
     group.delete()
     results.delete()
     return redirect('/home/')
+
+
+def result_from_excel(request):
+    success = False
+    data = readexcel('resultregistration/testfil.xlsx')
+    # print(read_lifters(data))
+    competition_details = read_competition_details(data)
+    # print(competition_details)
+    competition = {
+        'success': True,
+        'category': competition_details[0],
+        'host': competition_details[1],
+        'location': competition_details[2],
+        'start_date': competition_details[3],
+    }
+    result_details = read_lifters(data)
+    results = []
+    for i in range(len(result_details)):
+        key = 'result{}'.format(i)
+        row = result_details[i]
+
+        # is_row = False
+        # for e in row:
+        #     if e:
+        #         is_row = True
+        # if not is_row:
+        #     continue
+        result_row = {
+            'weight_class': row[0],
+            'body_weight': row[1],
+            'age_group': row[2],
+            'birth_date': row[3],
+            # 'start_number': row[4],
+            'lifter': row[4],
+            'club': row[5],
+            'snatch1': row[6],
+            'snatch2': row[7],
+            'snatch3': row[8],
+            'clean_and_jerk1': row[9],
+            'clean_and_jerk2': row[10],
+            'clean_and_jerk3': row[11],
+            'key': key
+        }
+        results.append(result_row)
+    group_details = read_competition_staff(data)
+    group_details['group_number'] = competition_details[4]
+    # print(group_details)
+    success = True
+    response = {
+        'success': success,
+        'competition_details': competition,
+        'result_details': results,
+        'group_details': group_details
+    }
+    return JsonResponse(response)
+    # return render(request, 'resultregistration/resultregistration.html', context={'success': True})

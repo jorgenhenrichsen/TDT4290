@@ -9,45 +9,47 @@
 {% endblock %}
 
 {% block content %}
+
     <div class="form-container">
         <h1>Stevne</h1>
         <form method="POST" class="post-form">{% csrf_token %}
-            <div class="before-table">
-                <label>Stevnekategori: {{ CompetitonForm.competition_category }}</label>
-                <label>Arrangør: {{ ClubForm.club_name }}</label>
-                <label>Sted: {{ CompetitonForm.location }}</label>
-                <label>Dato: {{ CompetitonForm.start_date }}</label>
-                <label>Pulje: {{ GroupForm.group_number }}</label>
+{#            <div class="before-table">#}
+{#                <label>Stevnekategori: {{ CompetitonForm.competition_category }}</label>#}
+{#                <label>Arrangør: {{ ClubForm.club_name }}</label>#}
+{#                <label>Sted: {{ CompetitonForm.location }}</label>#}
+{#                <label>Dato: {{ CompetitonForm.start_date }}</label>#}
+{#                <label>Pulje: {{ GroupForm.group_number }}</label>#}
+{#            </div>#}
+
+        <h2>Resultatrgistrering</h2>
+
+        <form class="ajax_form competition_form" id="competition_form" method="POST" action="."  data-url="competition/new/">
+            {% csrf_token %}
+            <button type="button" onclick="importExcel()">Import excel</button>
+            {{ CompetitonForm.as_p|safe }}
+            <button type="submit">SUB</button>
+    {#         onclick="ajaxSubmit(this.parentNode)"#}
+    {#onclick="ajaxSubmit(this.parentNode)"#}
+        </form>
+
+        <div class="result_section" id="results" >
+    {#    onload="initiateResultRows(this.children[0])"#}
+            <div class="results" id="result_registration_table">
+    {#            <div class="result" id="result0">#}
+    {#                Result1 here#}
+                <p id="group_id_p">
+                    <input type="hidden" id="group_id" name="group_id" required value="2">
+                </p>
+    {#            {%  for x in '0' %}#}
+                {% include 'resultregistration/result_form.html' %}
+    {#            </div>#}
+    {#            {% endfor %}#}
             </div>
 
-    <h2>Resultatrgistrering</h2>
-
-    <form class="ajax_form competition_form" id="competition_form" method="POST" action="."  data-url="competition/new/">
-        {% csrf_token %}
-        {{ CompetitonForm.as_p|safe }}
-        <button type="submit">SUB</button>
-{#         onclick="ajaxSubmit(this.parentNode)"#}
-{#onclick="ajaxSubmit(this.parentNode)"#}
-    </form>
-
-    <div class="result_section" id="results" >
-{#    onload="initiateResultRows(this.children[0])"#}
-        <div class="results" id="result_registration_table">
-{#            <div class="result" id="result0">#}
-{#                Result1 here#}
-            <p id="group_id_p">
-                <input type="hidden" id="group_id" name="group_id" required value="2">
-            </p>
-{#            {%  for x in '0' %}#}
-            {% include 'resultregistration/result_form.html' %}
-{#            </div>#}
-{#            {% endfor %}#}
+    {#        <button id="initiate" onclick="initiateResultRows(this.parentNode.children[0])">Initialize</button>#}
+    {#        <br>#}
+    {#        <button onclick="addRow(this.parentNode.children[0])">Ny rad</button>#}
         </div>
-
-{#        <button id="initiate" onclick="initiateResultRows(this.parentNode.children[0])">Initialize</button>#}
-{#        <br>#}
-{#        <button onclick="addRow(this.parentNode.children[0])">Ny rad</button>#}
-    </div>
 
             <div class="table-buttons">
                 <input class="new-judge-button" type="submit" value="Opprett dommer">
@@ -72,6 +74,7 @@
                 </div>
                 <div class="third-column">
                     <label>Notater: {{ GroupForm.notes }}</label>
+                    <label>Beskrivelse rekorder: {{ GroupForm.records_description }}</label>
                 </div>
             </div>
 
@@ -85,14 +88,14 @@
         </form>
     </div>
 
-    <form class="group_form ajax_form" id="group_form" method="post" action="." data-url="group/new">
-        {% csrf_token %}
+{#    <form class="group_form ajax_form" id="group_form" method="post" action="." data-url="group/new">#}
+{#        {% csrf_token %}#}
 {#        {{ Groupform.comptetition.as_hidden }}#}
-        {{ GroupForm.as_p|safe }}
-        <button type="submit">SUB</button>
+{#        {{ GroupForm.as_p|safe }}#}
+{#        <button type="submit">SUB</button>#}
 {#        onclick="getCompetitionId(this.parentNode)"#}
 {#    onclick="ajaxSubmit(this.parentNode)"#}
-    </form>
+{#    </form>#}
 
     <script type="text/javascript" src="{% static 'js/resultregistration.js' %}"></script>
 
