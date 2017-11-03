@@ -267,7 +267,7 @@ function importExcel(){
         success: function(json){
             // console.log(json)
             // var jsonObj = JSON.parse(json)
-            console.log(json.success, json.group_details);
+            console.log(json.success, json.result_details);
             var competition = json.competition_details;
             var results = json.result_details;
             var group = json.group_details;
@@ -294,9 +294,43 @@ function fillCompetition(competition){
 
 function fillResults(results){
     // TODO: BETTER ARGUMENTS FOR FOR-LOOP
-    for(var i = 1; i<19; i++){
-
+    for(var i = 0; i<results.length; i++){
+        fillResultRow(results[i], i)
     }
+}
+
+function fillResultRow(resultRow, i){
+    // id_form-i-field
+    var $formId = '#pending_result'+i.toString()+' '
+    console.log($formId, resultRow)
+    // TODO: APPLY THIS TO NEW RESULTFORM
+    // $('#id_form-'+i.toString()+'weight_class').val(resultRow.weight_class)
+    // $('#id_form-'+i.toString()+'body_weight').val(resultRow.body_weight)
+    // $('#id_form-'+i.toString()+'category').val(resultRow.category)
+    // $('#id_form-'+i.toString()+'lifter').val(resultRow.lifter)
+    // $('#id_form-'+i.toString()+'birth_date').val(resultRow.birth_date)
+    // $('#id_form-'+i.toString()+'club').val(resultRow.club)
+    // $('#id_form-'+i.toString()+'snatch1').val(resultRow.snatch1)
+    // $('#id_form-'+i.toString()+'snatch2').val(resultRow.snatch3)
+    // $('#id_form-'+i.toString()+'snatch3').val(resultRow.snatch2)
+    // $('#id_form-'+i.toString()+'clean_and_jerk1').val(resultRow.clean_and_jerk1)
+    // $('#id_form-'+i.toString()+'clean_and_jerk2').val(resultRow.clean_and_jerk2)
+    // $('#id_form-'+i.toString()+'clean_and_jerk3').val(resultRow.clean_and_jerk3)
+
+    $($formId+'#id_weight_class').val(resultRow.weight_class)
+    $($formId+'#id_body_weight').val(resultRow.body_weight)
+    $($formId+'#id_category').val(resultRow.age_group)
+    $($formId+'#id_lifter_first_name').val(resultRow.lifter)
+    $($formId+'#id_birth_date').val(resultRow.birth_date)
+    $($formId+'#id_club').val(resultRow.club)
+    $($formId+'#id_snatch1').val(resultRow.snatch1)
+    $($formId+'#id_snatch2').val(resultRow.snatch3)
+    $($formId+'#id_snatch3').val(resultRow.snatch2)
+    $($formId+'#id_clean_and_jerk1').val(resultRow.clean_and_jerk1)
+    $($formId+'#id_clean_and_jerk2').val(resultRow.clean_and_jerk2)
+    $($formId+'#id_clean_and_jerk3').val(resultRow.clean_and_jerk3)
+
+
 }
 
 function fillGroup(group){
