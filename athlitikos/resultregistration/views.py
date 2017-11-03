@@ -38,7 +38,8 @@ def lifter_detail(request, pk):
     return render(request, 'resultregistration/lifter_detail.html',
                   {'fullname': lifter.__str__(),
                    'birth_date': lifter.birth_date.strftime('%Y-%m-%d'),
-                   'gender': lifter.gender
+                   'gender': lifter.gender,
+                   'club': lifter.club,
                    })
 
 
@@ -70,8 +71,8 @@ def judge_detail(request, pk):
     judge = get_object_or_404(Judge, pk=pk)
     return render(request, 'resultregistration/judge_detail.html', {
         'fullname': judge.__str__(),
-        # 'birth_date': judge.birth_date.strftime('%Y-%m-%d'),
         'level': judge.judge_level,
+        'club': judge.club,
     })
 
 

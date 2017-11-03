@@ -16,8 +16,13 @@
             </li>
             <li>
                 {% if request.user.is_authenticated %}
-                    <a id="home-button" onclick="redirectToHome()">Hjem</a>
+                    <a href="#" onclick="redirectToHome()">Hjem</a>
                 {% endif %}
+{#                {% if  request.user.is_club_admin or request.user.is_staff  %}#}
+{#                    <a id="home-button" onclick="redirectToHomeAdmin()">Hjem</a>#}
+{#                {% elif request.user.is_authenticated %}#}
+{#                    <a id="home-button" onclick="redirectToHomeClubof()">Hjem</a>#}
+{#                {% endif %}#}
             </li>
 {#        </div>#}
         <li id="login-wrapper">

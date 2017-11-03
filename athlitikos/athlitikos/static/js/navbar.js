@@ -45,3 +45,11 @@ function collapseNavbar() {
         x.className = "navbar";
     }
 }
+
+function redirectToHomeAdmin() {
+    window.location.href = "/home/admin/";
+}
+
+function redirectToHomeClubof() {
+    window.location.href = "/home/clubofc/";
+}
