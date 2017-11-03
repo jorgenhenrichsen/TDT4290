@@ -195,7 +195,6 @@ def get_available_weight_classes(request):
 
 
 def preview_group(request, pk):
-    print(pk)
     group = Group.objects.filter(pk=pk)
     results = Result.objects.filter(group=group)
     context = {
