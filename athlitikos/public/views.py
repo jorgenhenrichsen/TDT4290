@@ -5,6 +5,7 @@ import athlitikos.settings as settings
 from resultregistration.enums import AgeGroup, Gender, CompetitionCategory
 from easy_pdf.rendering import render_to_pdf_response
 from djqscsv import render_to_csv_response
+from resultregistration.models import Group, Result
 
 
 def generate_csv_report(request):
@@ -191,3 +192,14 @@ def get_available_weight_classes(request):
 
     mime_type = 'application/json'
     return HttpResponse(data, mime_type)
+
+
+def preview_group(request, pk):
+    group = Group.objects.filter(pk=pk)
+    results = Result.objects.filter(group=group)
+    context = {
+        'pending_results': results,
+        'groups': group
+    }
+
+    return render(request, 'public/competition-preview.html', context)
