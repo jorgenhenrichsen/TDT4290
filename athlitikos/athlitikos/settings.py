@@ -11,6 +11,14 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+#for gmail or google apps
+EMAIL_USE_TLS = True
+#simple transfer mail protocol ect
+EMAIL_HOST = 'smtp.gmail.com'
+#my gmail, made a new one for this purpose
+EMAIL_HOST_USER = "testmailerdjango@gmail.com"
+EMAIL_HOST_PASSWORD = "Password987"
+EMAIL_PORT=587
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -41,10 +49,13 @@ INSTALLED_APPS = [
     'resultregistration',
     'usermanagement',
     'userRoles',
+    'accounts',
     'public',
     'easy_pdf',
     'djqscsv',
 ]
+
+AUTH_USER_MODEL = 'accounts.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

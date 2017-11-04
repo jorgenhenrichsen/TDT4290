@@ -1,6 +1,6 @@
 from datetime import datetime
 import athlitikos.settings as settings
-from resultregistration.models import Club, Result, Lifter
+from resultregistration.models import Club, Result, Lifter, Competition
 from resultregistration.enums import Status
 import json
 
@@ -30,6 +30,51 @@ class SearchFiltering:
         """
         return value is None or SearchFiltering.NONE_VALUES.__contains__(str(value))\
             or SearchFiltering.NONE_VALUES.__contains__(value)
+
+    @classmethod
+    def get_competitions(cls, category=None, from_date=None, to_date=None, hosts=None):
+        """
+        Get competitions belonging to a category.
+        :param category:
+        :param from_date:
+        :param to_date:
+        :param hosts:
+        :return:
+        """
+        if settings.DEBUG:
+            print("Getting competitions with category={} from_date={} to_date={} hosts={}"
+                  .format(category, from_date, to_date, hosts))
+
+        competitions = Competition.objects.all()
+
+        if not SearchFiltering.is_none_value(category) and category != "all":
+            competitions = competitions.filter(competition_category__iexact=category)
+
+        if not SearchFiltering.is_none_value(from_date):
+            from_date_formatted = datetime.strptime(from_date, "%d/%m/%Y").date()
+            competitions = competitions.filter(start_date__gte=from_date_formatted)
+
+        if not SearchFiltering.is_none_value(to_date):
+            to_date_formatted = datetime.strptime(to_date, "%d/%m/%Y").date()
+            competitions = competitions.filter(start_date__lte=to_date_formatted)
+
+        if not SearchFiltering.is_none_value(hosts):
+            all_results = []
+            for host in hosts:
+                all_results.append(competitions.filter(host__icontains=host))
+
+            if len(all_results) > 1:
+                end_result = all_results[0]
+
+                for i in range(1, len(all_results)):
+                    end_result = (end_result | all_results[i]).distinct()
+
+                competitions = end_result
+
+            else:
+                competitions = all_results[0]
+
+        return competitions
 
     @classmethod
     def get_best_results(cls, results, filter_by: str="p"):
@@ -161,6 +206,8 @@ class SearchFiltering:
 
                 for i in range(1, len(all_results)):
                     end_result = (end_result | all_results[i]).distinct()
+
+                results = end_result
 
             else:
                 results = all_results[0]
