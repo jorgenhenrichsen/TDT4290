@@ -451,7 +451,7 @@ def change_result(request, pk):
         if form.is_valid():
 
             data = form.cleaned_data
-            changing_result.lifter = data['lifter']
+
             changing_result.body_weight = data['body_weight']
             changing_result.age_group = data['age_group']
             changing_result.weight_class = data['weight_class']
@@ -468,8 +468,7 @@ def change_result(request, pk):
 
             return redirect(reverse('resultregistration:edit_result', args=[changing_result.pk]))
 
-    initial_form_values = {'lifter': changing_result.lifter,
-                           'body_weight': changing_result.body_weight,
+    initial_form_values = {'body_weight': changing_result.body_weight,
                            'age_group': changing_result.age_group,
                            'weight_class': changing_result.weight_class,
                            'sinclair_coefficient': changing_result.sinclair_coefficient,
