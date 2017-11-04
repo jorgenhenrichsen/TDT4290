@@ -442,15 +442,46 @@ def delete_group(request, pk):
     return redirect('/home/')
 
 def change_result(request, pk):
+
+    changing_result = Result.objects.get(pk=pk)
+
     if request.method == "POST":
         form = ChangeResultForm(request.POST)
         if form.is_valid():
-            change_result = form.save()
-            return redirect(reverse('resultregistration:edit_result', args=[change_result.pk]))
 
-    initial_form_values = {'lifter': Result.objects.get(pk=pk)}
-    #initial=initial_form_values
+            data = form.cleaned_data
+            changing_result.lifter = data['lifter']
+            changing_result.body_weight = data['body_weight']
+            changing_result.age_group = data['age_group']
+            changing_result.weight_class = data['weight_class']
+            changing_result.sinclair_coefficient = data['sinclair_coefficient']
+            changing_result.veteran_coefficient = data['veteran_coefficient']
+            changing_result.age = data['age']
+            changing_result.best_clean_and_jerk = data['best_clean_and_jerk']
+            changing_result.best_snatch = data['best_snatch']
+            changing_result.total_lift = data['total_lift']
+            changing_result.points_with_sinclair = data['points_with_sinclair']
+            changing_result.points_with_veteran = data['points_with_veteran']
 
-    form = ChangeResultForm()
+            changing_result.save()
+
+            #change_result = form.save()
+            return redirect(reverse('resultregistration:edit_result', args=[changing_result.pk]))
+
+
+    initial_form_values = {'lifter': changing_result.lifter ,
+                           'body_weight': changing_result.body_weight,
+                           'age_group': changing_result.age_group,
+                           'weight_class': changing_result.weight_class,
+                           'sinclair_coefficient': changing_result.sinclair_coefficient,
+                           'veteran_coefficient': changing_result.veteran_coefficient,
+                           'age': changing_result.veteran_coefficient,
+                           'best_clean_and_jerk': changing_result.best_clean_and_jerk,
+                           'best_snatch': changing_result.best_snatch,
+                           'total_lift': changing_result.total_lift,
+                           'points_with_sinclair': changing_result.points_with_sinclair,
+                           'points_with_veteran': changing_result.points_with_veteran}
+
+    form = ChangeResultForm(initial=initial_form_values)
 
     return render(request, 'resultregistration/edit_person.html', {'title': 'Endre valgt resultat', 'form': form})
