@@ -64,7 +64,7 @@ class Group(models.Model):
     competition = models.ForeignKey(Competition)
     date = models.DateField()
 
-    status = models.CharField(max_length=30, default=Status.not_sent, choices=Status.choices(), null=False)
+    status = models.CharField(max_length=30, default=Status.not_sent.value, choices=Status.choices(), null=False)
 
     competitors = models.ManyToManyField('Lifter', blank=True)
 
