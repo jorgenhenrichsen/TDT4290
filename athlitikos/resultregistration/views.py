@@ -3,14 +3,10 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.generic import FormView
 from .mixins import AjaxFormMixin
-from .models import Lifter, Judge, Staff, Group, Competition
+from .models import Lifter, Judge, Group, Competition
 from .models import Result, MoveAttempt
 from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm
-from .forms import CompetitonForm, GroupFormV2, ChangeResultForm
-# from .utils import *
-from .forms import PendingResultForm
-# from .forms import forms
-# from django.views.generic import UpdateView
+from .forms import CompetitonForm, GroupFormV2, ChangeResultForm, PendingResultForm
 
 
 @login_required(login_url='/login')
@@ -38,7 +34,8 @@ def lifter_detail(request, pk):
     return render(request, 'resultregistration/lifter_detail.html',
                   {'fullname': lifter.__str__(),
                    'birth_date': lifter.birth_date.strftime('%Y-%m-%d'),
-                   'gender': lifter.gender
+                   'gender': lifter.gender,
+                   'club': lifter.club,
                    })
 
 
@@ -70,28 +67,9 @@ def judge_detail(request, pk):
     judge = get_object_or_404(Judge, pk=pk)
     return render(request, 'resultregistration/judge_detail.html', {
         'fullname': judge.__str__(),
-        # 'birth_date': judge.birth_date.strftime('%Y-%m-%d'),
-        'level': judge.judge_level,
-    })
-
-
-@login_required(login_url='/login')
-def add_new_staff(request):
-
-    if request.method == "POST":
-        form = StaffForm(request.POST)
-        if form.is_valid():
-            staff = form.save()
-            return redirect(reverse('resultregistration:staff_detail', args=[staff.pk]))
-    form = StaffForm()
-    return render(request, 'resultregistration/edit_person.html', {'title': 'Legg til ny funksjonær', 'form': form})
-
-
-def staff_detail(request, pk):
-    staff = get_object_or_404(Staff, pk=pk)
-    return render(request, 'resultregistration/staff_detail.html', {
-        'fullname': staff.__str__(),
-        # 'birth_date': staff.birth_date.strftime('%Y-%m-%d'),
+        # 'level': judge.judge_level,
+        'level': judge.get_judge_level_display,
+        'club': judge.club,
     })
 
 

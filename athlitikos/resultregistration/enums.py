@@ -15,7 +15,6 @@ class ChoiceEnum(Enum):
 class JudgeLevel(ChoiceEnum):
     kretsdommer = "K"
     forbundsdommer = "F"
-    forbunds_krets_dommer = "F-K"
     internasjonal_kategori_1 = "Int. I"
     internasjonal_kategori_2 = "Int. II"
 
