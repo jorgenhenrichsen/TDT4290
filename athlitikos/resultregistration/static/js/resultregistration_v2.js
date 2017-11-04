@@ -50,6 +50,13 @@ $(function () {
         }
     });
 
+    $(".age-group-input-field").autocomplete({
+        source: "/autocomplete/age_groups/",
+        minLength: 0
+    }).focus(function() {
+      $(this).autocomplete('search', $(this).val())
+    });
+
 });
 
 

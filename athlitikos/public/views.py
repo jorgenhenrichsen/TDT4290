@@ -177,6 +177,33 @@ def get_age_groups(request):
     return HttpResponse(data, mime_type)
 
 
+def autocomplete_age_groups(request):
+
+    if request.is_ajax():
+
+        query = request.GET.get('term', '')
+        all_groups = AgeGroup.choices()
+
+        if query is not '':
+            all_groups = filter(lambda x: query in x[0], all_groups)
+
+        dicts = []
+        for group in all_groups:
+            dicts.append({
+                'label': group[0],
+                'value': group[0],
+                'id': group[1],
+            })
+
+        json_data = json.dumps(dicts)
+
+    else:
+        raise Http404()
+
+    mime_type = 'application/json'
+    return HttpResponse(json_data, mime_type)
+
+
 def get_available_weight_classes(request):
     if request.is_ajax():
         age_group = request.GET.get('selected_age_group')
