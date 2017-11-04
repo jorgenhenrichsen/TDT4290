@@ -24,4 +24,11 @@ urlpatterns = [
     url(r'^home/clubofc/$', views.home_club_official, name='home_club_official'),
     url(r'^judges/$', views.list_all_judges, name="result_registration"),
     url(r'^result/change/(?P<pk>\d+)/$', views.change_result, name="change_result")
+    url(r'^internationalresult/new/$', views.add_new_internationalresult,
+        name='add_new_internationalresult'),
+    url(r'^internationalresult/(?P<pk>\d+)/$', views.international_result_detail,
+        name='international_result_detail'),
+    url(r'^internationalgroup/new', views.add_new_international_group, name='new_international_group'),
+    url(r'^internasjonal/konkurranse/ny', views.add_new_international_competition, name='new_international_competition')
 ]
+

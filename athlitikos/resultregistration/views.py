@@ -3,6 +3,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.generic import FormView
 from .mixins import AjaxFormMixin
+from .models import InternationalResult
+from .forms import InternationalResultForm, InternationalGroupForm
+from .forms import InternationalCompetitionForm
 from .models import Lifter, Judge, Group, Competition
 from .models import Result, MoveAttempt
 from .forms import LifterForm, JudgeForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm
@@ -61,6 +64,67 @@ def add_new_judge(request):
             return redirect(reverse('resultregistration:judge_detail', args=[judge.pk]))
     form = JudgeForm()
     return render(request, 'resultregistration/edit_person.html', {'title': 'Legg til ny dommer', 'form': form})
+
+
+@login_required(login_url='/login')
+def add_new_internationalresult(request):
+
+    if request.method == "POST":
+        form = InternationalResultForm(request.POST)
+        if form.is_valid():
+            international_result = form.save()
+            print(international_result)
+            return redirect(reverse('resultregistration:international_result_detail',
+                                    args=[international_result.pk]))
+
+    form = InternationalResultForm()
+    return render(request, 'resultregistration/new_international_result.html',
+                  {'title': 'Legg til nytt internasjonalt resultat', 'form': form})
+
+
+def add_new_international_group(request):
+
+    if request.method == "POST":
+        form = InternationalGroupForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('resultregistration:add_new_internationalresult')
+
+    form = InternationalGroupForm()
+    return render(request, 'resultregistration/new_international_group.html',
+                  {'title': 'Legg til ny internasjonal pulje', 'form': form})
+
+
+def add_new_international_competition(request):
+
+    if request.method == "POST":
+        form = InternationalCompetitionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('resultregistration:add_new_internationalresult')
+
+    form = InternationalCompetitionForm()
+    return render(request, 'resultregistration/new_international_competition.html',
+                  {'title': 'Legg til ny internasjonal konkurranse', 'form': form})
+
+
+def international_result_detail(request, pk):
+
+    international_result = get_object_or_404(InternationalResult, pk=pk)
+
+    return render(request, 'resultregistration/international_result_detail.html',
+                  context={'lifter': international_result.__str__(),
+                           'body_weight': international_result.body_weight,
+                           'age_group': international_result.age_group,
+                           'weight_class': international_result.weight_class,
+                           'sinclair_coefficient': international_result.sinclair_coefficient,
+                           'veteran_coefficient': international_result.veteran_coefficient,
+                           'age': international_result.age,
+                           'best_clean_and_jerk': international_result.best_clean_and_jerk,
+                           'best_snatch': international_result.best_snatch,
+                           'total_lift': international_result.total_lift,
+                           'points_with_sinclair': international_result.points_with_sinclair,
+                           'points_with_veteran': international_result.points_with_veteran})
 
 
 def judge_detail(request, pk):
