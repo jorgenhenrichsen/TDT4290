@@ -70,6 +70,7 @@ def add_new_internationalresult(request):
         form = InternationalResultForm(request.POST)
         if form.is_valid():
             international_result = form.save()
+            print(international_result)
             return redirect(reverse('resultregistration:international_result_detail',
                                     args=[international_result.pk]))
 
@@ -83,6 +84,7 @@ def add_new_international_group(request):
     if request.method == "POST":
         form = InternationalGroupForm(request.POST)
         if form.is_valid():
+            form.save()
             return redirect('resultregistration:add_new_internationalresult')
 
     form = InternationalGroupForm()
