@@ -15,12 +15,9 @@ import json
 from .enums import MoveTypes
 import re
 from datetime import datetime
+from .resultparser import resultparser
 
 
-def is_success(attempt):
-    if "n" in attempt or "-" in attempt:
-        return False
-    return True
 
 def v2_result_registration(request):
 
@@ -29,110 +26,7 @@ def v2_result_registration(request):
     if request.method == "POST":
         r_formset = ResultFormSet(request.POST, request.FILES)
         group_form = GroupFormV3(user=request.user, data=request.POST)
-
-        if group_form.is_valid():
-
-            group_data = group_form.cleaned_data
-
-            print(group_data)
-
-            competition = group_data['competition']
-            group_number = group_data['group_number']
-            date = group_data['date']
-
-            group = Group.objects.filter(competition_id__exact=competition.id, group_number__exact=group_number).first()
-
-            if group is not None:
-                print("Existing group, updating...")
-                group.date = date
-                group.save()
-            else:
-                print("Creating new group.")
-                group = Group.objects.create(
-                    group_number=group_number,
-                    competition=competition,
-                    date=date,
-                    author=request.user,
-                )
-
-            if r_formset.is_valid():
-                data = r_formset.cleaned_data
-                print(data)
-                results = []
-                for result_form in data:
-                    if bool(result_form):
-                        print(result_form)
-                        lifter = Lifter.objects.get(pk=result_form['lifter_id'])
-                        body_weight = result_form['body_weight']
-                        age_group = result_form['age_group']
-                        weight_class = result_form['weight_class']
-
-                        result = Result.objects.create(
-                            group=group,
-                            lifter=lifter,
-                            body_weight=body_weight,
-                            age_group=age_group,
-                            weight_class=weight_class,
-                            )
-
-                        snatches = [
-                            result_form['snatch_1'],
-                            result_form['snatch_2'],
-                            result_form['snatch_3'],
-                        ]
-
-                        c_and_js = [
-                            result_form['clean_and_jerk_1'],
-                            result_form['clean_and_jerk_2'],
-                            result_form['clean_and_jerk_3'],
-                        ]
-
-                        best_snatch = None
-                        best_clean_and_jerk = None
-
-                        for snatch in snatches:
-
-                            success = is_success(snatch)
-                            weight = int(re.sub("[^0-9]", "", snatch))
-                            snatch_attempt = MoveAttempt.objects.create(
-                                parent_result=result,
-                                move_type=MoveTypes.snatch,
-                                attempt_num=snatches.index(snatch),
-                                weight=weight,
-                                success=success,
-                            )
-
-                            if best_snatch is None or best_snatch.weight < weight:
-                                best_snatch = snatch_attempt
-
-                        for c_j in c_and_js:
-                            success = is_success(c_j)
-                            weight = int(re.sub("[^0-9]", "", c_j))
-                            c_j_attempt = MoveAttempt.objects.create(
-                                parent_result=result,
-                                move_type=MoveTypes.clean_and_jerk,
-                                attempt_num=c_and_js.index(c_j),
-                                weight=weight,
-                                success=success,
-                            )
-
-                            if best_clean_and_jerk is None or best_clean_and_jerk.weight < weight:
-                                best_clean_and_jerk = c_j_attempt
-
-                        result.best_snatch = best_snatch
-                        result.best_clean_and_jerk = best_clean_and_jerk
-                        result.save()
-
-                        results.append(result)
-
-            else:
-                print(r_formset.errors)
-
-        else:
-            print("Group form not valid, no results can be saved.")
-            print(group_form.errors)
-
-
+        resultparser.parse_result(group_form=group_form, result_formset=r_formset, user=request.user)
     else:
         r_formset = ResultFormSet()
         group_form = GroupFormV3(user=request.user)

@@ -66,7 +66,7 @@ class Group(models.Model):
 
     status = models.CharField(max_length=30, default=Status.not_sent, choices=Status.choices(), null=False)
 
-    competitors = models.ManyToManyField('Lifter', null=True, blank=True)
+    competitors = models.ManyToManyField('Lifter', blank=True)
 
     competition_leader = models.ForeignKey('Judge',
                                            verbose_name='Stevneleder',
@@ -74,8 +74,8 @@ class Group(models.Model):
                                            null=True,
                                            blank=True)
     # , related_name='competition_leader')
-    jury = models.ManyToManyField('Judge', verbose_name='Jurie', default='', related_name='groups_juries', null=True, blank=True)
-    judges = models.ManyToManyField('Judge', related_name='groups_judges', null=True, blank=True)
+    jury = models.ManyToManyField('Judge', verbose_name='Jurie', default='', related_name='groups_juries', blank=True)
+    judges = models.ManyToManyField('Judge', related_name='groups_judges', blank=True)
     secretary = models.CharField(max_length=100, verbose_name='Sekretær', null=True, blank=True)  # , related_name='secretary')
     speaker = models.CharField(max_length=100, verbose_name='Taler', null=True, blank=True)  # , related_name='speaker')
 
@@ -136,7 +136,7 @@ class MoveAttempt(models.Model):
     move_type = models.CharField(max_length=20, choices=MoveTypes.choices())
     attempt_num = models.IntegerField(validators=[MaxValueValidator(3), MinValueValidator(1)])
     weight = models.IntegerField()  # Weight that was attempted lifted
-    success = models.BooleanField(max_length=100)
+    success = models.BooleanField()
 
     def __str__(self):
         return '{0}, attempt {1}, weight {2}, {3}'.format(self.move_type, self.attempt_num, self.weight, self.success)
