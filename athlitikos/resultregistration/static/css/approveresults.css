@@ -46,3 +46,20 @@ thead {
     left: 10px;
     top: 100px;
 }
+
+#group_info_before_table {
+    display: flex;
+    justify-content: space-around;
+    padding: 2%;
+}
+
+#group_info_after_table {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.group_info_after_table_col {
+    display: flex;
+    flex-direction: column;
+    padding: 2%;
+}

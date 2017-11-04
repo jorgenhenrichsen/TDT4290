@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'athlitikos/base.html' %}
 
 {% block content %}
 
@@ -6,7 +6,7 @@
 
    <form method="POST" class="post-form">{% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="save btn btn-default">Fortsett</button>
+        <button class="ok-button" type="submit" class="save btn btn-default">Fortsett</button>
     </form>
 
 {% endblock %}
