@@ -54,6 +54,10 @@ function openCompetition(id) {
     alert("Open" + id);
 }
 
+function preview_group(id) {
+    window.location.href = "/search/group/" + id;
+}
+
 function didSelectCategory() {
     selectedCategory = $("#category-selector").val();
     fetchCompetitions();
