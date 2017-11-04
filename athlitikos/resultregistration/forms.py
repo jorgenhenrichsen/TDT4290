@@ -125,6 +125,7 @@ class PendingResultForm(forms.Form):
 
 
 class ChangeResultForm(forms.ModelForm):
+
     class Meta:
         model = Result
-        fields = '__all__'
+        exclude = ['group']
