@@ -97,7 +97,6 @@ class MoveAttemptForm(forms.ModelForm):
         fields = '__all__'
 
 
-
 class InternationalResultForm(forms.ModelForm):
     class Meta:
         model = InternationalResult

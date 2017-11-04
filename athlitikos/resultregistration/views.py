@@ -1,13 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from datetime import date
 from django.views.generic import FormView
 from .mixins import AjaxFormMixin
 from .models import Lifter, Judge, Staff, Group, Competition, Result, MoveAttempt, InternationalResult
 from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm
 from .forms import PendingResultForm,  InternationalResultForm, InternationalGroupForm, CompetitonForm, GroupFormV2
-
 
 
 @login_required(login_url='/login')
