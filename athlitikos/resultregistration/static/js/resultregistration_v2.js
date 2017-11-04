@@ -24,6 +24,8 @@ $(function () {
                 success: function (json) {
                     console.log(json);
 
+                    // Autofilling the field that can be autofilled
+
                     const club_field = "#" + baseElementId + "club";
                     $(club_field).val(json.club.name);
 
@@ -47,6 +49,7 @@ $(function () {
             $(elementId).val(ui.item.id);
         }
     });
+    
 });
 
 
@@ -74,10 +77,16 @@ function displayErrors(errors) {
     var errorArray = $.parseJSON(errors);
     console.log(errorArray);
 
-    const fieldNames = new Array("lifter", "lifter_id", "club", "club_id", "birth_date", "category", "body_weight");
+
+
+    const fieldNames = new Array("lifter",
+        "lifter_id", "club", "club_id", "birth_date",
+        "age_group", "weight_class", "body_weight",
+        "snatch_1", "snatch_2", "snatch_3",
+        "clean_and_jerk_1", "clean_and_jerk_2", "clean_and_jerk_3");
 
     for (i = 0; i < errorArray.length; i++) {
-        const errorDict = errorArray[i]
+        const errorDict = errorArray[i];
         console.log(errorDict);
         for (y = 0; y < fieldNames.length; y++) {
             const fieldName = fieldNames[y];
@@ -87,7 +96,10 @@ function displayErrors(errors) {
             if (fieldErrors != undefined) {
                 for (e = 0; e < fieldErrors.length; e++) {
                     const error = fieldErrors[e];
-                    $(id).before("<label>" + error + "</label>")
+                    $(id).css("border-color", "red")
+
+                    //Uncomment to display error messages
+                    //$(id).before("<label>" + error + "</label>")
                 }
             }
         }

@@ -84,6 +84,7 @@ class GroupFormV2(forms.ModelForm):
 #     pass
 
 
+
 class MoveAttemptForm(forms.ModelForm):
     class Meta:
         model = MoveAttempt
@@ -103,8 +104,17 @@ class ResultForm(forms.Form):
     birth_date = forms.DateField(widget=forms.DateInput(attrs={'placeholder': 'dd/mm/yyyy'}))
 
     body_weight = forms.FloatField(widget=forms.NumberInput(attrs={'placeholder': 'kg'}))
-    category = forms.CharField(max_length=10, widget=forms.TextInput(attrs={'placeholder': 'Kategori'}))
 
+    age_group = forms.CharField(max_length=10, widget=forms.TextInput(attrs={'class': 'age-group-input-field', 'placeholder': 'Aldersgruppe'}))
+    weight_class = forms.CharField(max_length=10, widget=forms.TextInput(attrs={'placeholder': 'Vektklasse'}))
+
+    snatch_1 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Støt 1'}))
+    snatch_2 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Støt 2'}))
+    snatch_3 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Støt 3'}))
+
+    clean_and_jerk_1 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Rykk 1'}))
+    clean_and_jerk_2 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Rykk 2'}))
+    clean_and_jerk_3 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Rykk 3'}))
 
 class BaseResultFormSet(forms.BaseFormSet):
 
