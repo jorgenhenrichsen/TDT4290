@@ -119,4 +119,4 @@ class ChangeResultForm(forms.ModelForm):
 
     class Meta:
         model = Result
-        exclude = ['group']
+        exclude = ['group', 'lifter']
