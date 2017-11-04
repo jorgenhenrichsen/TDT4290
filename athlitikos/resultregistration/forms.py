@@ -1,6 +1,7 @@
 from django import forms
 from .models import Competition, Club, Group, Result, MoveAttempt, Lifter, Judge, Staff, \
     InternationalResult, InternationalGroup
+from .models import Competition, Club, Group, Result, MoveAttempt, Lifter, Judge
 from django.utils import timezone
 
 YEAR_CHOICES = [y for y in range(1900, timezone.now().year+1)]
@@ -9,7 +10,7 @@ YEAR_CHOICES = [y for y in range(1900, timezone.now().year+1)]
 class LifterForm(forms.ModelForm):
     class Meta:
         model = Lifter
-        fields = ('first_name', 'last_name', 'birth_date', 'gender')
+        fields = ('first_name', 'last_name', 'birth_date', 'gender', 'club')
 
     def __init__(self, *args, **kwargs):
         super(LifterForm, self).__init__(*args, **kwargs)
@@ -19,20 +20,11 @@ class LifterForm(forms.ModelForm):
 class JudgeForm(forms.ModelForm):
     class Meta:
         model = Judge
-        fields = ('first_name', 'last_name', 'judge_level')  # 'birth_date',
+        fields = ('first_name', 'last_name', 'judge_level', 'club')  # 'birth_date',
 
     def __init__(self, *args, **kwargs):
         super(JudgeForm, self).__init__(*args, **kwargs)
         # self.fields['birth_date'].widget = forms.widgets.SelectDateWidget(years=YEAR_CHOICES)
-
-
-class StaffForm(forms.ModelForm):
-    class Meta:
-        model = Staff
-        fields = ('first_name', 'last_name')  # , 'birth_date'
-
-    def __init__(self, *args, **kwargs):
-        super(StaffForm, self).__init__(*args, **kwargs)
 
 
 # For the resultregistration page
