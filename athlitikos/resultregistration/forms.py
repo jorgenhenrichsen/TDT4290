@@ -94,6 +94,24 @@ class MoveAttemptForm(forms.ModelForm):
 class GroupFormV3(forms.Form):
 
     group_number = forms.IntegerField()
+    competition = forms.ModelMultipleChoiceField(queryset=Competition.objects.all())
+    date = forms.DateField()
+    competition_leader = forms.CharField(max_length=200)
+    jury = forms.CharField()
+    judges = forms.CharField()
+    secretary = forms.CharField()
+    speaker = forms.CharField()
+    technical_controller = forms.CharField()
+    chief_marhsall = forms.CharField()
+    timekeeper = forms.CharField()
+    notes = forms.CharField()
+    records_description = forms.CharField()
+
+
+    def __init__(self, user, *args, **kwargs):
+        super(GroupFormV3, self).__init__(*args, **kwargs)
+        self.user = user
+        self.fields['competition'].queryset = Competition.objects.filter(author__exact=user)
 
 
 class ResultForm(forms.Form):

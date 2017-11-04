@@ -8,7 +8,7 @@ from .models import Result, MoveAttempt
 from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm
 from .forms import CompetitonForm, GroupFormV2
 # from .utils import *
-from .forms import PendingResultForm, ResultForm, BaseResultFormSet
+from .forms import PendingResultForm, ResultForm, BaseResultFormSet, GroupFormV3
 from django.forms import formset_factory
 from resultregistration.models import Club, Lifter
 import json
@@ -20,17 +20,21 @@ def v2_result_registration(request):
 
     if request.method == "POST":
         r_formset = ResultFormSet(request.POST, request.FILES)
+        group_form = GroupFormV3(user=request.user, data=request.POST)
+
+        if group_form.is_valid():
+            print(group_form.cleaned_data)
+
         if r_formset.is_valid():
-            print("IS VALID")
             data = r_formset.cleaned_data
             print(data)
         else:
-            print("NOT VALID")
             print(r_formset.errors)
 
     else:
         r_formset = ResultFormSet()
-    return render(request, "resultregistration/resultregistration_v2.html", {'result_formset': r_formset})
+        group_form = GroupFormV3(user=request.user)
+    return render(request, "resultregistration/resultregistration_v2.html", {'result_formset': r_formset, 'group_form': group_form})
 
 
 def get_result_autofill_data(request):
