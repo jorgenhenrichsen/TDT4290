@@ -6,6 +6,7 @@ from .mixins import AjaxFormMixin
 from .models import Lifter, Judge, Staff, Group, Competition, Result, MoveAttempt, InternationalResult
 from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm
 from .forms import PendingResultForm,  InternationalResultForm, InternationalGroupForm, CompetitonForm, GroupFormV2
+from .forms import InternationalCompetitionForm
 
 
 @login_required(login_url='/login')
@@ -88,6 +89,20 @@ def add_new_international_group(request):
     form = InternationalGroupForm()
     return render(request, 'resultregistration/new_international_group.html',
                   {'title': 'Legg til ny internasjonal pulje', 'form': form})
+
+
+def add_new_international_competition(request):
+
+    if request.method == "POST":
+        form = InternationalCompetitionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('resultregistration:add_new_internationalresult')
+
+    form = InternationalCompetitionForm()
+    return render(request, 'resultregistration/new_international_competition.html',
+                  {'title': 'Legg til ny internasjonal konkurranse', 'form': form})
+
 
 
 def international_result_detail(request, pk):

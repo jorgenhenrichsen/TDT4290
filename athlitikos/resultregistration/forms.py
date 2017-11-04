@@ -109,6 +109,12 @@ class InternationalGroupForm(forms.ModelForm):
         fields = '__all__'
 
 
+class InternationalCompetitionForm(forms.ModelForm):
+    class Meta:
+        model = Competition
+        fields = '__all__'
+
+
 class PendingResultForm(forms.Form):
     weight_class = forms.CharField(max_length=3)
     body_weight = forms.FloatField()

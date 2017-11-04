@@ -29,5 +29,6 @@ urlpatterns = [
         name='add_new_internationalresult'),
     url(r'^internationalresult/(?P<pk>\d+)/$', views.international_result_detail,
         name='international_result_detail'),
-    url(r'^internationalgroup/new', views.add_new_international_group, name='new_international_group')
+    url(r'^internationalgroup/new', views.add_new_international_group, name='new_international_group'),
+    url(r'^internasjonal/konkurranse/ny', views.add_new_international_competition, name='new_international_competition')
 ]
