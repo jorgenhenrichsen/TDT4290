@@ -441,6 +441,7 @@ def delete_group(request, pk):
     results.delete()
     return redirect('/home/')
 
+
 def change_result(request, pk):
 
     changing_result = Result.objects.get(pk=pk)
@@ -465,11 +466,9 @@ def change_result(request, pk):
 
             changing_result.save()
 
-            #change_result = form.save()
             return redirect(reverse('resultregistration:edit_result', args=[changing_result.pk]))
 
-
-    initial_form_values = {'lifter': changing_result.lifter ,
+    initial_form_values = {'lifter': changing_result.lifter,
                            'body_weight': changing_result.body_weight,
                            'age_group': changing_result.age_group,
                            'weight_class': changing_result.weight_class,
