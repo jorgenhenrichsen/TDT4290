@@ -141,6 +141,30 @@ class ResultForm(forms.Form):
     clean_and_jerk_2 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Rykk 2'}), required=False)
     clean_and_jerk_3 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Rykk 3'}), required=False)
 
+    def clean(self):
+        cleaned_data = super(ResultForm, self).clean()
+
+        if cleaned_data.get('lifter_id'):
+            return cleaned_data
+        else:
+            lifter_name = cleaned_data.get('lifter')
+            club = cleaned_data.get('club')
+
+            if lifter_name and club:
+                names = lifter_name.rsplit(' ', 1)
+                firstname = names[0]
+                lastname = names[1]
+
+                print(firstname, lastname, club)
+
+                lifter = Lifter.objects.filter(first_name__icontains=firstname,
+                                               last_name__icontains=lastname,
+                                               club__club_name__icontains=club).first()
+                if lifter is None:
+                    self.add_error('lifter', "Ingen utøver funnet!")
+
+        return cleaned_data
+
 
 class BaseResultFormSet(forms.BaseFormSet):
 

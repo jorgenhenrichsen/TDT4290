@@ -101,10 +101,15 @@ def create_result_from_form(result_form, group):
     if bool(result_form):
 
         lifter_id = result_form['lifter_id']
+        lifter_name = result_form['lifter']
+        club_name = result_form['club']
 
+        if lifter_id is not None:
+            lifter = Lifter.objects.get(pk=result_form['lifter_id'])
+        elif lifter_name is not None and club_name is not None:
+            # TODO: Fetch lifter on name and club, needed for Excel import, since we wont have lifter_id.
+            return None
 
-
-        lifter = Lifter.objects.get(pk=result_form['lifter_id'])
         body_weight = result_form['body_weight']
         age_group = result_form['age_group']
         weight_class = result_form['weight_class']
