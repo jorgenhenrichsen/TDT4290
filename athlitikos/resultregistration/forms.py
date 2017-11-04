@@ -94,8 +94,10 @@ class MoveAttemptForm(forms.ModelForm):
 class GroupFormV3(forms.Form):
 
     group_number = forms.IntegerField()
-    competition = forms.ModelMultipleChoiceField(queryset=Competition.objects.all())
+    competition = forms.ModelChoiceField(queryset=Competition.objects.all())
     date = forms.DateField()
+
+    """
     competition_leader = forms.CharField(max_length=200)
     jury = forms.CharField()
     judges = forms.CharField()
@@ -106,6 +108,7 @@ class GroupFormV3(forms.Form):
     timekeeper = forms.CharField()
     notes = forms.CharField()
     records_description = forms.CharField()
+    """
 
 
     def __init__(self, user, *args, **kwargs):
@@ -126,18 +129,17 @@ class ResultForm(forms.Form):
 
     birth_date = forms.DateField(widget=forms.DateInput(attrs={'placeholder': 'dd/mm/yyyy'}))
 
-    body_weight = forms.FloatField(widget=forms.NumberInput(attrs={'placeholder': 'kg'}))
-
     age_group = forms.CharField(max_length=10, widget=forms.TextInput(attrs={'class': 'age-group-input-field', 'placeholder': 'Aldersgruppe'}))
     weight_class = forms.CharField(max_length=10, widget=forms.TextInput(attrs={'placeholder': 'Vektklasse'}))
+    body_weight = forms.FloatField(widget=forms.NumberInput(attrs={'placeholder': 'kg'}))
 
-    snatch_1 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Støt 1'}))
-    snatch_2 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Støt 2'}))
-    snatch_3 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Støt 3'}))
+    snatch_1 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Støt 1'}), required=False)
+    snatch_2 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Støt 2'}), required=False)
+    snatch_3 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Støt 3'}), required=False)
 
-    clean_and_jerk_1 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Rykk 1'}))
-    clean_and_jerk_2 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Rykk 2'}))
-    clean_and_jerk_3 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Rykk 3'}))
+    clean_and_jerk_1 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Rykk 1'}), required=False)
+    clean_and_jerk_2 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Rykk 2'}), required=False)
+    clean_and_jerk_3 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Rykk 3'}), required=False)
 
 class BaseResultFormSet(forms.BaseFormSet):
 

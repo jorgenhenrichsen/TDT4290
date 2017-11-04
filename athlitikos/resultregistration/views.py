@@ -23,13 +23,59 @@ def v2_result_registration(request):
         group_form = GroupFormV3(user=request.user, data=request.POST)
 
         if group_form.is_valid():
-            print(group_form.cleaned_data)
 
-        if r_formset.is_valid():
-            data = r_formset.cleaned_data
-            print(data)
+            group_data = group_form.cleaned_data
+
+            print(group_data)
+
+            competition = group_data['competition']
+            group_number = group_data['group_number']
+            date = group_data['date']
+
+            group = Group.objects.filter(competition_id__exact=competition.id, group_number__exact=group_number).first()
+
+            if group is not None:
+                print("Existing group, updating...")
+                group.date = date
+                group.save()
+            else:
+                print("Creating new group.")
+                group = Group.objects.create(
+                    group_number=group_number,
+                    competition=competition,
+                    date=date,
+                    author=request.user,
+                )
+
+            if r_formset.is_valid():
+                data = r_formset.cleaned_data
+                print(data)
+                results = []
+                for result_form in data:
+                    if bool(result_form):
+                        print(result_form)
+                        lifter = Lifter.objects.get(pk=result_form['lifter_id'])
+                        body_weight = result_form['body_weight']
+                        age_group = result_form['age_group']
+                        weight_class = result_form['weight_class']
+
+                        results.append(
+                            Result.objects.create(
+                                group=group,
+                                lifter=lifter,
+                                body_weight=body_weight,
+                                age_group=age_group,
+                                weight_class=weight_class,
+                            )
+                        )
+
+            else:
+                print(r_formset.errors)
+
         else:
-            print(r_formset.errors)
+            print("Group form not valid, no results can be saved.")
+            print(group_form.errors)
+
 
     else:
         r_formset = ResultFormSet()

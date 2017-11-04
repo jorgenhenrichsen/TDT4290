@@ -66,22 +66,23 @@ class Group(models.Model):
 
     status = models.CharField(max_length=30, default=Status.not_sent, choices=Status.choices(), null=False)
 
-    competitors = models.ManyToManyField('Lifter', null=True)
+    competitors = models.ManyToManyField('Lifter', null=True, blank=True)
 
     competition_leader = models.ForeignKey('Judge',
                                            verbose_name='Stevneleder',
                                            related_name="groups_competition_leader",
-                                           null=True)
+                                           null=True,
+                                           blank=True)
     # , related_name='competition_leader')
-    jury = models.ManyToManyField('Judge', verbose_name='Jurie', default='', related_name='groups_juries', null=True)
-    judges = models.ManyToManyField('Judge', related_name='groups_judges', null=True)
-    secretary = models.CharField(max_length=100, verbose_name='Sekretær', null=True)  # , related_name='secretary')
-    speaker = models.CharField(max_length=100, verbose_name='Taler', null=True)  # , related_name='speaker')
+    jury = models.ManyToManyField('Judge', verbose_name='Jurie', default='', related_name='groups_juries', null=True, blank=True)
+    judges = models.ManyToManyField('Judge', related_name='groups_judges', null=True, blank=True)
+    secretary = models.CharField(max_length=100, verbose_name='Sekretær', null=True, blank=True)  # , related_name='secretary')
+    speaker = models.CharField(max_length=100, verbose_name='Taler', null=True, blank=True)  # , related_name='speaker')
 
     technical_controller = models.ForeignKey('Judge', verbose_name='Teknisk kontrollør',
-                                             related_name='groups_technical_controller', null=True)
-    cheif_marshall = models.ForeignKey('Judge', verbose_name='Chief Marshall', related_name='groups_chief_marshall', null=True)
-    time_keeper = models.ForeignKey('Judge', verbose_name='Tidtaker', related_name='groups_time_keeper', null=True)
+                                             related_name='groups_technical_controller', null=True, blank=True)
+    cheif_marshall = models.ForeignKey('Judge', verbose_name='Chief Marshall', related_name='groups_chief_marshall', null=True, blank=True)
+    time_keeper = models.ForeignKey('Judge', verbose_name='Tidtaker', related_name='groups_time_keeper', null=True, blank=True)
 
     notes = models.CharField(max_length=300, null=True, blank=True)
     records_description = models.CharField(max_length=300, null=True, blank=True)
