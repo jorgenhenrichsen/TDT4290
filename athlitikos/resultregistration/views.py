@@ -423,6 +423,8 @@ def delete_group(request, pk):
 def change_result(request, pk):
 
     changing_result = Result.objects.get(pk=pk)
+    group_result_belongs_to = changing_result.group
+    group_primary_key = group_result_belongs_to.pk
 
     if request.method == "POST":
         form = ChangeResultForm(request.POST)
@@ -444,7 +446,7 @@ def change_result(request, pk):
 
             changing_result.save()
 
-            return redirect(reverse('resultregistration:edit_result', args=[changing_result.pk]))
+            return redirect(reverse('resultregistration:edit_result', args=[group_primary_key]))
 
     initial_form_values = {'body_weight': changing_result.body_weight,
                            'age_group': changing_result.age_group,
