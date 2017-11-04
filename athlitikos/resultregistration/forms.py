@@ -95,7 +95,7 @@ class GroupFormV3(forms.Form):
 
     group_number = forms.IntegerField()
     competition = forms.ModelChoiceField(queryset=Competition.objects.all())
-    date = forms.DateField()
+    date = forms.DateField(widget=forms.DateInput(attrs={'class': 'datepicker'}))
 
     """
     competition_leader = forms.CharField(max_length=200)

@@ -57,6 +57,8 @@ $(function () {
       $(this).autocomplete('search', $(this).val())
     });
 
+    $(".datepicker").datepicker();
+
 });
 
 
