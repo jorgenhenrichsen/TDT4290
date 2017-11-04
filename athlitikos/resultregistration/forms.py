@@ -141,6 +141,7 @@ class ResultForm(forms.Form):
     clean_and_jerk_2 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Rykk 2'}), required=False)
     clean_and_jerk_3 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Rykk 3'}), required=False)
 
+
 class BaseResultFormSet(forms.BaseFormSet):
 
     def clean(self):

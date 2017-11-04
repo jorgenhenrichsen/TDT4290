@@ -136,7 +136,7 @@ class MoveAttempt(models.Model):
     move_type = models.CharField(max_length=20, choices=MoveTypes.choices())
     attempt_num = models.IntegerField(validators=[MaxValueValidator(3), MinValueValidator(1)])
     weight = models.IntegerField()  # Weight that was attempted lifted
-    success = models.BooleanField()
+    success = models.BooleanField(max_length=100)
 
     def __str__(self):
         return '{0}, attempt {1}, weight {2}, {3}'.format(self.move_type, self.attempt_num, self.weight, self.success)

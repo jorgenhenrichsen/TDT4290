@@ -12,7 +12,15 @@ from .forms import PendingResultForm, ResultForm, BaseResultFormSet, GroupFormV3
 from django.forms import formset_factory
 from resultregistration.models import Club, Lifter
 import json
+from .enums import MoveTypes
+import re
 from datetime import datetime
+
+
+def is_success(attempt):
+    if "n" in attempt or "-" in attempt:
+        return False
+    return True
 
 def v2_result_registration(request):
 
@@ -59,15 +67,63 @@ def v2_result_registration(request):
                         age_group = result_form['age_group']
                         weight_class = result_form['weight_class']
 
-                        results.append(
-                            Result.objects.create(
-                                group=group,
-                                lifter=lifter,
-                                body_weight=body_weight,
-                                age_group=age_group,
-                                weight_class=weight_class,
+                        result = Result.objects.create(
+                            group=group,
+                            lifter=lifter,
+                            body_weight=body_weight,
+                            age_group=age_group,
+                            weight_class=weight_class,
                             )
-                        )
+
+                        snatches = [
+                            result_form['snatch_1'],
+                            result_form['snatch_2'],
+                            result_form['snatch_3'],
+                        ]
+
+                        c_and_js = [
+                            result_form['clean_and_jerk_1'],
+                            result_form['clean_and_jerk_2'],
+                            result_form['clean_and_jerk_3'],
+                        ]
+
+                        best_snatch = None
+                        best_clean_and_jerk = None
+
+                        for snatch in snatches:
+
+                            success = is_success(snatch)
+                            weight = int(re.sub("[^0-9]", "", snatch))
+                            snatch_attempt = MoveAttempt.objects.create(
+                                parent_result=result,
+                                move_type=MoveTypes.snatch,
+                                attempt_num=snatches.index(snatch),
+                                weight=weight,
+                                success=success,
+                            )
+
+                            if best_snatch is None or best_snatch.weight < weight:
+                                best_snatch = snatch_attempt
+
+                        for c_j in c_and_js:
+                            success = is_success(c_j)
+                            weight = int(re.sub("[^0-9]", "", c_j))
+                            c_j_attempt = MoveAttempt.objects.create(
+                                parent_result=result,
+                                move_type=MoveTypes.clean_and_jerk,
+                                attempt_num=c_and_js.index(c_j),
+                                weight=weight,
+                                success=success,
+                            )
+
+                            if best_clean_and_jerk is None or best_clean_and_jerk.weight < weight:
+                                best_clean_and_jerk = c_j_attempt
+
+                        result.best_snatch = best_snatch
+                        result.best_clean_and_jerk = best_clean_and_jerk
+                        result.save()
+
+                        results.append(result)
 
             else:
                 print(r_formset.errors)
@@ -80,7 +136,9 @@ def v2_result_registration(request):
     else:
         r_formset = ResultFormSet()
         group_form = GroupFormV3(user=request.user)
-    return render(request, "resultregistration/resultregistration_v2.html", {'result_formset': r_formset, 'group_form': group_form})
+    return render(request,
+                  "resultregistration/resultregistration_v2.html",
+                  {'result_formset': r_formset, 'group_form': group_form})
 
 
 def get_result_autofill_data(request):
