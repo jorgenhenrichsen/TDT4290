@@ -91,6 +91,11 @@ class MoveAttemptForm(forms.ModelForm):
         fields = '__all__'
 
 
+class GroupFormV3(forms.Form):
+
+    group_number = forms.IntegerField()
+
+
 class ResultForm(forms.Form):
 
     lifter = forms.CharField(max_length=200, widget=forms.TextInput(

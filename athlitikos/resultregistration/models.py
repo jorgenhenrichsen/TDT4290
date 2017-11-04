@@ -43,6 +43,7 @@ class Competition(models.Model):
     host = models.CharField(max_length=100, verbose_name="Arrangør")
     location = models.CharField(max_length=100)
     start_date = models.DateField(help_text="år-måned-dag")
+    author = models.ForeignKey(User, null=True)
 
     def __str__(self):
         return '{0}, {1}, {2}'.format(self.competition_category, self.location, self.start_date)
