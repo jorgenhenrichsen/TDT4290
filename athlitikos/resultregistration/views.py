@@ -15,7 +15,7 @@ import json
 from .enums import MoveTypes
 import re
 from datetime import datetime
-from .resultparser import resultparser
+from .resultparser import resultparser, resultserializer
 
 
 
@@ -33,6 +33,24 @@ def v2_result_registration(request):
     return render(request,
                   "resultregistration/resultregistration_v2.html",
                   {'result_formset': r_formset, 'group_form': group_form})
+
+
+def v2_edit_result(request, pk):
+
+    group = get_object_or_404(Group, pk=pk)
+    ResultFormSet = formset_factory(ResultForm, extra=2, formset=BaseResultFormSet)
+
+    group_data, results_data = resultserializer.serialize_group(group)
+
+    if request.method == "POST":
+        r_formset = ResultFormSet(request.POST, request.FILES)
+        group_form = GroupFormV3(user=request.user, data=request.POST)
+        resultparser.parse_result(group_form=group_form, result_formset=r_formset, user=request.user)
+    else:
+        group_form = GroupFormV3(user=request.user, initial=group_data)
+        r_formset = ResultFormSet(initial=results_data)
+
+    return render(request, "resultregistration/resultregistration_v2.html", {'result_formset': r_formset, 'group_form': group_form})
 
 
 def get_result_autofill_data(request):

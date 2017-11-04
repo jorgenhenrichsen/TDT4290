@@ -33,6 +33,7 @@ urlpatterns = [
     url(r'^result/delete/(?P<pk>\d+)/$', views.delete_group, name='delete_group'),
 
     url(r'^v2/resultregistration/$', views.v2_result_registration, name='v2_result_registration'),
+    url(r'^v2/resultregistration/edit/(?P<pk>\d+)/$', views.v2_edit_result, name='v2_edit_result'),
     url(r'autofill/result/$', views.get_result_autofill_data, name='get_result_autofill_data')
 
 ]
