@@ -104,7 +104,6 @@ def add_new_international_competition(request):
                   {'title': 'Legg til ny internasjonal konkurranse', 'form': form})
 
 
-
 def international_result_detail(request, pk):
 
     international_result = get_object_or_404(InternationalResult, pk=pk)
