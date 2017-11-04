@@ -449,7 +449,8 @@ def change_result(request, pk):
             return redirect(reverse('resultregistration:edit_result', args=[change_result.pk]))
 
     initial_form_values = {'lifter': Result.objects.get(pk=pk)}
+    #initial=initial_form_values
 
-    form = ChangeResultForm(initial=initial_form_values)
+    form = ChangeResultForm()
 
     return render(request, 'resultregistration/edit_person.html', {'title': 'Endre valgt resultat', 'form': form})
