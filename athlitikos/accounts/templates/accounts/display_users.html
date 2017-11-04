@@ -9,6 +9,7 @@
 <h5> Innlogget: {{request.user.get_name_of_user}}</h5>
 
 <button onclick="createNewUser()">opprett ny bruker</button>
+<button class="cancel-button" onclick="goBackOnePage()">Avbryt</button>
 
 {% for user in userlist %}
 <style>
