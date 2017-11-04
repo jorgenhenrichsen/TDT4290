@@ -1,4 +1,5 @@
 from django import forms
+from .models import InternationalResult, InternationalGroup
 from .models import Competition, Club, Group, Result, MoveAttempt, Lifter, Judge
 from django.utils import timezone
 
@@ -84,6 +85,24 @@ class ResultForm(forms.ModelForm):
 class MoveAttemptForm(forms.ModelForm):
     class Meta:
         model = MoveAttempt
+        fields = '__all__'
+
+
+class InternationalResultForm(forms.ModelForm):
+    class Meta:
+        model = InternationalResult
+        fields = '__all__'
+
+
+class InternationalGroupForm(forms.ModelForm):
+    class Meta:
+        model = InternationalGroup
+        fields = '__all__'
+
+
+class InternationalCompetitionForm(forms.ModelForm):
+    class Meta:
+        model = Competition
         fields = '__all__'
 
 
