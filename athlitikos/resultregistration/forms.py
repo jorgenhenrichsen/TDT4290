@@ -1,6 +1,5 @@
 from django import forms
-from .models import Competition, Club, Group, Result, MoveAttempt, Lifter, Judge, Staff, \
-    InternationalResult, InternationalGroup
+from .models import InternationalResult, InternationalGroup
 from .models import Competition, Club, Group, Result, MoveAttempt, Lifter, Judge
 from django.utils import timezone
 

@@ -3,9 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.generic import FormView
 from .mixins import AjaxFormMixin
-from .models import Lifter, Judge, Staff, Group, Competition, Result, MoveAttempt, InternationalResult
-from .forms import LifterForm, JudgeForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm
-from .forms import PendingResultForm,  InternationalResultForm, InternationalGroupForm, CompetitonForm, GroupFormV2
+from .models import InternationalResult
+from .forms import InternationalResultForm, InternationalGroupForm
 from .forms import InternationalCompetitionForm
 from .models import Lifter, Judge, Group, Competition
 from .models import Result, MoveAttempt
