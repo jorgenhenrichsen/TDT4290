@@ -152,13 +152,10 @@ class ResultForm(forms.Form):
 
             if lifter_name and club:
                 names = lifter_name.rsplit(' ', 1)
-                firstname = names[0]
-                lastname = names[1]
-
-                print(firstname, lastname, club)
-
-                lifter = Lifter.objects.filter(first_name__icontains=firstname,
-                                               last_name__icontains=lastname,
+                first_name = names[0]
+                last_name = names[1]
+                lifter = Lifter.objects.filter(first_name__icontains=first_name,
+                                               last_name__icontains=last_name,
                                                club__club_name__icontains=club).first()
                 if lifter is None:
                     self.add_error('lifter', "Ingen utøver funnet!")
