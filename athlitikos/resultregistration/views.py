@@ -5,7 +5,7 @@ from django.views.generic import FormView
 from .mixins import AjaxFormMixin
 from .models import Lifter, Judge, Group, Competition
 from .models import Result, MoveAttempt
-from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm
+from .forms import LifterForm, JudgeForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm
 from .forms import CompetitonForm, GroupFormV2, ChangeResultForm, PendingResultForm
 
 
