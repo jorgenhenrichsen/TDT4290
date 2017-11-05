@@ -1,4 +1,24 @@
+{% extends 'athlitikos/base.html' %}
 
-{% block competition %}
-        
+{% block head %}
+        <link rel="stylesheet" type="text/css" href="/static/css/personforms.css">
+{%  endblock %}
+
+
+{% block content %}
+
+    <div class="container">
+        <h1>{{ title }}</h1>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <input class="ok-button" type="submit" onclick="goBackOnePage()" value="Lagre">
+
+        </form>
+        <button class="cancel-button" onclick="redirectToHome()">Avbryt</button>
+
+    </div>
+
+
 {% endblock %}

@@ -13,10 +13,10 @@ class ChoiceEnum(Enum):
 
 
 class JudgeLevel(ChoiceEnum):
-    Level0 = 0
-    Level1 = 1
-    Level2 = 2
-    Level3 = 3
+    kretsdommer = "K"
+    forbundsdommer = "F"
+    internasjonal_kategori_1 = "Int. I"
+    internasjonal_kategori_2 = "Int. II"
 
 
 class Gender(ChoiceEnum):
@@ -128,6 +128,21 @@ class Status(ChoiceEnum):
 
 
 class CompetitionCategory(ChoiceEnum):
-    cat1 = 'Klubbstevne'
-    cat2 = '5-kamp'
-    cat3 = 'NM'
+    klubbstevne = 'Klubbstevne'
+    klubbmesterskap = "Klubbmesterskap"
+    kretsmesterskap = "Kretsmesterskap"
+    lagseriestevne = "Lagseriestevne"
+    nasjonalt_stevne = "Nasjonalt stevne"
+    seriestevne = "Seriestevne"
+    nm = 'NM'
+    nm_junior = "NM-Junior"
+    nm_ungdom = "NM-Ungdom"
+    nm_senior = "NM-Senior"
+    nm_veteran = "NM-Veteran"
+    nordisk_junior = "Nordisk Junior"
+    nordisk_senior = "Nordisk Senior"
+    Nordisk_ungdom = "Nordisk Ungdom"
+    norges_cup = "Norgescup"
+    em = "EM"
+    vm = "VM"
+    ol = "OL"

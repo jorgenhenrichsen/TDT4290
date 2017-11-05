@@ -29,16 +29,22 @@ thead {
     background-image: none;
 }
 
-#approve-btn {
+#approve-btn, #send-button {
     position: absolute;
-    right: 110px;
-    top: 140px;
+    right: 20px;
+    top: 110px;
 }
 
 #underkjenn-btn {
     position: absolute;
-    right: 30px;
-    top: 140px;
+    left: 120px;
+    top: 100px;
+}
+
+#change-button {
+    position: absolute;
+    right: 120px;
+    top: 110px;
 }
 
 #avbryt-btn {

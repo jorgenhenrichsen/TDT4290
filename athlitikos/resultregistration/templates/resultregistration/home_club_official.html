@@ -1,5 +1,5 @@
 
-{% extends 'base.html' %}
+{% extends 'athlitikos/base.html' %}
 
 {#{% block title %}Home{% endblock %}#}
 
@@ -20,9 +20,28 @@
 
 {% block content %}
 
-    <h1>Mine Resultater</h1>
+    <div class="content-wrapper">
+        <h1>Forside klubbleder</h1>
 
-    <button id="add-result-button">Legg til nytt resultat</button>
+        <div class="button-wrapper">
+            <div class="button-column">
+                <h3>Personer</h3>
+                <button onclick="addNewLifter()">Ny løfter</button>
+                <button onclick="addNewJudge()">Ny dommer</button>
+            </div>
+            <div class="button-column">
+                <h3>Ny gruppe</h3>
+                <button id="add-result-button">Legg til ny gruppe</button>
+                <button id="add-competition-button">Legg til ny konkurranse</button>
+            </div>
+            <div class="button-column">
+                <h3>Annet</h3>
+                <button onclick="judges()" id="add-result-button">Dommerstatistikk</button>
+            </div>
+        </div>
+
+        <h2>Mine resultater</h2>
+    </div>
 
     <div id="registered-results-container">
 
@@ -49,8 +68,15 @@
                     <th>{{ pending_group.date }}</th>
                     <th>{{ pending_group.status }}</th>
                     <th>
+                    
                         <button onclick="editPendingGroup({{ pending_group.pk }})">Endre</button>
-                        <button onclick="deletePendingGroup({{ pending_group.pk }})">Slett</button>
+
+                        {% if pending_group.status == "Til godkjenning" or pending_group.status == "Ikke sendt" %}
+                            <button onclick="deletePendingGroup({{ pending_group.pk }})">Slett</button>
+                        {% else %}
+                            <button onclick="denyDeletePendingGroupClubofc()">Slett</button>
+                        {% endif %}
+
                     </th>
                 </tr>
 

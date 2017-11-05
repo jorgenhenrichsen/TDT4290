@@ -1,0 +1,41 @@
+{% load static %}
+
+<div class="navbar" id="top-navbar">
+    <ul class="navbar-list">
+{#        <div>#}
+            <li >
+                <img id="nvf-logo" {% load static %} src={% static 'athlitikos/images/NVFlogo.png' %} alt="Logo">
+            </li>
+{#        </div>#}
+{#        <div>#}
+            <li>
+                <a href="#" onclick="redirectToResults()">Resultater</a>
+            </li>
+            <li>
+                <a href="#" onclick="redirectToCompetitions()">Stevner</a>
+            </li>
+            <li>
+                {% if request.user.is_authenticated %}
+                    <a href="#" onclick="redirectToHome()">Hjem</a>
+                {% endif %}
+{#                {% if  request.user.is_club_admin or request.user.is_staff  %}#}
+{#                    <a id="home-button" onclick="redirectToHomeAdmin()">Hjem</a>#}
+{#                {% elif request.user.is_authenticated %}#}
+{#                    <a id="home-button" onclick="redirectToHomeClubof()">Hjem</a>#}
+{#                {% endif %}#}
+            </li>
+{#        </div>#}
+        <li id="login-wrapper">
+            {% if request.user.is_authenticated %}
+                <label id="logged-in-as-label">Logget inn som {{ request.user.get_full_name }}</label>
+                <a href="#" onclick="logoutCurrentUser()">Logg ut</a>
+            {% else %}
+                <a href="#" onclick="login()">Logg inn</a>
+            {% endif %}
+        </li>
+        <li>
+            <a href="javascript:void(0);" class="icon" onclick="collapseNavbar()">&#9776;</a>
+        </li>
+    </ul>
+</div>
+
