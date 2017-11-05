@@ -80,7 +80,7 @@ def judge_detail(request, pk):
 def merge_find_two_lifters_view(request, *args, **kwargs):
 
     if not request.user.is_club_admin and not request.user.is_staff:  # hvis man ikke request ikke har rettigheter
-        return ('/home')
+        return HttpResponseRedirect('/home')
 
     searchform = MergeLifterSearchForm(request.POST or None)
     lifter_qs = None
@@ -93,7 +93,7 @@ def merge_find_two_lifters_view(request, *args, **kwargs):
 def merge_lifter_view(request, *args, **kwargs):
 
     if not request.user.is_club_admin and not request.user.is_staff:  # hvis man ikke request ikke har rettigheter
-        return ('/home')
+        return HttpResponseRedirect('/home')
 
     # alle utøvere har en personid, som de arver fra superklassen.
     if request.POST.get('ny') is not None:
