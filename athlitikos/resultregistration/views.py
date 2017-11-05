@@ -78,6 +78,19 @@ def get_result_autofill_data(request):
     return HttpResponse(json_data, mime_type)
 
 
+def add_new_competition(request):
+
+    if request.method == "POST":
+        form = CompetitonForm(request.POST)
+        if form.is_valid():
+            competition = form.save()
+            competition.author = request.user
+            competition.save()
+    else:
+        form = CompetitonForm()
+    return render(request, "resultregistration/competition_form.html", {"title": "Ny konkurranse", "form": form})
+
+
 @login_required(login_url='/login')
 def home(request):
     if request.user.is_club_admin or request.user.is_staff:

@@ -29,9 +29,12 @@ class JudgeForm(forms.ModelForm):
 
 # For the resultregistration page
 class CompetitonForm(forms.ModelForm):
+
+    host = forms.ModelChoiceField(Club.objects.all())
+
     class Meta:
         model = Competition
-        fields = '__all__'
+        fields = ['competition_category', 'host', 'location', 'start_date']
     # def add_competition_if_not_exists(self):
     #
     #     competition = self.cleaned_data
