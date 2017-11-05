@@ -31,18 +31,41 @@ thead {
 
 #approve-btn {
     position: absolute;
-    right: 110px;
-    top: 140px;
+    right: 20px;
+    top: 110px;
 }
 
 #underkjenn-btn {
     position: absolute;
-    right: 30px;
-    top: 140px;
+    left: 120px;
+    top: 100px;
+}
+
+#gjør-endringer-btn {
+    position: absolute;
+    right: 10px;
+    top: 110px;
 }
 
 #avbryt-btn {
     position: absolute;
     left: 10px;
     top: 100px;
+}
+
+#group_info_before_table {
+    display: flex;
+    justify-content: space-around;
+    padding: 2%;
+}
+
+#group_info_after_table {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.group_info_after_table_col {
+    display: flex;
+    flex-direction: column;
+    padding: 2%;
 }

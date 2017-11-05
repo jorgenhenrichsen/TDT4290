@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'athlitikos/base.html' %}
 
 {%  block head %}
     <link rel="stylesheet" type="text/css" href="/static/css/home.css">
@@ -14,7 +14,7 @@
             {% for entry in judgelist %}
                 <tr>
                     <td>{{ entry.judge.fullname }}</td>
-                    <td>{{ entry.judge.judge_level }}</td>
+                    <td>{{ entry.judge.get_judge_level_display }}</td>
                     <td>
                         <table>
                             <tr>
@@ -35,4 +35,5 @@
                 </tr>
             {% endfor %}
     </table>
+    <button class="cancel-button" onclick="goBackOnePage()">Avbryt</button>
 {% endblock %}

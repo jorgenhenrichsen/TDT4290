@@ -1,0 +1,93 @@
+* {
+  font-weight: 400;
+}
+
+.navbar {
+    background-color: #cb1e1f;
+    overflow: hidden;
+}
+
+.navbar-list {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style-type: none;
+}
+
+li a {
+    text-decoration: none;
+    text-align: center;
+    padding: 14px 16px;
+    color: white;
+    display: block;
+    font-size: 1.1em;
+}
+
+li a:hover {
+    background-color: white;
+    color: black;
+}
+
+li a:active {
+    background-color: white;
+    color: black;
+}
+
+#login-wrapper {
+    margin-left: auto;
+}
+
+#nvf-logo {
+    margin-left: 15px;
+}
+
+#logged-in-as-label {
+    color: white;
+    padding-right: 1em;
+}
+
+.navbar .icon {
+    display: none;
+}
+
+@media screen and (max-width: 600px) {
+    .navbar a {display: none;}
+    .navbar a.icon {
+        float: right;
+        display: block;
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+
+    .navbar-list {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #login-wrapper {
+        margin-left: 0;
+    }
+}
+
+@media screen and (max-width: 600px) {
+  .navbar.responsive {position: relative;}
+  .navbar.responsive a.icon{
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .navbar.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+}

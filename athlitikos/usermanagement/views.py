@@ -4,6 +4,7 @@ from django.views.generic import View, ListView
 from .forms import UserForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import Group
+from django.contrib.auth import logout
 
 
 class UserListView(ListView):
@@ -66,3 +67,8 @@ class UserFormView(View):
 def club_official_options(request):
     # html = ''
     return HttpResponse()
+
+
+def logout_user(request):
+    logout(request)
+    return HttpResponse(status=200)

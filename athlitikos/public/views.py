@@ -2,8 +2,32 @@ from django.shortcuts import render, HttpResponse, Http404
 import json
 from .search.search import SearchFiltering
 import athlitikos.settings as settings
-from resultregistration.enums import AgeGroup, Gender
+from resultregistration.enums import AgeGroup, Gender, CompetitionCategory
 from easy_pdf.rendering import render_to_pdf_response
+from djqscsv import render_to_csv_response
+from resultregistration.models import Group, Result
+
+
+def generate_csv_report(request):
+    """
+    Generates a CSV file version of a search result.
+    :param request:
+    :return:
+    """
+    results = SearchFiltering.search_for_results_with_request(request).values('lifter__first_name',
+                                                                              'lifter__last_name',
+                                                                              'body_weight', 'age',
+                                                                              'lifter__club__club_name',
+                                                                              'age_group',
+                                                                              'weight_class',
+                                                                              'best_snatch',
+                                                                              'best_clean_and_jerk',
+                                                                              'total_lift',
+                                                                              'sinclair_coefficient',
+                                                                              'points_with_sinclair',
+                                                                              'veteran_coefficient',
+                                                                              'points_with_veteran')
+    return render_to_csv_response(results)
 
 
 def generate_report(request):
@@ -37,6 +61,29 @@ def search(request):
         age_groups = map(lambda x: x[0], AgeGroup.choices())
         genders = map(lambda x: x[0], Gender.choices())
         return render(request, 'public/search.html', {'age_groups': age_groups, 'genders': genders})
+
+
+def search_for_competitions(request):
+
+    if request.is_ajax():
+        category = request.GET.get('category')
+        from_date = request.GET.get('from_date')
+        to_date = request.GET.get('to_date')
+        hosts_json = request.GET.get('hosts')
+        hosts = None
+
+        if hosts_json is not None:
+            hosts = json.loads(hosts_json)
+
+        competitions = SearchFiltering.get_competitions(category=category,
+                                                        from_date=from_date,
+                                                        to_date=to_date,
+                                                        hosts=hosts)
+
+        return render(request, 'public/competitions-table.html', {'competitions': competitions})
+    else:
+        categories = CompetitionCategory.choices()
+        return render(request, 'public/competitions.html', {'categories': categories})
 
 
 def search_for_lifter(request):
@@ -145,3 +192,14 @@ def get_available_weight_classes(request):
 
     mime_type = 'application/json'
     return HttpResponse(data, mime_type)
+
+
+def preview_group(request, pk):
+    group = Group.objects.filter(pk=pk)
+    results = Result.objects.filter(group=group)
+    context = {
+        'pending_results': results,
+        'groups': group
+    }
+
+    return render(request, 'public/competition-preview.html', context)

@@ -3,7 +3,7 @@ select {
     width: 100px;
 }
 
-input[type=submit] {
+input {
     width: 200px;
 }
 
