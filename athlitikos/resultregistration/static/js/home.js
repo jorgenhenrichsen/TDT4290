@@ -9,6 +9,10 @@ $(function(){
             }
         }
     });
+
+    $("#add-competition-button").click(function () {
+        window.location.href = "/resultregistration/competition/new";
+    })
 });
 
 function addNewJudge() {

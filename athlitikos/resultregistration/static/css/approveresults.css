@@ -29,7 +29,7 @@ thead {
     background-image: none;
 }
 
-#approve-btn {
+#approve-btn, #send-button {
     position: absolute;
     right: 20px;
     top: 110px;

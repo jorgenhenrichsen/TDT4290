@@ -19,6 +19,7 @@ from .enums import MoveTypes
 import re
 from datetime import datetime
 from .resultparser import resultparser, resultserializer
+from .enums import Status
 
 
 
@@ -552,16 +553,26 @@ def edit_result_clubofc(request, pk):
     return render(request, 'resultregistration/editresult_clubofc.html', context)
 
 
+@login_required(login_url='/login')
 def approve_group(request, pk):
     group = Group.objects.get(pk=pk)
-    group.status = "Godkjent"
+    group.status = Status.approved.value
     group.save()
     return redirect('/home/')
 
 
+@login_required(login_url='/login')
 def reject_group(request, pk):
     group = Group.objects.get(pk=pk)
-    group.status = "Ikke godkjent"
+    group.status = Status.denied.value
+    group.save()
+    return redirect('/home/')
+
+
+@login_required(login_url='/login')
+def send_group(request, pk):
+    group = Group.objects.get(pk=pk)
+    group.status = Status.pending.value
     group.save()
     return redirect('/home/')
 
