@@ -203,3 +203,7 @@ def preview_group(request, pk):
     }
 
     return render(request, 'public/competition-preview.html', context)
+
+
+def front_page(request):
+    return render(request, 'public/search.html')
