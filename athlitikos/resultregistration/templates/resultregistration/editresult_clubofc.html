@@ -4,7 +4,7 @@
 
 {% block head %}
     <link rel="stylesheet" type="text/css" href="/static/css/approveresults.css">
-    <script type="text/javascript" src="/static/js/approvegroup.js"></script>
+    <script type="text/javascript" src="/static/js/edit_result_club_official.js"></script>
 {% endblock %}
 
 
@@ -12,8 +12,102 @@
 
     <button class="cancel-button" id="avbryt-btn" onclick="goBackToHome()">Avbryt</button>
 
-    <div>
-        {% include "resultregistration/result_preview.html" %}
+    {% load static %}
+
+
+<h1>Forhåndsvisning av pulje</h1>
+
+{% for group in groups %}
+    <div id="group_info_before_table">
+        <label>Stevnekategori: {{ group.competition.competition_category }}</label>
+        <label>Arrangør: {{ group.competition.host }}</label>
+        <label>Sted: {{ group.competition.location}}</label>
+        <label>Dato: {{ group.competition.start_date}}</label>
+        <label>Gruppe nummer: {{ group.group_number }}</label>
     </div>
+{%  endfor %}
+
+<div id="registered-results-container">
+    <table id="result-table">
+
+        <thead>
+
+            <tr>
+                <th>Utøver</th>
+                <th>Kroppsvekt</th>
+                <th>Aldersgruppe</th>
+                <th>Vektklasse</th>
+                <th>Sinclair-koeffisient</th>
+                <th>Veteran-koeffisient</th>
+                <th>Alder</th>
+                <th>Beste clean-and-jerk</th>
+                <th>Beste snatch</th>
+                <th>Totalvekt</th>
+                <th>Poeng med Sinclair</th>
+                <th>Poeng med Veteran</th>
+                <th class="no-icon"><span class="actions"></span></th>
+            </tr>
+
+        </thead>
+
+        {% for pending_result in pending_results %}
+
+            <tr>
+                <th>{{ pending_result.lifter }}</th>
+                <th>{{ pending_result.body_weight }}</th>
+                <th>{{ pending_result.age_group }}</th>
+                <th>{{ pending_result.weight_class }}</th>
+                <th>{{ pending_result.sinclair_coefficient }}</th>
+                <th>{{ pending_result.veteran_coefficient }}</th>
+                <th>{{ pending_result.age }}</th>
+                <th>{{ pending_result.best_clean_and_jerk }}</th>
+                <th>{{ pending_result.best_snatch }}</th>
+                <th>{{ pending_result.total_lift }}</th>
+                <th>{{ pending_result.points_with_sinclair }}</th>
+                <th>{{ pending_result.points_with_veteran }}</th>
+
+                <th>
+                    {% for group in groups %}
+                        {% if group.status == "Til godkjenning" %}
+                            <button class="ok-button" onclick="changePendingGroupClubofc({{ pending_result.pk }})">Gjør endringer</button>
+                        {% else %}
+                            <button class="ok-button" onclick="denyChangePendingGroupClubofc()">Gjør endringer</button>
+                        {% endif %}
+                    {% endfor %}
+                </th>
+            </tr>
+
+        {% endfor %}
+
+    </table>
+</div>
+
+{% for group in groups %}
+    <div id="group_info_after_table">
+        <div class="group_info_after_table_col">
+            <label>Stevneleder: {{ group.competition_leader }}</label>
+            <label>Jury:
+                {% for jurymember in group.jury.all %}
+                    {{ jurymember.fullname }}<br/>
+                {% endfor %}
+            </label>
+            <label>Sekretær: {{ group.secretary }}</label>
+            <label>Speaker: {{ group.speaker }}</label>
+        </div>
+        <div class="group_info_after_table_col">
+            <label>Dommere:
+                {% for judge in group.judges.all %}
+                    {{ judge.fullname }}<br/>
+                {% endfor %}
+            </label>
+            <label>Teknisk kontrollør: {{ group.technical_controller }}</label>
+            <label>Chief marshall: {{ group.cheif_marshall }}</label>
+            <label>Tidtaker: {{ group.time_keeper }}</label>
+        </div>
+    </div>
+{%  endfor %}
+
+
+<script type="text/javascript" src="/static/js/approvegroup.js"></script>
 
 {% endblock content %}
