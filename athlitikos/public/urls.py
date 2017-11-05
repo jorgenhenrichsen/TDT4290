@@ -13,6 +13,6 @@ urlpatterns = [
     url(r'^search/report.pdf$', views.generate_report, name='generate_report'),
     url(r'^search/report.csv$', views.generate_csv_report, name='generate_csv_report'),
     url(r'^search/competitions/$', views.search_for_competitions, name='search_for_competitions'),
-
     url(r'^autocomplete/age_groups/$', views.autocomplete_age_groups, name='autocomplete_age_groups'),
+    url(r'^search/group/(?P<pk>\d+)/$', views.preview_group, name='preview_group'),
 ]

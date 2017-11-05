@@ -3,9 +3,12 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.generic import FormView
 from .mixins import AjaxFormMixin
-from .models import Lifter, Judge, Staff, Group, Competition
+from .models import InternationalResult
+from .forms import InternationalResultForm, InternationalGroupForm
+from .forms import InternationalCompetitionForm
+from .models import Lifter, Judge, Group, Competition
 from .models import Result, MoveAttempt
-from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm
+from .forms import LifterForm, JudgeForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm
 from .forms import CompetitonForm, GroupFormV2
 # from .utils import *
 from .forms import PendingResultForm, ResultForm, BaseResultFormSet, GroupFormV3
@@ -72,7 +75,6 @@ def get_result_autofill_data(request):
     return HttpResponse(json_data, mime_type)
 
 
-
 @login_required(login_url='/login')
 def home(request):
     if request.user.is_club_admin or request.user.is_staff:
@@ -98,7 +100,8 @@ def lifter_detail(request, pk):
     return render(request, 'resultregistration/lifter_detail.html',
                   {'fullname': lifter.__str__(),
                    'birth_date': lifter.birth_date.strftime('%Y-%m-%d'),
-                   'gender': lifter.gender
+                   'gender': lifter.gender,
+                   'club': lifter.club,
                    })
 
 
@@ -126,32 +129,74 @@ def add_new_judge(request):
     return render(request, 'resultregistration/edit_person.html', {'title': 'Legg til ny dommer', 'form': form})
 
 
+@login_required(login_url='/login')
+def add_new_internationalresult(request):
+
+    if request.method == "POST":
+        form = InternationalResultForm(request.POST)
+        if form.is_valid():
+            international_result = form.save()
+            print(international_result)
+            return redirect(reverse('resultregistration:international_result_detail',
+                                    args=[international_result.pk]))
+
+    form = InternationalResultForm()
+    return render(request, 'resultregistration/new_international_result.html',
+                  {'title': 'Legg til nytt internasjonalt resultat', 'form': form})
+
+
+def add_new_international_group(request):
+
+    if request.method == "POST":
+        form = InternationalGroupForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('resultregistration:add_new_internationalresult')
+
+    form = InternationalGroupForm()
+    return render(request, 'resultregistration/new_international_group.html',
+                  {'title': 'Legg til ny internasjonal pulje', 'form': form})
+
+
+def add_new_international_competition(request):
+
+    if request.method == "POST":
+        form = InternationalCompetitionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('resultregistration:add_new_internationalresult')
+
+    form = InternationalCompetitionForm()
+    return render(request, 'resultregistration/new_international_competition.html',
+                  {'title': 'Legg til ny internasjonal konkurranse', 'form': form})
+
+
+def international_result_detail(request, pk):
+
+    international_result = get_object_or_404(InternationalResult, pk=pk)
+
+    return render(request, 'resultregistration/international_result_detail.html',
+                  context={'lifter': international_result.__str__(),
+                           'body_weight': international_result.body_weight,
+                           'age_group': international_result.age_group,
+                           'weight_class': international_result.weight_class,
+                           'sinclair_coefficient': international_result.sinclair_coefficient,
+                           'veteran_coefficient': international_result.veteran_coefficient,
+                           'age': international_result.age,
+                           'best_clean_and_jerk': international_result.best_clean_and_jerk,
+                           'best_snatch': international_result.best_snatch,
+                           'total_lift': international_result.total_lift,
+                           'points_with_sinclair': international_result.points_with_sinclair,
+                           'points_with_veteran': international_result.points_with_veteran})
+
+
 def judge_detail(request, pk):
     judge = get_object_or_404(Judge, pk=pk)
     return render(request, 'resultregistration/judge_detail.html', {
         'fullname': judge.__str__(),
-        # 'birth_date': judge.birth_date.strftime('%Y-%m-%d'),
-        'level': judge.judge_level,
-    })
-
-
-@login_required(login_url='/login')
-def add_new_staff(request):
-
-    if request.method == "POST":
-        form = StaffForm(request.POST)
-        if form.is_valid():
-            staff = form.save()
-            return redirect(reverse('resultregistration:staff_detail', args=[staff.pk]))
-    form = StaffForm()
-    return render(request, 'resultregistration/edit_person.html', {'title': 'Legg til ny funksjonær', 'form': form})
-
-
-def staff_detail(request, pk):
-    staff = get_object_or_404(Staff, pk=pk)
-    return render(request, 'resultregistration/staff_detail.html', {
-        'fullname': staff.__str__(),
-        # 'birth_date': staff.birth_date.strftime('%Y-%m-%d'),
+        # 'level': judge.judge_level,
+        'level': judge.get_judge_level_display,
+        'club': judge.club,
     })
 
 
@@ -500,3 +545,48 @@ def delete_group(request, pk):
     group.delete()
     results.delete()
     return redirect('/home/')
+
+
+def change_result(request, pk):
+
+    changing_result = Result.objects.get(pk=pk)
+    group_result_belongs_to = changing_result.group
+    group_primary_key = group_result_belongs_to.pk
+
+    if request.method == "POST":
+        form = ChangeResultForm(request.POST)
+        if form.is_valid():
+
+            data = form.cleaned_data
+
+            changing_result.body_weight = data['body_weight']
+            changing_result.age_group = data['age_group']
+            changing_result.weight_class = data['weight_class']
+            changing_result.sinclair_coefficient = data['sinclair_coefficient']
+            changing_result.veteran_coefficient = data['veteran_coefficient']
+            changing_result.age = data['age']
+            changing_result.best_clean_and_jerk = data['best_clean_and_jerk']
+            changing_result.best_snatch = data['best_snatch']
+            changing_result.total_lift = data['total_lift']
+            changing_result.points_with_sinclair = data['points_with_sinclair']
+            changing_result.points_with_veteran = data['points_with_veteran']
+
+            changing_result.save()
+
+            return redirect(reverse('resultregistration:edit_result', args=[group_primary_key]))
+
+    initial_form_values = {'body_weight': changing_result.body_weight,
+                           'age_group': changing_result.age_group,
+                           'weight_class': changing_result.weight_class,
+                           'sinclair_coefficient': changing_result.sinclair_coefficient,
+                           'veteran_coefficient': changing_result.veteran_coefficient,
+                           'age': changing_result.veteran_coefficient,
+                           'best_clean_and_jerk': changing_result.best_clean_and_jerk,
+                           'best_snatch': changing_result.best_snatch,
+                           'total_lift': changing_result.total_lift,
+                           'points_with_sinclair': changing_result.points_with_sinclair,
+                           'points_with_veteran': changing_result.points_with_veteran}
+
+    form = ChangeResultForm(initial=initial_form_values)
+
+    return render(request, 'resultregistration/edit_person.html', {'title': 'Endre valgt resultat', 'form': form})

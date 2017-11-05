@@ -1,5 +1,6 @@
 from django import forms
-from .models import Competition, Club, Group, Result, MoveAttempt, Lifter, Judge, Staff
+from .models import InternationalResult, InternationalGroup
+from .models import Competition, Club, Group, Result, MoveAttempt, Lifter, Judge
 from django.utils import timezone
 from datetime import datetime
 
@@ -9,7 +10,7 @@ YEAR_CHOICES = [y for y in range(1900, timezone.now().year+1)]
 class LifterForm(forms.ModelForm):
     class Meta:
         model = Lifter
-        fields = ('first_name', 'last_name', 'birth_date', 'gender')
+        fields = ('first_name', 'last_name', 'birth_date', 'gender', 'club')
 
     def __init__(self, *args, **kwargs):
         super(LifterForm, self).__init__(*args, **kwargs)
@@ -19,20 +20,11 @@ class LifterForm(forms.ModelForm):
 class JudgeForm(forms.ModelForm):
     class Meta:
         model = Judge
-        fields = ('first_name', 'last_name', 'judge_level')  # 'birth_date',
+        fields = ('first_name', 'last_name', 'judge_level', 'club')  # 'birth_date',
 
     def __init__(self, *args, **kwargs):
         super(JudgeForm, self).__init__(*args, **kwargs)
         # self.fields['birth_date'].widget = forms.widgets.SelectDateWidget(years=YEAR_CHOICES)
-
-
-class StaffForm(forms.ModelForm):
-    class Meta:
-        model = Staff
-        fields = ('first_name', 'last_name')  # , 'birth_date'
-
-    def __init__(self, *args, **kwargs):
-        super(StaffForm, self).__init__(*args, **kwargs)
 
 
 # For the resultregistration page
@@ -82,7 +74,6 @@ class GroupFormV2(forms.ModelForm):
 
 # class ResultRow(forms.):
 #     pass
-
 
 
 class MoveAttemptForm(forms.ModelForm):
@@ -180,6 +171,24 @@ class BaseResultFormSet(forms.BaseFormSet):
             lifter_ids.append(lifter_id)
 
 
+class InternationalResultForm(forms.ModelForm):
+    class Meta:
+        model = InternationalResult
+        fields = '__all__'
+
+
+class InternationalGroupForm(forms.ModelForm):
+    class Meta:
+        model = InternationalGroup
+        fields = '__all__'
+
+
+class InternationalCompetitionForm(forms.ModelForm):
+    class Meta:
+        model = Competition
+        fields = '__all__'
+
+
 class PendingResultForm(forms.Form):
     weight_class = forms.CharField(max_length=3)
     body_weight = forms.FloatField()
@@ -206,3 +215,10 @@ class PendingResultForm(forms.Form):
     pl = forms.CharField(max_length=6, required=False)
     rekord = forms.CharField(max_length=8, required=False)
     sinclair_coefficient = forms.CharField(max_length=9, required=False)
+
+
+class ChangeResultForm(forms.ModelForm):
+
+    class Meta:
+        model = Result
+        exclude = ['group', 'lifter']
