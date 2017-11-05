@@ -39,10 +39,6 @@ def create_group_from_form(form, user):
         if group is not None:
             print("Existing group, updating...")
             group.date = date
-            group.competition_leader = competition_leader
-            group.jury = jury
-            group.judges = judges
-            group.save()
         else:
             print("Creating new group.")
             group = Group.objects.create(
@@ -50,10 +46,12 @@ def create_group_from_form(form, user):
                 competition=competition,
                 date=date,
                 author=user,
-                competition_leader=competition_leader,
-                jury=jury,
-                judges=judges,
             )
+
+        group.competition_leader = competition_leader
+        group.jury = jury
+        group.judges = judges
+        group.save()
 
         return group
 
