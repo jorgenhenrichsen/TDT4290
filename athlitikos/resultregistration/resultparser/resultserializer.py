@@ -40,8 +40,8 @@ def serialize_group(group):
         "competition": group.competition,
         "date": group.date,
         "competition_leader": group.competition_leader,
-        "jury": group.jury,
-        "judges": group.judges,
+        "jury": group.jury.all(),
+        "judges": group.judges.all(),
     }
 
     results = []
