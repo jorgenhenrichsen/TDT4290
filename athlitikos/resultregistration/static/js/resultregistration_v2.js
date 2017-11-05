@@ -57,11 +57,11 @@ $(function () {
       $(this).autocomplete('search', $(this).val())
     });
 
-    $(".datepicker").datepicker();
-
     $('#add-lifter').click(function () {
-            cloneMore('tr:last', 'form')
+        cloneMore('#result-form-table tr:last', 'form')
     })
+
+    $(".datepicker").datepicker();
 
 });
 

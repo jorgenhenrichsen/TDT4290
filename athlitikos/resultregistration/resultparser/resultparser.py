@@ -165,6 +165,7 @@ def create_result_from_form(result_form, group):
 
         result.best_snatch = best_snatch
         result.best_clean_and_jerk = best_clean_and_jerk
+
         result.save()
         return result
 
