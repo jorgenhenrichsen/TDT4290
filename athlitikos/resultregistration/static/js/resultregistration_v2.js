@@ -59,6 +59,10 @@ $(function () {
 
     $(".datepicker").datepicker();
 
+    $('#add-lifter').click(function () {
+            cloneMore('tr:last', 'form')
+    })
+
 });
 
 
@@ -86,8 +90,6 @@ function displayErrors(errors) {
     var errorArray = $.parseJSON(errors);
     console.log(errorArray);
 
-
-
     const fieldNames = new Array("lifter",
         "lifter_id", "club", "club_id", "birth_date",
         "age_group", "weight_class", "body_weight",
@@ -113,4 +115,8 @@ function displayErrors(errors) {
             }
         }
     }
+}
+
+function routeToAddNewLifter() {
+    window.open("/lifter/new/");
 }

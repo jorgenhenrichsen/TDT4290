@@ -51,26 +51,32 @@
 
         </tbody>
 
+
+
     </table>
 
-    <label>Feilmeldinger</label><li>
-        {% for error in result_formset.non_form_errors %}
-            <ul>
-                {{ error }}
-            </ul>
-        {% endfor %}
-    </li>
+    <input type="button" value="+ Legg til rad" id="add-lifter">
 
-    <button type="submit">Lagre</button>
+    {% if result_formset.non_form_errors %}
+        <label>Feilmeldinger:</label>
+        <li>
+            {% for error in result_formset.non_form_errors %}
+                <ul>
+                    {{ error }}
+                </ul>
+            {% endfor %}
+        </li>
+    {% endif %}
+
+
+    <button type="submit">Lagre resultater</button>
 
     </form>
 
-    <input type="button" value="Legg til utøver" id="add-lifter">
-    <script>
-        $('#add-lifter').click(function () {
-            cloneMore('tr:last', 'form')
-        })
+    <label>Mangler en utøver i databasen?</label>
+    <button onclick="routeToAddNewLifter()">Legg til ny utøver her</button>
 
+    <script>
         displayErrors("{{ result_formset.errors }}")
     </script>
 
