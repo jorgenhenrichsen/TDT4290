@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from django.views.generic import FormView
 from .mixins import AjaxFormMixin
 from .models import InternationalResult
@@ -10,7 +10,6 @@ from .models import Lifter, Judge, Group, Competition
 from .models import Result, MoveAttempt
 from .forms import LifterForm, JudgeForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm
 from .forms import CompetitonForm, GroupFormV2, ChangeResultForm, PendingResultForm
-from django.contrib import messages
 
 
 @login_required(login_url='/login')
@@ -568,7 +567,6 @@ def change_result_clubofc(request, pk):
             changing_result.save()
             return redirect(reverse('resultregistration:edit_result_clubofc', args=[group_primary_key]))
 
-
     initial_form_values = {'body_weight': changing_result.body_weight,
                            'age_group': changing_result.age_group,
                            'weight_class': changing_result.weight_class,
@@ -584,7 +582,3 @@ def change_result_clubofc(request, pk):
     form = ChangeResultForm(initial=initial_form_values)
 
     return render(request, 'resultregistration/edit_person.html', {'title': 'Endre valgt resultat', 'form': form})
-
-
-
-
