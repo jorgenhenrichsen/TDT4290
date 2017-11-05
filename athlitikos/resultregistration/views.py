@@ -462,6 +462,17 @@ def edit_result(request, pk):
     return render(request, 'resultregistration/editresult.html', context)
 
 
+def edit_result_clubofc(request, pk):
+    group = Group.objects.filter(pk=pk)
+    results = Result.objects.filter(group=group)
+    context = {
+        'pending_results': results,
+        'groups': group
+    }
+
+    return render(request, 'resultregistration/editresult_clubofc.html', context)
+
+
 def approve_group(request, pk):
     group = Group.objects.get(pk=pk)
     group.status = "Godkjent"
@@ -511,6 +522,50 @@ def change_result(request, pk):
             changing_result.save()
 
             return redirect(reverse('resultregistration:edit_result', args=[group_primary_key]))
+
+    initial_form_values = {'body_weight': changing_result.body_weight,
+                           'age_group': changing_result.age_group,
+                           'weight_class': changing_result.weight_class,
+                           'sinclair_coefficient': changing_result.sinclair_coefficient,
+                           'veteran_coefficient': changing_result.veteran_coefficient,
+                           'age': changing_result.veteran_coefficient,
+                           'best_clean_and_jerk': changing_result.best_clean_and_jerk,
+                           'best_snatch': changing_result.best_snatch,
+                           'total_lift': changing_result.total_lift,
+                           'points_with_sinclair': changing_result.points_with_sinclair,
+                           'points_with_veteran': changing_result.points_with_veteran}
+
+    form = ChangeResultForm(initial=initial_form_values)
+
+    return render(request, 'resultregistration/edit_person.html', {'title': 'Endre valgt resultat', 'form': form})
+
+
+def change_result_clubofc(request, pk):
+
+    changing_result = Result.objects.get(pk=pk)
+    group_result_belongs_to = changing_result.group
+    group_primary_key = group_result_belongs_to.pk
+
+    if request.method == "POST":
+        form = ChangeResultForm(request.POST)
+
+        if form.is_valid():
+            data = form.cleaned_data
+
+            changing_result.body_weight = data['body_weight']
+            changing_result.age_group = data['age_group']
+            changing_result.weight_class = data['weight_class']
+            changing_result.sinclair_coefficient = data['sinclair_coefficient']
+            changing_result.veteran_coefficient = data['veteran_coefficient']
+            changing_result.age = data['age']
+            changing_result.best_clean_and_jerk = data['best_clean_and_jerk']
+            changing_result.best_snatch = data['best_snatch']
+            changing_result.total_lift = data['total_lift']
+            changing_result.points_with_sinclair = data['points_with_sinclair']
+            changing_result.points_with_veteran = data['points_with_veteran']
+
+            changing_result.save()
+            return redirect(reverse('resultregistration:edit_result_clubofc', args=[group_primary_key]))
 
     initial_form_values = {'body_weight': changing_result.body_weight,
                            'age_group': changing_result.age_group,

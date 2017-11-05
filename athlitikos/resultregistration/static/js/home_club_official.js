@@ -1,5 +1,3 @@
-
-
 function editPendingGroup(id) {
-    window.location.href = "/resultregistration/";
+    window.location.href = "/result/edit/clubofc/" + id;
 }
