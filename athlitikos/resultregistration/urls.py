@@ -24,6 +24,8 @@ urlpatterns = [
     url(r'^home/admin/$', views.home_admin, name='home_admin'),
     url(r'^home/clubofc/$', views.home_club_official, name='home_club_official'),
     url(r'^judges/$', views.list_all_judges, name="result_registration"),
+    url(r'^merge-lifters/$', views.merge_find_two_lifters_view),
+    url(r'^merge-lifters/merging$', views.merge_lifter_view),
     url(r'^result/change/(?P<pk>\d+)/$', views.change_result, name="change_result"),
     url(r'^result/change/clubofc/(?P<pk>\d+)/$', views.change_result_clubofc, name="change_result_clubofc"),
     url(r'^internationalresult/new/$', views.add_new_internationalresult,
@@ -33,4 +35,3 @@ urlpatterns = [
     url(r'^internationalgroup/new', views.add_new_international_group, name='new_international_group'),
     url(r'^internasjonal/konkurranse/ny', views.add_new_international_competition, name='new_international_competition')
 ]
-
