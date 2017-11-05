@@ -65,7 +65,8 @@
                     <th>
                     
                         <button onclick="editPendingGroup({{ pending_group.pk }})">Endre</button>
-                        {% if pending_group.status == "Til godkjenning" %}
+
+                        {% if pending_group.status == "Til godkjenning" or pending_group.status == "Ikke sendt" %}
                             <button onclick="deletePendingGroup({{ pending_group.pk }})">Slett</button>
                         {% else %}
                             <button onclick="denyDeletePendingGroupClubofc()">Slett</button>
