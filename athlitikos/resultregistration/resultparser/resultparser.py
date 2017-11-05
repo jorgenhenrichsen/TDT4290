@@ -196,7 +196,13 @@ def parse_result(group_form=None, result_formset=None, user=None):
             results = []
             for result_form in data:
                 result = create_result_from_form(result_form, group)
-                results.append(result)
+                if result is not None:
+                    results.append(result)
+
+            for result in results:
+                group.competitors.add(result.lifter)
+
+            group.save()
             return results, group
         else:
             print(result_formset.errors)

@@ -9,10 +9,14 @@
 
 {% block content %}
 
+    <h1>Legg til ny gruppe</h1>
+
     <form method="post">
     {% csrf_token %}
 
     {{ group_form }}
+
+    <h2>Tilhørende resultater</h2>
 
     {{ result_formset.management_form }}
     <table id="result-form-table">

@@ -90,6 +90,11 @@ class GroupFormV3(forms.Form):
     group_number = forms.IntegerField()
     competition = forms.ModelChoiceField(queryset=Competition.objects.all())
     date = forms.DateField(widget=forms.DateInput(attrs={'class': 'datepicker'}))
+    competition_leader = forms.ModelChoiceField(queryset=Judge.objects.all(), required=False)
+    jury = forms.ModelMultipleChoiceField(queryset=Judge.objects.all(), required=False)
+    judges = forms.ModelMultipleChoiceField(queryset=Judge.objects.all(), required=False)
+
+
 
     """
     competition_leader = forms.CharField(max_length=200)
