@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^judge/(?P<pk>\d+)/$', views.judge_detail, name='judge_detail'),
     url(r'^judge/new/$', views.add_new_judge, name='add_new_judge'),
     url(r'^resultregistration/$', views.v2_result_registration, name="result_registration"),
+    url(r'^resultregistration/edit/(?P<pk>\d+)/$', views.v2_edit_result, name='v2_edit_result'),
     url(r'^result/edit/(?P<pk>\d+)/$', views.edit_result, name='edit_result'),
     url(r'^result/approve/(?P<pk>\d+)/$', views.approve_group, name='approve_group'),
     url(r'^result/reject/(?P<pk>\d+)/$', views.reject_group, name='reject_group'),
@@ -31,8 +32,6 @@ urlpatterns = [
     url(r'^internationalgroup/new', views.add_new_international_group, name='new_international_group'),
     url(r'^internasjonal/konkurranse/ny', views.add_new_international_competition, name='new_international_competition'),
 
-    url(r'^v2/resultregistration/$', views.v2_result_registration, name='v2_result_registration'),
-    url(r'^v2/resultregistration/edit/(?P<pk>\d+)/$', views.v2_edit_result, name='v2_edit_result'),
     url(r'autofill/result/$', views.get_result_autofill_data, name='get_result_autofill_data')
 
 ]
