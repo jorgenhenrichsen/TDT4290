@@ -63,8 +63,14 @@
                     <th>{{ pending_group.date }}</th>
                     <th>{{ pending_group.status }}</th>
                     <th>
+                    
                         <button onclick="editPendingGroup({{ pending_group.pk }})">Endre</button>
-                        <button onclick="deletePendingGroup({{ pending_group.pk }})">Slett</button>
+                        {% if pending_group.status == "Til godkjenning" %}
+                            <button onclick="deletePendingGroup({{ pending_group.pk }})">Slett</button>
+                        {% else %}
+                            <button onclick="denyDeletePendingGroupClubofc()">Slett</button>
+                        {% endif %}
+
                     </th>
                 </tr>
 
