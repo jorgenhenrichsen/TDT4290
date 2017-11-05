@@ -68,8 +68,8 @@ def create_move_attempt_from_form_data(form_data, parent_result, move_type, atte
         weight = int(re.sub("[^0-9]", "", form_data))
 
         attempt = MoveAttempt.objects.filter(parent_result__exact=parent_result,
-                                          move_type__exact=move_type
-                                          , attempt_num__exact=attempt_number).first()
+                                             move_type__exact=move_type,
+                                             attempt_num__exact=attempt_number).first()
 
         if attempt is None:
             attempt = MoveAttempt.objects.create(

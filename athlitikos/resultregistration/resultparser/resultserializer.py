@@ -1,7 +1,10 @@
+from resultregistration.models import MoveAttempt
+from resultregistration.enums import MoveTypes
 
 
 def serialize_result(result):
-    return {
+
+    data = {
         "lifter": result.lifter,
         "lifter_id": result.lifter_id,
         "club": result.lifter.club.club_name,
@@ -11,6 +14,22 @@ def serialize_result(result):
         "weight_class": result.weight_class,
         "body_weight": result.body_weight,
     }
+
+    attempts = MoveAttempt.objects.filter(parent_result__exact=result)
+    snatches = attempts.filter(move_type__exact=MoveTypes.snatch.value).order_by('attempt_num')
+    c_js = attempts.filter(move_type__exact=MoveTypes.clean_and_jerk.value).order_by('attempt_num')
+
+    snatch_dict = {}
+    for i in range(0, len(snatches)):
+        snatch_dict["snatch_{}".format(i+1)] = snatches[i].weight
+    data.update(snatch_dict)
+
+    c_j_dict = {}
+    for i in range(0, len(c_js)):
+        c_j_dict["clean_and_jerk_{}".format(i+1)] = c_js[i].weight
+    data.update(c_j_dict)
+
+    return data
 
 
 def serialize_group(group):
