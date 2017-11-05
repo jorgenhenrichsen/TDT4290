@@ -1,4 +1,3 @@
-
 {% extends 'athlitikos/base.html' %}
 
 {% block head %}
@@ -10,12 +9,12 @@
 
     <div class="container">
         <h1>{{ title }}</h1>
-        <form method="POST">
+
+        <form method="POST" class="person-form">
             {% csrf_token %}
             {{ form.as_p }}
 
-            <input class="ok-button" type="submit" onclick="goBackOnePage()" value="Lagre">
-            <button class="cancel-button" onclick="goBackOnePage()">Avbryt</button>
+            <input class="save-button" type="submit" value="Lagre">
 
         </form>
 

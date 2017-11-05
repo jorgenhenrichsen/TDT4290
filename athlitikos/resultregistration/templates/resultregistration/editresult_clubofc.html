@@ -1,4 +1,18 @@
-{% load static %}
+{% extends 'athlitikos/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="/static/css/approveresults.css">
+    <script type="text/javascript" src="/static/js/edit_result_club_official.js"></script>
+{% endblock %}
+
+
+{% block content %}
+
+    <button class="cancel-button" id="avbryt-btn" onclick="goBackToHome()">Avbryt</button>
+
+    {% load static %}
 
 
 <h1>Forhåndsvisning av pulje</h1>
@@ -53,7 +67,13 @@
                 <th>{{ pending_result.points_with_veteran }}</th>
 
                 <th>
-                    <button class="ok-button" onclick="changePendingGroup({{ pending_result.pk }})">Gjør endringer</button>
+                    {% for group in groups %}
+                        {% if group.status == "Til godkjenning" %}
+                            <button class="ok-button" onclick="changePendingGroupClubofc({{ pending_result.pk }})">Gjør endringer</button>
+                        {% else %}
+                            <button class="ok-button" onclick="denyChangePendingGroupClubofc()">Gjør endringer</button>
+                        {% endif %}
+                    {% endfor %}
                 </th>
             </tr>
 
@@ -89,3 +109,5 @@
 
 
 <script type="text/javascript" src="/static/js/approvegroup.js"></script>
+
+{% endblock content %}
