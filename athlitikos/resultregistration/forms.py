@@ -73,6 +73,10 @@ class MoveAttemptForm(forms.ModelForm):
         fields = '__all__'
 
 
+class ExcelFileForm(forms.Form):
+    excel_file = forms.FileField()
+
+
 class PendingResultForm(forms.Form):
     weight_class = forms.CharField(max_length=3)
     body_weight = forms.FloatField()

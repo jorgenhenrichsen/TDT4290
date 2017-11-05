@@ -256,13 +256,53 @@ $(document).ready(function() {
             })
         }
     })
-});
 
+
+    // var $excel_form= $('.excel_form');
+    // $excel_form.submit( function(event){
+    //     console.log("IN SUBMIT")
+    //     event.preventDefault();
+    //     var data = form.serialize()
+    //     console.log(data)
+    //     $.ajax({
+    //         method: "POST",
+    //         url: "fromexcel",
+    //         dataType: 'json',
+    //         data : data,
+    //
+    //         success: function(json){
+    //             // console.log(json)
+    //             // var jsonObj = JSON.parse(json)
+    //             console.log(json.success, json.result_details);
+    //             var competition = json.competition_details;
+    //             var results = json.result_details;
+    //             var group = json.group_details;
+    //             fillCompetition(competition);
+    //             fillResults(results);
+    //             fillGroup(group);
+    //             // $('#id_host').val(competition.host)
+    //         },
+    //         error: function (error) {
+    //             console.log(error)
+    //         },
+    //         complete: function () {
+    //             console.log('complete excel')
+    //         }
+    //     })
+    //
+    // })
+});
+//
 function importExcel(){
+    var form= $('#excel_form')
+    var data = form.serialize()
+    console.log("data: |", data, "|")
+    console.log("form:", form)
     $.ajax({
         method: "POST",
         url: "fromexcel/",
         dataType: 'json',
+        data : data,
 
         success: function(json){
             // console.log(json)

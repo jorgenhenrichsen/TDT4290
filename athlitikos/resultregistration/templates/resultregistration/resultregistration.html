@@ -12,7 +12,7 @@
 
     <div class="form-container">
         <h1>Stevne</h1>
-        <form method="POST" class="post-form">{% csrf_token %}
+{#        <form method="POST" class="post-form">{% csrf_token %}#}
 {#            <div class="before-table">#}
 {#                <label>Stevnekategori: {{ CompetitonForm.competition_category }}</label>#}
 {#                <label>Arrangør: {{ ClubForm.club_name }}</label>#}
@@ -23,9 +23,16 @@
 
         <h2>Resultatrgistrering</h2>
 
+        <form class="excel_form" id="excel_form" enctype="multipart/form-data" method="POST" data-url="fromexcel/">
+            {% csrf_token %}
+            {{ ExcelFileForm.excel_file }}
+            <button type="button" onclick="importExcel()">Import excel</button>
+{#            <button type="submit">IMPORT EXCEL</button>#}
+        </form>
+
         <form class="ajax_form competition_form" id="competition_form" method="POST" action="."  data-url="competition/new/">
             {% csrf_token %}
-            <button type="button" onclick="importExcel()">Import excel</button>
+
             {{ CompetitonForm.as_p|safe }}
             <button type="submit">SUB</button>
     {#         onclick="ajaxSubmit(this.parentNode)"#}
@@ -85,7 +92,7 @@
                 <input class="delete-button" type="submit" value="Slett">
                 <input class="submit-for-approval-button" type="submit" value="Send til godkjenning">
             </div>
-        </form>
+{#        </form>#}
     </div>
 
 {#    <form class="group_form ajax_form" id="group_form" method="post" action="." data-url="group/new">#}
