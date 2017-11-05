@@ -43,6 +43,7 @@ class Competition(models.Model):
     host = models.CharField(max_length=100, verbose_name="Arrangør")
     location = models.CharField(max_length=100)
     start_date = models.DateField(help_text="år-måned-dag")
+    author = models.ForeignKey(User, null=True)
 
     def __str__(self):
         return '{0}, {1}, {2}'.format(self.competition_category, self.location, self.start_date)
@@ -63,23 +64,33 @@ class Group(models.Model):
     competition = models.ForeignKey(Competition)
     date = models.DateField()
 
-    status = models.CharField(max_length=30, default=Status.not_sent, choices=Status.choices(), null=False)
+    status = models.CharField(max_length=30, default=Status.not_sent.value, choices=Status.choices(), null=False)
 
-    competitors = models.ManyToManyField('Lifter')
+    competitors = models.ManyToManyField('Lifter', blank=True)
 
     competition_leader = models.ForeignKey('Judge',
                                            verbose_name='Stevneleder',
-                                           related_name="groups_competition_leader")
+                                           related_name="groups_competition_leader",
+                                           null=True,
+                                           blank=True)
     # , related_name='competition_leader')
-    jury = models.ManyToManyField('Judge', verbose_name='Jurie', default='', related_name='groups_juries')
-    judges = models.ManyToManyField('Judge', related_name='groups_judges')
-    secretary = models.CharField(max_length=100, verbose_name='Sekretær')  # , related_name='secretary')
-    speaker = models.CharField(max_length=100, verbose_name='Taler')  # , related_name='speaker')
+    jury = models.ManyToManyField('Judge', verbose_name='Jurie', default='', related_name='groups_juries', blank=True)
+    judges = models.ManyToManyField('Judge', related_name='groups_judges', blank=True)
+    secretary = models.CharField(max_length=100, verbose_name='Sekretær', null=True, blank=True)
+    speaker = models.CharField(max_length=100, verbose_name='Taler', null=True, blank=True)
 
     technical_controller = models.ForeignKey('Judge', verbose_name='Teknisk kontrollør',
-                                             related_name='groups_technical_controller')
-    cheif_marshall = models.ForeignKey('Judge', verbose_name='Chief Marshall', related_name='groups_chief_marshall')
-    time_keeper = models.ForeignKey('Judge', verbose_name='Tidtaker', related_name='groups_time_keeper')
+                                             related_name='groups_technical_controller', null=True, blank=True)
+    chief_marshall = models.ForeignKey('Judge',
+                                       verbose_name='Chief Marshall',
+                                       related_name='groups_chief_marshall',
+                                       null=True, blank=True)
+
+    time_keeper = models.ForeignKey('Judge',
+                                    verbose_name='Tidtaker',
+                                    related_name='groups_time_keeper',
+                                    null=True,
+                                    blank=True)
 
     notes = models.CharField(max_length=300, null=True, blank=True)
     records_description = models.CharField(max_length=300, null=True, blank=True)

@@ -20,6 +20,10 @@
         <button class="ok-button" id="approve-btn" onclick="approvePendingGroup({{ group.pk }})">Godkjenn</button>
     {% endfor %}
 
+    {% for group in groups %}
+        <button class="ok-button" id="change-button" onclick="changePendingGroup({{ group.pk }})">Gjør endringer</button>
+    {% endfor %}
+
 
 
     <div>

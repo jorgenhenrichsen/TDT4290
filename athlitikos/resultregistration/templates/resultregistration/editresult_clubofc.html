@@ -12,6 +12,14 @@
 
     <button class="cancel-button" id="avbryt-btn" onclick="goBackToHome()">Avbryt</button>
 
+    {% for group in groups %}
+        <button class="ok-button" id="send-button" onclick="sendGroup({{ group.pk }})">Send inn</button>
+    {% endfor %}
+
+    {% for group in groups %}
+        <button class="ok-button" id="change-button" onclick="changePendingGroup({{ group.pk }})">Gjør endringer</button>
+    {% endfor %}
+
     {% load static %}
 
 

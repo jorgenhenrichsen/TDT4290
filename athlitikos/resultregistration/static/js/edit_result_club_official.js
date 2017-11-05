@@ -5,3 +5,7 @@ function changePendingGroupClubofc(id) {
 function denyChangePendingGroupClubofc(id) {
     window.alert("Kan bare endre resultater som venter på godkjenning");
 }
+
+function sendGroup(id) {
+    window.location.href = "/result/send/" + id;
+}
