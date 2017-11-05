@@ -35,4 +35,3 @@ urlpatterns = [
     url(r'^internationalgroup/new', views.add_new_international_group, name='new_international_group'),
     url(r'^internasjonal/konkurranse/ny', views.add_new_international_competition, name='new_international_competition')
 ]
-

@@ -3,20 +3,21 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.generic import FormView
 from .mixins import AjaxFormMixin
-from .models import Lifter, Judge, Staff, Group, Competition
-from .models import Result, MoveAttempt, PentathlonResult
-from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm
+from .models import Lifter, Judge, Group, Competition
+from .models import PentathlonResult
+from .forms import LifterForm, JudgeForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm
 from django.contrib import messages
 from django.db.models import Q
 # from .utils import *
-from .forms import PendingResultForm
+# from .forms import PendingResultForm
 # from .forms import forms
 # from django.views.generic import UpdateView
 from .models import InternationalResult
 from .forms import InternationalResultForm, InternationalGroupForm
 from .forms import InternationalCompetitionForm
 from .models import Result, MoveAttempt
-from .forms import CompetitonForm, GroupFormV2, ChangeResultForm, PendingResultForm, MergeLifterSearchForm, MergeLifterCreateForm
+from .forms import CompetitonForm, GroupFormV2, ChangeResultForm, PendingResultForm,\
+    MergeLifterSearchForm, MergeLifterCreateForm
 
 
 @login_required(login_url='/login')
@@ -158,7 +159,8 @@ def merge_lifter_view(request, *args, **kwargs):
 
 @login_required(login_url='/login')
 def add_new_staff(request):
-    return 
+    return request
+
 
 def add_new_international_group(request):
 

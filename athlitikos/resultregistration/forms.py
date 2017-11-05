@@ -1,6 +1,6 @@
 from django import forms
 from .models import InternationalResult, InternationalGroup
-from .models import Competition, Club, Group, Result, MoveAttempt, Lifter, Judge, Staff, Person
+from .models import Competition, Club, Group, Result, MoveAttempt, Lifter, Judge, Person
 from django.utils import timezone
 from django.db.models import Q
 
@@ -133,7 +133,6 @@ class PendingResultForm(forms.Form):
     pl = forms.CharField(max_length=6, required=False)
     rekord = forms.CharField(max_length=8, required=False)
     sinclair_coefficient = forms.CharField(max_length=9, required=False)
-
 
 
 class MergeLifterSearchForm(forms.Form):
