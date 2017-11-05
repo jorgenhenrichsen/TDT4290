@@ -1,8 +1,9 @@
 from django import forms
 from .models import InternationalResult, InternationalGroup
-from .models import Competition, Club, Group, Result, MoveAttempt, Lifter, Judge
+from .models import Competition, Club, Group, Result, MoveAttempt, Lifter, Judge, Person
 from django.utils import timezone
 from datetime import datetime
+from django.db.models import Q
 
 YEAR_CHOICES = [y for y in range(1900, timezone.now().year+1)]
 
@@ -223,6 +224,54 @@ class PendingResultForm(forms.Form):
     pl = forms.CharField(max_length=6, required=False)
     rekord = forms.CharField(max_length=8, required=False)
     sinclair_coefficient = forms.CharField(max_length=9, required=False)
+
+
+class MergeLifterSearchForm(forms.Form):
+    first_name = forms.CharField(label="Fornavn")
+    last_name = forms.CharField(label="Etternavn")
+
+    def clean(self, *args, **kwargs):
+        first_name = self.cleaned_data.get("first_name")
+        last_name = self.cleaned_data.get("last_name")
+        lifter_qs = Lifter.objects.filter(Q(first_name__startswith=first_name) | Q(last_name__startswith=last_name))
+        if not lifter_qs.count() >= 2:
+            raise forms.ValidationError("Det finnes ikke flere enn to personer med disse søkekriterene i systemet.")
+
+    def qs(self):
+        return Lifter.objects.filter(Q(first_name__startswith=self.cleaned_data.get("first_name"))
+                                     | Q(last_name__startswith=self.cleaned_data.get("last_name")))
+
+
+class MergePersonCreateForm(forms.ModelForm):
+
+    class Meta:
+        model = Person
+        fields = ('first_name', 'last_name', 'club')
+
+    def __init__(self, *args, **kwargs):
+        super(MergePersonCreateForm, self).__init__(*args, **kwargs)
+
+    def save(self, commit=True):
+        person = super(MergePersonCreateForm, self).save(commit=False)
+        if commit:
+            person.save()
+        return person
+
+
+class MergeLifterCreateForm(forms.ModelForm):
+    class Meta:
+        model = Lifter
+        fields = ('first_name', 'last_name', 'club', 'birth_date', 'gender')
+
+    def __init__(self, *args, **kwargs):
+        super(MergeLifterCreateForm, self).__init__(*args, **kwargs)
+        self.fields['birth_date'].widget = forms.widgets.SelectDateWidget(years=YEAR_CHOICES)
+
+    def save(self, commit=True):
+        lifter = super(MergeLifterCreateForm, self).save(commit=False)
+        if commit:
+            lifter.save()
+        return lifter
 
 
 class ChangeResultForm(forms.ModelForm):

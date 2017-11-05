@@ -27,6 +27,10 @@ function deletePendingGroup(id) {
     window.location.href = "/result/delete/" + id;
 }
 
+function denyDeletePendingGroupClubofc() {
+    window.alert("Kan bare slette resultater som venter på godkjenning");
+}
+
 function editPendingGroup(id) {
     window.location.href = "/result/edit/" + id;
 }

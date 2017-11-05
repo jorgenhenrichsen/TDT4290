@@ -4,7 +4,6 @@
 {% block title %}Admin{% endblock %}
 
 {% block head %}
-
     <link rel="stylesheet" type="text/css" href="/static/css/home.css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript">
     </script> <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
@@ -15,6 +14,14 @@
 {% endblock %}
 
 {% block content %}
+
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
 
     <h1>Forside administrasjon</h1>
 
@@ -35,6 +42,8 @@
         <div class="button-column">
             <h3>Annet</h3>
             <button id="judge-statistic-button" onclick="judges()">Dommerstatistikk</button>
+            <!-- ps kan noe fikse slik at ikke http://127.0.0.1:8000/ kommer i koden. -->
+            <a href="http://127.0.0.1:8000/merge-lifters/"> <button>Sett sammen duplikate utøvere</button></a>
         </div>
     </div>
 
