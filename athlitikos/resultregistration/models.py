@@ -155,6 +155,7 @@ class Person(models.Model):
     def fullname(self):
         return "{} {}".format(self.first_name, self.last_name)
 
+
 class Lifter(Person):
     # Changed from dateTime, as we don't need time of birth
     birth_date = models.DateField(verbose_name='Fødselsdato', null=True)
