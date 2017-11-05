@@ -1,15 +1,90 @@
-from django.shortcuts import render, redirect, get_object_or_404, reverse
+from django.shortcuts import render, redirect, get_object_or_404, reverse, HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.generic import FormView
 from .mixins import AjaxFormMixin
+from .models import Judge, Group, Competition
+from .models import PentathlonResult
+from django.contrib import messages
+from django.db.models import Q
 from .models import InternationalResult
 from .forms import InternationalResultForm, InternationalGroupForm
 from .forms import InternationalCompetitionForm
-from .models import Lifter, Judge, Group, Competition
 from .models import Result, MoveAttempt
-from .forms import LifterForm, JudgeForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm
-from .forms import CompetitonForm, GroupFormV2, ChangeResultForm, PendingResultForm
+from .forms import LifterForm, JudgeForm, MoveAttemptForm, GroupForm, ClubForm
+from .forms import ResultForm, ResultFormSet, GroupFormV3
+from resultregistration.models import Lifter
+import json
+from .resultparser import resultparser, resultserializer
+from .enums import Status
+from .forms import CompetitonForm, GroupFormV2, ChangeResultForm, PendingResultForm,\
+    MergeLifterSearchForm, MergeLifterCreateForm
+
+
+def v2_result_registration(request):
+
+    if request.method == "POST":
+        r_formset = ResultFormSet(request.POST, request.FILES)
+        group_form = GroupFormV3(user=request.user, data=request.POST)
+        resultparser.parse_result(group_form=group_form, result_formset=r_formset, user=request.user)
+    else:
+        r_formset = ResultFormSet()
+        group_form = GroupFormV3(user=request.user)
+    return render(request,
+                  "resultregistration/resultregistration_v2.html",
+                  {'result_formset': r_formset, 'group_form': group_form})
+
+
+def v2_edit_result(request, pk):
+
+    group = get_object_or_404(Group, pk=pk)
+    group_data, results_data = resultserializer.serialize_group(group)
+
+    if request.method == "POST":
+        r_formset = ResultFormSet(request.POST, request.FILES)
+        group_form = GroupFormV3(user=request.user, data=request.POST)
+        resultparser.parse_result(group_form=group_form, result_formset=r_formset, user=request.user)
+    else:
+        group_form = GroupFormV3(user=request.user, initial=group_data)
+        r_formset = ResultFormSet(initial=results_data)
+
+    return render(request, "resultregistration/resultregistration_v2.html",
+                  {'result_formset': r_formset, 'group_form': group_form})
+
+
+def get_result_autofill_data(request):
+    """
+    Used for autofilling data when user selects lifter in the resultregistration form.
+    :param request:
+    :return:
+    """
+    lifter_id = request.GET.get('lifter_id')
+    lifter = get_object_or_404(Lifter, pk=lifter_id)
+
+    data = {
+        "club": {
+            "name": lifter.club.club_name,
+            "id": lifter.club.id,
+        },
+        "birth_date": lifter.birth_date.strftime('%d/%m/%Y')
+    }
+
+    json_data = json.dumps(data)
+    mime_type = "application/json"
+    return HttpResponse(json_data, mime_type)
+
+
+def add_new_competition(request):
+
+    if request.method == "POST":
+        form = CompetitonForm(request.POST)
+        if form.is_valid():
+            competition = form.save()
+            competition.author = request.user
+            competition.save()
+    else:
+        form = CompetitonForm()
+    return render(request, "resultregistration/competition_form.html", {"title": "Ny konkurranse", "form": form})
 
 
 @login_required(login_url='/login')
@@ -22,7 +97,9 @@ def home(request):
 
 @login_required(login_url='/login')
 def home_admin(request):
-    groups = Group.objects.all()
+    groups = Group.objects.filter(status__in=[Status.approved.value, Status.denied.value, Status.pending.value])\
+        .union(Group.objects.filter(author__exact=request.user))
+
     return render(request, 'resultregistration/home_admin.html', {'pending_groups': groups})
 
 
@@ -80,6 +157,78 @@ def add_new_internationalresult(request):
     form = InternationalResultForm()
     return render(request, 'resultregistration/new_international_result.html',
                   {'title': 'Legg til nytt internasjonalt resultat', 'form': form})
+
+
+def merge_find_two_lifters_view(request, *args, **kwargs):
+
+    if not request.user.is_club_admin and not request.user.is_staff:  # hvis man ikke request ikke har rettigheter
+        return HttpResponseRedirect('/home')
+
+    searchform = MergeLifterSearchForm(request.POST or None)
+    lifter_qs = None
+    if searchform.is_valid():
+        lifter_qs = searchform.qs()
+    context = {'searchform': searchform, 'lifter_qs': lifter_qs}
+    return render(request, 'resultregistration/merge_lifters.html', context)
+
+
+def merge_lifter_view(request, *args, **kwargs):
+
+    if not request.user.is_club_admin and not request.user.is_staff:  # hvis man ikke request ikke har rettigheter
+        return HttpResponseRedirect('/home')
+
+    # alle utøvere har en personid, som de arver fra superklassen.
+    if request.POST.get('ny') is not None:
+        personidlist = request.POST.getlist('ny')  # en ekstremt kreativ måte å sende over fra template tilbake til view
+    else:
+        personidlist = request.POST.getlist("valgt")
+
+    lifter_qs = Lifter.objects.filter(pk__in=personidlist)
+    print(lifter_qs.count())
+    if lifter_qs.count() != 2:
+        return HttpResponseRedirect("/merge-lifters/", messages.error(request, 'velg kun 2 personer'))
+    form = MergeLifterCreateForm(request.POST or None)
+    if form.is_valid():
+        # Should have a try-cach block like all code working with a database ;)
+
+        lifter_obj = form.save()
+        lifter_obj1 = lifter_qs.first()
+        lifter_obj2 = lifter_qs.last()
+
+        result_qs = Result.objects.filter(Q(lifter=lifter_obj1) | Q(lifter=lifter_obj2))
+
+        for result in result_qs:
+            result.lifter = lifter_obj
+            result.save()
+
+        pent_qs = PentathlonResult.objects.filter(Q(lifter=lifter_obj1) | Q(lifter=lifter_obj2))
+        for pent_result in pent_qs:
+            pent_result.lifter = lifter_obj
+            pent_result.save()
+
+        group_qs1 = Group.objects.filter(Q(competitors=lifter_obj1))
+        for group in group_qs1:
+            group.competitors.remove(lifter_obj1)
+            group.competitors.add(lifter_obj)
+            group.save()
+
+        group_qs2 = Group.objects.filter(Q(competitors=lifter_obj2))
+
+        for group in group_qs2:
+            group.competitors.remove(lifter_obj2)
+            group.competitors.add(lifter_obj)
+            group.save()
+
+        lifter_obj1.delete()
+        lifter_obj2.delete()
+        return HttpResponseRedirect("/home/admin", messages.success(request, 'utøvere slått sammen'))
+
+    return render(request, 'resultregistration/merging_lifters.html', {'form': form, 'personidlist': personidlist})
+
+
+@login_required(login_url='/login')
+def add_new_staff(request):
+    return request
 
 
 def add_new_international_group(request):
@@ -473,16 +622,26 @@ def edit_result_clubofc(request, pk):
     return render(request, 'resultregistration/editresult_clubofc.html', context)
 
 
+@login_required(login_url='/login')
 def approve_group(request, pk):
     group = Group.objects.get(pk=pk)
-    group.status = "Godkjent"
+    group.status = Status.approved.value
     group.save()
     return redirect('/home/')
 
 
+@login_required(login_url='/login')
 def reject_group(request, pk):
     group = Group.objects.get(pk=pk)
-    group.status = "Ikke godkjent"
+    group.status = Status.denied.value
+    group.save()
+    return redirect('/home/')
+
+
+@login_required(login_url='/login')
+def send_group(request, pk):
+    group = Group.objects.get(pk=pk)
+    group.status = Status.pending.value
     group.save()
     return redirect('/home/')
 

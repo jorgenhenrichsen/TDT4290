@@ -76,6 +76,16 @@ h3 {
     align-items: center;
 }
 
-.add-result-button {
+.broad-button {
+    padding: 1em 2em;
+    margin: 5px 0;
+    border-radius: 2px;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+}
 
+.broad-button:hover {
+    background-color: #cb1e1f;
+    color: white;
 }

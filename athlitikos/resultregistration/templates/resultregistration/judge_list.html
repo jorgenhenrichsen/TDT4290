@@ -1,22 +1,42 @@
 {% extends 'athlitikos/base.html' %}
 
 {%  block head %}
-    <link rel="stylesheet" type="text/css" href="/static/css/home.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/judgelist.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript">
+    </script> <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="/static/js/jquery.tablesorter.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/static/js/home.js"></script>
+    <script type="text/javascript" src="/static/js/home_admin.js"></script>
 {% endblock %}
 
 {% block content %}
-    <table class="judgetable" border="1">
-            <tr>
-                <td>Navn</td>
-                <td>Dommergrad</td>
-                <td>Deltatt på</td>
-            </tr>
-            {% for entry in judgelist %}
+
+    <h2>Dommer-oversikt</h2>
+
+    <div id="registered-results-container">
+
+        <table id="result-table" class="tablesorter">
+
+            <thead>
+
                 <tr>
-                    <td>{{ entry.judge.fullname }}</td>
-                    <td>{{ entry.judge.get_judge_level_display }}</td>
-                    <td>
-                        <table>
+                    <th><b>Navn</b></th>
+                    <th><b>Dommergrad</b></th>
+                    <th><b>Klubb</b></th>
+                    <th><b>Deltatt på</b></th>
+
+                </tr>
+
+            </thead>
+
+
+            {% for entry in judgelist %}
+
+                <tr>
+                    <th>{{ entry.judge.fullname }}</th>
+                    <th>{{ entry.judge.get_judge_level_display }}</th>
+                    <th>{{ entry.judge.club }}</th>
+                    <th> <table align="right" class="judgetable" border="1">
                             <tr>
                                 <td>Konkurranse:</td>
                                 <td>Dato:</td>
@@ -27,13 +47,18 @@
                                 <tr>
                                     <td>{{ competition.competition.competition_category }}</td>
                                     <td>Dato: {{ competition.competition.start_date}}</td>
-                                    <td>Gruppe nummer: {{ competition.group_number}}</td>
+                                    <td>Gruppe-nummer: {{ competition.group_number}}</td>
                                 </tr>
                         {% endfor %}
                         </table>
-                    </td>
+                    </th>
                 </tr>
+
             {% endfor %}
-    </table>
-    <button class="cancel-button" onclick="goBackOnePage()">Avbryt</button>
+        </table>
+    </div>
+
+    <button class="cancel-button" id="cancel-judge-btn" onclick="goBackOnePage()">Avbryt</button>
+
+
 {% endblock %}
