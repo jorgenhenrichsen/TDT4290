@@ -58,7 +58,7 @@
 
     </table>
 
-    <input type="button" value="+ Legg til rad" id="add-lifter">
+    <input type="button" class="broad-button" value="+ Legg til rad" id="add-lifter">
 
     {% if result_formset.non_form_errors %}
         <label>Feilmeldinger:</label>
@@ -72,12 +72,13 @@
     {% endif %}
 
 
-    <button type="submit">Lagre resultater</button>
+    <button class="ok-button" type="submit">Lagre resultater</button>
 
     </form>
 
     <label>Mangler en utøver i databasen?</label>
-    <button onclick="routeToAddNewLifter()">Legg til ny utøver her</button>
+    <button onclick="routeToAddNewLifter()">Legg til ny utøver her</button><br>
+    <button class="cancel-button" onclick="redirectToHome()">Avbryt</button>
 
     <script>
         displayErrors("{{ result_formset.errors }}")
