@@ -40,9 +40,9 @@ class Competition(models.Model):
                                             choices=CompetitionCategory.choices(),
                                             verbose_name="Kategori", null=True, blank=True)
 
-    host = models.CharField(max_length=100, verbose_name="Arrangør")
+    host = models.CharField(max_length=100, verbose_name="Arrangør", null=True, blank=True)
     location = models.CharField(max_length=100, null=True, blank=True)
-    start_date = models.DateField(help_text="år-måned-dag")
+    start_date = models.DateField(help_text="år-måned-dag", null=True, blank=True)
 
     def __str__(self):
         return '{0}, {1}, {2}'.format(self.competition_category, self.location, self.start_date)
