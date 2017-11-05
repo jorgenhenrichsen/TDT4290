@@ -149,6 +149,7 @@ def add_new_club(request):
     if request.method == "POST":
         form = ClubForm(request.POST)
         if form.is_valid():
+            form.save()
             return redirect(reverse('resultregistration:home_admin'))
     form = ClubForm()
     return render(request, 'resultregistration/edit_person.html', {'title': 'Legg til ny klubb', 'form': form})
