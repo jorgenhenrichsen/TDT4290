@@ -41,6 +41,16 @@ $(function () {
         }
     });
 
+    // Delete lifter_id value if text is added by user.
+    $(".lifter-input-field").keypress(function () {
+        $("#" + $(this).attr("id") + "_id").val(undefined);
+    });
+
+    // Delete club id value on text input.
+    $(".club-input-field").keypress(function () {
+        $("#" + $(this).attr("id") + "_id").val(undefined);
+    });
+
     $(".club-input-field").autocomplete({
         source: "/search/club/",
         minLength: 2,
