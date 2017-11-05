@@ -128,7 +128,7 @@ def old_1938_1972(curs, conn):
         club_id = club_dict.get(club)
         competition_category = row[0]
         host = row[1]
-        start_date = datetime.datetime.strptime(row[2], '%Y-%m-%d %H:%M:%S').date() # converts to correct date format
+        start_date = datetime.datetime.strptime(row[2], '%Y-%m-%d %H:%M:%S').date()  # converts to correct date format
         weight_class = row[3]
         body_weight = row[4]
         age_group = row[5]
@@ -152,7 +152,7 @@ def old_1938_1972(curs, conn):
             # Checks if competition already exist and then get the ID
             if (competition_category, host, start_date) in competition_id_dict:
                 competition_id = competition_id_dict[competition_category, host, start_date]
-            else: # If not store the competition in the database and put the ID in the competition_id dictonary
+            else:  # If not store the competition in the database and put the ID in the competition_id dictonary
                 sql_competition = "INSERT INTO public.resultregistration_competition " \
                                   "(competition_category, host, start_date) VALUES (%s,%s,%s) RETURNING id;"
                 cur.execute(sql_competition, (competition_category, host, start_date,))
@@ -373,6 +373,8 @@ def old_1992_1997(curs, conn):
 
 # Be aware that this function takes in a other argument than the other functions,
 # this is because the old data is stored in a other file
+
+
 def old_1998_2017(crsr, conn):
     cur = conn.cursor()
     crsr.execute('SELECT * FROM [Resultater]')
