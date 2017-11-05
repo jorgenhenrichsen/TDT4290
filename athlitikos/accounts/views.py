@@ -63,7 +63,7 @@ def register(request, *args, **kwargs):
             subject = "Velkommen " + user_obj.first_name + " " + user_obj.last_name
             msg = "Trykk på linken for å aktivere bruker"
             html_message += "<h3>Trykk på linken for å aktivere bruker<h3>"
-            #Erstatt denne URL'en med nettsidens egen
+            # Erstatt denne URL'en med nettsidens egen
             url = "http://127.0.0.1:8000/reset-password/" + ps_key
             html_message += '<a href="' + url + '"> Trykk her for å legge inn passord </a>'
             send_mail(subject=subject, from_email=from_email,

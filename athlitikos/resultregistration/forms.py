@@ -181,8 +181,8 @@ class MergeLifterCreateForm(forms.ModelForm):
         if commit:
             lifter.save()
         return lifter
-      
-      
+
+
 class ChangeResultForm(forms.ModelForm):
 
     class Meta:
