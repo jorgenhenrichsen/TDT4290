@@ -42,6 +42,13 @@ def serialize_group(group):
         "competition_leader": group.competition_leader,
         "jury": group.jury.all(),
         "judges": group.judges.all(),
+        "technical_controller": group.technical_controller,
+        "chief_marshall": group.chief_marshall,
+        "timekeeper": group.time_keeper,
+        "secretary": group.secretary,
+        "speaker": group.speaker,
+        "notes": group.notes,
+        "records_description": group.records_description,
     }
 
     results = []

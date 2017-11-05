@@ -33,6 +33,13 @@ def create_group_from_form(form, user):
         competition_leader = group_data.get('competition_leader')
         jury = group_data.get('jury')
         judges = group_data.get('judges')
+        technical_controller = group_data.get('technical_controller')
+        chief_marshall = group_data.get('chief_marshall')
+        timekeeper = group_data.get('timekeeper')
+        secretary = group_data.get('secretary')
+        speaker = group_data.get('speaker')
+        notes = group_data.get('notes')
+        records_description = group_data.get('records_description')
 
         group = Group.objects.filter(competition_id__exact=competition.id, group_number__exact=group_number).first()
 
@@ -51,6 +58,13 @@ def create_group_from_form(form, user):
         group.competition_leader = competition_leader
         group.jury = jury
         group.judges = judges
+        group.technical_controller = technical_controller
+        group.chief_marshall = chief_marshall
+        group.time_keeper = timekeeper
+        group.secretary = secretary
+        group.speaker = speaker
+        group.notes = notes
+        group.records_description = records_description
         group.save()
 
         return group
