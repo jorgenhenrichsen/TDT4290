@@ -5,7 +5,9 @@
         <td>{{ competition.host }}</td>
         <td>
             {% for group in competition.group_set.all %}
+                {% if group.status == "Godkjent" %}
                 <a onclick="preview_group({{ group.pk }})" href="#">Pulje {{ group.group_number }},</a>
+                {% endif %}
             {% endfor %}
         </td>
         <td>{{ competition.start_date }}</td>
