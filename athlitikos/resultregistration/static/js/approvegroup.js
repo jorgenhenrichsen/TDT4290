@@ -7,7 +7,7 @@ function rejectPendingGroup(id) {
 }
 
 function changePendingGroup(id) {
-    window.location.href = "/result/change/" + id;
+    window.location.href = "/resultregistration/edit/" + id;
 }
 
 function goBackToHome() {

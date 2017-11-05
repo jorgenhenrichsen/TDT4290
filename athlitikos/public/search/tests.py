@@ -58,7 +58,7 @@ class SearchFilteringTestCase(TestCase):
             secretary=staff,
             speaker=staff,
             technical_controller=judge,
-            cheif_marshall=judge,
+            chief_marshall=judge,
             time_keeper=judge,
             status=Status.approved.value,
         )
@@ -71,7 +71,7 @@ class SearchFilteringTestCase(TestCase):
             secretary=staff,
             speaker=staff,
             technical_controller=judge,
-            cheif_marshall=judge,
+            chief_marshall=judge,
             time_keeper=judge,
             status=Status.denied.value,
         )
