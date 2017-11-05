@@ -173,15 +173,22 @@ def create_result_from_form(result_form, group):
         best_clean_and_jerk = None
 
         for snatch in snatches:
-            snatch_attempt = create_move_attempt_from_form_data(snatch, result, MoveTypes.snatch.value, snatches.index(snatch))
+            snatch_attempt = create_move_attempt_from_form_data(snatch,
+                                                                result,
+                                                                MoveTypes.snatch.value,
+                                                                snatches.index(snatch))
 
             if snatch_attempt is not None and (best_snatch is None or best_snatch.weight < snatch_attempt.weight):
                     best_snatch = snatch_attempt
 
         for c_j in c_and_js:
-            c_j_attempt = create_move_attempt_from_form_data(c_j, result, MoveTypes.clean_and_jerk.value, c_and_js.index(c_j))
+            c_j_attempt = create_move_attempt_from_form_data(c_j,
+                                                             result,
+                                                             MoveTypes.clean_and_jerk.value,
+                                                             c_and_js.index(c_j))
 
-            if c_j_attempt is not None and (best_clean_and_jerk is None or best_clean_and_jerk.weight < c_j_attempt.weight):
+            if c_j_attempt is not None and\
+                    (best_clean_and_jerk is None or best_clean_and_jerk.weight < c_j_attempt.weight):
                     best_clean_and_jerk = c_j_attempt
 
         result.best_snatch = best_snatch
@@ -234,5 +241,3 @@ def parse_result(group_form=None, result_formset=None, user=None):
         print(group_form.errors)
 
     return None
-
-

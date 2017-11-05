@@ -12,8 +12,7 @@ from .forms import InternationalResultForm, InternationalGroupForm
 from .forms import InternationalCompetitionForm
 from .models import Result, MoveAttempt
 from .forms import LifterForm, JudgeForm, MoveAttemptForm, GroupForm, ClubForm
-from .forms import ResultForm, BaseResultFormSet, GroupFormV3
-from django.forms import formset_factory
+from .forms import ResultForm, ResultFormSet, GroupFormV3
 from resultregistration.models import Lifter
 import json
 from .resultparser import resultparser, resultserializer
@@ -23,8 +22,6 @@ from .forms import CompetitonForm, GroupFormV2, ChangeResultForm, PendingResultF
 
 
 def v2_result_registration(request):
-
-    ResultFormSet = formset_factory(ResultForm, extra=2, formset=BaseResultFormSet)
 
     if request.method == "POST":
         r_formset = ResultFormSet(request.POST, request.FILES)
@@ -41,8 +38,6 @@ def v2_result_registration(request):
 def v2_edit_result(request, pk):
 
     group = get_object_or_404(Group, pk=pk)
-    ResultFormSet = formset_factory(ResultForm, extra=2, formset=BaseResultFormSet)
-
     group_data, results_data = resultserializer.serialize_group(group)
 
     if request.method == "POST":
@@ -53,7 +48,8 @@ def v2_edit_result(request, pk):
         group_form = GroupFormV3(user=request.user, initial=group_data)
         r_formset = ResultFormSet(initial=results_data)
 
-    return render(request, "resultregistration/resultregistration_v2.html", {'result_formset': r_formset, 'group_form': group_form})
+    return render(request, "resultregistration/resultregistration_v2.html",
+                  {'result_formset': r_formset, 'group_form': group_form})
 
 
 def get_result_autofill_data(request):

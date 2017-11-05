@@ -2,8 +2,8 @@ from django import forms
 from .models import InternationalResult, InternationalGroup
 from .models import Competition, Club, Group, Result, MoveAttempt, Lifter, Judge, Person
 from django.utils import timezone
-from datetime import datetime
 from django.db.models import Q
+from django.forms import formset_factory
 
 YEAR_CHOICES = [y for y in range(1900, timezone.now().year+1)]
 
@@ -102,14 +102,6 @@ class GroupFormV3(forms.Form):
     speaker = forms.CharField(required=False)
     notes = forms.CharField(required=False)
     records_description = forms.CharField(required=False)
-    """
-
-    secretary = forms.CharField()
-    speaker = forms.CharField()
-    notes = forms.CharField()
-    records_description = forms.CharField()
-    """
-
 
     def __init__(self, user, *args, **kwargs):
         super(GroupFormV3, self).__init__(*args, **kwargs)
@@ -124,12 +116,14 @@ class ResultForm(forms.Form):
                'placeholder': 'Utøver'}))
     lifter_id = forms.IntegerField(widget=forms.HiddenInput(), required=False)
 
-    club = forms.CharField(max_length=200, widget=forms.TextInput(attrs={'class': 'club-input-field', 'placeholder': 'Klubb'}))
+    club = forms.CharField(max_length=200, widget=forms.TextInput(
+        attrs={'class': 'club-input-field', 'placeholder': 'Klubb'}))
     club_id = forms.IntegerField(widget=forms.HiddenInput(), required=False)
 
     birth_date = forms.DateField(widget=forms.DateInput(attrs={'placeholder': 'dd/mm/yyyy'}))
 
-    age_group = forms.CharField(max_length=10, widget=forms.TextInput(attrs={'class': 'age-group-input-field', 'placeholder': 'Aldersgruppe'}))
+    age_group = forms.CharField(max_length=10, widget=forms.TextInput(
+        attrs={'class': 'age-group-input-field', 'placeholder': 'Aldersgruppe'}))
     weight_class = forms.CharField(max_length=10, widget=forms.TextInput(attrs={'placeholder': 'Vektklasse'}))
     body_weight = forms.FloatField(widget=forms.NumberInput(attrs={'placeholder': 'kg'}))
 
@@ -137,9 +131,12 @@ class ResultForm(forms.Form):
     snatch_2 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Støt 2'}), required=False)
     snatch_3 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Støt 3'}), required=False)
 
-    clean_and_jerk_1 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Rykk 1'}), required=False)
-    clean_and_jerk_2 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Rykk 2'}), required=False)
-    clean_and_jerk_3 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Rykk 3'}), required=False)
+    clean_and_jerk_1 = forms.CharField(max_length=5, widget=forms.TextInput(
+        attrs={'placeholder': 'Rykk 1'}), required=False)
+    clean_and_jerk_2 = forms.CharField(max_length=5, widget=forms.TextInput(
+        attrs={'placeholder': 'Rykk 2'}), required=False)
+    clean_and_jerk_3 = forms.CharField(max_length=5, widget=forms.TextInput(
+        attrs={'placeholder': 'Rykk 3'}), required=False)
 
     def clean(self):
         cleaned_data = super(ResultForm, self).clean()
@@ -178,6 +175,9 @@ class BaseResultFormSet(forms.BaseFormSet):
             if lifter_id in lifter_ids:
                 raise forms.ValidationError("Kan ikke inneholde samme utøver to ganger")
             lifter_ids.append(lifter_id)
+
+
+ResultFormSet = formset_factory(ResultForm, extra=2, formset=BaseResultFormSet)
 
 
 class InternationalResultForm(forms.ModelForm):
@@ -235,7 +235,8 @@ class MergeLifterSearchForm(forms.Form):
         last_name = self.cleaned_data.get("last_name")
         lifter_qs = Lifter.objects.filter(Q(first_name__startswith=first_name) | Q(last_name__startswith=last_name))
         if not lifter_qs.count() >= 2:
-            raise forms.ValidationError("Det finnes ikke flere enn to personer med disse søkekriterene i systemet.")
+            raise forms.ValidationError("Det finnes ikke flere enn to personer"
+                                        " med disse søkekriterene i systemet.")
 
     def qs(self):
         return Lifter.objects.filter(Q(first_name__startswith=self.cleaned_data.get("first_name"))
