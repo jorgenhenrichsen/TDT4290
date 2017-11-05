@@ -21,10 +21,6 @@ jobs:
 
     working_directory: ~/repo
 
-    dependencies:
-      pre:
-        sudo apt-get update; sudo apt-get install unixodbc-dev
-
     steps:
       - checkout
 
@@ -40,6 +36,7 @@ jobs:
           command: sudo -u postgres psql -p 5433 -c "create user postgres with password ‘postgre314’;”
           command: sudo -u postgres psql -p 5433 -c "alter user postgres with superuser;"
           command: |
+            sudo apt-get update; sudo apt-get install unixodbc-dev
             sudo pip install pipenv
             export PIPENV_VENV_IN_PROJECT=1
             pipenv install
