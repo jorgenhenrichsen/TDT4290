@@ -8,7 +8,7 @@ from .forms import InternationalResultForm, InternationalGroupForm
 from .forms import InternationalCompetitionForm
 from .models import Lifter, Judge, Group, Competition
 from .models import Result, MoveAttempt
-from .forms import LifterForm, JudgeForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm
+from .forms import LifterForm, JudgeForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm, ChangeResultForm
 from .forms import CompetitonForm, GroupFormV2
 # from .utils import *
 from .forms import PendingResultForm, ResultForm, BaseResultFormSet, GroupFormV3
@@ -57,9 +57,12 @@ def v2_edit_result(request, pk):
 
 
 def get_result_autofill_data(request):
-
+    """
+    Used for autofilling data when user selects lifter in the resultregistration form.
+    :param request:
+    :return:
+    """
     lifter_id = request.GET.get('lifter_id')
-
     lifter = get_object_or_404(Lifter, pk=lifter_id)
 
     data = {
