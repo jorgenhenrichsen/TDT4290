@@ -1,0 +1,64 @@
+{% block content %}
+<h1> Slå sammen personer </h1>
+<h4> Dette er en side hvor man kan søke etter duplikater av utøvere å sette dem sammen til en.</h4>
+<h4> Alle resultater fra forskjellige konkurranser som er lagret på to instanser kan settes sammen på en person</h4>
+<h4> <u> NB: denne funksjonen støtter ikke resulter hvor en utøver er dobbelt lagret i en og samme pulje </u></h4>
+
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+<form method="Post" action='.'> {%csrf_token%}
+    {{searchform.as_p}}
+<input type="submit" value="søk" class="btn btn-primary">
+</form>
+<style>
+th, td, p {
+    border: 1px solid black;
+}
+td {
+  width: 200px;
+}
+</style>
+<form action="merging" method="post"> {%csrf_token%}
+    <h3> <b> Velg 2 </b> </h3>
+    {% for lifter in lifter_qs %}
+    <table>
+        <tr>
+            <th>Fornavn</th>
+            <th>Etternavn</th>
+            <th>Klubb</th>
+            <th>Fødselsdato</th>
+            <th>velg</th>
+
+        </tr>
+        <tr>
+            <td>
+                {{lifter.first_name}}
+            </td>
+            <td>
+                {{lifter.last_name}}
+            </td>
+            <td>
+                {{lifter.club}}
+            </td>
+            <td>
+                {{lifter.birth_date}}
+            </td>
+            <td>
+                <input type="checkbox" name="valgt"
+                    id="lifter {{ forloop.counter }}" value="{{lifter.id}}"
+                multiple="True"/>
+                <label for="lifter {{ forloop.counter }}"></label>
+            </td>
+
+        </tr>
+    </table>
+    {% endfor %}
+    <input type="submit" value="Merge"/>
+</form>
+{% endblock %}

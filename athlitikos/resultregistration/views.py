@@ -1,12 +1,14 @@
-from django.shortcuts import render, redirect, get_object_or_404, reverse
+from django.shortcuts import render, redirect, get_object_or_404, reverse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.generic import FormView
 from .mixins import AjaxFormMixin
 from .models import Lifter, Judge, Staff, Group, Competition
-from .models import Result, MoveAttempt
+from .models import Result, MoveAttempt, PentathlonResult
 from .forms import LifterForm, JudgeForm, StaffForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm
-from .forms import CompetitonForm, GroupFormV2
+from .forms import CompetitonForm, GroupFormV2, MergeLifterSearchForm, MergeLifterCreateForm
+from django.contrib import messages
+from django.db.models import Q
 # from .utils import *
 from .forms import PendingResultForm
 # from .forms import forms
@@ -73,6 +75,73 @@ def judge_detail(request, pk):
         # 'birth_date': judge.birth_date.strftime('%Y-%m-%d'),
         'level': judge.judge_level,
     })
+
+
+def merge_find_two_lifters_view(request, *args, **kwargs):
+
+    if not request.user.is_club_admin and not request.user.is_staff:  # hvis man ikke request ikke har rettigheter
+        return ('/home')
+
+    searchform = MergeLifterSearchForm(request.POST or None)
+    lifter_qs = None
+    if searchform.is_valid():
+        lifter_qs = searchform.qs()
+    context = {'searchform': searchform, 'lifter_qs': lifter_qs}
+    return render(request, 'resultregistration/merge_lifters.html', context)
+
+
+def merge_lifter_view(request, *args, **kwargs):
+
+    if not request.user.is_club_admin and not request.user.is_staff:  # hvis man ikke request ikke har rettigheter
+        return ('/home')
+
+    # alle utøvere har en personid, som de arver fra superklassen.
+    if request.POST.get('ny') is not None:
+        personidlist = request.POST.getlist('ny')  # en ekstremt kreativ måte å sende over fra template tilbake til view
+    else:
+        personidlist = request.POST.getlist("valgt")
+
+    lifter_qs = Lifter.objects.filter(pk__in=personidlist)
+    print(lifter_qs.count())
+    if lifter_qs.count() != 2:
+        return HttpResponseRedirect("/merge-lifters/", messages.error(request, 'velg kun 2 personer'))
+    form = MergeLifterCreateForm(request.POST or None)
+    if form.is_valid():
+        # Should have a try-cach block like all code working with a database ;)
+
+        lifter_obj = form.save()
+        lifter_obj1 = lifter_qs.first()
+        lifter_obj2 = lifter_qs.last()
+
+        result_qs = Result.objects.filter(Q(lifter=lifter_obj1) | Q(lifter=lifter_obj2))
+
+        for result in result_qs:
+            result.lifter = lifter_obj
+            result.save()
+
+        pent_qs = PentathlonResult.objects.filter(Q(lifter=lifter_obj1) | Q(lifter=lifter_obj2))
+        for pent_result in pent_qs:
+            pent_result.lifter = lifter_obj
+            pent_result.save()
+
+        group_qs1 = Group.objects.filter(Q(competitors=lifter_obj1))
+        for group in group_qs1:
+            group.competitors.remove(lifter_obj1)
+            group.competitors.add(lifter_obj)
+            group.save()
+
+        group_qs2 = Group.objects.filter(Q(competitors=lifter_obj2))
+
+        for group in group_qs2:
+            group.competitors.remove(lifter_obj2)
+            group.competitors.add(lifter_obj)
+            group.save()
+
+        lifter_obj1.delete()
+        lifter_obj2.delete()
+        return HttpResponseRedirect("/home/admin", messages.success(request, 'utøvere slått sammen'))
+
+    return render(request, 'resultregistration/merging_lifters.html', {'form': form, 'personidlist': personidlist})
 
 
 @login_required(login_url='/login')

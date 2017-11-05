@@ -25,4 +25,6 @@ urlpatterns = [
     url(r'^home/admin/$', views.home_admin, name='home_admin'),
     url(r'^home/clubofc/$', views.home_club_official, name='home_club_official'),
     url(r'^judges/$', views.list_all_judges, name="result_registration"),
+    url(r'^merge-lifters/$', views.merge_find_two_lifters_view),
+    url(r'^merge-lifters/merging$', views.merge_lifter_view),
 ]
