@@ -102,7 +102,7 @@ def home(request):
 
 @login_required(login_url='/login')
 def home_admin(request):
-    groups = Group.objects.all()
+    groups = Group.objects.filter(status__in=[Status.approved.value, Status.denied.value, Status.pending.value])
     return render(request, 'resultregistration/home_admin.html', {'pending_groups': groups})
 
 
