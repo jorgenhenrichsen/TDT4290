@@ -170,7 +170,7 @@ a positive attitude when it comes to testing!
 
 # Porting the old database to the new PostgreSQL database
 
-## This only works for Mac at the moment!
+## Mac version:
 
 1. Download the .mdb files from Dropbox or the project folder on Google Drive.
 2. Download the UCanAccess JDBC driver [Here.](http://ucanaccess.sourceforge.net/site.html)
@@ -181,6 +181,17 @@ a positive attitude when it comes to testing!
 7. At the bottom of the file uncomment the different lines for what you want to do, but make sure to run the 
    clubs(new_cursor, connection, cursor) first. I also recommend to run them in the order from old to newest (top-down).
 8. Be aware that the runtime, especially on the 1998-2017 porting (the last one) takes a few minutes to complete.
+
+## Windows version:
+#### I don't know if this works for Windows (not tested).
+
+1. Download the .mdb files from Dropbox or the project folder on Google Drive.
+2. Install the dependencies from pipenv, you need pyodbc to make this work.
+3. Put the path to the .mdb files in read_mdb() (NVF Historiske resultater.mdb) and in read_new_mdb() (Resultater_.mdb)
+4. Uncomment the import statment for pyodbc, and the Windows verisons in the read_mdb() and read_new_mdb().
+5. At the bottom of the file uncomment the different lines for what you want to do, but make sure to run the 
+   clubs(new_cursor, connection, cursor) first. I also recommend to run them in the order from old to newest (top-down).
+6. Be aware that the runtime, especially on the 1998-2017 porting (the last one) takes a few minutes to complete.
 
 # TODO:
   * Deploy on version release or tag?
