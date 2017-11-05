@@ -45,7 +45,7 @@ class SearchFiltering:
             print("Getting competitions with category={} from_date={} to_date={} hosts={}"
                   .format(category, from_date, to_date, hosts))
 
-        competitions = Competition.objects.filter(group__status__exact=Status.approved.value)
+        competitions = Competition.objects.filter(group__status__exact=Status.approved.value).distinct()
 
         if not SearchFiltering.is_none_value(category) and category != "all":
             competitions = competitions.filter(competition_category__iexact=category)
