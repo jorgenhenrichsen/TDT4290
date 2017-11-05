@@ -32,10 +32,10 @@ class Sinclair(models.Model):
 
 
 class Competition(models.Model):
-    competition_category = models.CharField(max_length=100)  # validators=[validate_name] removed due to conflict
-    host = models.CharField(max_length=100, verbose_name="Arrangør")
-    location = models.CharField(max_length=100)
-    start_date = models.DateField(help_text="år-måned-dag")
+    competition_category = models.CharField(max_length=100, null=True, blank=True)
+    host = models.CharField(max_length=100, verbose_name="Arrangør", null=True, blank=True)
+    location = models.CharField(max_length=100, null=True, blank=True)
+    start_date = models.DateField(help_text="år-måned-dag", null=True, blank=True)
 
     def __str__(self):
         return '{0}, {1}, {2}'.format(self.competition_category, self.location, self.start_date)
@@ -43,8 +43,8 @@ class Competition(models.Model):
 
 class Club(models.Model):
     club_name = models.CharField(max_length=100)
-    region = models.CharField(max_length=100)
-    address = models.CharField(max_length=100)
+    region = models.CharField(max_length=100, null=True, blank=True)
+    address = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return self.club_name
@@ -95,7 +95,7 @@ class Result(models.Model):
     body_weight = models.FloatField(verbose_name='Kroppsvekt', null=True)
     age_group = models.CharField(max_length=20, verbose_name='Kategori', choices=AgeGroup.choices(), null=True)
     weight_class = models.CharField(max_length=10, verbose_name='Vektklasse', null=True)
-
+    lifter_club = models.ForeignKey('Club', null=True)
     sinclair_coefficient = models.FloatField(db_column='sinclair_coefficient', null=True, blank=True)
     veteran_coefficient = models.FloatField(db_column='melzer_faber_coefficient', null=True, blank=True)
     age = models.IntegerField()
@@ -137,6 +137,7 @@ class MoveAttempt(models.Model):
 class Person(models.Model):
     first_name = models.CharField(max_length=40, verbose_name='Fornavn', validators=[validate_name])
     last_name = models.CharField(max_length=100, verbose_name='Etternavn', validators=[validate_name])
+    club = models.ForeignKey('Club', null=True)  # Current club the person belongs to
 
     def __str__(self):
         return self.fullname()
@@ -149,7 +150,6 @@ class Lifter(Person):
     # Changed from dateTime, as we don't need time of birth
     birth_date = models.DateField(verbose_name='Fødselsdato', null=True)
     gender = models.CharField(max_length=10, verbose_name='Kjønn', choices=Gender.choices(), null=True)
-    club = models.ForeignKey('Club', null=True)  # The club that this lifter< belongs to
 
 
 class Judge(Person):
@@ -180,8 +180,9 @@ class OldResults(models.Model):
     competition = models.ForeignKey(Competition, null=True)  # The competition that this result belongs to.
 
     weight_class = models.CharField(max_length=10, verbose_name='Vektklasse', null=True)
-    age_group = models.CharField(max_length=2, verbose_name='Kategori', null=True)
+    age_group = models.CharField(max_length=5, verbose_name='Kategori', null=True)
     body_weight = models.FloatField(verbose_name='Kroppsvekt', null=True)
+    lifter_club = models.ForeignKey('Club', null=True)
     best_press = models.FloatField(verbose_name='Press', null=True, blank=True)
     best_snatch = models.FloatField(verbose_name='Rykk', null=True, blank=True)
     best_clean_and_jerk = models.FloatField(verbose_name='Støt', null=True, blank=True)
@@ -190,7 +191,26 @@ class OldResults(models.Model):
     sinclair_coefficient = models.FloatField(verbose_name='Koeffisient', blank=True, null=True)
 
     def __str__(self):
-        return 'resultat for {0}'.format(self.lifter.fullname())
+        return 'Resultat for {}'.format(self.lifter.fullname())
+
+
+class OldPentathlonResult(models.Model):
+
+    lifter = models.ForeignKey(Person, null=True)
+    competition = models.ForeignKey(Competition, null=True)
+    result = models.ForeignKey(OldResults, null=True)
+
+    age_group = models.CharField(max_length=20, null=True, blank=True)
+    shot_put = models.DecimalField(max_digits=10, decimal_places=5, null=True, blank=True)
+    shot_put_points = models.DecimalField(max_digits=10, decimal_places=5, null=True, blank=True)
+    forty_meter = models.DecimalField(max_digits=10, decimal_places=5, null=True, blank=True)
+    forty_meter_points = models.DecimalField(max_digits=10, decimal_places=5, null=True, blank=True)
+    jump = models.DecimalField(max_digits=10, decimal_places=5, null=True, blank=True)
+    jump_points = models.DecimalField(max_digits=10, decimal_places=5, null=True, blank=True)
+    sum_all = models.DecimalField(max_digits=10, decimal_places=5, null=True, blank=True)
+
+    def __str__(self):
+        return "Fem-kamp resultat til: " + "{}".format(self.lifter.fullname())
 
 
 class Staff(Person):
