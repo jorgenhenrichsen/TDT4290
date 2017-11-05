@@ -166,6 +166,12 @@ def create_result_from_form(result_form, group):
         result.best_snatch = best_snatch
         result.best_clean_and_jerk = best_clean_and_jerk
 
+        if best_snatch is not None and best_clean_and_jerk is not None:
+            result.total_lift = best_snatch.weight + best_clean_and_jerk.weight
+
+            result.points_with_sinclair = result.total_lift * 1  # TODO: INSERT SINCLAIR COEFF HERE
+            result.points_with_veteran = result.total_lift * 1  # TODO: INSER VETERAN COEFF HERE
+
         result.save()
         return result
 
