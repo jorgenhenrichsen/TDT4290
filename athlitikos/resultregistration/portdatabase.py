@@ -1,6 +1,7 @@
 import jaydebeapi
 import psycopg2
 import datetime
+# import pyodbc
 
 
 def read_mdb():
@@ -21,6 +22,13 @@ def read_mdb():
         classpath
     )
     curs = cnxn.cursor()
+
+    # Use this for Windows
+    # mdb_path = 'c:/path/to/my.mdb' # Path to the NVF Historiske resultater.mdb
+    # driver = '{Microsoft Access Driver (*.mdb)}'
+    # con = pyodbc.connect('DRIVER={};DBQ={};'.format(driver, mdb_path))
+    # curs = con.cursor()
+
     return curs
 
 
@@ -42,6 +50,13 @@ def read_new_mdb():
         classpath
     )
     crsr = cnxn.cursor()
+
+    # Use this for Windows
+    # mdb_path = 'c:/path/to/my.mdb' # Path to the Resultater_.mdb
+    # driver = '{Microsoft Access Driver (*.mdb)}'
+    # con = pyodbc.connect('DRIVER={};DBQ={};'.format(driver, mdb_path))
+    # crsr = con.cursor()
+
     return crsr
 
 
