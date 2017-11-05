@@ -81,7 +81,7 @@ class Group(models.Model):
 
     technical_controller = models.ForeignKey('Judge', verbose_name='Teknisk kontrollør',
                                              related_name='groups_technical_controller', null=True, blank=True)
-    cheif_marshall = models.ForeignKey('Judge', verbose_name='Chief Marshall', related_name='groups_chief_marshall', null=True, blank=True)
+    chief_marshall = models.ForeignKey('Judge', verbose_name='Chief Marshall', related_name='groups_chief_marshall', null=True, blank=True)
     time_keeper = models.ForeignKey('Judge', verbose_name='Tidtaker', related_name='groups_time_keeper', null=True, blank=True)
 
     notes = models.CharField(max_length=300, null=True, blank=True)
