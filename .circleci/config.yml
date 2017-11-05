@@ -21,6 +21,10 @@ jobs:
 
     working_directory: ~/repo
 
+    dependencies:
+      pre:
+        sudo apt-get update; sudo apt-get install unixodbc-dev
+
     steps:
       - checkout
 
