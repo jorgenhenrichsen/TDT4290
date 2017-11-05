@@ -1,0 +1,19 @@
+{% extends 'athlitikos/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="/static/css/approveresults.css">
+    <script type="text/javascript" src="/static/js/approvegroup.js"></script>
+{% endblock %}
+
+
+{% block content %}
+
+    <button class="cancel-button" id="avbryt-btn" onclick="goBackToHome()">Avbryt</button>
+
+    <div>
+        {% include "resultregistration/result_preview.html" %}
+    </div>
+
+{% endblock content %}
