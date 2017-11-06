@@ -36,18 +36,44 @@ class SearchFilteringTestCase(TestCase):
             host=self.club1.club_name
         )
 
-        Competition.objects.create(
+        comp2 = Competition.objects.create(
             competition_category=CompetitionCategory.seriestevne.value,
             start_date="2017-08-27",
             location="Location2",
             host=self.club1.club_name
         )
 
-        Competition.objects.create(
+        Group.objects.create(
+            competition=comp2,
+            date="2017-08-20",
+            group_number=1,
+            competition_leader=judge,
+            secretary=staff,
+            speaker=staff,
+            technical_controller=judge,
+            chief_marshall=judge,
+            time_keeper=judge,
+            status=Status.approved.value,
+        )
+
+        comp3 = Competition.objects.create(
             competition_category=CompetitionCategory.seriestevne.value,
             start_date="2017-08-30",
             location="Location2",
             host=self.club2.club_name
+        )
+
+        Group.objects.create(
+            competition=comp3,
+            date="2017-08-20",
+            group_number=1,
+            competition_leader=judge,
+            secretary=staff,
+            speaker=staff,
+            technical_controller=judge,
+            chief_marshall=judge,
+            time_keeper=judge,
+            status=Status.approved.value,
         )
 
         group = Group.objects.create(
