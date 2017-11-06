@@ -19,7 +19,7 @@ from .resultparser import resultparser, resultserializer
 from .enums import Status
 from .forms import CompetitonForm, GroupFormV2, ChangeResultForm, PendingResultForm,\
     MergeLifterSearchForm, MergeLifterCreateForm, ExcelFileForm
-from .excel import *
+from .excel import read_competition_staff, read_lifters, read_competition_details, readexcel
 
 
 def v2_result_registration(request):
@@ -750,6 +750,7 @@ def change_result_clubofc(request, pk):
     return render(request, 'resultregistration/edit_person.html', {'title': 'Endre valgt resultat', 'form': form})
 
 
+@login_required(login_url='/login')
 def result_from_excel(request):
     if request.method == 'POST':
         success = False
@@ -766,18 +767,18 @@ def result_from_excel(request):
             print(read_lifters(data))
             competition_details = read_competition_details(data)
             # print(competition_details)
-            competition = {
-                'success': True,
-                'category': competition_details[0],
-                'host': competition_details[1],
-                'location': competition_details[2],
-                'start_date': competition_details[3],
-            }
+            # competition = {
+            #     'success': True,
+            #     'category': competition_details[0],
+            #     'host': competition_details[1],
+            #     'location': competition_details[2],
+            #     'start_date': competition_details[3],
+            # }
             result_details = read_lifters(data)
             results = []
             for i in range(len(result_details)):
-                form_number = 'form-{}-'.format(i)
-                key = 'result{}'.format(i)
+                # form_number = 'form-{}-'.format(i)
+                # key = 'result{}'.format(i)
                 row = result_details[i]
 
                 # is_row = False
@@ -802,10 +803,9 @@ def result_from_excel(request):
                 #     form_number+'clean_and_jerk_3': [row[11]],
                 #     # 'key': key
                 # }
-                lifter = row[4]
+                # lifter = row[4]
                 lifter_id = None
                 club_id = None
-
 
                 result_row = {
                     'lifter': row[4],
@@ -831,24 +831,24 @@ def result_from_excel(request):
             group_details['group_number'] = competition_details[4]
             # print(group_details)
             success = True
-            response = {
-                'success': success,
-                'competition_details': competition,
-                'result_details': results,
-                'group_details': group_details
-            }
+            # response = {
+            #     'success': success,
+            #     'competition_details': competition,
+            #     'result_details': results,
+            #     'group_details': group_details
+            # }
 
             r_formset = ResultFormSet(initial=results)
             group_form = GroupFormV3(user=request.user, initial=group_details)
             # resultparser.parse_result(group_form=group_form, result_formset=r_formset, user=request.user)
-            print("should be success")
+            # print("should be success")
             # print("r_formset:\n---\n")
             # print(str(r_formset))
-            print("group_form:\n---\n", group_form)
+            # print("group_form:\n---\n", group_form)
             return render(request,
                           'resultregistration/resultregistration_v2.html',
                           {'result_formset': r_formset, 'group_form': group_form})
-        except IOError as e:
+        except IOError:
             response = {
                 'success': success,
                 'error': 'File invalid or not found'

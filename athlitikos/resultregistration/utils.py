@@ -1,4 +1,4 @@
-from .models import Result, MoveAttempt, Sinclair, MelzerFaber, Lifter, Club, Competition, Judge
+from .models import Result, MoveAttempt, Sinclair, MelzerFaber
 from datetime import date
 from math import log10
 
@@ -129,28 +129,3 @@ def get_age_for_lifter_in_result(pk):
     result.age = age
     result.save()
     return {'age': str(age)}
-
-
-def parse_excel(data):
-    lifter_name = data['lifter']
-    club_name = data['club']
-    birth_date = data['birthdate']
-
-    if lifter_name is not None and club_name is not None:
-        names = lifter_name.rsplit(' ', 1)
-        first_name = names[0]
-        last_name = names[1]
-        lifter = Lifter.objects.filter(first_name__icontains=first_name,
-                                       last_name__icontains=last_name,
-                                       club__club_name__icontains=club_name).first()
-    elif lifter_name is not None and birth_date is not None:
-        names = lifter_name.rsplit(' ', 1)
-        first_name = names[0]
-        last_name = names[1]
-        lifter = Lifter.objects.filter(first_name__icontains=first_name,
-                                       last_name__icontains=last_name,
-                                       birth_date=birth_date).first()
-
-    age_group = data['age_group']
-    weight_class = data['weight_class']
-
