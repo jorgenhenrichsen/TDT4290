@@ -84,7 +84,7 @@ def add_new_competition(request):
             competition.save()
     else:
         form = CompetitonForm()
-    return render(request, "resultregistration/competition_form.html", {"title": "Ny konkurranse", "form": form})
+    return render(request, "resultregistration/competition_form.html", {"title": "Nytt stevne", "form": form})
 
 
 @login_required(login_url='/login')
