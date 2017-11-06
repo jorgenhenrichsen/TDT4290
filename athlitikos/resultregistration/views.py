@@ -619,6 +619,7 @@ def result_registration(request):
                                                                                        10, 11, 12, 13, 14, 15, 16,
                                                                                        17, 18]})
 
+
 @login_required(login_url='/login')
 def edit_result(request, pk):
     group = Group.objects.filter(pk=pk)
