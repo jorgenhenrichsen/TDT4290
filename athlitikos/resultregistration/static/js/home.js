@@ -9,6 +9,10 @@ $(function(){
             }
         }
     });
+
+    $("#add-competition-button").click(function () {
+        window.location.href = "/resultregistration/competition/new";
+    })
 });
 
 function addNewJudge() {
@@ -19,8 +23,16 @@ function addNewLifter() {
     window.location.href = "/lifter/new";
 }
 
+function addNewClub() {
+    window.location.href = "/club/new";
+}
+
 function deletePendingGroup(id) {
     window.location.href = "/result/delete/" + id;
+}
+
+function denyDeletePendingGroupClubofc() {
+    window.alert("Kan bare slette resultater som venter på godkjenning");
 }
 
 function editPendingGroup(id) {

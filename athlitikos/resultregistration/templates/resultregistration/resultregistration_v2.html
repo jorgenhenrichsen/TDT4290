@@ -1,0 +1,91 @@
+
+{% extends 'athlitikos/base.html' %}
+
+{% block head %}
+
+    <script type="text/javascript" src="/static/js/resultregistration_v2.js"></script>
+
+{% endblock %}
+
+{% block content %}
+
+    <h1>Legg til ny pulje</h1>
+
+    <form method="post">
+    {% csrf_token %}
+
+    {{ group_form }}
+
+    <h2>Tilhørende resultater</h2>
+
+    {{ result_formset.management_form }}
+    <table id="result-form-table">
+
+        <thead>
+            <tr>
+                <th>Utøver</th>
+                <th>Klubb</th>
+                <th>Fødselsdato</th>
+                <th>Aldersgruppe</th>
+                <th>Vektklasse</th>
+                <th>Kroppsvekt</th>
+                <th colspan="3">Støt</th>
+                <th colspan="3">Rykk</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for form in result_formset %}
+
+                {% for hidden_field in form.hidden_fields %}
+                    {{ hidden_field }}
+                {% endfor %}
+
+                <tr>
+
+                    {% for field in form.visible_fields %}
+                        <td>
+                        {{ field }}
+                        </td>
+                    {% endfor %}
+                    {{ form.non_field_errors }}
+                </tr>
+            {% endfor %}
+
+        </tbody>
+
+
+
+    </table>
+
+    <input type="button" class="broad-button" value="+ Legg til rad" id="add-lifter">
+
+    {% if result_formset.non_form_errors %}
+        <label>Feilmeldinger:</label>
+        <li>
+            {% for error in result_formset.non_form_errors %}
+                <ul>
+                    {{ error }}
+                </ul>
+            {% endfor %}
+        </li>
+    {% endif %}
+
+
+    <button class="ok-button" type="submit">Lagre resultater</button>
+
+    </form>
+
+    <label>Mangler en utøver i databasen?</label>
+    <button onclick="routeToAddNewLifter()">Legg til ny utøver her</button><br>
+    <button class="cancel-button" onclick="redirectToHome()">Avbryt</button>
+
+    <script>
+        displayErrors("{{ result_formset.errors }}")
+    </script>
+
+
+
+
+{% endblock %}
+

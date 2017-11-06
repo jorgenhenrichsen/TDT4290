@@ -12,6 +12,14 @@
 
     <button class="cancel-button" id="avbryt-btn" onclick="goBackToHome()">Avbryt</button>
 
+    {% for group in groups %}
+        <button class="ok-button" id="send-button" onclick="sendGroup({{ group.pk }})">Send inn</button>
+    {% endfor %}
+
+    {% for group in groups %}
+        <button class="ok-button" id="change-button" onclick="changePendingGroup({{ group.pk }})">Gjør endringer</button>
+    {% endfor %}
+
     {% load static %}
 
 
@@ -68,7 +76,7 @@
 
                 <th>
                     {% for group in groups %}
-                        {% if group.status == "Til godkjenning" %}
+                        {% if group.status == "Til godkjenning" or group.status == "Ikke sendt" %}
                             <button class="ok-button" onclick="changePendingGroupClubofc({{ pending_result.pk }})">Gjør endringer</button>
                         {% else %}
                             <button class="ok-button" onclick="denyChangePendingGroupClubofc()">Gjør endringer</button>

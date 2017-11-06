@@ -1,12 +1,13 @@
-#result-table {
+#judge-table {
     width: 100%;
 }
 
 th, td {
     font-weight: lighter;
     padding: 10px;
-    padding-left: 0;
+    padding-right: 90px;
 }
+
 
 thead {
     box-shadow: 0px 2px 2px grey;
@@ -29,43 +30,20 @@ thead {
     background-image: none;
 }
 
-#approve-btn, #send-button {
-    position: absolute;
-    right: 20px;
-    top: 110px;
-}
-
-#underkjenn-btn {
-    position: absolute;
-    left: 120px;
-    top: 100px;
-}
-
-#change-button {
-    position: absolute;
-    right: 120px;
-    top: 110px;
-}
-
-#avbryt-btn {
-    position: absolute;
-    left: 10px;
-    top: 100px;
-}
-
-#group_info_before_table {
+.button-wrapper {
     display: flex;
-    justify-content: space-around;
-    padding: 2%;
+    justify-content: center;
+    /*align-content: center;*/
 }
 
-#group_info_after_table {
-    display: flex;
-    justify-content: flex-start;
-}
-
-.group_info_after_table_col {
+.button-column {
     display: flex;
     flex-direction: column;
-    padding: 2%;
+    padding: 0 2em;
+}
+
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
 }

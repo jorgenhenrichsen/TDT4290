@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404, reverse, HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404, reverse, HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.generic import FormView
@@ -8,17 +8,85 @@ from .models import PentathlonResult, InternationalGroup
 from .forms import LifterForm, JudgeForm, MoveAttemptForm, ResultForm, GroupForm, ClubForm
 from django.contrib import messages
 from django.db.models import Q
-# from .utils import *
-# from .forms import PendingResultForm
-# from .forms import forms
-# from django.views.generic import UpdateView
 from .models import InternationalResult
 from .forms import InternationalResultForm, InternationalGroupForm
 from .forms import InternationalCompetitionForm
 from .models import Result, MoveAttempt
+from .forms import LifterForm, JudgeForm, MoveAttemptForm, GroupForm, ClubForm
+from .forms import ResultForm, ResultFormSet, GroupFormV3
+from resultregistration.models import Lifter
+import json
+from .resultparser import resultparser, resultserializer
+from .enums import Status
 from .forms import CompetitonForm, GroupFormV2, ChangeResultForm, PendingResultForm,\
     MergeLifterSearchForm, MergeLifterCreateForm
 from django.core import exceptions
+
+
+def v2_result_registration(request):
+
+    if request.method == "POST":
+        r_formset = ResultFormSet(request.POST, request.FILES)
+        group_form = GroupFormV3(user=request.user, data=request.POST)
+        resultparser.parse_result(group_form=group_form, result_formset=r_formset, user=request.user)
+    else:
+        r_formset = ResultFormSet()
+        group_form = GroupFormV3(user=request.user)
+    return render(request,
+                  "resultregistration/resultregistration_v2.html",
+                  {'result_formset': r_formset, 'group_form': group_form})
+
+
+def v2_edit_result(request, pk):
+
+    group = get_object_or_404(Group, pk=pk)
+    group_data, results_data = resultserializer.serialize_group(group)
+
+    if request.method == "POST":
+        r_formset = ResultFormSet(request.POST, request.FILES)
+        group_form = GroupFormV3(user=request.user, data=request.POST)
+        resultparser.parse_result(group_form=group_form, result_formset=r_formset, user=request.user)
+    else:
+        group_form = GroupFormV3(user=request.user, initial=group_data)
+        r_formset = ResultFormSet(initial=results_data)
+
+    return render(request, "resultregistration/resultregistration_v2.html",
+                  {'result_formset': r_formset, 'group_form': group_form})
+
+
+def get_result_autofill_data(request):
+    """
+    Used for autofilling data when user selects lifter in the resultregistration form.
+    :param request:
+    :return:
+    """
+    lifter_id = request.GET.get('lifter_id')
+    lifter = get_object_or_404(Lifter, pk=lifter_id)
+
+    data = {
+        "club": {
+            "name": lifter.club.club_name,
+            "id": lifter.club.id,
+        },
+        "birth_date": lifter.birth_date.strftime('%d/%m/%Y')
+    }
+
+    json_data = json.dumps(data)
+    mime_type = "application/json"
+    return HttpResponse(json_data, mime_type)
+
+
+def add_new_competition(request):
+
+    if request.method == "POST":
+        form = CompetitonForm(request.POST)
+        if form.is_valid():
+            competition = form.save()
+            competition.author = request.user
+            competition.save()
+    else:
+        form = CompetitonForm()
+    return render(request, "resultregistration/competition_form.html", {"title": "Nytt stevne", "form": form})
 
 
 @login_required(login_url='/login')
@@ -31,7 +99,9 @@ def home(request):
 
 @login_required(login_url='/login')
 def home_admin(request):
-    groups = Group.objects.all()
+    groups = Group.objects.filter(status__in=[Status.approved.value, Status.denied.value, Status.pending.value])\
+        .union(Group.objects.filter(author__exact=request.user))
+
     return render(request, 'resultregistration/home_admin.html', {'pending_groups': groups})
 
 
@@ -73,6 +143,18 @@ def add_new_judge(request):
             return redirect(reverse('resultregistration:judge_detail', args=[judge.pk]))
     form = JudgeForm()
     return render(request, 'resultregistration/edit_person.html', {'title': 'Legg til ny dommer', 'form': form})
+
+
+@login_required(login_url='/login')
+def add_new_club(request):
+
+    if request.method == "POST":
+        form = ClubForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('resultregistration:home_admin'))
+    form = ClubForm()
+    return render(request, 'resultregistration/edit_person.html', {'title': 'Legg til ny klubb', 'form': form})
 
 
 @login_required(login_url='/login')
@@ -576,20 +658,30 @@ def edit_result_clubofc(request, pk):
     return render(request, 'resultregistration/editresult_clubofc.html', context)
 
 
+@login_required(login_url='/login')
 def approve_group(request, pk):
     if not request.user.is_club_admin and not request.user.is_staff:  # hvis man ikke request ikke har rettigheter
         return HttpResponseRedirect('/home')
     group = Group.objects.get(pk=pk)
-    group.status = "Godkjent"
+    group.status = Status.approved.value
     group.save()
     return redirect('/home/')
 
 
+@login_required(login_url='/login')
 def reject_group(request, pk):
     if not request.user.is_club_admin and not request.user.is_staff:  # hvis man ikke request ikke har rettigheter
         return HttpResponseRedirect('/home')
     group = Group.objects.get(pk=pk)
-    group.status = "Ikke godkjent"
+    group.status = Status.denied.value
+    group.save()
+    return redirect('/home/')
+
+
+@login_required(login_url='/login')
+def send_group(request, pk):
+    group = Group.objects.get(pk=pk)
+    group.status = Status.pending.value
     group.save()
     return redirect('/home/')
 
