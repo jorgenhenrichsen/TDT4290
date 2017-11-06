@@ -170,7 +170,7 @@ def parse_judges(judge_list):
     if len(judges) > 1:
         end_query = judges[0]
         for i in range(1, len(judges)):
-            end_query = (end_query| judges[i]).distinct()
+            end_query = (end_query | judges[i]).distinct()
         judge_query = end_query
     elif len(judges) == 1:
         judge_query = judges[0]

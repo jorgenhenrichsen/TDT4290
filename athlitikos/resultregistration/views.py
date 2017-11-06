@@ -1,26 +1,23 @@
 from django.shortcuts import render, redirect, get_object_or_404, reverse, HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
-from django.views.generic import FormView
 
 from resultregistration.utils import parse_judge, parse_judges
-from .mixins import AjaxFormMixin
-from .models import Judge, Group, Competition
+from .models import Judge, Group
 from .models import PentathlonResult, InternationalGroup
 from django.contrib import messages
 from django.db.models import Q
 from .models import InternationalResult
 from .forms import InternationalResultForm, InternationalGroupForm
 from .forms import InternationalCompetitionForm
-from .models import Result, MoveAttempt
-from .forms import LifterForm, JudgeForm, MoveAttemptForm, GroupForm, ClubForm
+from .models import Result
+from .forms import LifterForm, JudgeForm, MoveAttemptForm, ClubForm
 from .forms import ResultForm, ResultFormSet, GroupFormV3
 from resultregistration.models import Lifter
 import json
 from .resultparser import resultparser, resultserializer
 from .enums import Status
 from .forms import CompetitonForm, GroupFormV2, ChangeResultForm, PendingResultForm,\
-    MergeLifterSearchForm, MergeLifterCreateForm, ExcelFileForm
+    MergeLifterSearchForm, MergeLifterCreateForm
 from .excel import read_competition_staff, read_lifters, read_competition_details, readexcel
 from django.core import exceptions
 
@@ -352,9 +349,6 @@ def result_view(request):
                            'row_id': row_id})
 
 
-
-
-
 def group_registration(request):
     return render(request, 'resultregistration/group_form.html', context={'GroupForm': GroupFormV2})
 
@@ -575,7 +569,7 @@ def result_from_excel(request):
                 # print(group_details)
                 # print(competition_details)
 
-                competition_leader_error = parse_judge(group_details['competition_leader'])
+                # competition_leader_error = parse_judge(group_details['competition_leader'])
 
                 group_details['group_number'] = competition_details[4]
                 group_details['date'] = competition_details[3]
@@ -597,7 +591,8 @@ def result_from_excel(request):
                 return render(request,
                               'resultregistration/resultregistration_v2.html',
                               {'result_formset': r_formset, 'group_form': group_form})
-                # redirect('resultregistration:result_registration_with_excel', context={'result_formset': r_formset, 'group_form': group_form})
+                # redirect('resultregistration:result_registration_with_excel', context={'result_formset': r_formset,
+                # 'group_form': group_form})
             except IOError:
                 response = {
                     'success': success,
