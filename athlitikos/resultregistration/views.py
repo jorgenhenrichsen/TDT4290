@@ -539,56 +539,15 @@ def result_from_excel(request):
             print('request.FILES', request.FILES)
             group_form = GroupFormV3(user=request.user, data=request.POST)
             resultparser.parse_result(group_form=group_form, result_formset=r_formset, user=request.user)
-        else:# print(request.user)
-            # print(request.FILES)
+        else:
             excel_file = request.FILES['excel_file']
-            # if(request.FILES):
-            #     excel_file = request.FILES['excel_file']
-            # else:
-            #     print("\n\nrequest.FILES is empty\n\n")
-
             try:
                 data = readexcel(excel_file)
-                print(read_lifters(data))
                 competition_details = read_competition_details(data)
-                # print(competition_details)
-                # competition = {
-                #     'success': True,
-                #     'category': competition_details[0],
-                #     'host': competition_details[1],
-                #     'location': competition_details[2],
-                #     'start_date': competition_details[3],
-                # }
                 result_details = read_lifters(data)
                 results = []
                 for i in range(len(result_details)):
-                    # form_number = 'form-{}-'.format(i)
-                    # key = 'result{}'.format(i)
                     row = result_details[i]
-
-                    # is_row = False
-                    # for e in row:
-                    #     if e:
-                    #         is_row = True
-                    # if not is_row:
-                    #     continue
-                    # result_row = {
-                    #     form_number+'lifter': [row[4]],
-                    #     form_number+'club': [row[5]],
-                    #     form_number+'birth_date': [row[3]],
-                    #     form_number+'age_group': [row[2]],
-                    #     form_number+'weight_class': [row[0]],
-                    #     form_number+'body_weight': [row[1]],
-                    #     # 'start_number': row[4],
-                    #     form_number+'snatch_1': [row[6]],
-                    #     form_number+'snatch_2': [row[7]],
-                    #     form_number+'snatch_3': [row[8]],
-                    #     form_number+'clean_and_jerk_1': [row[9]],
-                    #     form_number+'clean_and_jerk_2': [row[10]],
-                    #     form_number+'clean_and_jerk_3': [row[11]],
-                    #     # 'key': key
-                    # }
-                    # lifter = row[4]
                     lifter_id = None
                     club_id = None
 
