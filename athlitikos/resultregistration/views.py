@@ -564,6 +564,8 @@ def edit_result(request, pk):
 
 
 def edit_result_clubofc(request, pk):
+    if not request.user.is_club_admin and not request.user.is_staff:  # hvis man ikke request ikke har rettigheter
+        return HttpResponseRedirect('/home')
     group = Group.objects.filter(pk=pk)
     results = Result.objects.filter(group=group)
     context = {
