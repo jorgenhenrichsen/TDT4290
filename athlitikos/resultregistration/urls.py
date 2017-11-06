@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^lifter/new/$', views.add_new_lifter, name='add_new_lifter'),
     url(r'^judge/(?P<pk>\d+)/$', views.judge_detail, name='judge_detail'),
     url(r'^judge/new/$', views.add_new_judge, name='add_new_judge'),
+    url(r'^club/new/$', views.add_new_club, name='add_new_club'),
     url(r'^resultregistration/$', views.v2_result_registration, name="result_registration"),
     url(r'^resultregistration/edit/(?P<pk>\d+)/$', views.v2_edit_result, name='v2_edit_result'),
     url(r'^result/edit/(?P<pk>\d+)/$', views.edit_result, name='edit_result'),

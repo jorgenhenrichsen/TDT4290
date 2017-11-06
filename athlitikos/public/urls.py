@@ -15,4 +15,5 @@ urlpatterns = [
     url(r'^search/competitions/$', views.search_for_competitions, name='search_for_competitions'),
     url(r'^autocomplete/age_groups/$', views.autocomplete_age_groups, name='autocomplete_age_groups'),
     url(r'^search/group/(?P<pk>\d+)/$', views.preview_group, name='preview_group'),
+    url(r'^$', views.front_page, name='front_page'),
 ]
