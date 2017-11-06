@@ -61,7 +61,7 @@ class CompetitonForm(forms.ModelForm):
 class ClubForm(forms.ModelForm):
     class Meta:
         model = Club
-        fields = ('club_name',)
+        fields = '__all__'
 
 
 class GroupForm(forms.ModelForm):

@@ -50,9 +50,9 @@ class Competition(models.Model):
 
 
 class Club(models.Model):
-    club_name = models.CharField(max_length=100)
-    region = models.CharField(max_length=100, null=True, blank=True)
-    address = models.CharField(max_length=100, null=True, blank=True)
+    club_name = models.CharField(max_length=100, verbose_name="Navn")
+    region = models.CharField(max_length=100, verbose_name="Region", null=True, blank=True)
+    address = models.CharField(max_length=100, verbose_name="Adresse", null=True, blank=True)
 
     def __str__(self):
         return self.club_name
