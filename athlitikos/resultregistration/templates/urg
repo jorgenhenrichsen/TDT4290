@@ -1,0 +1,43 @@
+'group_number': ['2'],
+'competition': ['1'],
+ 'date': ['11/15/2017'],
+ 'competition_leader': ['1'],
+ 'jury': ['1'], 'judges': ['2'],
+ 'technical_controller': ['3'],
+ 'chief_marshall': ['2'],
+ 'timekeeper': ['2'],
+ 'secretary': ['urge'],
+ 'speaker': ['burde'],
+ 'notes': ['notere'],
+ 'records_description': ['bedre'],
+ 'form-TOTAL_FORMS': ['3'], 'form-INITIAL_FORMS': ['0'], 'form-MIN_NUM_FORMS': ['0'], 'form-MAX_NUM_FORMS': ['1000'],
+
+  'form-0-lifter_id': ['4'], 'form-0-club_id': ['3'], 'form-0-lifter': ['Torern Brasken, hauge'],
+  'form-0-club': ['hauge'], 'form-0-birth_date': ['02/01/1979'], 'form-0-age_group': ['JM'],
+  'form-0-weight_class': ['58'], 'form-0-body_weight': ['55'],
+  'form-0-snatch_1': ['60'], 'form-0-snatch_2': ['60'], 'form-0-snatch_3': ['60'],
+  'form-0-clean_and_jerk_1': ['60'],
+  'form-0-clean_and_jerk_2': ['60'], 'form-0-clean_and_jerk_3': ['60'],
+
+  'form-1-lifter_id': ['5'], 'form-1-club_id': ['2'], 'form-1-lifter': ['Heisan dudelideisan, korma'], 'form-1-club': ['korma'], 'form-1-birth_date': ['03/02/2000'], 'form-1-age_group': ['JM'], 'form-1-weight_class': ['55'], 'form-1-body_weight': ['53'], 'form-1-snatch_1': ['50'], 'form-1-snatch_2': ['50'], 'form-1-snatch_3': ['50'], 'form-1-clean_and_jerk_1': ['50'], 'form-1-clean_and_jerk_2': ['50'], 'form-1-clean_and_jerk_3': ['50'], 'form-2-lifter': [''], 'form-2-club': [''], 'form-2-birth_date': [''], 'form-2-age_group': [''], 'form-2-weight_class': [''], 'form-2-body_weight': [''], 'form-2-snatch_1': [''], 'form-2-snatch_2': [''], 'form-2-snatch_3': [''], 'form-2-clean_and_jerk_1': [''], 'form-2-clean_and_jerk_2': [''], 'form-2-clean_and_jerk_3': ['']}>
+
+  groupdata:
+ {'group_number': 2, 'competition': <Competition: Klubbmesterskap, ejrng, 1999-05-17>,
+  'date': datetime.date(2017, 11, 15), 'competition_leader': <Judge: Tor Kippersund>,
+   'jury': <QuerySet [<Judge: Tor Kippersund>]>,
+   'judges': <QuerySet [<Judge: HUrre Durr>]>,
+   'technical_controller': <Judge: burge brende>,
+   'chief_marshall': <Judge: HUrre Durr>,
+   'timekeeper': <Judge: HUrre Durr>,
+   'secretary': 'urge', 'speaker': 'burde',
+   'notes': 'notere', 'records_description': 'bedre'}
+results_data:
+ [{'lifter': <Lifter: Torern Brasken>, 'lifter_id': 4, 'club': 'hauge',
+ 'club_id': 3, 'birth_date': datetime.date(1979, 1, 2),
+ 'age_group': 'JM', 'weight_class': '58', 'body_weight': 55.0,
+ 'snatch_1': 60, 'clean_and_jerk_1': 60},
+
+ {'lifter': <Lifter: Heisan dudelideisan>, 'lifter_id': 5, 'club': 'korma',
+ 'club_id': 2, 'birth_date': datetime.date(2000, 2, 3),
+ 'age_group': 'JM', 'weight_class': '55', 'body_weight': 53.0,
+ 'snatch_1': 50, 'clean_and_jerk_1': 50}]

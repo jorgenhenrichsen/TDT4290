@@ -1,0 +1,18 @@
+{% extends 'athlitikos/base.html' %}
+
+{% block title %}Excel Import{% endblock %}
+
+{% block head %}
+{#    <link rel="stylesheet" type="text/css" href="/static/css/home">#}
+{#    <script type="text/javascript" src="/static/js/"></script>#}
+{% endblock %}
+
+{% block content %}
+    <div>Last opp en og en gruppe</div>
+    <form enctype="multipart/form-data" method="post">
+        {% csrf_token %}
+        <input type="file" name="excel_file" id="excel_file">
+        <button type="submit">Importer</button>
+    </form>
+
+{% endblock %}

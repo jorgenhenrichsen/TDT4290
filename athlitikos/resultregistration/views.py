@@ -26,6 +26,8 @@ def v2_result_registration(request):
 
     if request.method == "POST":
         r_formset = ResultFormSet(request.POST, request.FILES)
+        print("request.post:", request.POST)
+        print('request.FILES', request.FILES)
         group_form = GroupFormV3(user=request.user, data=request.POST)
         resultparser.parse_result(group_form=group_form, result_formset=r_formset, user=request.user)
     else:
@@ -46,6 +48,9 @@ def v2_edit_result(request, pk):
         group_form = GroupFormV3(user=request.user, data=request.POST)
         resultparser.parse_result(group_form=group_form, result_formset=r_formset, user=request.user)
     else:
+        print("groupdata:\n", group_data)
+        print("results_data:\n", results_data)
+
         group_form = GroupFormV3(user=request.user, initial=group_data)
         r_formset = ResultFormSet(initial=results_data)
 
@@ -746,69 +751,111 @@ def change_result_clubofc(request, pk):
 
 
 def result_from_excel(request):
-    success = False
-    print(request.FILES)
-    excel_file = request.FILES['excel_file']
-    if(request.FILES):
+    if request.method == 'POST':
+        success = False
+        # print(request.user)
+        # print(request.FILES)
         excel_file = request.FILES['excel_file']
-    else:
-        print("\n\nrequest.FILES is empty\n\n")
+        # if(request.FILES):
+        #     excel_file = request.FILES['excel_file']
+        # else:
+        #     print("\n\nrequest.FILES is empty\n\n")
 
-    try:
-        data = readexcel('resultregistration/testfil.xlsx')
-        print(read_lifters(data))
-        competition_details = read_competition_details(data)
-        # print(competition_details)
-        competition = {
-            'success': True,
-            'category': competition_details[0],
-            'host': competition_details[1],
-            'location': competition_details[2],
-            'start_date': competition_details[3],
-        }
-        result_details = read_lifters(data)
-        results = []
-        for i in range(len(result_details)):
-            key = 'result{}'.format(i)
-            row = result_details[i]
-
-            # is_row = False
-            # for e in row:
-            #     if e:
-            #         is_row = True
-            # if not is_row:
-            #     continue
-            result_row = {
-                'weight_class': row[0],
-                'body_weight': row[1],
-                'age_group': row[2],
-                'birth_date': row[3],
-                # 'start_number': row[4],
-                'lifter': row[4],
-                'club': row[5],
-                'snatch1': row[6],
-                'snatch2': row[7],
-                'snatch3': row[8],
-                'clean_and_jerk1': row[9],
-                'clean_and_jerk2': row[10],
-                'clean_and_jerk3': row[11],
-                'key': key
+        try:
+            data = readexcel(excel_file)
+            print(read_lifters(data))
+            competition_details = read_competition_details(data)
+            # print(competition_details)
+            competition = {
+                'success': True,
+                'category': competition_details[0],
+                'host': competition_details[1],
+                'location': competition_details[2],
+                'start_date': competition_details[3],
             }
-            results.append(result_row)
-        group_details = read_competition_staff(data)
-        group_details['group_number'] = competition_details[4]
-        # print(group_details)
-        success = True
-        response = {
-            'success': success,
-            'competition_details': competition,
-            'result_details': results,
-            'group_details': group_details
-        }
-    except IOError as e:
-        response = {
-            'success': success,
-            'error': 'File invalid or not found'
-        }
-    return JsonResponse(response)
+            result_details = read_lifters(data)
+            results = []
+            for i in range(len(result_details)):
+                form_number = 'form-{}-'.format(i)
+                key = 'result{}'.format(i)
+                row = result_details[i]
+
+                # is_row = False
+                # for e in row:
+                #     if e:
+                #         is_row = True
+                # if not is_row:
+                #     continue
+                # result_row = {
+                #     form_number+'lifter': [row[4]],
+                #     form_number+'club': [row[5]],
+                #     form_number+'birth_date': [row[3]],
+                #     form_number+'age_group': [row[2]],
+                #     form_number+'weight_class': [row[0]],
+                #     form_number+'body_weight': [row[1]],
+                #     # 'start_number': row[4],
+                #     form_number+'snatch_1': [row[6]],
+                #     form_number+'snatch_2': [row[7]],
+                #     form_number+'snatch_3': [row[8]],
+                #     form_number+'clean_and_jerk_1': [row[9]],
+                #     form_number+'clean_and_jerk_2': [row[10]],
+                #     form_number+'clean_and_jerk_3': [row[11]],
+                #     # 'key': key
+                # }
+                lifter = row[4]
+                lifter_id = None
+                club_id = None
+
+
+                result_row = {
+                    'lifter': row[4],
+                    'lifter_id': lifter_id,
+                    'club': row[5],
+                    'club_id': club_id,
+                    'birth_date': row[3],
+                    'age_group': row[2],
+                    'weight_class': row[0],
+                    'body_weight': row[1],
+                    # 'start_number': row[4],
+                    'snatch_1': row[6],
+                    'snatch_2': row[7],
+                    'snatch_3': row[8],
+                    'clean_and_jerk_1': row[9],
+                    'clean_and_jerk_2': row[10],
+                    'clean_and_jerk_3': row[11],
+                    # # 'key': key
+                }
+                # results.update(result_row)
+                results.append(result_row)
+            group_details = read_competition_staff(data)
+            group_details['group_number'] = competition_details[4]
+            # print(group_details)
+            success = True
+            response = {
+                'success': success,
+                'competition_details': competition,
+                'result_details': results,
+                'group_details': group_details
+            }
+
+            r_formset = ResultFormSet(initial=results)
+            group_form = GroupFormV3(user=request.user, initial=group_details)
+            # resultparser.parse_result(group_form=group_form, result_formset=r_formset, user=request.user)
+            print("should be success")
+            # print("r_formset:\n---\n")
+            # print(str(r_formset))
+            print("group_form:\n---\n", group_form)
+            return render(request,
+                          'resultregistration/resultregistration_v2.html',
+                          {'result_formset': r_formset, 'group_form': group_form})
+        except IOError as e:
+            response = {
+                'success': success,
+                'error': 'File invalid or not found'
+            }
+
+        return render(request, 'resultregistration/resultregistration_v2.html', context=response)
+    else:
+        return render(request, 'resultregistration/import_excel.html')
+
     # return render(request, 'resultregistration/resultregistration.html', context={'success': True})

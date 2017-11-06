@@ -37,5 +37,6 @@ urlpatterns = [
     url(r'^internationalgroup/new', views.add_new_international_group, name='new_international_group'),
     url(r'^internasjonal/konkurranse/ny', views.add_new_international_competition, name='new_international_competition'),
     url(r'autofill/result/$', views.get_result_autofill_data, name='get_result_autofill_data'),
-url(r'^resultregistration/fromexcel/$', views.result_from_excel, name='from_excel'),
+    url(r'^resultregistration/fromexcel/$', views.result_from_excel, name='from_excel'),
+
 ]
