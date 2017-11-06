@@ -4,7 +4,7 @@
 {% block title %}Admin{% endblock %}
 
 {% block head %}
-    <link rel="stylesheet" type="text/css" href="/static/css/home.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/home.css" xmlns="http://www.w3.org/1999/html">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript">
     </script> <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
     <script src="/static/js/jquery.tablesorter.js" type="text/javascript"></script>
@@ -38,6 +38,7 @@
             <button id="add-result-button">Ny gruppe</button>
             <button onclick="addNewLifter()">Ny løfter</button>
             <button onclick="addNewJudge()">Ny dommer</button>
+            <button onclick="addNewClub()">Ny klubb</button>
         </div>
         <div class="button-column">
             <h3>Annet</h3>
