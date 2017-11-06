@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 
 
 def validate_name(value):  # name can't contain numbers, ect
-    if not value.isalpha():
-        raise ValidationError("Ugyldig navn")
+    for v in value:
+        if not (v == " " or v == "-" or v.isalpha()):
+            raise ValidationError("Ugyldig navn")
     return value
