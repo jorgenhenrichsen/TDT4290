@@ -19,6 +19,7 @@ from .resultparser import resultparser, resultserializer
 from .enums import Status
 from .forms import CompetitonForm, GroupFormV2, ChangeResultForm, PendingResultForm,\
     MergeLifterSearchForm, MergeLifterCreateForm
+from django.contrib import messages
 
 
 def v2_result_registration(request):
@@ -44,6 +45,7 @@ def v2_edit_result(request, pk):
         r_formset = ResultFormSet(request.POST, request.FILES)
         group_form = GroupFormV3(user=request.user, data=request.POST)
         resultparser.parse_result(group_form=group_form, result_formset=r_formset, user=request.user)
+        messages.success(request, "Resultat lagret!")
     else:
         group_form = GroupFormV3(user=request.user, initial=group_data)
         r_formset = ResultFormSet(initial=results_data)
