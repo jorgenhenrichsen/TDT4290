@@ -5,7 +5,6 @@ from django.views.generic import FormView
 from .mixins import AjaxFormMixin
 from .models import Judge, Group, Competition
 from .models import PentathlonResult
-from django.contrib import messages
 from django.db.models import Q
 from .models import InternationalResult
 from .forms import InternationalResultForm, InternationalGroupForm
@@ -36,6 +35,7 @@ def v2_result_registration(request):
                   {'result_formset': r_formset, 'group_form': group_form})
 
 
+@login_required(login_url='/login')
 def v2_edit_result(request, pk):
 
     group = get_object_or_404(Group, pk=pk)
@@ -76,6 +76,7 @@ def get_result_autofill_data(request):
     return HttpResponse(json_data, mime_type)
 
 
+@login_required(login_url='/login')
 def add_new_competition(request):
 
     if request.method == "POST":
@@ -84,6 +85,7 @@ def add_new_competition(request):
             competition = form.save()
             competition.author = request.user
             competition.save()
+            messages.success(request, "Konkurranse lagret!")
     else:
         form = CompetitonForm()
     return render(request, "resultregistration/competition_form.html", {"title": "Ny konkurranse", "form": form})
@@ -173,6 +175,7 @@ def add_new_internationalresult(request):
                   {'title': 'Legg til nytt internasjonalt resultat', 'form': form})
 
 
+@login_required(login_url='/login')
 def merge_find_two_lifters_view(request, *args, **kwargs):
 
     if not request.user.is_club_admin and not request.user.is_staff:  # hvis man ikke request ikke har rettigheter
@@ -186,6 +189,7 @@ def merge_find_two_lifters_view(request, *args, **kwargs):
     return render(request, 'resultregistration/merge_lifters.html', context)
 
 
+@login_required(login_url='/login')
 def merge_lifter_view(request, *args, **kwargs):
 
     if not request.user.is_club_admin and not request.user.is_staff:  # hvis man ikke request ikke har rettigheter
@@ -245,6 +249,7 @@ def add_new_staff(request):
     return request
 
 
+@login_required(login_url='/login')
 def add_new_international_group(request):
 
     if request.method == "POST":
@@ -258,6 +263,7 @@ def add_new_international_group(request):
                   {'title': 'Legg til ny internasjonal pulje', 'form': form})
 
 
+@login_required(login_url='/login')
 def add_new_international_competition(request):
 
     if request.method == "POST":
@@ -613,7 +619,7 @@ def result_registration(request):
                                                                                        10, 11, 12, 13, 14, 15, 16,
                                                                                        17, 18]})
 
-
+@login_required(login_url='/login')
 def edit_result(request, pk):
     group = Group.objects.filter(pk=pk)
     results = Result.objects.filter(group=group)
@@ -625,6 +631,7 @@ def edit_result(request, pk):
     return render(request, 'resultregistration/editresult.html', context)
 
 
+@login_required(login_url='/login')
 def edit_result_clubofc(request, pk):
     group = Group.objects.filter(pk=pk)
     results = Result.objects.filter(group=group)
@@ -668,6 +675,7 @@ def delete_group(request, pk):
     return redirect('/home/')
 
 
+@login_required(login_url='/login')
 def change_result(request, pk):
 
     changing_result = Result.objects.get(pk=pk)
@@ -713,6 +721,7 @@ def change_result(request, pk):
     return render(request, 'resultregistration/edit_person.html', {'title': 'Endre valgt resultat', 'form': form})
 
 
+@login_required(login_url='/login')
 def change_result_clubofc(request, pk):
 
     changing_result = Result.objects.get(pk=pk)

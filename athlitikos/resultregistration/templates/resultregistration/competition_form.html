@@ -9,6 +9,13 @@
 
     <div class="container">
         <h1>{{ title }}</h1>
+        {% if messages %}
+            <ul class="messages" id="new-competition-message">
+        {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+        </ul>
+        {% endif %}
         <form method="POST">
             {% csrf_token %}
             {{ form.as_p }}
