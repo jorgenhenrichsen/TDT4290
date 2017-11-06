@@ -4,7 +4,6 @@ from django.contrib.auth.decorators import login_required
 from resultregistration.utils import parse_judge, parse_judges
 from .models import Judge, Group
 from .models import PentathlonResult, InternationalGroup
-from django.contrib import messages
 from django.db.models import Q
 from .models import InternationalResult
 from .forms import InternationalResultForm, InternationalGroupForm
@@ -19,6 +18,7 @@ from .enums import Status
 from .forms import CompetitonForm, GroupFormV2, ChangeResultForm, PendingResultForm,\
     MergeLifterSearchForm, MergeLifterCreateForm
 from .excel import read_competition_staff, read_lifters, read_competition_details, readexcel
+from django.contrib import messages
 from django.core import exceptions
 
 
@@ -36,6 +36,7 @@ def v2_result_registration(request):
                   {'result_formset': r_formset, 'group_form': group_form})
 
 
+@login_required(login_url='/login')
 def v2_edit_result(request, pk):
 
     group = get_object_or_404(Group, pk=pk)
@@ -45,6 +46,7 @@ def v2_edit_result(request, pk):
         r_formset = ResultFormSet(request.POST, request.FILES)
         group_form = GroupFormV3(user=request.user, data=request.POST)
         resultparser.parse_result(group_form=group_form, result_formset=r_formset, user=request.user)
+        messages.success(request, "Resultat lagret!")
     else:
         group_form = GroupFormV3(user=request.user, initial=group_data)
         r_formset = ResultFormSet(initial=results_data)
@@ -75,6 +77,7 @@ def get_result_autofill_data(request):
     return HttpResponse(json_data, mime_type)
 
 
+@login_required(login_url='/login')
 def add_new_competition(request):
 
     if request.method == "POST":
@@ -83,6 +86,7 @@ def add_new_competition(request):
             competition = form.save()
             competition.author = request.user
             competition.save()
+            messages.success(request, "Konkurranse lagret!")
     else:
         form = CompetitonForm()
     return render(request, "resultregistration/competition_form.html", {"title": "Nytt stevne", "form": form})
@@ -172,6 +176,7 @@ def add_new_internationalresult(request):
                   {'title': 'Legg til nytt internasjonalt resultat', 'form': form})
 
 
+@login_required(login_url='/login')
 def merge_find_two_lifters_view(request, *args, **kwargs):
 
     if not request.user.is_club_admin and not request.user.is_staff:  # hvis man ikke request ikke har rettigheter
@@ -185,6 +190,7 @@ def merge_find_two_lifters_view(request, *args, **kwargs):
     return render(request, 'resultregistration/merge_lifters.html', context)
 
 
+@login_required(login_url='/login')
 def merge_lifter_view(request, *args, **kwargs):
 
     if not request.user.is_club_admin and not request.user.is_staff:  # hvis man ikke request ikke har rettigheter
@@ -260,6 +266,7 @@ def add_new_staff(request):
     return request
 
 
+@login_required(login_url='/login')
 def add_new_international_group(request):
 
     if request.method == "POST":
@@ -273,6 +280,7 @@ def add_new_international_group(request):
                   {'title': 'Legg til ny internasjonal pulje', 'form': form})
 
 
+@login_required(login_url='/login')
 def add_new_international_competition(request):
 
     if request.method == "POST":
@@ -371,6 +379,7 @@ def result_registration(request):
                                                                                        17, 18]})
 
 
+@login_required(login_url='/login')
 def edit_result(request, pk):
     if not request.user.is_club_admin and not request.user.is_staff:  # hvis man ikke request ikke har rettigheter
         return HttpResponseRedirect('/home')
@@ -384,6 +393,7 @@ def edit_result(request, pk):
     return render(request, 'resultregistration/editresult.html', context)
 
 
+@login_required(login_url='/login')
 def edit_result_clubofc(request, pk):
     if not request.user.is_club_admin and not request.user.is_staff:  # hvis man ikke request ikke har rettigheter
         return HttpResponseRedirect('/home')
@@ -433,6 +443,7 @@ def delete_group(request, pk):
     return redirect('/home/')
 
 
+@login_required(login_url='/login')
 def change_result(request, pk):
     if not request.user.is_club_admin and not request.user.is_staff:  # hvis man ikke request ikke har rettigheter
         return HttpResponseRedirect('/home')
@@ -479,6 +490,7 @@ def change_result(request, pk):
     return render(request, 'resultregistration/edit_person.html', {'title': 'Endre valgt resultat', 'form': form})
 
 
+@login_required(login_url='/login')
 def change_result_clubofc(request, pk):
 
     changing_result = Result.objects.get(pk=pk)

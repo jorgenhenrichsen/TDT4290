@@ -4,12 +4,21 @@
 {% block head %}
 
     <script type="text/javascript" src="/static/js/resultregistration_v2.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/resultregistration_v2.css">
 
 {% endblock %}
 
 {% block content %}
 
     <h1>Legg til ny pulje</h1>
+
+    {% if messages %}
+        <ul class="messages" id="message">
+    {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+        </ul>
+    {% endif %}
 
     <form method="post">
     {% csrf_token %}
@@ -73,6 +82,7 @@
 
 
     <button class="ok-button" type="submit">Lagre resultater</button>
+
 
     </form>
 
