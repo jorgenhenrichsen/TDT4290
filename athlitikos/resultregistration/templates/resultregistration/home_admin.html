@@ -27,21 +27,25 @@
 
     <div class="button-wrapper">
         <div class="button-column">
-            <h3>Brukeradministrasjon</h3>
+            <h3>Brukere </h3>
             <a href="http://127.0.0.1:8000/brukere/"> <button>Brukeradministrasjon</button></a>
 {#            <button id="add-new-user-button" onclick="addNewUser()">Ny bruker</button>#}
 {#            <button id="change-existing-user-button" onclick="usersList()">Endre eksisterende bruker</button>#}
         </div>
         <div class="button-column">
-            <h3>Legg til</h3>
-            <button id="add-competition-button">Ny konkurranse</button>
-            <button id="add-result-button">Ny gruppe</button>
+            <h3>Stevner</h3>
+            <button id="add-competition-button">Nytt stevne</button>
+            <button id="add-result-button">Ny pulje</button>
+        </div>
+        <div class="button-column">
+            <h3>Personer</h3>
             <button onclick="addNewLifter()">Ny løfter</button>
             <button onclick="addNewJudge()">Ny dommer</button>
-            <button onclick="addNewClub()">Ny klubb</button>
+
         </div>
         <div class="button-column">
             <h3>Annet</h3>
+            <button onclick="addNewClub()">Ny klubb</button>
             <button id="judge-statistic-button" onclick="judges()">Dommerstatistikk</button>
             <!-- ps kan noe fikse slik at ikke http://127.0.0.1:8000/ kommer i koden. -->
             <a href="http://127.0.0.1:8000/merge-lifters/"> <button>Sett sammen duplikate utøvere</button></a>
