@@ -4,9 +4,7 @@ from django.http import JsonResponse
 from django.views.generic import FormView
 from .mixins import AjaxFormMixin
 from .models import Judge, Group, Competition
-from .models import PentathlonResult
 from .models import PentathlonResult, InternationalGroup
-from django.contrib import messages
 from django.db.models import Q
 from .models import InternationalResult
 from .forms import InternationalResultForm, InternationalGroupForm
