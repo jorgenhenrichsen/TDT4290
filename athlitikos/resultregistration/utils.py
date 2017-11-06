@@ -1,4 +1,4 @@
-from .models import Result, MoveAttempt, Sinclair, MelzerFaber
+from .models import Result, MoveAttempt, Sinclair, MelzerFaber, Judge, Club
 from datetime import date
 from math import log10
 
@@ -129,3 +129,52 @@ def get_age_for_lifter_in_result(pk):
     result.age = age
     result.save()
     return {'age': str(age)}
+
+
+def parse_judge(name_string):
+    print('parsing..')
+    if name_string:
+        try:
+            split_name_string = name_string.split(',')
+            split_name = split_name_string[0].rsplit(' ', 1)
+            first_name = split_name[0]
+            last_name = split_name[1]
+            club_name = split_name_string[1]
+            judge_level = split_name_string[2]
+            print(split_name_string, split_name, first_name, last_name, 'club ' + club_name, 'judge '+judge_level)
+        except IndexError:
+            # return "invalid name format"
+            return None
+
+        club = Club.objects.filter(club_name=club_name).first()
+        if club is not None:
+            judge = Judge.objects.filter(first_name=first_name,
+                                         last_name=last_name,
+                                         club=club).first()
+        else:
+            judge = Judge.objects.filter(first_name=first_name, last_name=last_name)
+
+        if judge is not None:
+            return judge
+    else:
+        # return 'judge not in db'
+        return None
+
+
+def parse_judges(judge_list):
+    judges = []
+    for judge_string in judge_list:
+        judge = parse_judge(judge_string)
+        if judge is not None:
+            judges.append(judge)
+    if len(judges) > 1:
+        end_query = judges[0]
+        for i in range(1, len(judges)):
+            end_query = (end_query| judges[i]).distinct()
+        judge_query = end_query
+    elif len(judges) == 1:
+        judge_query = judges[0]
+    else:
+        judge_query = judges
+    return judge_query
+    # end_result = (end_result | all_results[i]).distinct()
