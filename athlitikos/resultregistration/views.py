@@ -6,7 +6,7 @@ from django.views.generic import FormView
 from resultregistration.utils import parse_judge, parse_judges
 from .mixins import AjaxFormMixin
 from .models import Judge, Group, Competition
-from .models import PentathlonResult
+from .models import PentathlonResult, InternationalGroup
 from django.contrib import messages
 from django.db.models import Q
 from .models import InternationalResult
@@ -22,14 +22,13 @@ from .enums import Status
 from .forms import CompetitonForm, GroupFormV2, ChangeResultForm, PendingResultForm,\
     MergeLifterSearchForm, MergeLifterCreateForm, ExcelFileForm
 from .excel import read_competition_staff, read_lifters, read_competition_details, readexcel
+from django.core import exceptions
 
 
 def v2_result_registration(request):
 
     if request.method == "POST":
         r_formset = ResultFormSet(request.POST, request.FILES)
-        print("request.post:", request.POST)
-        print('request.FILES', request.FILES)
         group_form = GroupFormV3(user=request.user, data=request.POST)
         resultparser.parse_result(group_form=group_form, result_formset=r_formset, user=request.user)
     else:
@@ -50,9 +49,6 @@ def v2_edit_result(request, pk):
         group_form = GroupFormV3(user=request.user, data=request.POST)
         resultparser.parse_result(group_form=group_form, result_formset=r_formset, user=request.user)
     else:
-        print("groupdata:\n", group_data)
-        print("results_data:\n", results_data)
-
         group_form = GroupFormV3(user=request.user, initial=group_data)
         r_formset = ResultFormSet(initial=results_data)
 
@@ -82,7 +78,6 @@ def get_result_autofill_data(request):
     return HttpResponse(json_data, mime_type)
 
 
-
 def add_new_competition(request):
 
     if request.method == "POST":
@@ -93,7 +88,7 @@ def add_new_competition(request):
             competition.save()
     else:
         form = CompetitonForm()
-    return render(request, "resultregistration/competition_form.html", {"title": "Ny konkurranse", "form": form})
+    return render(request, "resultregistration/competition_form.html", {"title": "Nytt stevne", "form": form})
 
 
 @login_required(login_url='/login')
@@ -211,38 +206,54 @@ def merge_lifter_view(request, *args, **kwargs):
     form = MergeLifterCreateForm(request.POST or None)
     if form.is_valid():
         # Should have a try-cach block like all code working with a database ;)
+        try:
+            lifter_obj = form.save()
+            lifter_obj1 = lifter_qs.first()
+            lifter_obj2 = lifter_qs.last()
 
-        lifter_obj = form.save()
-        lifter_obj1 = lifter_qs.first()
-        lifter_obj2 = lifter_qs.last()
+            result_qs = Result.objects.filter(Q(lifter=lifter_obj1) | Q(lifter=lifter_obj2))
 
-        result_qs = Result.objects.filter(Q(lifter=lifter_obj1) | Q(lifter=lifter_obj2))
+            for result in result_qs:
+                result.lifter = lifter_obj
+                result.save()
 
-        for result in result_qs:
-            result.lifter = lifter_obj
-            result.save()
+            pent_qs = PentathlonResult.objects.filter(Q(lifter=lifter_obj1) | Q(lifter=lifter_obj2))
+            for pent_result in pent_qs:
+                pent_result.lifter = lifter_obj
+                pent_result.save()
 
-        pent_qs = PentathlonResult.objects.filter(Q(lifter=lifter_obj1) | Q(lifter=lifter_obj2))
-        for pent_result in pent_qs:
-            pent_result.lifter = lifter_obj
-            pent_result.save()
+            group_qs1 = Group.objects.filter(Q(competitors=lifter_obj1))
+            for group in group_qs1:
+                group.competitors.remove(lifter_obj1)
+                group.competitors.add(lifter_obj)
+                group.save()
 
-        group_qs1 = Group.objects.filter(Q(competitors=lifter_obj1))
-        for group in group_qs1:
-            group.competitors.remove(lifter_obj1)
-            group.competitors.add(lifter_obj)
-            group.save()
+            group_qs2 = Group.objects.filter(Q(competitors=lifter_obj2))
 
-        group_qs2 = Group.objects.filter(Q(competitors=lifter_obj2))
+            for group in group_qs2:
+                group.competitors.remove(lifter_obj2)
+                group.competitors.add(lifter_obj)
+                group.save()
 
-        for group in group_qs2:
-            group.competitors.remove(lifter_obj2)
-            group.competitors.add(lifter_obj)
-            group.save()
+            igroup_qs1 = InternationalGroup.objects.filter(Q(competitors=lifter_obj1))
+            for igroup in igroup_qs1:
+                igroup.competitors.remove(lifter_obj1)
+                igroup.competitors.add(lifter_obj)
+                igroup.save()
 
-        lifter_obj1.delete()
-        lifter_obj2.delete()
-        return HttpResponseRedirect("/home/admin", messages.success(request, 'utøvere slått sammen'))
+            igroup_qs2 = InternationalGroup.filter(Q(competitors=lifter_obj2))
+
+            for igroup in igroup_qs2:
+                igroup.competitors.remove(lifter_obj2)
+                igroup.competitors.add(lifter_obj)
+                igroup.save()
+
+            lifter_obj1.delete()
+            lifter_obj2.delete()
+            return HttpResponseRedirect("/home/admin", messages.success(request, 'utøvere slått sammen'))
+        except exceptions.FieldDoesNotExist or exceptions.ObjectDoesNotExist:
+            return HttpResponseRedirect("/merge-lifters/",
+                                        messages.error(request, 'en eller flere utøvere har ikke resultat.'))
 
     return render(request, 'resultregistration/merging_lifters.html', {'form': form, 'personidlist': personidlist})
 
@@ -349,6 +360,8 @@ def group_registration(request):
 
 
 def result_registration(request):
+    if not request.user.is_club_admin and not request.user.is_staff:  # hvis man ikke request ikke har rettigheter
+        return HttpResponseRedirect('/home')
     # result_form = ResultForm.
 
     return render(request, 'resultregistration/resultregistration.html', context={'MoveAttemptForm': MoveAttemptForm,
@@ -358,7 +371,6 @@ def result_registration(request):
                                                                                   'GroupForm': GroupFormV2,
                                                                                   'ClubForm': ClubForm,
                                                                                   'CompetitonForm': CompetitonForm,
-                                                                                  'ExcelFileForm': ExcelFileForm,
                                                                                   'indexes':
                                                                                       [1, 2, 3, 4, 5, 6, 7, 8, 9,
                                                                                        10, 11, 12, 13, 14, 15, 16,
@@ -366,6 +378,8 @@ def result_registration(request):
 
 
 def edit_result(request, pk):
+    if not request.user.is_club_admin and not request.user.is_staff:  # hvis man ikke request ikke har rettigheter
+        return HttpResponseRedirect('/home')
     group = Group.objects.filter(pk=pk)
     results = Result.objects.filter(group=group)
     context = {
@@ -377,6 +391,8 @@ def edit_result(request, pk):
 
 
 def edit_result_clubofc(request, pk):
+    if not request.user.is_club_admin and not request.user.is_staff:  # hvis man ikke request ikke har rettigheter
+        return HttpResponseRedirect('/home')
     group = Group.objects.filter(pk=pk)
     results = Result.objects.filter(group=group)
     context = {
@@ -389,6 +405,8 @@ def edit_result_clubofc(request, pk):
 
 @login_required(login_url='/login')
 def approve_group(request, pk):
+    if not request.user.is_club_admin and not request.user.is_staff:  # hvis man ikke request ikke har rettigheter
+        return HttpResponseRedirect('/home')
     group = Group.objects.get(pk=pk)
     group.status = Status.approved.value
     group.save()
@@ -397,6 +415,8 @@ def approve_group(request, pk):
 
 @login_required(login_url='/login')
 def reject_group(request, pk):
+    if not request.user.is_club_admin and not request.user.is_staff:  # hvis man ikke request ikke har rettigheter
+        return HttpResponseRedirect('/home')
     group = Group.objects.get(pk=pk)
     group.status = Status.denied.value
     group.save()
@@ -420,7 +440,8 @@ def delete_group(request, pk):
 
 
 def change_result(request, pk):
-
+    if not request.user.is_club_admin and not request.user.is_staff:  # hvis man ikke request ikke har rettigheter
+        return HttpResponseRedirect('/home')
     changing_result = Result.objects.get(pk=pk)
     group_result_belongs_to = changing_result.group
     group_primary_key = group_result_belongs_to.pk
