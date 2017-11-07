@@ -28,6 +28,7 @@ def v2_result_registration(request):
         r_formset = ResultFormSet(request.POST, request.FILES)
         group_form = GroupFormV3(user=request.user, data=request.POST)
         resultparser.parse_result(group_form=group_form, result_formset=r_formset, user=request.user)
+        messages.success(request, "Resultat lagret!")
     else:
         r_formset = ResultFormSet()
         group_form = GroupFormV3(user=request.user)
@@ -622,8 +623,6 @@ def group_registration(request):
 
 
 def result_registration(request):
-    if not request.user.is_club_admin and not request.user.is_staff:  # hvis man ikke request ikke har rettigheter
-        return HttpResponseRedirect('/home')
     # result_form = ResultForm.
 
     return render(request, 'resultregistration/resultregistration.html', context={'MoveAttemptForm': MoveAttemptForm,
@@ -641,8 +640,6 @@ def result_registration(request):
 
 @login_required(login_url='/login')
 def edit_result(request, pk):
-    if not request.user.is_club_admin and not request.user.is_staff:  # hvis man ikke request ikke har rettigheter
-        return HttpResponseRedirect('/home')
     group = Group.objects.filter(pk=pk)
     results = Result.objects.filter(group=group)
     context = {
@@ -655,8 +652,6 @@ def edit_result(request, pk):
 
 @login_required(login_url='/login')
 def edit_result_clubofc(request, pk):
-    if not request.user.is_club_admin and not request.user.is_staff:  # hvis man ikke request ikke har rettigheter
-        return HttpResponseRedirect('/home')
     group = Group.objects.filter(pk=pk)
     results = Result.objects.filter(group=group)
     context = {
@@ -669,8 +664,6 @@ def edit_result_clubofc(request, pk):
 
 @login_required(login_url='/login')
 def approve_group(request, pk):
-    if not request.user.is_club_admin and not request.user.is_staff:  # hvis man ikke request ikke har rettigheter
-        return HttpResponseRedirect('/home')
     group = Group.objects.get(pk=pk)
     group.status = Status.approved.value
     group.save()
@@ -679,8 +672,6 @@ def approve_group(request, pk):
 
 @login_required(login_url='/login')
 def reject_group(request, pk):
-    if not request.user.is_club_admin and not request.user.is_staff:  # hvis man ikke request ikke har rettigheter
-        return HttpResponseRedirect('/home')
     group = Group.objects.get(pk=pk)
     group.status = Status.denied.value
     group.save()
@@ -705,8 +696,6 @@ def delete_group(request, pk):
 
 @login_required(login_url='/login')
 def change_result(request, pk):
-    if not request.user.is_club_admin and not request.user.is_staff:  # hvis man ikke request ikke har rettigheter
-        return HttpResponseRedirect('/home')
     changing_result = Result.objects.get(pk=pk)
     group_result_belongs_to = changing_result.group
     group_primary_key = group_result_belongs_to.pk
