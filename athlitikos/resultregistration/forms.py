@@ -121,7 +121,9 @@ class ResultForm(forms.Form):
         attrs={'class': 'club-input-field', 'placeholder': 'Klubb'}))
     club_id = forms.IntegerField(widget=forms.HiddenInput(), required=False)
 
-    birth_date = forms.DateField(widget=forms.DateInput(attrs={'placeholder': 'dd/mm/yyyy'}), input_formats=["%d/%m/%Y"])
+    birth_date = forms.DateField(widget=forms.DateInput(
+        attrs={'placeholder': 'dd/mm/yyyy'}),
+        input_formats=["%d/%m/%Y"])
 
     age_group = forms.CharField(max_length=10, widget=forms.TextInput(
         attrs={'class': 'age-group-input-field', 'placeholder': 'Aldersgruppe'}))
