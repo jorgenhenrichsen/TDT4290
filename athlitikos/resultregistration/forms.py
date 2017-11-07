@@ -32,6 +32,7 @@ class JudgeForm(forms.ModelForm):
 class CompetitonForm(forms.ModelForm):
 
     host = forms.ModelChoiceField(Club.objects.all())
+    start_date = forms.DateField(widget=forms.DateInput(attrs={"class": "date-input", "placeholder": "mm/dd/yyyy"}))
 
     class Meta:
         model = Competition
