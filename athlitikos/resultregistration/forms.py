@@ -130,16 +130,16 @@ class ResultForm(forms.Form):
     weight_class = forms.CharField(max_length=10, widget=forms.TextInput(attrs={'placeholder': 'Vektklasse'}))
     body_weight = forms.FloatField(widget=forms.NumberInput(attrs={'placeholder': 'kg'}))
 
-    snatch_1 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Støt 1'}), required=False)
-    snatch_2 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Støt 2'}), required=False)
-    snatch_3 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Støt 3'}), required=False)
-
     clean_and_jerk_1 = forms.CharField(max_length=5, widget=forms.TextInput(
         attrs={'placeholder': 'Rykk 1'}), required=False)
     clean_and_jerk_2 = forms.CharField(max_length=5, widget=forms.TextInput(
         attrs={'placeholder': 'Rykk 2'}), required=False)
     clean_and_jerk_3 = forms.CharField(max_length=5, widget=forms.TextInput(
         attrs={'placeholder': 'Rykk 3'}), required=False)
+
+    snatch_1 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Støt 1'}), required=False)
+    snatch_2 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Støt 2'}), required=False)
+    snatch_3 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Støt 3'}), required=False)
 
     def clean(self):
         cleaned_data = super(ResultForm, self).clean()
