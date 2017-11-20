@@ -1,15 +1,17 @@
 from resultregistration.models import MoveAttempt
 from resultregistration.enums import MoveTypes
-
+from datetime import datetime
 
 def serialize_result(result):
+
+    birth_date = result.lifter.birth_date.strftime("%d/%m/%Y")
 
     data = {
         "lifter": result.lifter,
         "lifter_id": result.lifter_id,
         "club": result.lifter.club.club_name,
         "club_id": result.lifter.club.id,
-        "birth_date": result.lifter.birth_date,
+        "birth_date": birth_date,
         "age_group": result.age_group,
         "weight_class": result.weight_class,
         "body_weight": result.body_weight,
@@ -33,12 +35,13 @@ def serialize_result(result):
 
 
 def serialize_group(group):
-    pass
+
+    date = group.date.strftime("%d/%m/%Y")
 
     group_data = {
         "group_number": group.group_number,
         "competition": group.competition,
-        "date": group.date,
+        "date": date,
         "competition_leader": group.competition_leader,
         "jury": group.jury.all(),
         "judges": group.judges.all(),

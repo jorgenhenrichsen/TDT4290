@@ -73,6 +73,10 @@ $(function () {
 
     $(".datepicker").datepicker();
 
+    $.datepicker.setDefaults({
+        dateFormat: "dd/mm/yy",
+    });
+
     $(".remove-row-button").click(function () {
         $(this).closest("tr").remove();
     })
