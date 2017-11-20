@@ -1,33 +1,33 @@
-import jaydebeapi
+# import jaydebeapi
 import psycopg2
 import datetime
-# import pyodbc
+import pyodbc
 
 
 def read_mdb():
     # You need to input the path to the UCanAccess Jars below
-    ucanaccess_jars = [
-        "/Users/ChristianRossow/Downloads/UCanAccess-4.0.2-bin/ucanaccess-4.0.2.jar",
-        "/Users/ChristianRossow/Downloads/UCanAccess-4.0.2-bin/lib/commons-lang-2.6.jar",
-        "/Users/ChristianRossow/Downloads/UCanAccess-4.0.2-bin/lib/commons-logging-1.1.1.jar",
-        "/Users/ChristianRossow/Downloads/UCanAccess-4.0.2-bin/lib/hsqldb.jar",
-        "/Users/ChristianRossow/Downloads/UCanAccess-4.0.2-bin/lib/jackcess-2.1.6.jar",
-    ]
-    classpath = ":".join(ucanaccess_jars)
-    cnxn = jaydebeapi.connect(
-        "net.ucanaccess.jdbc.UcanaccessDriver",
-        # Input path below to the mdb file jdbc:ucanaccess://Pathtofile
-        "jdbc:ucanaccess:///Users/ChristianRossow/Downloads/NVF Historiske resultater.mdb",
-        ["", ""],
-        classpath
-    )
-    curs = cnxn.cursor()
+    # ucanaccess_jars = [
+    #     # "/Users/ChristianRossow/Downloads/UCanAccess-4.0.2-bin/ucanaccess-4.0.2.jar",
+    #     # "/Users/ChristianRossow/Downloads/UCanAccess-4.0.2-bin/lib/commons-lang-2.6.jar",
+    #     # "/Users/ChristianRossow/Downloads/UCanAccess-4.0.2-bin/lib/commons-logging-1.1.1.jar",
+    #     # "/Users/ChristianRossow/Downloads/UCanAccess-4.0.2-bin/lib/hsqldb.jar",
+    #     # "/Users/ChristianRossow/Downloads/UCanAccess-4.0.2-bin/lib/jackcess-2.1.6.jar",
+    # ]
+    # classpath = ":".join(ucanaccess_jars)
+    # cnxn = jaydebeapi.connect(
+    #     "net.ucanaccess.jdbc.UcanaccessDriver",
+    #     # Input path below to the mdb file jdbc:ucanaccess://Pathtofile
+    #     "jdbc:ucanaccess:///Users/ChristianRossow/Downloads/NVF Historiske resultater.mdb",
+    #     ["", ""],
+    #     classpath
+    # )
+    # curs = cnxn.cursor()
 
     # Use this for Windows
-    # mdb_path = 'c:/path/to/my.mdb' # Path to the NVF Historiske resultater.mdb
-    # driver = '{Microsoft Access Driver (*.mdb)}'
-    # con = pyodbc.connect('DRIVER={};DBQ={};'.format(driver, mdb_path))
-    # curs = con.cursor()
+    mdb_path = 'D:/Downloads/NVF Historiske resultater.mdb' # Path to the NVF Historiske resultater.mdb
+    driver = '{Microsoft Access Driver (*.mdb)}'
+    con = pyodbc.connect('DRIVER={};DBQ={};'.format(driver, mdb_path))
+    curs = con.cursor()
 
     return curs
 
@@ -70,18 +70,18 @@ def connect_postgre():
 
 
 # Read all the clubs in both mdb files and store each unique club to the database
-def clubs(crsr, conn, curs):
+def clubs(conn, curs):
     cur = conn.cursor()
-    crsr.execute('SELECT * FROM [Klubber]')
-    club = crsr.fetchall()
-    crsr.execute('SELECT Klubb FROM [Resultater]')
-    more_clubs = crsr.fetchall()
-
-    for club2 in more_clubs:
-        if not club2[0]:
-            pass
-        elif club2 not in club:
-            club.append(club2)
+    # crsr.execute('SELECT * FROM [Klubber]')
+    # club = crsr.fetchall()
+    # crsr.execute('SELECT Klubb FROM [Resultater]')
+    # more_clubs = crsr.fetchall()
+    club = []
+    # for club2 in more_clubs:
+    #     if not club2[0]:
+    #         pass
+    #     elif club2 not in club:
+    #         club.append(club2)
 
     curs.execute('SELECT KLUBB FROM [1938-1972 Oversikt - Resultater] '
                  'UNION ALL SELECT KLUBB FROM [1972-1985 Oversikt - Resultater] '
@@ -97,7 +97,7 @@ def clubs(crsr, conn, curs):
 
     for row in club:
         sql = "INSERT INTO public.resultregistration_club (club_name) VALUES (%s);"
-        cur.execute(sql, (row,))
+        cur.execute(sql, (row))
 
     conn.commit()
     cur.close()
@@ -492,9 +492,9 @@ def old_1998_2017(crsr, conn):
 # but I recommend to run them in the order set up below.
 
 # new_cursor = read_new_mdb()
-# connection = connect_postgre()
-# cursor = read_mdb()
-# clubs(new_cursor, connection, cursor)
+connection = connect_postgre()
+cursor = read_mdb()
+clubs(connection, cursor)
 # old_1938_1972(cursor, connection)
 # old_1972_1985(cursor, connection)
 # old_1986_1992(cursor, connection)
