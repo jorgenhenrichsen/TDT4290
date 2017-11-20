@@ -227,8 +227,20 @@ class SearchFiltering:
         :param query:
         :return:
         """
-        lifters_first_name = Lifter.objects.filter(first_name__icontains=query)
-        lifters_last_name = Lifter.objects.filter(last_name__icontains=query)
+
+        first_name = query
+        last_name = query
+
+        query_splitted = query.rsplit(" ", 1)
+        print(query_splitted)
+        if len(query_splitted) > 1:
+            first_name = query_splitted[0]
+            last_name = query_splitted[1]
+            if last_name == "":
+                last_name = query
+
+        lifters_first_name = Lifter.objects.filter(first_name__icontains=first_name)
+        lifters_last_name = Lifter.objects.filter(last_name__icontains=last_name)
         lifters = lifters_first_name.union(lifters_last_name)
         return lifters
 
