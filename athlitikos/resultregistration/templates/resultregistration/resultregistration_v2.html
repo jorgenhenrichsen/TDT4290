@@ -23,7 +23,10 @@
     <form method="post">
     {% csrf_token %}
 
-    {{ group_form }}
+    <div id="group-form-container">
+        {{ group_form }}
+    </div>
+
 
     <h2>Tilhørende resultater</h2>
 
