@@ -180,7 +180,7 @@ class BaseResultFormSet(forms.BaseFormSet):
             lifter_ids.append(lifter_id)
 
 
-ResultFormSet = formset_factory(ResultForm, extra=2, formset=BaseResultFormSet)
+ResultFormSet = formset_factory(ResultForm, extra=6, formset=BaseResultFormSet)
 
 
 class InternationalResultForm(forms.ModelForm):
