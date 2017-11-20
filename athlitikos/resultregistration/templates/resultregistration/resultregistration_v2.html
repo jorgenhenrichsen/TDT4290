@@ -35,6 +35,7 @@
 
         <thead>
             <tr>
+                <th> </th>
                 <th>Utøver</th>
                 <th>Klubb</th>
                 <th>Fødselsdato</th>
@@ -54,7 +55,7 @@
                 {% endfor %}
 
                 <tr>
-
+                    <td><button type="button" class="remove-row-button">X</button></td>
                     {% for field in form.visible_fields %}
                         <td>
                         {{ field }}
@@ -62,6 +63,7 @@
                     {% endfor %}
                     {{ form.non_field_errors }}
                 </tr>
+
             {% endfor %}
 
         </tbody>

@@ -1,11 +1,12 @@
 
+
 // Autocompletion
 $(function () {
+
     $(".lifter-input-field").autocomplete({
         source: "/search/lifter",
         minLength: 2,
         select: function (event, ui) {
-
             var baseElementId = $(this).attr("id").replace("lifter", "")
             console.log(baseElementId);
             var elementId = "#" + $(this).attr("id") + "_id";
@@ -37,7 +38,6 @@ $(function () {
 
                 }
             })
-            
         }
     });
 
@@ -68,10 +68,14 @@ $(function () {
     });
 
     $('#add-lifter').click(function () {
-        cloneMore('#result-form-table tr:last', 'form')
-    })
+        var newElement = cloneMore('#result-form-table tr:last', 'form');
+    });
 
     $(".datepicker").datepicker();
+
+    $(".remove-row-button").click(function () {
+        $(this).closest("tr").remove();
+    })
 
 });
 
@@ -81,9 +85,12 @@ function cloneMore(selector, type) {
     var newElement = $(selector).clone(true);
     var total = $('#id_' + type + '-TOTAL_FORMS').val();
     newElement.find(':input').each(function() {
-        var name = $(this).attr('name').replace('-' + (total-1) + '-','-' + total + '-');
-        var id = 'id_' + name;
-        $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+        var name = $(this).attr('name');
+        if (name != undefined) {
+            name = name.replace('-' + (total-1) + '-','-' + total + '-');
+            var id = 'id_' + name;
+            $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+        }
     });
     newElement.find('label').each(function() {
         var newFor = $(this).attr('for').replace('-' + (total-1) + '-','-' + total + '-');
@@ -92,6 +99,7 @@ function cloneMore(selector, type) {
     total++;
     $('#id_' + type + '-TOTAL_FORMS').val(total);
     $(selector).after(newElement);
+    return newElement;
 }
 
 // Display validation errors on load.
