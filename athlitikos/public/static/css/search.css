@@ -31,23 +31,6 @@
     width: 150px;
 }
 
-.search-button {
-    background-color: #cb1e1f;
-    border: none;
-    display: block;
-    width: 20%;
-    padding: 10px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    border-radius: 4px;
-    -webkit-text-fill-color: white;
-    -moz-text-decoration-color: white;
-}
-
-.search-button:hover {
-    background-color: #D95C5D;
-}
-
 .centered-horizontal {
     /* Horizontal centering */
     position: absolute;
