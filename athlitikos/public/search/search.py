@@ -221,8 +221,81 @@ class SearchFiltering:
         return results
 
     @classmethod
-    def search_for_old_results(cls):
-        return OldResults.objects.all().order_by('-competition.date')[:500]
+    def search_for_old_results(cls, lifters=None, clubs=None, from_date=None, to_date=None, categories=None,
+                           best_results=None):
+
+        results = OldResults.objects.all().order_by('-competition__start_date')
+
+        if not SearchFiltering.is_none_value(lifters):
+            results = results.filter(lifter_id__in=lifters)
+
+        if not SearchFiltering.is_none_value(clubs):
+            results = results.filter(lifter_club_id__in=clubs)
+
+        if not SearchFiltering.is_none_value(from_date):
+            from_date_formatted = datetime.strptime(from_date, "%d/%m/%Y").date()
+            results = results.filter(competition__start_date__gte=from_date_formatted)
+
+        if not SearchFiltering.is_none_value(to_date):
+            to_date_formatted = datetime.strptime(to_date, "%d/%m/%Y").date()
+            results = results.filter(competition__start_date__lte=to_date_formatted)
+
+        if not SearchFiltering.is_none_value(categories):
+            print(categories)
+            all_results = []
+
+            for category in categories:
+                age_group = category["age_group"]
+                weight_class = int(category["weight_class"])
+
+                part_result = results.filter(age_group__exact=age_group,
+                                             weight_class__exact=weight_class)
+
+                all_results.append(part_result)
+
+            if len(all_results) > 1:
+                end_result = all_results[0]
+
+                for i in range(1, len(all_results)):
+                    end_result = (end_result | all_results[i]).distinct()
+
+                results = end_result
+
+            else:
+                results = all_results[0]
+
+        if not SearchFiltering.is_none_value(best_results):
+            results = SearchFiltering.get_best_results(results, filter_by=best_results)
+
+        return results[:500]
+
+    @classmethod
+    def search_for_old_results_with_request(cls, request):
+
+        lifters_json = request.GET.get('lifters')
+        clubs_json = request.GET.get('clubs')
+        categories_json = request.GET.get('categories')
+        lifters = None
+        clubs = None
+        categories = None
+
+        if lifters_json is not None:
+            lifters = json.loads(lifters_json)
+
+        if clubs_json is not None:
+            clubs = json.loads(clubs_json)
+
+        if categories_json is not None:
+            categories_dict = json.loads(categories_json)
+            categories = []
+            for key, value in categories_dict.items():
+                categories.append(value)
+
+        from_date = request.GET.get('from_date')
+        to_date = request.GET.get('to_date')
+        best_results = request.GET.get('best_results')
+
+        return SearchFiltering.search_for_old_results(lifters, clubs, from_date, to_date, categories, best_results)
 
 
     @classmethod

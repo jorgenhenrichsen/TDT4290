@@ -55,7 +55,7 @@ def search(request):
     """
 
     if request.method == 'GET' and request.is_ajax():
-        results = SearchFiltering.search_for_results_with_request(request)
+        results = SearchFiltering.search_for_old_results_with_request(request)#SearchFiltering.search_for_results_with_request(request)
         return render(request, 'public/result-table.html', {'results': results})
     else:
         age_groups = map(lambda x: x[0], AgeGroup.choices())
