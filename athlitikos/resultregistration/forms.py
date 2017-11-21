@@ -32,6 +32,7 @@ class JudgeForm(forms.ModelForm):
 class CompetitonForm(forms.ModelForm):
 
     host = forms.ModelChoiceField(Club.objects.all())
+    start_date = forms.DateField(widget=forms.DateInput(attrs={"class": "date-input", "placeholder": "mm/dd/yyyy"}))
 
     class Meta:
         model = Competition
@@ -124,16 +125,14 @@ class ResultForm(forms.Form):
         attrs={'class': 'club-input-field', 'placeholder': 'Klubb'}))
     club_id = forms.IntegerField(widget=forms.HiddenInput(), required=False)
 
-    birth_date = forms.DateField(widget=forms.DateInput(attrs={'placeholder': 'dd/mm/yyyy'}))
+    birth_date = forms.DateField(widget=forms.DateInput(
+        attrs={'placeholder': 'dd/mm/yyyy'}),
+        input_formats=["%d/%m/%Y"])
 
     age_group = forms.CharField(max_length=10, widget=forms.TextInput(
         attrs={'class': 'age-group-input-field', 'placeholder': 'Aldersgruppe'}))
     weight_class = forms.CharField(max_length=10, widget=forms.TextInput(attrs={'placeholder': 'Vektklasse'}))
     body_weight = forms.FloatField(widget=forms.NumberInput(attrs={'placeholder': 'kg'}))
-
-    snatch_1 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Støt 1'}), required=False)
-    snatch_2 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Støt 2'}), required=False)
-    snatch_3 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Støt 3'}), required=False)
 
     clean_and_jerk_1 = forms.CharField(max_length=5, widget=forms.TextInput(
         attrs={'placeholder': 'Rykk 1'}), required=False)
@@ -141,6 +140,10 @@ class ResultForm(forms.Form):
         attrs={'placeholder': 'Rykk 2'}), required=False)
     clean_and_jerk_3 = forms.CharField(max_length=5, widget=forms.TextInput(
         attrs={'placeholder': 'Rykk 3'}), required=False)
+
+    snatch_1 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Støt 1'}), required=False)
+    snatch_2 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Støt 2'}), required=False)
+    snatch_3 = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Støt 3'}), required=False)
 
     def clean(self):
         cleaned_data = super(ResultForm, self).clean()
