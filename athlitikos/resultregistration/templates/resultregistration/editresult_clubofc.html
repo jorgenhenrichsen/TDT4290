@@ -77,9 +77,7 @@
                 <th>
                     {% for group in groups %}
                         {% if group.status == "Til godkjenning" or group.status == "Ikke sendt" %}
-                            <button class="ok-button" onclick="changePendingGroupClubofc({{ pending_result.pk }})">Gjør endringer</button>
                         {% else %}
-                            <button class="ok-button" onclick="denyChangePendingGroupClubofc()">Gjør endringer</button>
                         {% endif %}
                     {% endfor %}
                 </th>

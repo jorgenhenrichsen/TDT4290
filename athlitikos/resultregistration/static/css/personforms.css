@@ -1,4 +1,3 @@
-
 select {
     width: 100px;
 }
@@ -14,4 +13,9 @@ input {
 .person-form {
     margin-top: 40px;
     margin-bottom: 40px;
+}
+
+#new-competition-message {
+    font-size: 150%;
+    color: darkgreen;
 }
