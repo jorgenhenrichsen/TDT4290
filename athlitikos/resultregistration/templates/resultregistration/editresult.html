@@ -1,0 +1,33 @@
+{% extends 'athlitikos/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="/static/css/approveresults.css">
+    <script type="text/javascript" src="/static/js/approvegroup.js"></script>
+{% endblock %}
+
+
+{% block content %}
+
+    <button class="cancel-button" id="avbryt-btn" onclick="goBackToHome()">Avbryt</button>
+
+    {% for group in groups %}
+        <button class="cancel-button" id="underkjenn-btn" onclick="rejectPendingGroup({{ group.pk }})">Underkjenn</button>
+    {% endfor %}
+
+    {% for group in groups %}
+        <button class="ok-button" id="approve-btn" onclick="approvePendingGroup({{ group.pk }})">Godkjenn</button>
+    {% endfor %}
+
+    {% for group in groups %}
+        <button class="ok-button" id="change-button" onclick="changePendingGroup({{ group.pk }})">Gjør endringer</button>
+    {% endfor %}
+
+
+
+    <div>
+        {% include "resultregistration/result_preview.html" %}
+    </div>
+
+{% endblock content %}

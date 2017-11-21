@@ -1,0 +1,61 @@
+
+{% extends 'athlitikos/base.html' %}
+
+{% block head %}
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" media="all" />
+        <link rel="stylesheet" type="text/css" href="/static/css/search.css">
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript">
+        </script> <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
+        <script src="/static/js/jquery.tablesorter.js" type="text/javascript"></script>
+        <script type="text/javascript" src="/static/js/competitions.js"></script>
+        <link rel="stylesheet" href="/static/css/competitions.css"/>
+{%  endblock %}
+
+
+{% block content %}
+
+    <div id="parameter-container">
+        <input type="text" id="host-query-field" placeholder="Arrangør...">
+        <div id="clubs-container"></div>
+
+
+        <label>Velg kategori</label>
+        <select id="category-selector" onchange="didSelectCategory()">
+            <option value="all">Alle</option>
+            {% for category in categories %}
+                <option value="{{ category.0 }}">{{ category.0 }}</option>
+            {%  endfor %}
+        </select>
+
+        <label>Filtrer konkurranser på tidsrom</label><br>
+        <input type="text" class="datepicker" id="from-date-picker" placeholder="Fra dato: dd/mm/yyyy">
+        <input type="text" class="datepicker" id="to-date-picker" placeholder="Til dato: dd/mm/yyyy">
+
+        <button onclick="fetchCompetitions()">Oppdater</button>
+    </div>
+
+
+
+    <table class="tablesorter" id="competitions-table">
+
+            <thead>
+
+                <tr>
+                    <th>Konkurranse</th>
+                    <th>Arrangør</th>
+                    <th>Puljer</th>
+                    <th>Dato</th>
+                </tr>
+
+                <tbody>
+
+
+
+                </tbody>
+
+            </thead>
+
+    </table>
+
+
+{% endblock %}

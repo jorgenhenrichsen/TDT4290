@@ -1,10 +1,16 @@
 [[source]]
+
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 
-[packages]
-django = "*"
-psycopg2 = "*"
-Django = "*"
-enum34 = "*"
 
+[packages]
+
+"psycopg2" = "*"
+"enum34" = "*"
+django = "*"
+"flake8" = "*"
+"pep8" = "*"
+"pep8-naming" = "*"
+django-easy-pdf = "*"
+django-queryset-csv = "*"

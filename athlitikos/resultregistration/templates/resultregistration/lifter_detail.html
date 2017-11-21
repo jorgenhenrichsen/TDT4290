@@ -1,8 +1,8 @@
 
-{% extends 'base.html' %}
+{% extends 'athlitikos/base.html' %}
 
 {% block head %}
-        <link rel="stylesheet" type="text/css" href="../../static/css/persondetail.css">
+        <!--<link rel="stylesheet" type="text/css" href="../../static/css/persondetail.css">-->
 {%  endblock %}
 
 {% block content %}
@@ -12,6 +12,8 @@
         <h1>Navn: {{ fullname }}</h1>
         <label>Fødselsdato: {{ birth_date }}<br></label>
         <label>Kjønn: {{ gender }}<br></label>
+        <label>Klubb: {{ club }}<br></label>
+        <button class="ok-button" onclick="goBackTwoPages()">Ok</button>
 
     </div>
 

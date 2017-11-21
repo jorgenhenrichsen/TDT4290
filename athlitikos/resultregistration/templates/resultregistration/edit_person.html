@@ -1,8 +1,8 @@
 
-{% extends 'base.html' %}
+{% extends 'athlitikos/base.html' %}
 
 {% block head %}
-        <link rel="stylesheet" type="text/css" href="../../static/css/personforms.css">
+        <link rel="stylesheet" type="text/css" href="/static/css/personforms.css">
 {%  endblock %}
 
 
@@ -10,11 +10,12 @@
 
     <div class="container">
         <h1>{{ title }}</h1>
-        <form method="POST" class="person-form">
+        <form method="POST">
             {% csrf_token %}
             {{ form.as_p }}
 
-            <input class="save-button" type="submit" value="Lagre">
+            <input class="ok-button" type="submit" onclick="goBackOnePage()" value="Lagre">
+            <button class="cancel-button" onclick="goBackOnePage()">Avbryt</button>
 
         </form>
 

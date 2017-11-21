@@ -1,0 +1,17 @@
+{% block content %}
+<button> <a href=http://127.0.0.1:8000/home/admin">Hjem</a> </button>
+<h2> Oppgi korrekt personinformasjon</h2>
+
+<form method="Post" action='merging'> {%csrf_token%}
+    {{form.as_p}}
+
+    <!-- så templaten kan sende tilbake med riktig valg av person -->
+    {% for id in personidlist %}
+    <input type="checkbox" name="ny" value="{{id}}" checked="checked" hidden="hidden"/>
+    <label>Utøver med id:{{id}} er klar</label>
+    {% endfor %}
+
+
+<input type="submit" value="Lagre" class="btn btn-primary">
+</form>
+{% endblock %}

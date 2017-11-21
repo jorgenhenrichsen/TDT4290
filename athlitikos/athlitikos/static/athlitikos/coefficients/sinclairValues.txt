@@ -1,0 +1,4 @@
+Sinclair coefficients line 1= A, line 2 = b
+Men 	Women
+0.751945030	0.783497476
+175.508	153.655

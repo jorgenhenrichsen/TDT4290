@@ -1,0 +1,93 @@
+/*overwrites browser standard for padding and margin*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+/*styling for input fields*/
+input,
+select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    box-sizing: border-box;
+}
+
+/*Styling for buttons*/
+button {
+    padding: 1em 2em;
+    margin: 5px 0;
+    border-radius: 2px;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    background-color: lightgray;
+}
+
+button:hover {
+    background-color: #cb1e1f;
+    color: white;
+}
+
+.cancel-button{
+    background-color: #cb1e1f;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.cancel-button:hover {
+    background-color: #CD4E4F;
+}
+
+.ok-button {
+    background-color: green;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.ok-button:hover {
+    background-color: darkseagreen;
+}
+
+h1 {
+    text-align: center;
+    padding: 1em;
+}
+
+h2 {
+    text-align: center;
+    padding: 2%;
+}
+
+h3 {
+    text-align: center;
+    padding: 2%;
+}
+
+.form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.broad-button {
+    padding: 1em 2em;
+    margin: 5px 0;
+    border-radius: 2px;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    background-color: lightgray;
+}
+
+.broad-button:hover {
+    background-color: #cb1e1f;
+    color: white;
+}

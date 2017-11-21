@@ -1,0 +1,49 @@
+#result-table {
+    width: 100%;
+}
+
+th, td {
+    font-weight: lighter;
+    padding: 10px;
+    padding-left: 0;
+}
+
+thead {
+    box-shadow: 0px 2px 2px grey;
+}
+
+.tablesorter-header {
+    font-weight: bold;
+    background: no-repeat center right url(../icons/UpAndDownArrowBlack.svg);
+}
+
+.tablesorter-headerAsc {
+    background-image: url(../icons/UpArrowBlack.svg);
+}
+
+.tablesorter-headerDesc {
+    background-image: url(../icons/DownArrowBlack.svg);
+}
+
+.no-icon {
+    background-image: none;
+}
+
+.button-wrapper {
+    display: flex;
+    justify-content: center;
+    /*align-content: center;*/
+}
+
+.button-column {
+    display: flex;
+    flex-direction: column;
+    padding: 0 2em;
+}
+
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+}
+

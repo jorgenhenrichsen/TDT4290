@@ -1,0 +1,24 @@
+{% extends 'athlitikos/base.html' %}
+
+{% block head %}
+        <link rel="stylesheet" type="text/css" href="/static/css/personforms.css">
+{%  endblock %}
+
+
+{% block content %}
+
+    <div class="container">
+        <h1>{{ title }}</h1>
+
+        <form method="POST" class="person-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <input class="save-button" type="submit" value="Lagre">
+
+        </form>
+
+    </div>
+
+
+{% endblock %}

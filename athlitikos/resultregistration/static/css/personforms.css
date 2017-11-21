@@ -1,9 +1,8 @@
-
 select {
     width: 100px;
 }
 
-input[type=submit] {
+input {
     width: 200px;
 }
 
@@ -14,4 +13,9 @@ input[type=submit] {
 .person-form {
     margin-top: 40px;
     margin-bottom: 40px;
+}
+
+#new-competition-message {
+    font-size: 150%;
+    color: darkgreen;
 }
