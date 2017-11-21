@@ -93,16 +93,16 @@ class GroupFormV3(forms.Form):
     competition = forms.ModelChoiceField(queryset=Competition.objects.all())
     date = forms.DateField(input_formats=["%d/%m/%Y"], widget=forms.DateInput(attrs={'class': 'datepicker'}))
     competition_leader = forms.ModelChoiceField(queryset=Judge.objects.all(), required=False)
-    jury = forms.ModelMultipleChoiceField(queryset=Judge.objects.all(), required=False)
-    judges = forms.ModelMultipleChoiceField(queryset=Judge.objects.all(), required=False)
     technical_controller = forms.ModelChoiceField(queryset=Judge.objects.all(), required=False)
     chief_marshall = forms.ModelChoiceField(queryset=Judge.objects.all(), required=False)
     timekeeper = forms.ModelChoiceField(queryset=Judge.objects.all(), required=False)
+    jury = forms.ModelMultipleChoiceField(queryset=Judge.objects.all(), required=False)
+    judges = forms.ModelMultipleChoiceField(queryset=Judge.objects.all(), required=False)
 
     secretary = forms.CharField(required=False)
     speaker = forms.CharField(required=False)
-    notes = forms.CharField(required=False)
-    records_description = forms.CharField(required=False)
+    notes = forms.CharField(required=False, widget=forms.Textarea())
+    records_description = forms.CharField(required=False, widget=forms.Textarea())
 
     def __init__(self, user, *args, **kwargs):
         super(GroupFormV3, self).__init__(*args, **kwargs)

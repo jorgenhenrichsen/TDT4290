@@ -24,7 +24,87 @@
     {% csrf_token %}
 
     <div id="group-form-container">
-        {{ group_form }}
+
+        <div>
+            <div class="input-container">
+                {{ group_form.group_number.label }}
+                {{ group_form.group_number }}
+            </div>
+
+            <div class="input-container">
+                {{ group_form.competition.label }}
+                {{ group_form.competition }}
+            </div>
+
+            <div class="input-container">
+                {{ group_form.date.label }}
+                {{ group_form.date }}
+            </div>
+
+        </div>
+
+        <div>
+            <div class="input-container">
+                {{ group_form.competition_leader.label }}
+                {{ group_form.competition_leader }}
+            </div>
+
+            <div class="input-container">
+                {{ group_form.technical_controller.label }}
+                {{ group_form.technical_controller }}
+            </div>
+
+            <div class="input-container">
+                {{ group_form.chief_marshall.label }}
+                {{ group_form.chief_marshall }}
+            </div>
+
+            <div class="input-container">
+                {{ group_form.timekeeper.label }}
+                {{ group_form.timekeeper }}
+            </div>
+
+        </div>
+
+        <div>
+
+            <div class="input-container">
+                {{ group_form.jury.label }}
+                {{ group_form.jury }}
+            </div>
+
+            <div class="input-container">
+                {{ group_form.judges.label }}
+                {{ group_form.judges }}
+            </div>
+
+            <div class="input-container">
+                {{ group_form.secretary.label }}
+                {{ group_form.secretary }}
+            </div>
+
+            <div class="input-container">
+                {{ group_form.speaker.label }}
+                {{ group_form.speaker }}
+            </div>
+
+        </div>
+        
+
+        <div>
+
+            <div class="text-area-container">
+                {{ group_form.notes.label }}
+                {{ group_form.notes }}
+            </div>
+
+            <div class="text-area-container">
+                {{ group_form.records_description.label }}
+                {{ group_form.records_description }}
+            </div>
+
+        </div>
+
     </div>
 
 
