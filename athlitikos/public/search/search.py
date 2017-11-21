@@ -309,21 +309,30 @@ class SearchFiltering:
         :return:
         """
 
-        first_name = query
-        last_name = query
+        first_name = None
+        last_name = None
 
         query_splitted = query.rsplit(" ", 1)
         print(query_splitted)
         if len(query_splitted) > 1:
             first_name = query_splitted[0]
             last_name = query_splitted[1]
-            if last_name == "":
-                last_name = query
+        elif len(query_splitted) == 1:
+            first_name = query_splitted[0]
 
-        lifters_first_name = Person.objects.filter(first_name__icontains=first_name)
-        lifters_last_name = Person.objects.filter(last_name__icontains=last_name)
-        lifters = lifters_first_name.union(lifters_last_name)
-        print(lifters)
+        lifters = None
+
+        if not SearchFiltering.is_none_value(first_name) and not SearchFiltering.is_none_value(last_name):
+            lifters_first_last_name = Person.objects.filter(first_name__iexact=first_name,
+                                            last_name__istartswith=last_name)
+            lifters_middlename = Person.objects.filter(first_name__istartswith=query)
+            lifters = lifters_first_last_name.union(lifters_middlename)
+
+        elif not SearchFiltering.is_none_value(first_name):
+            lifters_first_name = Person.objects.filter(first_name__istartswith=first_name)
+            lifters_last_name = Person.objects.filter(last_name__istartswith=first_name)
+            lifters = lifters_first_name.union(lifters_last_name)
+
         return lifters
 
     @classmethod

@@ -98,32 +98,36 @@ def search_for_lifter(request):
         lifters = SearchFiltering.search_for_lifter_containing(query)
 
         results = []
-        for lifter in lifters:
 
-            lifter_string = lifter.first_name +\
-                            " " + lifter.last_name
+        if lifters is not None:
+            for lifter in lifters:
 
-            if lifter.club is not None:
-                lifter_string += ", " + lifter.club.club_name
+                lifter_string = lifter.first_name +\
+                                " " + lifter.last_name
 
-            lifter_json = {
-                'label': lifter_string,
-                'value': lifter_string,
-                'id': lifter.id,
-            }
+                if lifter.club is not None:
+                    lifter_string += ", " + lifter.club.club_name
 
-            results.append(lifter_json)
+                lifter_json = {
+                    'label': lifter_string,
+                    'value': lifter_string,
+                    'id': lifter.id,
+                }
 
-        data = json.dumps(results)
+                results.append(lifter_json)
+
+            data = json.dumps(results)
+
+            if settings.DEBUG:
+                print(data)
+
+            mime_type = 'application/json'
+            return HttpResponse(data, mime_type)
 
     else:
         raise Http404()
 
-    if settings.DEBUG:
-        print(data)
-
-    mime_type = 'application/json'
-    return HttpResponse(data, mime_type)
+    return Http404()
 
 
 def search_for_clubs(request):
