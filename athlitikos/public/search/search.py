@@ -148,7 +148,10 @@ class SearchFiltering:
         to_date = request.GET.get('to_date')
         best_results = request.GET.get('best_results')
 
-        return SearchFiltering.search_for_results(lifters, clubs, from_date, to_date, categories, best_results)
+        results = list(SearchFiltering.search_for_results(lifters, clubs, from_date, to_date, categories, best_results).all())
+        old_results = list(SearchFiltering.search_for_old_results(lifters, clubs, from_date, to_date, categories, best_results).all())
+        results.extend(old_results)
+        return results
 
     @classmethod
     def search_for_results(cls, lifters=None, clubs=None, from_date=None, to_date=None, categories=None,
