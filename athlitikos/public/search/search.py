@@ -1,6 +1,6 @@
 from datetime import datetime
 import athlitikos.settings as settings
-from resultregistration.models import Club, Result, Lifter, Competition, Person, OldResults
+from resultregistration.models import Club, Result, Competition, Person, OldResults
 from resultregistration.enums import Status
 import json
 
@@ -148,8 +148,10 @@ class SearchFiltering:
         to_date = request.GET.get('to_date')
         best_results = request.GET.get('best_results')
 
-        results = list(SearchFiltering.search_for_results(lifters, clubs, from_date, to_date, categories, best_results).all())
-        old_results = list(SearchFiltering.search_for_old_results(lifters, clubs, from_date, to_date, categories, best_results).all())
+        results = list(SearchFiltering.search_for_results(lifters, clubs, from_date,
+                                                          to_date, categories, best_results).all())
+        old_results = list(SearchFiltering.search_for_old_results(lifters, clubs, from_date,
+                                                                  to_date, categories, best_results).all())
         results.extend(old_results)
         return results
 
@@ -224,8 +226,8 @@ class SearchFiltering:
         return results
 
     @classmethod
-    def search_for_old_results(cls, lifters=None, clubs=None, from_date=None, to_date=None, categories=None,
-                           best_results=None):
+    def search_for_old_results(cls, lifters=None, clubs=None, from_date=None,
+                               to_date=None, categories=None, best_results=None):
 
         results = OldResults.objects.all().order_by('-competition__start_date')
 
@@ -300,7 +302,6 @@ class SearchFiltering:
 
         return SearchFiltering.search_for_old_results(lifters, clubs, from_date, to_date, categories, best_results)
 
-
     @classmethod
     def search_for_lifter_containing(cls, query):
         """
@@ -324,7 +325,7 @@ class SearchFiltering:
 
         if not SearchFiltering.is_none_value(first_name) and not SearchFiltering.is_none_value(last_name):
             lifters_first_last_name = Person.objects.filter(first_name__iexact=first_name,
-                                            last_name__istartswith=last_name)
+                                                            last_name__istartswith=last_name)
             lifters_middlename = Person.objects.filter(first_name__istartswith=query)
             lifters = lifters_first_last_name.union(lifters_middlename)
 
