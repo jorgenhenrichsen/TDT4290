@@ -1,7 +1,6 @@
 from resultregistration.models import Group, Lifter, Result, MoveAttempt
 from resultregistration.enums import MoveTypes
 import re
-from datetime import datetime
 
 
 def is_success(attempt):

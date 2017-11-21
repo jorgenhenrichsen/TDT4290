@@ -1,6 +1,6 @@
 from resultregistration.models import MoveAttempt
 from resultregistration.enums import MoveTypes
-from datetime import datetime
+
 
 def serialize_result(result):
 
