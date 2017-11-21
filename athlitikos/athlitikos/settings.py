@@ -47,8 +47,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'athlitikos',
     'resultregistration',
-    'usermanagement',
-    'userRoles',
     'accounts',
     'public',
     'easy_pdf',
