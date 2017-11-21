@@ -100,8 +100,8 @@ def search_for_lifter(request):
         results = []
         for lifter in lifters:
 
-            lifter_string = lifter.lifter.first_name +\
-                            " " + lifter.lifter.last_name
+            lifter_string = lifter.first_name +\
+                            " " + lifter.last_name
 
             if lifter.club is not None:
                 lifter_string += ", " + lifter.club.club_name
@@ -109,7 +109,7 @@ def search_for_lifter(request):
             lifter_json = {
                 'label': lifter_string,
                 'value': lifter_string,
-                'id': lifter.lifter.id,
+                'id': lifter.id,
             }
 
             results.append(lifter_json)

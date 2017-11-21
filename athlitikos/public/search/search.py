@@ -1,6 +1,6 @@
 from datetime import datetime
 import athlitikos.settings as settings
-from resultregistration.models import Club, Result, Lifter, Competition
+from resultregistration.models import Club, Result, Lifter, Competition, Person, OldResults
 from resultregistration.enums import Status
 import json
 
@@ -45,7 +45,7 @@ class SearchFiltering:
             print("Getting competitions with category={} from_date={} to_date={} hosts={}"
                   .format(category, from_date, to_date, hosts))
 
-        competitions = Competition.objects.filter(group__status__exact=Status.approved.value).distinct()
+        competitions = Competition.objects.all().order_by('-start_date')
 
         if not SearchFiltering.is_none_value(category) and category != "all":
             competitions = competitions.filter(competition_category__iexact=category)
@@ -74,7 +74,7 @@ class SearchFiltering:
             else:
                 competitions = all_results[0]
 
-        return competitions
+        return competitions[:500]
 
     @classmethod
     def get_best_results(cls, results, filter_by: str="p"):
@@ -221,6 +221,11 @@ class SearchFiltering:
         return results
 
     @classmethod
+    def search_for_old_results(cls):
+        return OldResults.objects.all().order_by('-competition.date')[:500]
+
+
+    @classmethod
     def search_for_lifter_containing(cls, query):
         """
         Find a lifter.
@@ -239,9 +244,10 @@ class SearchFiltering:
             if last_name == "":
                 last_name = query
 
-        lifters_first_name = Lifter.objects.filter(first_name__icontains=first_name)
-        lifters_last_name = Lifter.objects.filter(last_name__icontains=last_name)
+        lifters_first_name = Person.objects.filter(first_name__icontains=first_name)
+        lifters_last_name = Person.objects.filter(last_name__icontains=last_name)
         lifters = lifters_first_name.union(lifters_last_name)
+        print(lifters)
         return lifters
 
     @classmethod
