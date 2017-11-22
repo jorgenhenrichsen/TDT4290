@@ -70,6 +70,7 @@ def connect_postgre():
 
 
 # Read all the clubs in both mdb files and store each unique club to the database
+# Needs to be updated with correction for misspelled clubname or invalid clubname
 def clubs(crsr, conn, curs):
     cur = conn.cursor()
     crsr.execute('SELECT * FROM [Klubber]')
@@ -103,6 +104,30 @@ def clubs(crsr, conn, curs):
     cur.close()
 
 
+# All club names needs to me manually checked, since there is a lot of wrong names in the old database
+# This function is not used, but can be used and improved in the future
+# Caused some errors when inserting old data where the club was a NoneType object
+def fix_club_name(club_name):
+    name_of_club = 'None'
+    if not club_name[0]:
+        pass
+    else:
+        club_split = club_name[0].rsplit(' ', 1)
+        length = len(club_split) - 1
+        if len(club_split[0]) < 3 and length > 0:
+            short_name = club_split[0].upper()
+            long_name = club_split[length].lower().title()
+            name_of_club = short_name + ' ' + long_name
+        elif len(club_split[0]) > 2 and length > 0:
+            long_name = club_split[0].lower().title()
+            short_name = club_split[length].upper()
+            name_of_club = long_name + ' ' + short_name
+        else:
+            name_of_club = club_split[0].lower().title()
+
+    return name_of_club
+
+
 # Returns the club_id for a club in the database
 def get_club_id(conn):
     cur = conn.cursor()
@@ -122,12 +147,22 @@ def valid_name(first, last):
     return valid
 
 
+def get_person_id(conn):
+    cur = conn.cursor()
+    cur.execute('SELECT id, first_name, last_name, club_id FROM public.resultregistration_person')
+    rows = cur.fetchall()
+    person_id_dict = {}
+    for row in rows:
+        person_id_dict[row[1], row[2], row[3]] = row[0]
+    return person_id_dict
+
+
 def old_1938_1972(curs, conn):
     cur = conn.cursor()
     curs.execute('SELECT * FROM [1938-1972 Oversikt - Resultater]')
     rows = curs.fetchall()
     club_dict = get_club_id(conn)
-    person_id_dict = {}
+    person_id_dict = get_person_id(conn)
     competition_id_dict = {}
     invalid_data = []
     # Reads in data from each row
@@ -139,6 +174,7 @@ def old_1938_1972(curs, conn):
         else:
             first_name = row[6].rsplit(' ', 1)[0].lower().title()
             last_name = row[6].rsplit(' ', 1)[-1].lower().title()
+
         club = row[7]
         club_id = club_dict.get(club)
         competition_category = row[0]
@@ -155,14 +191,15 @@ def old_1938_1972(curs, conn):
 
         # Checks if name is valid and that the lifter has a club
         if valid_name(first_name, last_name) and club_id is not None:
-            if (first_name, last_name) in person_id_dict:  # Checks if person already exist and then get their ID
-                person_id = person_id_dict[first_name, last_name]
+            # Checks if person already exist with the same club if so then get their ID
+            if (first_name, last_name, club_id) in person_id_dict:
+                person_id = person_id_dict[first_name, last_name, club_id]
             else:  # If not store the person in the database and put the ID in the person_id dictonary
                 sql_person = "INSERT INTO public.resultregistration_person (first_name, last_name, club_id) " \
                              "VALUES (%s,%s,%s) RETURNING id;"
                 cur.execute(sql_person, (first_name, last_name, club_id,))
                 person_id = cur.fetchone()[0]
-                person_id_dict[first_name, last_name] = person_id
+                person_id_dict[first_name, last_name, club_id] = person_id
 
             # Checks if competition already exist and then get the ID
             if (competition_category, host, start_date) in competition_id_dict:
@@ -195,7 +232,7 @@ def old_1972_1985(curs, conn):
     curs.execute('SELECT * FROM [1972-1985 Oversikt - Resultater]')
     rows = curs.fetchall()
     club_dict = get_club_id(conn)
-    person_id_dict = {}
+    person_id_dict = get_person_id(conn)
     competition_id_dict = {}
     invalid_data = []
     for row in rows:
@@ -206,6 +243,7 @@ def old_1972_1985(curs, conn):
         else:
             first_name = row[7].rsplit(' ', 1)[0].lower().title()
             last_name = row[7].rsplit(' ', 1)[-1].lower().title()
+
         club = row[8]
         club_id = club_dict.get(club)
         competition_category = row[1]
@@ -220,14 +258,14 @@ def old_1972_1985(curs, conn):
         points = row[12]
 
         if valid_name(first_name, last_name) and club_id is not None:
-            if (first_name, last_name) in person_id_dict:
-                person_id = person_id_dict[first_name, last_name]
+            if (first_name, last_name, club_id) in person_id_dict:
+                person_id = person_id_dict[first_name, last_name, club_id]
             else:
                 sql_person = "INSERT INTO public.resultregistration_person (first_name, last_name, club_id) " \
                              "VALUES (%s,%s,%s) RETURNING id;"
                 cur.execute(sql_person, (first_name, last_name, club_id,))
                 person_id = cur.fetchone()[0]
-                person_id_dict[first_name, last_name] = person_id
+                person_id_dict[first_name, last_name, club_id] = person_id
 
             if (competition_category, host, start_date) in competition_id_dict:
                 competition_id = competition_id_dict[competition_category, host, start_date]
@@ -258,7 +296,7 @@ def old_1986_1992(curs, conn):
     curs.execute('SELECT * FROM [1986-1992 Oversikt - Resultater]')
     rows = curs.fetchall()
     club_dict = get_club_id(conn)
-    person_id_dict = {}
+    person_id_dict = get_person_id(conn)
     competition_id_dict = {}
     invalid_data = []
     for row in rows:
@@ -269,6 +307,7 @@ def old_1986_1992(curs, conn):
         else:
             first_name = row[7].rsplit(' ', 1)[0].lower().title()
             last_name = row[7].rsplit(' ', 1)[-1].lower().title()
+
         club = row[8]
         club_id = club_dict.get(club)
         competition_category = row[1]
@@ -283,14 +322,14 @@ def old_1986_1992(curs, conn):
         points = row[12]
 
         if valid_name(first_name, last_name) and club_id is not None:
-            if (first_name, last_name) in person_id_dict:
-                person_id = person_id_dict[first_name, last_name]
+            if (first_name, last_name, club_id) in person_id_dict:
+                person_id = person_id_dict[first_name, last_name, club_id]
             else:
                 sql_person = "INSERT INTO public.resultregistration_person (first_name, last_name, club_id) " \
                              "VALUES (%s,%s,%s) RETURNING id;"
                 cur.execute(sql_person, (first_name, last_name, club_id,))
                 person_id = cur.fetchone()[0]
-                person_id_dict[first_name, last_name] = person_id
+                person_id_dict[first_name, last_name, club_id] = person_id
 
             if (competition_category, host, start_date) in competition_id_dict:
                 competition_id = competition_id_dict[competition_category, host, start_date]
@@ -321,7 +360,7 @@ def old_1992_1997(curs, conn):
     curs.execute('SELECT * FROM [1992-1997 Resultater]')
     rows = curs.fetchall()
     club_dict = get_club_id(conn)
-    person_id_dict = {}
+    person_id_dict = get_person_id(conn)
     competition_id_dict = {}
     invalid_data = []
     for row in rows:
@@ -333,6 +372,7 @@ def old_1992_1997(curs, conn):
         else:
             first_name = row[5].rsplit(' ', 1)[0].lower().title()
             last_name = row[5].rsplit(' ', 1)[-1].lower().title()
+
         club = row[6]
         club_id = club_dict.get(club)
 
@@ -354,14 +394,14 @@ def old_1992_1997(curs, conn):
         sinclair_coefficient = row[11]
 
         if valid_name(first_name, last_name) and club_id is not None:
-            if (first_name, last_name) in person_id_dict:
-                person_id = person_id_dict[first_name, last_name]
+            if (first_name, last_name, club_id) in person_id_dict:
+                person_id = person_id_dict[first_name, last_name, club_id]
             else:
                 sql_person = "INSERT INTO public.resultregistration_person (first_name, last_name, club_id) " \
                              "VALUES (%s,%s,%s) RETURNING id;"
                 cur.execute(sql_person, (first_name, last_name, club_id,))
                 person_id = cur.fetchone()[0]
-                person_id_dict[first_name, last_name] = person_id
+                person_id_dict[first_name, last_name, club_id] = person_id
 
             if (competition_category, host, start_date) in competition_id_dict:
                 competition_id = competition_id_dict[competition_category, host, start_date]
@@ -395,7 +435,7 @@ def old_1998_2017(crsr, conn):
     crsr.execute('SELECT * FROM [Resultater]')
     rows = crsr.fetchall()
     club_dict = get_club_id(conn)
-    person_id_dict = {}
+    person_id_dict = get_person_id(conn)
     competition_id_dict = {}
     invalid_data = []
     current_date = datetime.datetime.now().date()
@@ -409,6 +449,7 @@ def old_1998_2017(crsr, conn):
         else:
             first_name = row[5].rsplit(' ', 1)[0].lower().title()
             last_name = row[5].rsplit(' ', 1)[-1].lower().title()
+
         club = row[6]
         club_id = club_dict.get(club)
 
@@ -431,14 +472,14 @@ def old_1998_2017(crsr, conn):
 
         if valid_name(first_name, last_name) and club_id is not None and start_date <= current_date \
                 and competition_row is not None:
-            if (first_name, last_name) in person_id_dict:
-                person_id = person_id_dict[first_name, last_name]
+            if (first_name, last_name, club_id) in person_id_dict:
+                person_id = person_id_dict[first_name, last_name, club_id]
             else:
                 sql_person = "INSERT INTO public.resultregistration_person (first_name, last_name, club_id) " \
                              "VALUES (%s,%s,%s) RETURNING id;"
                 cur.execute(sql_person, (first_name, last_name, club_id,))
                 person_id = cur.fetchone()[0]
-                person_id_dict[first_name, last_name] = person_id
+                person_id_dict[first_name, last_name, club_id] = person_id
 
             if (competition_category, host, location, start_date) in competition_id_dict:
                 competition_id = competition_id_dict[competition_category, host, location, start_date]
@@ -487,22 +528,23 @@ def old_1998_2017(crsr, conn):
     conn.commit()
     cur.close()
 
-
 # Run the clubs(new_cursor, connection, cursor) first, then the other functions can be called randomly,
 # but I recommend to run them in the order set up below.
 
+
 # new_cursor = read_new_mdb()
-# connection = connect_postgre()
-# cursor = read_mdb()
+connection = connect_postgre()
+cursor = read_mdb()
 # clubs(new_cursor, connection, cursor)
-# old_1938_1972(cursor, connection)
+old_1938_1972(cursor, connection)
 # old_1972_1985(cursor, connection)
 # old_1986_1992(cursor, connection)
 # old_1992_1997(cursor, connection)
 # old_1998_2017(new_cursor, connection)
 
-
 # Names not valid if it contains a ?, one letter or if it has for example a ')' in it
 # Club for a lifter is the club which the lifter represented in the first competition.
 # If the date is in the future the results are invalid
 # The runtime is not very good, especially on the 1998-2017 porting (takes a few minutes to run)
+# Problem it adds a new lifter even if he/she exists in the database if they are added in a other function
+# ^Example above Navn Navnsen exists in both the 1938-1972 and 1972-1985 It will then be added two times

@@ -1,6 +1,6 @@
 from datetime import datetime
 import athlitikos.settings as settings
-from resultregistration.models import Club, Result, Lifter, Competition
+from resultregistration.models import Club, Result, Lifter, Competition, OldResults, Person
 from resultregistration.enums import Status
 import json
 
@@ -148,7 +148,7 @@ class SearchFiltering:
         to_date = request.GET.get('to_date')
         best_results = request.GET.get('best_results')
 
-        return SearchFiltering.search_for_results(lifters, clubs, from_date, to_date, categories, best_results)
+        return SearchFiltering.search_for_old_results(lifters, clubs, from_date, to_date, categories, best_results)
 
     @classmethod
     def search_for_results(cls, lifters=None, clubs=None, from_date=None, to_date=None, categories=None,
@@ -221,14 +221,43 @@ class SearchFiltering:
         return results
 
     @classmethod
+    def search_for_old_results(cls, lifters=None, clubs=None, from_date=None, to_date=None, categories=None,
+                           best_results=None):
+
+        results = OldResults.objects.all().order_by('competition__start_date')
+
+        if not SearchFiltering.is_none_value(lifters):
+            print(lifters)
+            results = results.filter(lifter_id__in=lifters)
+
+        if not SearchFiltering.is_none_value(clubs):
+            results = results.filter(lifter__club_id__in=clubs)
+
+        if not SearchFiltering.is_none_value(from_date):
+            from_date_formatted = datetime.strptime(from_date, "%d/%m/%Y").date()
+            results = results.filter(group__date__gte=from_date_formatted)
+
+        if not SearchFiltering.is_none_value(to_date):
+            to_date_formatted = datetime.strptime(to_date, "%d/%m/%Y").date()
+            results = results.filter(group__date__lte=to_date_formatted)
+
+        if not SearchFiltering.is_none_value(best_results):
+            results = SearchFiltering.get_best_results(results, filter_by=best_results)
+
+        results = results[:500]
+
+        return results
+
+
+    @classmethod
     def search_for_lifter_containing(cls, query):
         """
         Find a lifter.
         :param query:
         :return:
         """
-        lifters_first_name = Lifter.objects.filter(first_name__icontains=query)
-        lifters_last_name = Lifter.objects.filter(last_name__icontains=query)
+        lifters_first_name = Person.objects.filter(first_name__icontains=query)
+        lifters_last_name = Person.objects.filter(last_name__icontains=query)
         lifters = lifters_first_name.union(lifters_last_name)
         return lifters
 
