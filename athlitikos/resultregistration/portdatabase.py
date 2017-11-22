@@ -7,17 +7,17 @@ import datetime
 def read_mdb():
     # You need to input the path to the UCanAccess Jars below
     ucanaccess_jars = [
-        "/Users/ChristianRossow/Downloads/UCanAccess-4.0.2-bin/ucanaccess-4.0.2.jar",
-        "/Users/ChristianRossow/Downloads/UCanAccess-4.0.2-bin/lib/commons-lang-2.6.jar",
-        "/Users/ChristianRossow/Downloads/UCanAccess-4.0.2-bin/lib/commons-logging-1.1.1.jar",
-        "/Users/ChristianRossow/Downloads/UCanAccess-4.0.2-bin/lib/hsqldb.jar",
-        "/Users/ChristianRossow/Downloads/UCanAccess-4.0.2-bin/lib/jackcess-2.1.6.jar",
+        "/Users/jorgenhenrichsen/Downloads/UCanAccess-4.0.2-bin/ucanaccess-4.0.2.jar",
+        "/Users/jorgenhenrichsen/Downloads/UCanAccess-4.0.2-bin/lib/commons-lang-2.6.jar",
+        "/Users/jorgenhenrichsen/Downloads/UCanAccess-4.0.2-bin/lib/commons-logging-1.1.1.jar",
+        "/Users/jorgenhenrichsen/Downloads/UCanAccess-4.0.2-bin/lib/hsqldb.jar",
+        "/Users/jorgenhenrichsen/Downloads/UCanAccess-4.0.2-bin/lib/jackcess-2.1.6.jar",
     ]
     classpath = ":".join(ucanaccess_jars)
     cnxn = jaydebeapi.connect(
         "net.ucanaccess.jdbc.UcanaccessDriver",
         # Input path below to the mdb file jdbc:ucanaccess://Pathtofile
-        "jdbc:ucanaccess:///Users/ChristianRossow/Downloads/NVF Historiske resultater.mdb",
+        "jdbc:ucanaccess:///Users/jorgenhenrichsen/Downloads/NVF Historiske resultater.mdb",
         ["", ""],
         classpath
     )
@@ -35,17 +35,17 @@ def read_mdb():
 def read_new_mdb():
     # You need to input the path to the UCanAccess Jars below
     ucanaccess_jars = [
-        "/Users/ChristianRossow/Downloads/UCanAccess-4.0.2-bin/ucanaccess-4.0.2.jar",
-        "/Users/ChristianRossow/Downloads/UCanAccess-4.0.2-bin/lib/commons-lang-2.6.jar",
-        "/Users/ChristianRossow/Downloads/UCanAccess-4.0.2-bin/lib/commons-logging-1.1.1.jar",
-        "/Users/ChristianRossow/Downloads/UCanAccess-4.0.2-bin/lib/hsqldb.jar",
-        "/Users/ChristianRossow/Downloads/UCanAccess-4.0.2-bin/lib/jackcess-2.1.6.jar",
+        "/Users/jorgenhenrichsen/Downloads/UCanAccess-4.0.2-bin/ucanaccess-4.0.2.jar",
+        "/Users/jorgenhenrichsen/Downloads/UCanAccess-4.0.2-bin/lib/commons-lang-2.6.jar",
+        "/Users/jorgenhenrichsen/Downloads/UCanAccess-4.0.2-bin/lib/commons-logging-1.1.1.jar",
+        "/Users/jorgenhenrichsen/Downloads/UCanAccess-4.0.2-bin/lib/hsqldb.jar",
+        "/Users/jorgenhenrichsen/Downloads/UCanAccess-4.0.2-bin/lib/jackcess-2.1.6.jar",
     ]
     classpath = ":".join(ucanaccess_jars)
     # Input path below to the mdb file jdbc:ucanaccess://Pathtofile
     cnxn = jaydebeapi.connect(
         "net.ucanaccess.jdbc.UcanaccessDriver",
-        "jdbc:ucanaccess:///Users/ChristianRossow/Downloads/Resultater_.mdb",
+        "jdbc:ucanaccess:///Users/jorgenhenrichsen/Downloads/Resultater_.mdb",
         ["", ""],
         classpath
     )
@@ -533,14 +533,15 @@ def old_1998_2017(crsr, conn):
 
 
 # new_cursor = read_new_mdb()
-connection = connect_postgre()
-cursor = read_mdb()
+# connection = connect_postgre()
+# cursor = read_mdb()
 # clubs(new_cursor, connection, cursor)
-old_1938_1972(cursor, connection)
+# old_1938_1972(cursor, connection)
 # old_1972_1985(cursor, connection)
 # old_1986_1992(cursor, connection)
 # old_1992_1997(cursor, connection)
 # old_1998_2017(new_cursor, connection)
+
 
 # Names not valid if it contains a ?, one letter or if it has for example a ')' in it
 # Club for a lifter is the club which the lifter represented in the first competition.

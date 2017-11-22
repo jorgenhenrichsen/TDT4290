@@ -208,7 +208,7 @@ class OldResults(models.Model):
     best_snatch = models.FloatField(verbose_name='Rykk', null=True, blank=True)
     best_clean_and_jerk = models.FloatField(verbose_name='Støt', null=True, blank=True)
     total_lift = models.FloatField(verbose_name='Sammenlagt', blank=True, null=True)
-    points = models.FloatField(verbose_name='Poeng', blank=True, null=True)
+    points_with_sinclair = models.FloatField(verbose_name='Poeng', blank=True, null=True)
     sinclair_coefficient = models.FloatField(verbose_name='Koeffisient', blank=True, null=True)
 
     def __str__(self):

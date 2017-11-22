@@ -46,7 +46,7 @@
                     <select class="cat-selector" id="weight-class-selector" onchange="didSelectWeightClass(this)">
                         <option value="" disabled selected>Velg vektklasse</option>
                     </select>
-                    <button class="search-button" id="add-category-button" onclick="addCurrentCategoryFilter()">Legg til</button>
+                    <button class="ok-button" id="add-category-button" onclick="addCurrentCategoryFilter()">Legg til</button>
                     <div id="categories-container"></div>
                 </div>
 
@@ -70,15 +70,14 @@
 
             </div>
 
-        <button class="search-button" onclick="submitForm()">Søk</button>
+        <button class="ok-button" onclick="submitForm()">Søk</button>
+        <button class="button" id="generate-report-button" onclick="generateReport()">Generer rapport fra resultater</button>
+        <button class="button" id="generate-csv-button" onclick="generateCsv()">Generer CSV-fil fra resultater</button>
 
     </section>
 
 
     <section class="search-results-section">
-
-        <button class="search-button" id="generate-report-button" onclick="generateReport()">Generer rapport fra resultater</button>
-        <button class="search-button" id="generate-csv-button" onclick="generateCsv()">Generer CSV-fil fra resultater</button>
 
         <table class="tablesorter" id="result-table">
 
@@ -94,9 +93,7 @@
                     <th>Rykk</th>
                     <th>Støt</th>
                     <th>Total</th>
-                    <th>SP</th>
                     <th>Poeng</th>
-                    <th>VP</th>
                     <th>Veteranpoeng</th>
                 </tr>
 

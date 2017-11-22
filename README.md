@@ -1,11 +1,8 @@
-# Amazing Codename Goes Here
+# NVF Resultregistration System
 
-Here we are to present our project and code. Make it understandable, give relevant information etc.
+Result registration for NVF, written in Django.
 
 ## How To Get Started 🙌
-
-![](http://i.imgur.com/ZvnsY1d.gif)
-
 
 First go ahead and clone the repo with: 
 ```
@@ -79,11 +76,6 @@ pipenv install somepackage
 
 This will install the package in the virtualenv and add it to the Pipfile and Pipfile.lock.
 
-## CircleCI
-
-CircleCI will pull, build and test for us whenever a pull request is opened or a commit to an open pull request is pushed.
-The project's builds can be seen [here](https://circleci.com/gh/jorgenhenrichsen/TDT4290).
-
 # PostgreSQL
 
 Here is a tutorial on how to install the database PostgreSQL
@@ -156,17 +148,7 @@ class SomeClass(ParentClass):
 ```
 
 # Testing
-
-When you are writing your own tests, do the following:
-
-* First, look at resultregistration.tests.py. Check what tests are relevant for you and copy them.
-It is ok if nothing is relevant, but try to think of some edge cases you can test :) 
-
-* Then run: python manage.py test. This will execute all the tests!
-
-* Testing can seem unnecessary, but often there are bugs that we did not see :), and testing helps our customer 
-who will work on the code later. They give a better picture of how the code works, so I hope everyone can adapt
-a positive attitude when it comes to testing!
+Run: python manage.py test. This will execute all the tests!
 
 # Porting the old database to the new PostgreSQL database
 
@@ -183,7 +165,6 @@ a positive attitude when it comes to testing!
 8. Be aware that the runtime, especially on the 1998-2017 porting (the last one) takes a few minutes to complete.
 
 ## Windows version:
-#### I don't know if this works for Windows (not tested).
 
 1. Download the .mdb files from Dropbox or the project folder on Google Drive.
 2. Install the dependencies from pipenv, you need pyodbc to make this work.
@@ -191,8 +172,4 @@ a positive attitude when it comes to testing!
 4. Uncomment the import statment for pyodbc, and the Windows verisons in the read_mdb() and read_new_mdb().
 5. At the bottom of the file uncomment the different lines for what you want to do, but make sure to run the 
    clubs(new_cursor, connection, cursor) first. I also recommend to run them in the order from old to newest (top-down).
-6. Be aware that the runtime, especially on the 1998-2017 porting (the last one) takes a few minutes to complete.
-
-# TODO:
-  * Deploy on version release or tag?
-  
+6. Be aware that the runtime, especially on the 1998-2017 porting (the last one) takes a few minutes to complete.  

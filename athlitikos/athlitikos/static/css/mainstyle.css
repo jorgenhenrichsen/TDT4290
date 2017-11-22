@@ -26,6 +26,7 @@ button {
     text-align: center;
     cursor: pointer;
     border: none;
+    background-color: lightgray;
 }
 
 button:hover {
@@ -83,6 +84,7 @@ h3 {
     text-align: center;
     cursor: pointer;
     border: none;
+    background-color: lightgray;
 }
 
 .broad-button:hover {
