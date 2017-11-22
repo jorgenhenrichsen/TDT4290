@@ -87,34 +87,30 @@ class SearchFiltering:
             - w: total weight lifted
         :return:
         """
-        filter_by = filter_by.lower()
-        results_dict = {}
+
+        if len(results) == 0:
+            return results
+
+        lifters_in_results = set()
 
         for result in results:
-            if result.lifter.pk not in results_dict:
-                results_dict[result.lifter.pk] = []
-            results_dict[result.lifter.pk].append(result)
+            lifters_in_results.add(result.lifter)
 
-        best_results = []
+        field_name = ""
 
-        for key, value in results_dict.items():
-            best_result = value[0]
-            for i in range(1, len(value)):
-                result = value[i]
+        if filter_by == "p":
+            field_name = "points_with_sinclair"
+        elif filter_by == "pv":
+            field_name = "points_with_veteran"
+        else:
+            field_name = "total"
 
-                if filter_by == "p":
-                    if result.points_with_sinclair > best_result.points_with_sinclair:
-                        best_result = result
-                elif filter_by == "pv":
-                    if result.points_with_veteran > best_result.points_with_veteran:
-                        best_result = result
-                else:
-                    if result.total_lift > best_result.total_lift:
-                        best_result = result
+        lifters_results = []
 
-            best_results.append(best_result)
+        for lifter in lifters_in_results:
+            lifters_results.append(results.filter(lifter_id__exact=lifter.id).latest(field_name))
 
-        return best_results
+        return lifters_results
 
     @classmethod
     def search_for_results_with_request(cls, request):
@@ -148,10 +144,17 @@ class SearchFiltering:
         to_date = request.GET.get('to_date')
         best_results = request.GET.get('best_results')
 
-        results = list(SearchFiltering.search_for_results(lifters, clubs, from_date,
-                                                          to_date, categories, best_results).all())
-        old_results = list(SearchFiltering.search_for_old_results(lifters, clubs, from_date,
-                                                                  to_date, categories, best_results).all())
+        results = SearchFiltering.search_for_results(lifters, clubs, from_date,
+                                                          to_date, categories, best_results)
+        old_results = SearchFiltering.search_for_old_results(lifters, clubs, from_date,
+                                                                  to_date, categories, best_results)
+
+        if type(results) is not list:
+            results = list(results.all())
+
+        if type(old_results) is not list:
+            old_results = list(old_results.all())
+
         results.extend(old_results)
         return results
 
@@ -221,13 +224,17 @@ class SearchFiltering:
             results = SearchFiltering.get_best_results(results, filter_by=best_results)
 
         if settings.DEBUG:
-            print(results)
+            print("NEW RESULTS:", results)
 
         return results
 
     @classmethod
     def search_for_old_results(cls, lifters=None, clubs=None, from_date=None,
                                to_date=None, categories=None, best_results=None):
+
+        if settings.DEBUG:
+            print("Searching for old results with lifters={}, clubs={}, from_date={}, to_date={}, categories={}, best_results={}"
+                  .format(lifters, clubs, from_date, to_date, categories, best_results))
 
         results = OldResults.objects.all().order_by('-competition__start_date')
 
@@ -270,7 +277,11 @@ class SearchFiltering:
                 results = all_results[0]
 
         if not SearchFiltering.is_none_value(best_results):
+            print("Searching for best OLD RESTULTS")
             results = SearchFiltering.get_best_results(results, filter_by=best_results)
+
+        if settings.DEBUG:
+            print("OLD RESULTS:", results[:500])
 
         return results[:500]
 
