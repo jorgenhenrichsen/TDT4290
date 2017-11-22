@@ -32,29 +32,29 @@
 
                 <tr class="result-element">
 
-                    <th>{{ result.lifter.first_name }} {{ result.lifter.last_name }}</th>
-                    <th>{{ result.body_weight }}</th>
-                    <th>{{ result.age }}</th>
-                    <th>{{ result.lifter.club }}</th>
-                    <th>{{ result.age_group }} {{ result.weight_class }}</th>
-                    <th>{{ result.group.competition.host }}{{ result.competition.host }}</th>
+                    <td>{{ result.lifter.first_name }} {{ result.lifter.last_name }}</td>
+                    <td>{{ result.body_weight }}</td>
+                    <td>{{ result.age }}</td>
+                    <td>{{ result.lifter.club }}</td>
+                    <td>{{ result.age_group }} {{ result.weight_class }}</td>
+                    <td>{{ result.group.competition.host }}{{ result.competition.host }}</td>
 
                     {% if  result.best_snatch.weight %}
-                        <th>{{ result.best_snatch.weight }}</th>
+                        <td>{{ result.best_snatch.weight }}</td>
                     {% else %}
-                        <th>{{ result.best_snatch }}</th>
+                        <td>{{ result.best_snatch }}</td>
                     {% endif %}
 
                     {% if  result.best_snatch.weight %}
-                        <th>{{ result.best_clean_and_jerk.weight }}</th>
+                        <td>{{ result.best_clean_and_jerk.weight }}</td>
                     {% else %}
-                        <th>{{ result.best_clean_and_jerk }}</th>
+                        <td>{{ result.best_clean_and_jerk }}</td>
                     {% endif %}
 
 
-                    <th>{{ result.total_lift }}</th>
-                    <th>{{ result.points_with_sinclair }}</th>
-                    <th>{{ result.points_with_veteran }}</th>
+                    <td>{{ result.total_lift }}</td>
+                    <td>{{ result.points_with_sinclair }}</td>
+                    <td>{{ result.points_with_veteran }}</td>
 
                 </tr>
 
