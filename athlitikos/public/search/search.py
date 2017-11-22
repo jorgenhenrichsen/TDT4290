@@ -272,11 +272,6 @@ class SearchFiltering:
         if not SearchFiltering.is_none_value(best_results):
             results = SearchFiltering.get_best_results(results, filter_by=best_results)
 
-        printable = list(results.all()[:10])
-
-        for p in printable:
-            print(p.lifter, p.lifter.club.id)
-
         return results[:500]
 
     @classmethod
