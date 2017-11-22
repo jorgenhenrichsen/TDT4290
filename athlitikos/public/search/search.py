@@ -103,7 +103,7 @@ class SearchFiltering:
         elif filter_by == "pv":
             field_name = "points_with_veteran"
         else:
-            field_name = "total"
+            field_name = "total_lift"
 
         lifters_results = []
 
