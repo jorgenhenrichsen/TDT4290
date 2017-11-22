@@ -145,9 +145,9 @@ class SearchFiltering:
         best_results = request.GET.get('best_results')
 
         results = SearchFiltering.search_for_results(lifters, clubs, from_date,
-                                                          to_date, categories, best_results)
+                                                     to_date, categories, best_results)
         old_results = SearchFiltering.search_for_old_results(lifters, clubs, from_date,
-                                                                  to_date, categories, best_results)
+                                                             to_date, categories, best_results)
 
         if type(results) is not list:
             results = list(results.all())
@@ -233,7 +233,8 @@ class SearchFiltering:
                                to_date=None, categories=None, best_results=None):
 
         if settings.DEBUG:
-            print("Searching for old results with lifters={}, clubs={}, from_date={}, to_date={}, categories={}, best_results={}"
+            print("Searching for old results with"
+                  " lifters={}, clubs={}, from_date={}, to_date={}, categories={}, best_results={}"
                   .format(lifters, clubs, from_date, to_date, categories, best_results))
 
         results = OldResults.objects.all().order_by('-competition__start_date')
