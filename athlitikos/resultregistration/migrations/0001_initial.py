@@ -24,18 +24,18 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('club_name', models.CharField(max_length=100)),
-                ('region', models.CharField(max_length=100)),
-                ('address', models.CharField(max_length=100)),
+                ('region', models.CharField(blank=True, max_length=100, null=True)),
+                ('address', models.CharField(blank=True, max_length=100, null=True)),
             ],
         ),
         migrations.CreateModel(
             name='Competition',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('competition_category', models.CharField(choices=[('Nordisk Ungdom', 'Nordisk_ungdom'), ('EM', 'em'), ('Klubbmesterskap', 'klubbmesterskap'), ('Klubbstevne', 'klubbstevne'), ('Kretsmesterskap', 'kretsmesterskap'), ('Lagseriestevne', 'lagseriestevne'), ('Nasjonalt stevne', 'nasjonalt_stevne'), ('NM', 'nm'), ('NM-Junior', 'nm_junior'), ('NM-Senior', 'nm_senior'), ('NM-Ungdom', 'nm_ungdom'), ('NM-Veteran', 'nm_veteran'), ('Nordisk Junior', 'nordisk_junior'), ('Nordisk Senior', 'nordisk_senior'), ('Norgescup', 'norges_cup'), ('OL', 'ol'), ('Seriestevne', 'seriestevne'), ('VM', 'vm')], max_length=100, verbose_name='Kategori')),
-                ('host', models.CharField(max_length=100, verbose_name='Arrangør')),
-                ('location', models.CharField(max_length=100)),
-                ('start_date', models.DateField(help_text='år-måned-dag')),
+                ('competition_category', models.CharField(blank=True, choices=[('Nordisk Ungdom', 'Nordisk_ungdom'), ('EM', 'em'), ('Klubbmesterskap', 'klubbmesterskap'), ('Klubbstevne', 'klubbstevne'), ('Kretsmesterskap', 'kretsmesterskap'), ('Lagseriestevne', 'lagseriestevne'), ('Nasjonalt stevne', 'nasjonalt_stevne'), ('NM', 'nm'), ('NM-Junior', 'nm_junior'), ('NM-Senior', 'nm_senior'), ('NM-Ungdom', 'nm_ungdom'), ('NM-Veteran', 'nm_veteran'), ('Nordisk Junior', 'nordisk_junior'), ('Nordisk Senior', 'nordisk_senior'), ('Norgescup', 'norges_cup'), ('OL', 'ol'), ('Seriestevne', 'seriestevne'), ('VM', 'vm')], max_length=100, null=True, verbose_name='Kategori')),
+                ('host', models.CharField(blank=True, max_length=100, null=True, verbose_name='Arrangør')),
+                ('location', models.CharField(blank=True, max_length=100, null=True)),
+                ('start_date', models.DateField(blank=True, help_text='år-måned-dag', null=True)),
                 ('author', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
@@ -100,6 +100,37 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='OldPentathlonResult',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('age_group', models.CharField(blank=True, max_length=20, null=True)),
+                ('shot_put', models.DecimalField(blank=True, decimal_places=5, max_digits=10, null=True)),
+                ('shot_put_points', models.DecimalField(blank=True, decimal_places=5, max_digits=10, null=True)),
+                ('forty_meter', models.DecimalField(blank=True, decimal_places=5, max_digits=10, null=True)),
+                ('forty_meter_points', models.DecimalField(blank=True, decimal_places=5, max_digits=10, null=True)),
+                ('jump', models.DecimalField(blank=True, decimal_places=5, max_digits=10, null=True)),
+                ('jump_points', models.DecimalField(blank=True, decimal_places=5, max_digits=10, null=True)),
+                ('sum_all', models.DecimalField(blank=True, decimal_places=5, max_digits=10, null=True)),
+                ('competition', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='resultregistration.Competition')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='OldResults',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('weight_class', models.CharField(max_length=10, null=True, verbose_name='Vektklasse')),
+                ('age_group', models.CharField(max_length=5, null=True, verbose_name='Kategori')),
+                ('body_weight', models.FloatField(null=True, verbose_name='Kroppsvekt')),
+                ('best_press', models.FloatField(blank=True, null=True, verbose_name='Press')),
+                ('best_snatch', models.FloatField(blank=True, null=True, verbose_name='Rykk')),
+                ('best_clean_and_jerk', models.FloatField(blank=True, null=True, verbose_name='Støt')),
+                ('total_lift', models.FloatField(blank=True, null=True, verbose_name='Sammenlagt')),
+                ('points', models.FloatField(blank=True, null=True, verbose_name='Poeng')),
+                ('sinclair_coefficient', models.FloatField(blank=True, null=True, verbose_name='Koeffisient')),
+                ('competition', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='resultregistration.Competition')),
+            ],
+        ),
+        migrations.CreateModel(
             name='PentathlonResult',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -137,6 +168,7 @@ class Migration(migrations.Migration):
                 ('best_clean_and_jerk', models.ForeignKey(blank=True, db_column='best_clean_and_jerk', null=True, on_delete=django.db.models.deletion.CASCADE, related_name='best_clean_and_jerk', to='resultregistration.MoveAttempt')),
                 ('best_snatch', models.ForeignKey(blank=True, db_column='best_snatch', null=True, on_delete=django.db.models.deletion.CASCADE, related_name='best_snatch', to='resultregistration.MoveAttempt')),
                 ('group', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='resultregistration.Group')),
+                ('lifter_club', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='resultregistration.Club')),
             ],
         ),
         migrations.CreateModel(
@@ -181,6 +213,26 @@ class Migration(migrations.Migration):
             model_name='person',
             name='club',
             field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='resultregistration.Club'),
+        ),
+        migrations.AddField(
+            model_name='oldresults',
+            name='lifter',
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='resultregistration.Person'),
+        ),
+        migrations.AddField(
+            model_name='oldresults',
+            name='lifter_club',
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='resultregistration.Club'),
+        ),
+        migrations.AddField(
+            model_name='oldpentathlonresult',
+            name='lifter',
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='resultregistration.Person'),
+        ),
+        migrations.AddField(
+            model_name='oldpentathlonresult',
+            name='result',
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='resultregistration.OldResults'),
         ),
         migrations.AddField(
             model_name='moveattempt',

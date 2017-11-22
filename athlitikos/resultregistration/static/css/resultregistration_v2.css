@@ -2,3 +2,27 @@
     font-size: 150%;
     color: darkgreen;
 }
+
+#group-form-container {
+    padding-left: 100px;
+    padding-right: 100px;
+}
+
+#group-form-container select, #group-form-container input {
+    width: 150px;
+}
+
+#group-form-container textarea {
+    width: 45%;
+    height: 60px;
+    display: block;
+}
+
+.input-container {
+    width: 150px;
+    display: inline-block;
+}
+
+.text-area-container {
+    display: block;
+}

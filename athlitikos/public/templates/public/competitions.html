@@ -14,23 +14,27 @@
 
 {% block content %}
 
-    <input type="text" id="host-query-field" placeholder="Arrangør...">
-    <div id="clubs-container"></div>
+    <div id="parameter-container">
+        <input type="text" id="host-query-field" placeholder="Arrangør...">
+        <div id="clubs-container"></div>
 
 
-    <lable>Velg kategori</lable>
-    <select id="category-selector" onchange="didSelectCategory()">
-        <option value="all">Alle</option>
-        {% for category in categories %}
-            <option value="{{ category.0 }}">{{ category.0 }}</option>
-        {%  endfor %}
-    </select>
+        <label>Velg kategori</label>
+        <select id="category-selector" onchange="didSelectCategory()">
+            <option value="all">Alle</option>
+            {% for category in categories %}
+                <option value="{{ category.0 }}">{{ category.0 }}</option>
+            {%  endfor %}
+        </select>
 
-    <label>Filtrer konkurranser på tidsrom</label><br>
-    <input type="text" class="datepicker" id="from-date-picker" placeholder="Fra dato: dd/mm/yyyy">
-    <input type="text" class="datepicker" id="to-date-picker" placeholder="Til dato: dd/mm/yyyy">
+        <label>Filtrer konkurranser på tidsrom</label><br>
+        <input type="text" class="datepicker" id="from-date-picker" placeholder="Fra dato: dd/mm/yyyy">
+        <input type="text" class="datepicker" id="to-date-picker" placeholder="Til dato: dd/mm/yyyy">
 
-    <button onclick="fetchCompetitions()">Oppdater</button>
+        <button onclick="fetchCompetitions()">Oppdater</button>
+    </div>
+
+
 
     <table class="tablesorter" id="competitions-table">
 
