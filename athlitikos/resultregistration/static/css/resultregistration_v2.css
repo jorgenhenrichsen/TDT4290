@@ -8,7 +8,7 @@
     padding-right: 100px;
 }
 
-#group-form-container select, input {
+#group-form-container select, #group-form-container input {
     width: 150px;
 }
 
