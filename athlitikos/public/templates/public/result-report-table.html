@@ -13,8 +13,8 @@
 
                 <tr>
                     <th>Utøver</th>
+                    <th>Dato</th>
                     <th>Kroppsvekt</th>
-                    <th>Alder</th>
                     <th>Klubb</th>
                     <th>Kategori</th>
                     <th>Arrangør</th>
@@ -22,7 +22,6 @@
                     <th>Støt</th>
                     <th>Total</th>
                     <th>Poeng</th>
-                    <th>Veteranpoeng</th>
                 </tr>
 
             </thead>
@@ -33,8 +32,14 @@
                 <tr class="result-element">
 
                     <td>{{ result.lifter.first_name }} {{ result.lifter.last_name }}</td>
+
+                    {% if  result.group.date  %}
+                        <td>{{ result.group.date  }}</td>
+                    {% else %}
+                        <td>{{ result.competition.start_date }}</td>
+                    {% endif %}
+
                     <td>{{ result.body_weight }}</td>
-                    <td>{{ result.age }}</td>
                     <td>{{ result.lifter.club }}</td>
                     <td>{{ result.age_group }} {{ result.weight_class }}</td>
                     <td>{{ result.group.competition.host }}{{ result.competition.host }}</td>
@@ -54,7 +59,6 @@
 
                     <td>{{ result.total_lift }}</td>
                     <td>{{ result.points_with_sinclair }}</td>
-                    <td>{{ result.points_with_veteran }}</td>
 
                 </tr>
 
