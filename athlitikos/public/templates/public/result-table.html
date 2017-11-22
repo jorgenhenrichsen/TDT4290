@@ -9,8 +9,20 @@
             <th>{{ result.lifter.club }}</th>
             <th>{{ result.age_group }} {{ result.weight_class }}</th>
             <th>{{ result.group.competition.host }}{{ result.competition.host }}</th>
-            <th>{{ result.best_snatch.weight }}</th>
-            <th>{{ result.best_clean_and_jerk.weight }}</th>
+
+            {% if  result.best_snatch.weight %}
+                <th>{{ result.best_snatch.weight }}</th>
+            {% else %}
+                <th>{{ result.best_snatch }}</th>
+            {% endif %}
+
+            {% if  result.best_snatch.weight %}
+                <th>{{ result.best_clean_and_jerk.weight }}</th>
+            {% else %}
+                <th>{{ result.best_clean_and_jerk }}</th>
+            {% endif %}
+
+
             <th>{{ result.total_lift }}</th>
             <th>{{ result.points_with_sinclair }}</th>
             <th>{{ result.points_with_veteran }}</th>
