@@ -235,7 +235,7 @@ class SearchFiltering:
             results = results.filter(lifter_id__in=lifters)
 
         if not SearchFiltering.is_none_value(clubs):
-            results = results.filter(lifter_club_id__in=clubs)
+            results = results.filter(lifter__club_id__in=clubs)
 
         if not SearchFiltering.is_none_value(from_date):
             from_date_formatted = datetime.strptime(from_date, "%d/%m/%Y").date()
@@ -271,6 +271,11 @@ class SearchFiltering:
 
         if not SearchFiltering.is_none_value(best_results):
             results = SearchFiltering.get_best_results(results, filter_by=best_results)
+
+        printable = list(results.all()[:10])
+
+        for p in printable:
+            print(p.lifter, p.lifter.club.id)
 
         return results[:500]
 
