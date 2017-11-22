@@ -2,11 +2,18 @@
 
 url = "https://pypi.python.org/simple"
 verify_ssl = true
-name = "pypi"
 
 
 [packages]
 
-
-
-[dev-packages]
+"psycopg2" = "*"
+"enum34" = "*"
+django = "*"
+"flake8" = "*"
+"pep8" = "*"
+"pep8-naming" = "*"
+django-easy-pdf = "*"
+django-queryset-csv = "*"
+jaydebeapi = "*"
+numpy = "*"
+pyodbc = "*"
