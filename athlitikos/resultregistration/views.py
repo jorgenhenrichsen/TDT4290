@@ -22,6 +22,7 @@ from django.contrib import messages
 from django.core import exceptions
 
 
+@login_required(login_url='/login')
 def v2_result_registration(request):
 
     if request.method == "POST":
