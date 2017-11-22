@@ -1,16 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404, reverse, HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
-from django.views.generic import FormView
-from .mixins import AjaxFormMixin
-from .models import Judge, Group, Competition
+
+from resultregistration.utils import parse_judge, parse_judges
+from .models import Judge, Group
 from .models import PentathlonResult, InternationalGroup
 from django.db.models import Q
 from .models import InternationalResult
 from .forms import InternationalResultForm, InternationalGroupForm
 from .forms import InternationalCompetitionForm
-from .models import Result, MoveAttempt
-from .forms import LifterForm, JudgeForm, MoveAttemptForm, GroupForm, ClubForm
+from .models import Result
+from .forms import LifterForm, JudgeForm, MoveAttemptForm, ClubForm
 from .forms import ResultForm, ResultFormSet, GroupFormV3
 from resultregistration.models import Lifter
 import json
@@ -18,10 +17,12 @@ from .resultparser import resultparser, resultserializer
 from .enums import Status
 from .forms import CompetitonForm, GroupFormV2, ChangeResultForm, PendingResultForm,\
     MergeLifterSearchForm, MergeLifterCreateForm
+from .excel import read_competition_staff, read_lifters, read_competition_details, readexcel
 from django.contrib import messages
 from django.core import exceptions
 
 
+@login_required(login_url='/login')
 def v2_result_registration(request):
 
     if request.method == "POST":
@@ -358,266 +359,6 @@ def result_view(request):
                            'row_id': row_id})
 
 
-class CompetitionFormView(AjaxFormMixin, FormView):
-    form_class = CompetitonForm
-    template_name = 'resultregistration/competition_form.html'
-    success_url = '/form-success/'
-
-    def post(self, request, *args, **kwargs):
-        competition_form = CompetitonForm(request.POST)
-        # competition = self.request.POST
-        # print('enters post')
-        # print(competition)
-        if competition_form.is_valid():
-            data = competition_form.cleaned_data
-            # print(competition.cleaned_data)
-            print('\ncompetition valid\n', data)
-            competition_category = data['competition_category']
-            start_date = data['start_date']
-            location = data['location']
-            host = data['host']
-            # print(competition_category, start_date, location)
-            # print(Competition.objects.filter())
-            competition = Competition.objects.get_or_create(competition_category=competition_category,
-                                                            host=host,
-                                                            location=location,
-                                                            start_date=start_date,)
-            print('competition: \n', competition, '\n')
-            return JsonResponse({'competition_id': competition[0].pk})
-        return render(request, 'resultregistration/resultregistration.html', context={'competition_id': 0})
-
-
-class GroupFormView(AjaxFormMixin, FormView):
-    form_class = GroupForm
-    template_name = 'resultregistration/group_form.html'
-    success_url = '/form-success/'
-
-    def post(self, request, *args, **kwargs):
-        # group_post = request.POST
-        # print(group_post)
-        group_form = GroupFormV2(request.POST)
-        group_form.is_valid()
-        competition_id = request.POST.get('competition_id')
-        print(group_form.is_valid(), group_form.cleaned_data)
-        group_fields = group_form.cleaned_data
-        # data[competition'']=Competition.objects.get(pk=competition_id)
-        # group_post['competition'] = competition_id
-        # print(request.POST)
-        # groupForm.competition = Competition.objects.get(pk=competition_id)
-        print('\n {} \n'.format(competition_id))
-        # print(groupForm)
-        # print('group in post', groupForm.is_valid(), groupForm.cleaned_data, '\n', groupForm.errors)
-        competition = Competition.objects.get(pk=competition_id)
-        if group_form.is_valid() and competition:
-            # TODONE: CHECK THAT GROUP IS NOT IN DB, AND CREATE
-            # print(Group.objects.filter(competition=competition_id))
-            print(competition)
-            print('group valid')
-            # competition.group_set.create(data)
-            # group_fields = groupForm.__getattribute__('group_number')
-            # print(groupForm.group_number)
-            # group_fields = group_form.cleaned_data
-            # print(group_fields)
-            # group_fields
-            group_query = competition.group_set.filter(group_number=int(group_fields['group_number']))
-            if not group_query:
-                group = Group.objects.create(
-                    competition=competition,
-                    group_number=group_fields['group_number'],
-                    date=group_fields['date'],
-                    status=group_fields['status'],
-                    competition_leader=group_fields['competition_leader'],
-
-                    secretary=group_fields['secretary'],
-                    speaker=group_fields['speaker'],
-
-                    technical_controller=group_fields['technical_controller'],
-                    cheif_marshall=group_fields['cheif_marshall'],
-                    time_keeper=group_fields['time_keeper'],
-
-                    notes=group_fields['notes'],
-                    records_description=group_fields['records_description'],
-                    author=group_fields['author'],
-                )
-                # competitors are added by registering the results
-                group.judges = group_fields['judges']
-                group.jury = group_fields['jury']
-                group.save()
-                return JsonResponse({'group_id': group.pk})
-                # jury = group_fields['jury'],
-                # judges = group_fields['judges'],
-                # competitiors = group_fields['competitors'],
-
-                # print(clean_group['status'])
-            # if not
-            # print(group.cleaned_data)
-            # data = groupForm.cleaned_data
-            # group_number = data['group_number']
-            # competition = data['competition']
-            # group= Group.objects.get_or_create(competition=competition, )
-            # if not Group.objects.filter(competition=competition_id, )
-
-        return render(request, 'resultregistration/resultregistration.html', context={'group_id': -1})
-
-
-class PendingResultFormView(AjaxFormMixin, FormView):
-    form_class = PendingResultForm
-    template_name = 'resultregistration/result_form.html'
-    success_url = '/form-success'
-
-    def post(self, request, *args, **kwargs):
-        result = PendingResultForm(request.POST)
-        group_id = request.POST['group_id']
-        # print('enters post\n')
-        # print(request.POST, '\n')
-        group = Group.objects.get(pk=group_id)
-        if result.is_valid() and group:
-            # print('result valid')
-            # print(result.cleaned_data)
-            data = result.cleaned_data
-            # TODO: MAKE THE FORM AUTOFIL TO PROPERLY GET THESE VALUES
-            lifter_first = data['lifter_first_name']
-            lifter_last = data['lifter_last_name']
-            result_query = group.result_set.filter(lifter__first_name=lifter_first,
-                                                   lifter__last_name=lifter_last)
-            # print(lifter_first, lifter_last)
-            lifter_query = Lifter.objects.filter(first_name=lifter_first, last_name=lifter_last)
-            # print('lifter_query:\n', lifter_query, '\n')
-            # lifter = Lifter.objects.get(lifter_query)
-            lifter = lifter_query.first()
-
-            # print('lifter: ', lifter)
-            # print(result_query)
-
-            if not result_query:
-                age_group = data['category']
-
-                result_instance = group.result_set.create(lifter=lifter,
-                                                          body_weight=data['body_weight'],
-                                                          age_group=age_group,
-                                                          weight_class=data['weight_class'],
-                                                          # age=14,
-                                                          )
-            else:
-                result_instance = result_query.first()
-            # add move_attempts
-            # print('result_instance: ', result_instance)
-            for i in range(1, 4):
-                snatch = data['snatch{}'.format(i)]
-                if str(snatch)[0].lower == 'n':
-                    success = False
-                    snatch = snatch[1:]
-                else:
-                    success = True
-                # attempt_weight = snatch
-                move_attempt = MoveAttempt.objects.filter(parent_result=result_instance,
-                                                          move_type='Snatch',
-                                                          attempt_num=i).first()
-                if not move_attempt:
-                    # print('\n move_attempt:\n{}\n'.format(move_attempt))
-                    result_instance.moveattempt_set.create(move_type='Snatch',
-                                                           attempt_num=i,
-                                                           weight=snatch,
-                                                           success=success)
-                else:
-                    move_attempt.weight = snatch
-                    move_attempt.success = success
-                    move_attempt.save()
-
-            for i in range(1, 4):
-                clean_and_jerk = data['clean_and_jerk{}'.format(i)]
-                if str(clean_and_jerk)[0].lower() == 'n':
-                    success = False
-                    clean_and_jerk = clean_and_jerk[1:]
-                else:
-                    success = True
-                # attempt_weight = clean_and_jerk
-                # print('Parent_result = {}, move_type = {}, attempt_num = {}'.format(result_instance,
-                #                                                                     'Clean and jerk',
-                #                                                                     i))
-                move_attempt = MoveAttempt.objects.filter(parent_result=result_instance.pk,
-                                                          move_type='Clean and jerk',
-                                                          attempt_num=i).first()
-                # print(move_attempt)
-                if not move_attempt:
-                    # print('\n move_attempt:\n{}\n'.format(move_attempt))
-                    result_instance.moveattempt_set.create(move_type='Clean and jerk',
-                                                           attempt_num=i,
-                                                           weight=clean_and_jerk,
-                                                           success=success)
-                else:
-                    move_attempt.weight = clean_and_jerk
-                    move_attempt.success = success
-                    move_attempt.save()
-            # print('success')
-            # best_clean_and_jerk = get_best_clean_and_jerk_for_result()
-            # pk = result_instance.pk,
-            # result_data = {
-            #     'age': get_age_for_lifter_in_result(pk),
-            #     'best_clean_and_jerk': get_best_clean_and_jerk_for_result(pk),
-            #     'best_snatch': get_best_snatch_for_result(pk),
-            #     'points_with_sinclair': get_points_with_sinclair_for_result(pk),
-            #     'points_with_veteran': get_points_with_veteran_for_result(pk)
-            # }
-
-            # returning dummy data before the methods are properly implemented and tested
-            result_data = {
-                'successful': True,
-                'best_snatch': 10,
-                'best_clean_and_jerk': 10,
-                'total': 20,
-                'point_with_sinclair': 25,
-                'points_with_veteran': 0,
-                'sinclair_coefficient': 1.25
-            }
-            # # result_data['success'] = True
-            # result_data['age'] = 10
-            # result_data[
-            # result_data[
-            # result_data['total'] = 20
-            # result_data['points_with_sinclair'] = 25
-            # result_data['points_with_veteran'] = 0
-            # result_data['sinclair_coefficient'] = 1.25
-        else:
-            print(result.errors, '\n', result.cleaned_data)
-            print('error')
-            result_data = {'successful': False}
-        return render(request, 'resultregistration/resultregistration.html', context=result_data)
-    # def add_competition_if_not_exists(self):
-    #
-    #     if self.request.method == 'POST':
-    #         competition = self.request.POST['competition_form']
-    #         competition_category = competition.competition_category,
-    #         start_date = competition.start_date,
-    #         location = competition.location
-    #         print(Competition.objects.filter(competition_category=competition_category,
-    #                                           start_date=start_date,
-    #                                           location=location))
-    #         if not Competition.objects.filter(competition_category=competition_category,
-    #                                           start_date=start_date,
-    #                                           location=location):
-    #             Competition.objects.create(competition_category=competition_category,
-    #                                        start_date=start_date,
-    #                                        location=location)
-    #             print('yey object created')
-    #         else:
-    #             print('neyy, object exists')
-    #         return self.request
-
-    # def add_competition(FormView):
-    #     context_instance = RequestContext(request)
-    #     if request.method=='POST':
-    #         competition = request.POST['competition_form']
-    #         print('kommet inn i views')
-    #         Competition.objects.Create(
-    #             competition_category=competition.competition_category,
-    #             start_date=competition.start_date,
-    #             location=competition.location
-    #         )
-    #         print('ferdig med competitioncreate')
-    #         return HttpResponse('')
-
-
 def group_registration(request):
     return render(request, 'resultregistration/group_form.html', context={'GroupForm': GroupFormV2})
 
@@ -782,3 +523,89 @@ def change_result_clubofc(request, pk):
     form = ChangeResultForm(initial=initial_form_values)
 
     return render(request, 'resultregistration/edit_person.html', {'title': 'Endre valgt resultat', 'form': form})
+
+
+@login_required(login_url='/login')
+def result_from_excel(request):
+    if request.method == 'POST':
+        success = False
+        if not request.FILES:
+            r_formset = ResultFormSet(request.POST, request.FILES)
+            print("request.post:", request.POST)
+            print('request.FILES', request.FILES)
+            group_form = GroupFormV3(user=request.user, data=request.POST)
+            resultparser.parse_result(group_form=group_form, result_formset=r_formset, user=request.user)
+        else:
+            excel_file = request.FILES['excel_file']
+            try:
+                data = readexcel(excel_file)
+                competition_details = read_competition_details(data)
+                result_details = read_lifters(data)
+                results = []
+                for i in range(len(result_details)):
+                    row = result_details[i]
+                    lifter_id = None
+                    club_id = None
+
+                    result_row = {
+                        'lifter': row[4],
+                        'lifter_id': lifter_id,
+                        'club': row[5],
+                        'club_id': club_id,
+                        'birth_date': row[3],
+                        'age_group': row[2],
+                        'weight_class': row[0],
+                        'body_weight': row[1],
+                        # 'start_number': row[4],
+                        'snatch_1': row[6],
+                        'snatch_2': row[7],
+                        'snatch_3': row[8],
+                        'clean_and_jerk_1': row[9],
+                        'clean_and_jerk_2': row[10],
+                        'clean_and_jerk_3': row[11],
+                        # # 'key': key
+                    }
+                    # results.update(result_row)
+                    results.append(result_row)
+                group_details = read_competition_staff(data)
+                # print(group_details)
+                # print(competition_details)
+
+                # competition_leader_error = parse_judge(group_details['competition_leader'])
+
+                group_details['group_number'] = competition_details[4]
+                group_details['date'] = competition_details[3]
+                group_details['competition_leader'] = parse_judge(group_details['competition_leader'])
+                group_details['time_keeper'] = parse_judge(group_details['time_keeper'])
+                group_details['judges'] = parse_judges(group_details['judges'])
+                group_details['jury'] = parse_judges(group_details['jury'])
+
+                success = True
+
+                r_formset = ResultFormSet(initial=results)
+                group_form = GroupFormV3(user=request.user, initial=group_details)
+                # group_form.add_error('competition_leader', competition_leader_error)
+                # resultparser.parse_result(group_form=group_form, result_formset=r_formset, user=request.user)
+                # print("should be success")
+                # print("r_formset:\n---\n")
+                # print(str(r_formset))
+                # print("group_form:\n---\n", group_form)
+                return render(request,
+                              'resultregistration/resultregistration_v2.html',
+                              {'result_formset': r_formset, 'group_form': group_form})
+                # redirect('resultregistration:result_registration_with_excel', context={'result_formset': r_formset,
+                # 'group_form': group_form})
+            except IOError:
+                response = {
+                    'success': success,
+                    'error': 'File invalid or not found'
+                }
+
+            return render(request, 'resultregistration/resultregistration_v2.html', context=response)
+        return render(request,
+                      "resultregistration/resultregistration_v2.html",
+                      {'result_formset': r_formset, 'group_form': group_form})
+    else:
+        return render(request, 'resultregistration/import_excel.html')
+
+    # return render(request, 'resultregistration/resultregistration.html', context={'success': True})

@@ -39,6 +39,10 @@ function editPendingGroup(id) {
     window.location.href = "/result/edit/" + id;
 }
 
+function importExcel() {
+    window.location.href = "/resultregistration/fromexcel/";
+}
+
 // Redirect to resultregistration on click.
 $(function () {
     document.getElementById("add-result-button").onclick = function () {

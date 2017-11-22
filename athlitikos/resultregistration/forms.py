@@ -87,6 +87,10 @@ class MoveAttemptForm(forms.ModelForm):
         fields = '__all__'
 
 
+class ExcelFileForm(forms.Form):
+    excel_file = forms.FileField()
+
+
 class GroupFormV3(forms.Form):
 
     group_number = forms.IntegerField()
